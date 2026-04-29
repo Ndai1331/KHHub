@@ -1,0 +1,7 @@
+{
+  "packages": {
+    "KHHub.WebGateway": {
+      "path": "KHHub.WebGateway/KHHub.WebGateway.abppkg"
+    }
+  }
+}

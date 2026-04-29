@@ -1,0 +1,11 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+
+  <Project Path="KHHub.AuditLoggingService/KHHub.AuditLoggingService.csproj" />
+  <Project Path="KHHub.AuditLoggingService.Contracts/KHHub.AuditLoggingService.Contracts.csproj" />
+  <Project Path="KHHub.AuditLoggingService.Tests/KHHub.AuditLoggingService.Tests.csproj" />
+</Solution>

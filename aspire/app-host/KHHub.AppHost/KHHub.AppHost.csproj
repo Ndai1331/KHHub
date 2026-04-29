@@ -1,0 +1,55 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.1.0">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <UserSecretsId>983c0807-a6e3-4602-a7d7-ee85aebce708</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="13.1.0"/>
+        <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="13.1.0" />
+        <PackageReference Include="Aspire.Hosting.Redis" Version="13.1.0" />
+        <PackageReference Include="Aspire.Hosting.Elasticsearch" Version="13.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting.SqlServer" Version="13.1.0" />
+        <PackageReference Include="Aspire.Hosting.MySql" Version="13.1.0" />
+        <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.1.0" />
+        <PackageReference Include="Aspire.Hosting.MongoDB" Version="13.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\services\administration\KHHub.AdministrationService\KHHub.AdministrationService.csproj" />
+        <ProjectReference Include="..\..\..\services\identity\KHHub.IdentityService\KHHub.IdentityService.csproj" />
+        <ProjectReference Include="..\..\..\apps\auth-server\KHHub.AuthServer\KHHub.AuthServer.csproj" />
+        <ProjectReference Include="..\..\..\gateways\web\KHHub.WebGateway\KHHub.WebGateway.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\services\audit-logging\KHHub.AuditLoggingService\KHHub.AuditLoggingService.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\services\gdpr\KHHub.GdprService\KHHub.GdprService.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\services\ai-management\KHHub.AIManagementService\KHHub.AIManagementService.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\services\language\KHHub.LanguageService\KHHub.LanguageService.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\apps\web\KHHub.Web\KHHub.Web.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\gateways\mobile\KHHub.MobileGateway\KHHub.MobileGateway.csproj" />
+    </ItemGroup>
+</Project>

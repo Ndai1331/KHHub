@@ -1,0 +1,15 @@
+{
+  "config": {
+    "context": "docker-desktop",
+    "namespace": "khhub-local"
+  },
+  "metadata": {
+    "dotnetEnvironment": "Staging"
+  },
+  "services": {
+    "khhub-local-identity": {
+    },
+    "khhub-local-web": {
+    }
+  }
+}

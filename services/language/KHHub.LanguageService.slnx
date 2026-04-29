@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+  </Configurations>
+
+  <Project Path="KHHub.LanguageService.Contracts/KHHub.LanguageService.Contracts.csproj" />
+  <Project Path="KHHub.LanguageService.Tests/KHHub.LanguageService.Tests.csproj" />
+  <Project Path="KHHub.LanguageService/KHHub.LanguageService.csproj" />
+</Solution>

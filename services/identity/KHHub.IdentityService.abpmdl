@@ -1,0 +1,65 @@
+{
+  "packages": {
+    "KHHub.IdentityService": {
+      "path": "KHHub.IdentityService/KHHub.IdentityService.abppkg"
+    },
+    "KHHub.IdentityService.Contracts": {
+      "path": "KHHub.IdentityService.Contracts/KHHub.IdentityService.Contracts.abppkg"
+    },
+    "KHHub.IdentityService.Tests": {
+      "path": "KHHub.IdentityService.Tests/KHHub.IdentityService.Tests.abppkg"
+    }
+  },
+  "imports": {
+    "Volo.Abp.Identity.Pro": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.OpenIddict.Pro": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.Identity": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.OpenIddict.Pro": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.BlobStoring.Database": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.LanguageManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    }
+  }
+}

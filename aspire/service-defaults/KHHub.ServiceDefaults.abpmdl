@@ -1,0 +1,7 @@
+{
+  "packages": {
+    "KHHub.ServiceDefaults": {
+      "path": "KHHub.ServiceDefaults/KHHub.ServiceDefaults.abppkg"
+    }
+  }
+} 

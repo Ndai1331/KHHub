@@ -1,0 +1,11 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+
+  <Project Path="KHHub.GdprService/KHHub.GdprService.csproj" />
+  <Project Path="KHHub.GdprService.Contracts/KHHub.GdprService.Contracts.csproj" />
+  <Project Path="KHHub.GdprService.Tests/KHHub.GdprService.Tests.csproj" />
+</Solution>

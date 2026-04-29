@@ -1,0 +1,38 @@
+volumes:
+  khhub_ollama:
+networks:
+  khhub:
+    external: true
+
+services:
+  ollama:
+    container_name: khhub-ollama
+    image: ollama/ollama:latest
+    volumes:
+      - khhub_ollama:/root/.ollama
+    networks:
+      - khhub
+    ports:
+      - "11434:11434"
+    restart: unless-stopped
+
+  ollama-init:
+    container_name: khhub-ollama-init
+    image: ollama/ollama:latest
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    entrypoint: >
+      sh -c "
+        echo 'Waiting for Ollama to be ready...';
+        until curl -sf http://ollama:11434/api/tags > /dev/null 2>&1; do
+          sleep 2;
+        done;
+        echo 'Pulling llama3.2...';
+        ollama pull 'llama3.2';
+        echo 'Model pulled successfully!';
+      "
+    networks:
+      - khhub
+    restart: "no"

@@ -1,0 +1,63 @@
+{
+  "packages": {
+    "KHHub.AuthServer": {
+      "path": "KHHub.AuthServer/KHHub.AuthServer.abppkg"
+    }
+  },
+  "imports": {
+     "Volo.Abp.LeptonXTheme": {
+       "version": "5.3.0",
+       "isInstalled": true
+     },
+    "Volo.Abp.Account.Pro": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.Identity": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.Identity.Pro": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.OpenIddict.Pro": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.BlobStoring.Database": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.LanguageManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    }
+  }
+}

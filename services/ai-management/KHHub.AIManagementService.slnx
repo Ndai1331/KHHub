@@ -1,0 +1,11 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+
+  <Project Path="KHHub.AIManagementService/KHHub.AIManagementService.csproj" />
+  <Project Path="KHHub.AIManagementService.Contracts/KHHub.AIManagementService.Contracts.csproj" />
+  <Project Path="KHHub.AIManagementService.Tests/KHHub.AIManagementService.Tests.csproj" />
+</Solution>

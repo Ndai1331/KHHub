@@ -1,0 +1,17 @@
+volumes:
+  khhub_rabbitmq:
+networks:
+  khhub:
+    external: true
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.12.7-management-alpine
+    volumes:
+      - khhub_rabbitmq:/var/lib/rabbitmq
+    networks:
+      - khhub
+    ports:
+      - "15672:15672"
+      - "5672:5672"

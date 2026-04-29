@@ -1,0 +1,97 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <Import Project="..\common.props" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>KHHub.Web</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.2" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.ElasticSearch" Version="10.0.0" />
+    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="10.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="10.0.2" />
+    <PackageReference Include="DistributedLock.Redis" Version="1.1.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="9.0.0" />
+    <PackageReference Include="KubernetesClient" Version="18.0.5"/>
+    <PackageReference Include="IdentityModel" Version="7.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.EventBus.RabbitMQ" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.Client" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.OpenIdConnect" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.Http.Client.Web" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.Identity.Pro.Web" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Admin.Web" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Admin.HttpApi.Client" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Public.Web.Shared" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Public.Web.Impersonation" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Web" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Public.HttpApi.Client" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.Identity.Pro.HttpApi.Client" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.SettingManagement.HttpApi.Client" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi.Client" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.HttpApi.Client" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.Studio.Client.AspNetCore" Version="2.2.7" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX" Version="5.3.0" />
+    <PackageReference Include="Volo.Abp.OpenIddict.Pro.Web" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.OpenIddict.Pro.HttpApi.Client" Version="10.3.0" />
+    <ProjectReference Include="../../../services/language/KHHub.LanguageService.Contracts/KHHub.LanguageService.Contracts.csproj" />
+    <PackageReference Include="Volo.Abp.LanguageManagement.HttpApi.Client" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.LanguageManagement.Web" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.TextTemplateManagement.Web" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.TextTemplateManagement.HttpApi.Client" Version="10.3.0" />
+    <ProjectReference Include="../../../services/audit-logging/KHHub.AuditLoggingService.Contracts/KHHub.AuditLoggingService.Contracts.csproj" />
+    <PackageReference Include="Volo.Abp.AuditLogging.HttpApi.Client" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Web" Version="10.3.0" />
+    <ProjectReference Include="../../../services/gdpr/KHHub.GdprService.Contracts/KHHub.GdprService.Contracts.csproj" />
+    <PackageReference Include="Volo.Abp.Gdpr.HttpApi.Client" Version="10.3.0" />
+    <PackageReference Include="Volo.Abp.Gdpr.Web" Version="10.3.0" />
+    <ProjectReference Include="../../../services/ai-management/KHHub.AIManagementService.Contracts/KHHub.AIManagementService.Contracts.csproj" />
+    <PackageReference Include="Volo.AIManagement.HttpApi.Client" Version="10.3.0" />
+    <PackageReference Include="Volo.AIManagement.Client.HttpApi.Client" Version="10.3.0" />
+    <PackageReference Include="Volo.AIManagement.Web" Version="10.3.0" />
+    <PackageReference Include="Volo.AIManagement.Client.Web" Version="10.3.0" />
+    <ProjectReference Include="../../../services/identity/KHHub.IdentityService.Contracts/KHHub.IdentityService.Contracts.csproj" />
+    <ProjectReference Include="../../../services/administration/KHHub.AdministrationService.Contracts/KHHub.AdministrationService.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\aspire\service-defaults\KHHub.ServiceDefaults\KHHub.ServiceDefaults.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Pages\**\*.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Pages\**\*.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\KHHubWeb\*.json" />
+    <Content Remove="Localization\KHHubWeb\*.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="**\*generate-proxy.json"/>
+    <Content Remove="**\*generate-proxy.json"/>
+  </ItemGroup>
+</Project>

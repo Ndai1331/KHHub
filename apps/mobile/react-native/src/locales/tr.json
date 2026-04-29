@@ -1,0 +1,110 @@
+{
+  "KHHub": {
+    "Welcome": "Hoş Geldiniz",
+    "LongWelcomeMessage": "KHHub'e Hoş Geldiniz",
+    "Menu": {
+      "Home": "Ana Sayfa",
+      "Dashboard": "Kontrol Paneli"
+    },
+    "Account": {
+      "Title": "Hesap",
+      "LoginSubtitle": "Hesabına giriş yap veya yeni hesap oluştur.",
+      "RegisterSubtitle": "Başlamak için yeni bir hesap oluştur."
+    },
+    "PasswordConfirm": "Şifreyi doğrula",
+    "ContinueWithGoogle": "Google ile devam et",
+    "DontHaveAnAccount": "Hesabın yok mu?",
+    "ForgotPasswordLink": "Şifremi unuttum",
+    "ForgotPasswordTitle": "Şifremi unuttum",
+    "ForgotPasswordSubtitle": "E-posta adresini gir, şifre sıfırlama bağlantısı göndereceğiz.",
+    "CheckYourEmailSubtitle": "Bu e-posta için bir hesap varsa, kısa süre içinde sıfırlama bağlantısı gönderilecektir.",
+    "BackToLogin": "Girişe dön",
+    "SendResetLink": "Sıfırlama bağlantısı gönder",
+    "ResetPasswordTitle": "Şifre sıfırla",
+    "ResetPasswordSubtitle": "Hesabın için yeni bir şifre belirle.",
+    "ResetPasswordAction": "Şifreyi sıfırla",
+    "ResetLink": "Sıfırlama bağlantısı",
+    "Feature": {
+      "Secure": "Güvenli",
+      "SecureDesc": "Rol tabanlı erişim kontrolü ile kurumsal düzeyde güvenlik.",
+      "Fast": "Hızlı",
+      "FastDesc": "Modern mimari ile optimize edilmiş performans.",
+      "Modern": "Modern",
+      "ModernDesc": "Sorunsuz bir deneyim için en son teknolojilerle geliştirildi."
+    }
+  },
+  "AbpUi": {
+    "AddNew": "Yeni Ekle",
+    "Cancel": "İptal",
+    "ChangePassword": "Şifre Değiştir",
+    "Delete": "Sil",
+    "Edit": "Düzenle",
+    "Error": "Hata",
+    "Language": "Dil",
+    "LoadMore": "Daha Fazla Yükle",
+    "Login": "Giriş Yap",
+    "Register": "Kayıt Ol",
+    "Logout": "Çıkış Yap",
+    "NoDataAvailableInDatatable": "Tabloda veri bulunmuyor",
+    "Ok": "Tamam",
+    "ProfilePicture": "Profil Resmi",
+    "Search": "Ara",
+    "Theme": "Tema",
+    "System": "Sistem",
+    "Light": "Açık",
+    "Dark": "Koyu"
+  },
+  "AbpAccount": {
+    "500Message": "Sunucu Hatası",
+    "Cancel": "İptal",
+    "ChoosePhoto": "Fotoğraf Seç",
+    "DefaultErrorMessage": "Bir hata oluştu",
+    "DefaultErrorMessage401": "Yetkisiz",
+    "DefaultErrorMessage401Detail": "Bu işlemi gerçekleştirmek için yetkiniz yok",
+    "DefaultErrorMessage403": "Yasak",
+    "DefaultErrorMessage403Detail": "Bu işlemi gerçekleştirmenize izin verilmiyor",
+    "DefaultErrorMessage404": "Bulunamadı",
+    "DefaultErrorMessage404Detail": "İstenen kaynak bulunamadı",
+    "DisplayName": {
+      "UseGravatar": "Gravatar Kullan"
+    },
+    "InternalServerErrorMessage": "Bir sunucu hatası oluştu",
+    "Login": "Giriş Yap",
+    "Password": "Şifre",
+    "ProfilePicture": "Profil Resmi",
+    "Save": "Kaydet",
+    "SelectNewImage": "Yeni Resim Seç",
+    "TakePhoto": "Fotoğraf Çek",
+    "UseDefault": "Varsayılanı Kullan",
+    "UserNameOrEmailAddress": "Kullanıcı Adı veya E-posta Adresi",
+    "InvalidUserNameOrPassword": "Kullanıcı adı veya şifre hatalı",
+    "ThisFieldIsRequired": "Bu alan zorunludur",
+    "ThisFieldIsNotAValidEmailAddress": "Bu geçerli bir e-posta adresi değil."
+  },
+  "AbpIdentity": {
+    "DisplayName": {
+      "CurrentPassword": "Mevcut Şifre",
+      "IsActive": "Aktif",
+      "LockoutEnabled": "Kilitlenme Etkin",
+      "Name": "Ad",
+      "NewPassword": "Yeni Şifre",
+      "NewPasswordConfirm": "Yeni Şifre Onayı",
+      "Surname": "Soyad"
+    },
+    "UserName": "Kullanıcı Adı",
+    "EmailAddress": "E-posta Adresi",
+    "Password": "Şifre",
+    "PhoneNumber": "Telefon Numarası",
+    "Save": "Kaydet",
+    "PasswordConfirmationFailed": "Şifre onayı başarısız oldu"
+  },
+  "AbpExceptionHandling": {
+    "DefaultErrorMessage": "İsteğiniz işlenirken bir hata oluştu"
+  },
+  "AbpValidation": {
+    "ThisFieldIsNotValid": "Bu alan geçerli değil"
+  },
+  "AbpSettingManagement": {
+    "Settings": "Ayarlar"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "packages": {
+    "KHHub.MobileGateway": {
+      "path": "KHHub.MobileGateway/KHHub.MobileGateway.abppkg"
+    }
+  }
+}

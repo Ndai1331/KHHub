@@ -1,0 +1,74 @@
+{
+  "name": "khhub",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start --port 19000",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "create:local-proxy": "npx local-ssl-proxy --source ${SOURCE_PORT:-443} --target 8081 --cert localhost.pem --key localhost-key.pem",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf node_modules .expo",
+    "upgrade:check": "npx expo-doctor"
+  },
+  "dependencies": {
+    "@expo/react-native-action-sheet": "^4.0.0",
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-navigation/bottom-tabs": "^7.15.9",
+    "@react-navigation/native": "^7.1.26",
+    "@react-navigation/native-stack": "^7.9.0",
+    "@reduxjs/toolkit": "^1.7.1",
+    "axios": "~1.2.1",
+    "expo": "^55.0.0",
+    "expo-image-picker": "~55.0.13",
+    "expo-linking": "~55.0.8",
+    "expo-splash-screen": "~55.0.12",
+    "expo-status-bar": "~55.0.4",
+    "formik": "^2.0.0",
+    "i18n-js": "^3.8.0",
+    "nativewind": "^4.2.3",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-native": "^0.83.4",
+    "react-native-gesture-handler": "~2.30.0",
+    "react-native-paper": "^5.9.1",
+    "react-native-reanimated": "4.2.1",
+    "react-native-root-siblings": "^5.0.0",
+    "react-native-root-toast": "^4.0.1",
+    "react-native-safe-area-context": "~5.6.0",
+    "react-native-screens": "~4.23.0",
+    "react-native-web": "^0.21.0",
+    "react-native-worklets": "0.7.2",
+    "react-redux": "^8.0.0",
+    "redux": "^4.2.1",
+    "redux-persist": "^6.0.0",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@babel/plugin-transform-modules-commonjs": "^7.27.1",
+    "@babel/plugin-transform-template-literals": "^7.25.7",
+    "@babel/preset-env": "^7.24.0",
+    "@expo/metro-runtime": "~55.0.6",
+    "@types/react": "~19.2.10",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "babel-plugin-module-resolver": "^5.0.2",
+    "tailwindcss": "^3.4.19",
+    "typescript": "~5.9.2"
+  },
+  "resolutions": {
+    "@expo/config-plugins": "~10.1.1"
+  },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "redux-persist"
+        ]
+      }
+    }
+  },
+  "private": true
+}

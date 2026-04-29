@@ -1,0 +1,7 @@
+{
+  "packages": {
+    "KHHub.AppHost": {
+      "path": "KHHub.AppHost/KHHub.AppHost.abppkg"
+    }
+  }
+} 

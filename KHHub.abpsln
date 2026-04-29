@@ -1,0 +1,360 @@
+{
+  "id": "82935ae8-4f59-4262-b971-9af3295b5982",
+  "template": "microservice",
+  "versions": {
+    "LeptonX": "5.3.0",
+    "AbpFramework": "10.3.0",
+    "AbpCommercial": "10.3.0",
+    "AbpStudio": "2.2.7",
+    "TargetDotnetFramework": "net10.0"
+  },
+  "folders": {
+    "items": {
+      "services": {},
+      "apps": {},
+      "gateways": {},
+      "aspire": {}
+
+    }
+  },
+  "defaultRunProfile": "Default",
+  "runProfiles": {
+    "Default": {
+      "path": "etc/abp-studio/run-profiles/Default.abprun.json"
+    },
+    "Aspire": {
+      "path": "etc/abp-studio/run-profiles/Aspire.abprun.json"
+    }
+  },
+  "modules": {
+    "KHHub.AdministrationService": {
+      "path": "services/administration/KHHub.AdministrationService.abpmdl",
+      "folder": "services"
+    },
+    "KHHub.IdentityService": {
+      "path": "services/identity/KHHub.IdentityService.abpmdl",
+      "folder": "services"
+    },
+    "KHHub.AuditLoggingService": {
+      "path": "services/audit-logging/KHHub.AuditLoggingService.abpmdl",
+      "folder": "services"
+    },
+    "KHHub.GdprService": {
+      "path": "services/gdpr/KHHub.GdprService.abpmdl",
+      "folder": "services"
+    },
+    "KHHub.AIManagementService": {
+      "path": "services/ai-management/KHHub.AIManagementService.abpmdl",
+      "folder": "services"
+    },
+    "KHHub.LanguageService": {
+      "path": "services/language/KHHub.LanguageService.abpmdl",
+      "folder": "services"
+    },
+    "KHHub.Web": {
+      "path": "apps/web/KHHub.Web.abpmdl",
+      "folder": "apps"
+    },
+    "KHHub.MobileGateway": {
+      "path": "gateways/mobile/KHHub.MobileGateway.abpmdl",
+      "folder": "gateways"
+    },
+    "KHHub.AuthServer": {
+      "path": "apps/auth-server/KHHub.AuthServer.abpmdl",
+      "folder": "apps"
+    },
+    "KHHub.WebGateway": {
+      "path": "gateways/web/KHHub.WebGateway.abpmdl",
+      "folder": "gateways"
+    },
+    "KHHub.AppHost": {
+      "path": "aspire/app-host/KHHub.AppHost.abpmdl",
+      "folder": "aspire"
+    },
+    "KHHub.ServiceDefaults": {
+      "path": "aspire/service-defaults/KHHub.ServiceDefaults.abpmdl",
+      "folder": "aspire"
+    },
+  },
+  "k8sProfiles": {
+    "local": {
+      "path": "etc/abp-studio/k8s-profiles/local.abpk8s.json"
+    }
+  },
+  "commands": {
+    "helmBuildDotnetImage": {
+      "triggerTargets": [
+        "HELM_CHARTS_ROOT",
+        "HELM_MAIN_CHART",
+        "HELM_SUB_CHART"
+      ],
+      "executionTargets": [
+        "HELM_MAIN_CHART",
+        "HELM_SUB_CHART"
+      ],
+      "displayName": "Build Docker Image(s)",
+      "workingDirectory": "etc/helm",
+      "terminalCommand": "./build-image.ps1 -ProjectPath {{metadata.projectPath}} -ImageName {{metadata.imageName}} -ProjectType {{metadata.projectType}}",
+      "condition": "{{metadata.projectPath != null && metadata.imageName != null && metadata.projectType != null}}"
+    },
+    "helmInstallChart": {
+      "triggerTargets": [
+        "HELM_CHARTS_ROOT",
+        "HELM_MAIN_CHART"
+      ],
+      "executionTargets": [
+        "HELM_MAIN_CHART"
+      ],
+      "displayName": "Install Chart(s)",
+      "workingDirectory": "etc/helm",
+      "terminalCommand": "./install.ps1 -ChartName {{chart.name}} -Namespace {{profile.namespace}} -ReleaseName {{chart.name}}-{{profile.name}} -DotnetEnvironment {{metadata.dotnetEnvironment}} {{~if metadata.k8ssuffix}} -User {{metadata.k8ssuffix}}{{end}}",
+      "requireConfirmation": "true",
+      "confirmationText": "Are you sure to install the chart(s) for the profile {{ profile.name }}?"
+    },
+    "helmUninstallChart": {
+      "triggerTargets": [
+        "HELM_CHARTS_ROOT",
+        "HELM_MAIN_CHART"
+      ],
+      "executionTargets": [
+        "HELM_MAIN_CHART"
+      ],
+      "displayName": "Uninstall Chart(s)",
+      "workingDirectory": "etc/helm",
+      "terminalCommand": "./uninstall.ps1 -Namespace {{profile.namespace}} -ReleaseName {{chart.name}}-{{profile.name}} {{~if metadata.k8ssuffix}} -User {{metadata.k8ssuffix}}{{end}}",
+      "requireConfirmation": "true",
+      "confirmationText": "Are you sure to uninstall the chart(s) for the profile {{profile.name}}?"
+    },
+    "kubernetesRedeploy": {
+      "triggerTargets": [
+        "KUBERNETES_SERVICE"
+      ],
+      "executionTargets": [
+        "KUBERNETES_SERVICE"
+      ],
+      "displayName": "Redeploy",
+      "workingDirectory": "etc/helm",
+      "terminalCommand": "./build-image.ps1 -ProjectPath {{chart.metadata.projectPath}} -ImageName {{chart.metadata.imageName}} -ProjectType {{chart.metadata.projectType}} &&& ./install.ps1 -ChartName {{mainChart.name}} -Namespace {{profile.namespace}} -ReleaseName {{mainChart.name}}-{{profile.name}} -DotnetEnvironment {{mainChart.metadata.dotnetEnvironment}} {{~if metadata.k8ssuffix}} -User {{metadata.k8ssuffix}}{{end}}",
+      "requireConfirmation": "true",
+      "confirmationText": "Are you sure to redeploy the related chart '{{chart.name}}' for the service '{{name}}'?",
+      "condition": "{{chart != null && chart.metadata.projectPath != null && chart.metadata.imageName != null && chart.metadata.projectType != null}}"
+    },
+    "createTlsSecret": {
+      "triggerTargets": [
+        "HELM_CHARTS_ROOT"
+      ],
+      "executionTargets": [
+        "HELM_CHARTS_ROOT"
+      ],
+      "displayName": "Create Self-Signed TLS secret",
+      "workingDirectory": "etc/helm",
+      "terminalCommand": "./create-tls-secrets.ps1 -Namespace {{profile.namespace}} {{~if metadata.k8ssuffix}} -User {{metadata.k8ssuffix}}{{end}}"
+    }
+  },
+  "helm": {
+    "charts": {
+      "khhub": {
+        "name": "khhub",
+        "path": "etc/helm/khhub",
+        "charts": {
+          "administration": {
+            "name": "administration",
+            "path": "etc/helm/khhub/charts/administration",
+            "metadata": {
+              "projectPath": "../../services/administration/KHHub.AdministrationService/KHHub.AdministrationService.csproj",
+              "imageName": "khhub/administration",
+              "projectType": "dotnet"
+            },
+            "services": [
+              ".*-administration$"
+            ]
+          },
+          "aimanagement": {
+            "name": "aimanagement",
+            "path": "etc/helm/khhub/charts/aimanagement",
+            "metadata": {
+              "projectPath": "../../services/audit-logging/KHHub.AIManagementService/KHHub.AIManagementService.csproj",
+              "imageName": "khhub/aimanagement",
+              "projectType": "dotnet"
+            },
+            "services": [
+              ".*-aimanagement$"
+            ]
+          },          
+          "auditlogging": {
+            "name": "auditlogging",
+            "path": "etc/helm/khhub/charts/auditlogging",
+            "metadata": {
+              "projectPath": "../../services/audit-logging/KHHub.AuditLoggingService/KHHub.AuditLoggingService.csproj",
+              "imageName": "khhub/auditlogging",
+              "projectType": "dotnet"
+            },
+            "services": [
+              ".*-auditlogging$"
+            ]
+          },
+          "authserver": {
+            "name": "authserver",
+            "path": "etc/helm/khhub/charts/authserver",
+            "metadata": {
+              "projectPath": "../../apps/auth-server/KHHub.AuthServer/KHHub.AuthServer.csproj",
+              "imageName": "khhub/authserver",
+              "projectType": "dotnet"
+            },
+            "services": [
+              ".*-authserver$"
+            ]
+          },
+          "elasticsearch": {
+            "name": "elasticsearch",
+            "path": "etc/helm/khhub/charts/elasticsearch",
+            "metadata": {}
+          },
+          "language": {
+            "name": "language",
+            "path": "etc/helm/khhub/charts/language",
+            "metadata": {
+              "projectPath": "../../services/language/KHHub.LanguageService/KHHub.LanguageService.csproj",
+              "imageName": "khhub/language",
+              "projectType": "dotnet"
+            },
+            "services": [
+              ".*-language"
+            ]
+          },
+          "gdpr": {
+            "name": "gdpr",
+            "path": "etc/helm/khhub/charts/gdpr",
+            "metadata": {
+              "projectPath": "../../services/gdpr/KHHub.GdprService/KHHub.GdprService.csproj",
+              "imageName": "khhub/gdpr",
+              "projectType": "dotnet"
+            },
+            "services": [
+              ".*-gdpr$"
+            ]
+          },
+          "grafana": {
+            "name": "grafana",
+            "path": "etc/helm/khhub/charts/grafana",
+            "metadata": {},
+            "services": [
+              ".*-grafana$"
+            ]
+          },
+          "identity": {
+            "name": "identity",
+            "path": "etc/helm/khhub/charts/identity",
+            "metadata": {
+              "projectPath": "../../services/identity/KHHub.IdentityService/KHHub.IdentityService.csproj",
+              "imageName": "khhub/identity",
+              "projectType": "dotnet"
+            },
+            "services": [
+              ".*-identity$"
+            ]
+          },
+          "kibana": {
+            "name": "kibana",
+            "path": "etc/helm/khhub/charts/kibana",
+            "metadata": {},
+            "services": [
+              ".*-kibana$"
+            ]
+          },
+          "mobilegateway": {
+            "name": "mobilegateway",
+            "path": "etc/helm/khhub/charts/mobilegateway",
+            "metadata": {
+              "projectPath": "../../gateways/mobile/KHHub.MobileGateway/KHHub.MobileGateway.csproj",
+              "imageName": "khhub/mobilegateway",
+              "projectType": "dotnet"
+            },
+            "services": [
+              ".*-mobilegateway$"
+            ]
+          },
+          "postgresql": {
+            "name": "postgresql",
+            "path": "etc/helm/khhub/charts/postgresql"
+          },
+          "prometheus": {
+            "name": "prometheus",
+            "path": "etc/helm/khhub/charts/prometheus",
+            "metadata": {}
+          },
+          "rabbitmq": {
+            "name": "rabbitmq",
+            "path": "etc/helm/khhub/charts/rabbitmq"
+          },
+          "redis": {
+            "name": "redis",
+            "path": "etc/helm/khhub/charts/redis"
+          },
+          "web": {
+            "name": "web",
+            "path": "etc/helm/khhub/charts/web",
+            "metadata": {
+              "projectPath": "../../apps/web/KHHub.Web/KHHub.Web.csproj",
+              "imageName": "khhub/web",
+              "projectType": "dotnet"
+            },
+            "services": [
+              ".*-web$"
+            ]
+          },
+          "webgateway": {
+            "name": "webgateway",
+            "path": "etc/helm/khhub/charts/webgateway",
+            "metadata": {
+              "projectPath": "../../gateways/web/KHHub.WebGateway/KHHub.WebGateway.csproj",
+              "imageName": "khhub/webgateway",
+              "projectType": "dotnet"
+            },
+            "services": [
+              ".*-webgateway$"
+            ]
+          }
+        },
+        "metadata": {}
+      }
+    }
+  },
+  "options": {
+    "httpRequests": {
+      "ignoredUrls": [
+      
+      ]
+    }
+  },
+  "creatingStudioConfiguration": {
+    "template": "microservice",
+    "createdAbpStudioVersion": "2.2.7",
+    "creationTool": "ABP Studio UI",    
+    "uiFramework": "mvc",
+    "runInstallLibs": "",
+    "useLocalReferences": "false",
+    "multiTenancy": "false",
+    "includeTests": "true",
+    "dynamicLocalization": "true",
+    "kubernetesConfiguration": "true",
+    "grafanaDashboard": "true",
+    "databaseProvider": "ef",
+    "databaseManagementSystem": "postgresql",
+    "theme": "leptonx",
+    "themeStyle": "system",
+    "themeMenuPlacement": "side",
+    "mobileFramework": "react-native",
+    "publicWebsite": "false",
+    "optionalModules": "GDPR TextTemplateManagement AuditLogging OpenIddictAdmin",
+    "socialLogin": "true",
+    "selectedLanguages": ["VN", "Chinese (Simplified)", "English", "Russian", "Korean", ],
+    "aspire": "true",
+    "defaultLanguage": "VN",
+    "aiManagementEnabled": true,
+    "selectedAiProviders": ["Ollama", "OpenAI", ],
+    "selectedRagVectorStores": [],
+    "createCommand": "abp new KHHub -t microservice --ui-framework mvc --mobile react-native --database-provider ef --database-management-system postgresql --theme leptonx --skip-migration  --skip-migrator  --without-cms-kit --aspire --dont-run-install-libs --dont-run-bundling -no-file-management -no-language-management"
+   
+  }
+}

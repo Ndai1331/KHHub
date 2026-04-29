@@ -1,0 +1,6 @@
+image:
+  repository: "khhub/administration"
+  tag: "latest"
+  pullPolicy: IfNotPresent
+swagger:
+  isEnabled: "true"

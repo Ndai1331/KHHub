@@ -1,0 +1,45 @@
+{
+  "packages": {
+    "KHHub.GdprService": {
+      "path": "KHHub.GdprService/KHHub.GdprService.abppkg"
+    },
+    "KHHub.GdprService.Contracts": {
+      "path": "KHHub.GdprService.Contracts/KHHub.GdprService.Contracts.abppkg"
+    },
+    "KHHub.GdprService.Tests": {
+      "path": "KHHub.GdprService.Tests/KHHub.GdprService.Tests.abppkg"
+    }
+  },
+  "imports": {
+    "Volo.Abp.PermissionManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.BlobStoring.Database": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.LanguageManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.Gdpr": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    }
+  }
+}

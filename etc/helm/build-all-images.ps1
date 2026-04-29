@@ -1,0 +1,10 @@
+./build-image.ps1 -ProjectPath "../../services/administration/KHHub.AdministrationService/KHHub.AdministrationService.csproj" -ImageName khhub/administration
+./build-image.ps1 -ProjectPath "../../services/identity/KHHub.IdentityService/KHHub.IdentityService.csproj" -ImageName khhub/identity
+./build-image.ps1 -ProjectPath "../../services/audit-logging/KHHub.AuditLoggingService/KHHub.AuditLoggingService.csproj" -ImageName khhub/auditlogging
+./build-image.ps1 -ProjectPath "../../services/gdpr/KHHub.GdprService/KHHub.GdprService.csproj" -ImageName khhub/gdpr
+./build-image.ps1 -ProjectPath "../../services/ai-management/KHHub.AIManagementService/KHHub.AIManagementService.csproj" -ImageName khhub/aimanagement
+./build-image.ps1 -ProjectPath "../../services/language/KHHub.LanguageService/KHHub.LanguageService.csproj" -ImageName khhub/language
+./build-image.ps1 -ProjectPath "../../gateways/web/KHHub.WebGateway/KHHub.WebGateway.csproj" -ImageName khhub/webgateway
+./build-image.ps1 -ProjectPath "../../apps/auth-server/KHHub.AuthServer/KHHub.AuthServer.csproj" -ImageName khhub/authserver
+./build-image.ps1 -ProjectPath "../../apps/web/KHHub.Web/KHHub.Web.csproj" -ImageName khhub/web
+./build-image.ps1 -ProjectPath "../../gateways/mobile/KHHub.MobileGateway/KHHub.MobileGateway.csproj" -ImageName khhub/mobilegateway

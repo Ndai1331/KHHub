@@ -1,0 +1,40 @@
+{
+  "packages": {
+    "KHHub.AuditLoggingService": {
+      "path": "KHHub.AuditLoggingService/KHHub.AuditLoggingService.abppkg"
+    },
+    "KHHub.AuditLoggingService.Contracts": {
+      "path": "KHHub.AuditLoggingService.Contracts/KHHub.AuditLoggingService.Contracts.abppkg"
+    },
+    "KHHub.AuditLoggingService.Tests": {
+      "path": "KHHub.AuditLoggingService.Tests/KHHub.AuditLoggingService.Tests.abppkg"
+    }
+  },
+  "imports": {
+    "Volo.Abp.PermissionManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.BlobStoring.Database": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.LanguageManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    }
+  }
+}

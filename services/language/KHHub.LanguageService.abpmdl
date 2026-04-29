@@ -1,0 +1,35 @@
+{
+  "packages": {
+    "KHHub.LanguageService": {
+      "path": "KHHub.LanguageService/KHHub.LanguageService.abppkg"
+    },
+    "KHHub.LanguageService.Contracts": {
+      "path": "KHHub.LanguageService.Contracts/KHHub.LanguageService.Contracts.abppkg"
+    },
+    "KHHub.LanguageService.Tests": {
+      "path": "KHHub.LanguageService.Tests/KHHub.LanguageService.Tests.abppkg"
+    }
+  },
+  "imports": {
+    "Volo.Abp.LanguageManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/29/2026 04:33:23 +00:00"
+    }
+  }
+}

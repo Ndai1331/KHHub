@@ -1,0 +1,11 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+
+  <Project Path="KHHub.IdentityService/KHHub.IdentityService.csproj" />
+  <Project Path="KHHub.IdentityService.Contracts/KHHub.IdentityService.Contracts.csproj" />
+  <Project Path="KHHub.IdentityService.Tests/KHHub.IdentityService.Tests.csproj" />
+</Solution>

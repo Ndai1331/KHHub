@@ -1,0 +1,110 @@
+{
+  "KHHub": {
+    "Welcome": "Welcome",
+    "LongWelcomeMessage": "Welcome to KHHub",
+    "Menu": {
+      "Home": "Home",
+      "Dashboard": "Dashboard"
+    },
+    "Account": {
+      "Title": "Account",
+      "LoginSubtitle": "Sign in to your account or create a new one.",
+      "RegisterSubtitle": "Create a new account to get started."
+    },
+    "PasswordConfirm": "Confirm password",
+    "ContinueWithGoogle": "Continue with Google",
+    "DontHaveAnAccount": "Don't have an account?",
+    "ForgotPasswordLink": "Forgot password?",
+    "ForgotPasswordTitle": "Forgot password",
+    "ForgotPasswordSubtitle": "Enter your email address and we'll send you a password reset link.",
+    "CheckYourEmailSubtitle": "If an account exists for this email, you'll receive a reset link shortly.",
+    "BackToLogin": "Back to login",
+    "SendResetLink": "Send reset link",
+    "ResetPasswordTitle": "Reset password",
+    "ResetPasswordSubtitle": "Set a new password for your account.",
+    "ResetPasswordAction": "Reset password",
+    "ResetLink": "Reset link",
+    "Feature": {
+      "Secure": "Secure",
+      "SecureDesc": "Enterprise-grade security with role-based access control.",
+      "Fast": "Fast",
+      "FastDesc": "Optimized performance with modern architecture.",
+      "Modern": "Modern",
+      "ModernDesc": "Built with the latest technologies for a seamless experience."
+    }
+  },
+  "AbpUi": {
+    "AddNew": "Add New",
+    "Cancel": "Cancel",
+    "ChangePassword": "Change Password",
+    "Delete": "Delete",
+    "Edit": "Edit",
+    "Error": "Error",
+    "Language": "Language",
+    "LoadMore": "Load More",
+    "Login": "Login",
+    "Register": "Register",
+    "Logout": "Logout",
+    "NoDataAvailableInDatatable": "No data available in datatable",
+    "Ok": "Ok",
+    "ProfilePicture": "Profile Picture",
+    "Search": "Search",
+    "Theme": "Theme",
+    "System": "System",
+    "Light": "Light",
+    "Dark": "Dark"
+  },
+  "AbpAccount": {
+    "500Message": "Internal Server Error",
+    "Cancel": "Cancel",
+    "ChoosePhoto": "Choose Photo",
+    "DefaultErrorMessage": "An error occurred",
+    "DefaultErrorMessage401": "Unauthorized",
+    "DefaultErrorMessage401Detail": "You are not authorized to perform this operation",
+    "DefaultErrorMessage403": "Forbidden",
+    "DefaultErrorMessage403Detail": "You are not allowed to perform this operation",
+    "DefaultErrorMessage404": "Not Found",
+    "DefaultErrorMessage404Detail": "The requested resource was not found",
+    "DisplayName": {
+      "UseGravatar": "Use Gravatar"
+    },
+    "InternalServerErrorMessage": "An internal server error occurred",
+    "Login": "Login",
+    "Password": "Password",
+    "ProfilePicture": "Profile Picture",
+    "Save": "Save",
+    "SelectNewImage": "Select New Image",
+    "TakePhoto": "Take Photo",
+    "UseDefault": "Use Default",
+    "UserNameOrEmailAddress": "User Name Or Email Address",
+    "InvalidUserNameOrPassword": "Invalid username or password",
+    "ThisFieldIsRequired": "This field is required",
+    "ThisFieldIsNotAValidEmailAddress": "This is not a valid email address."
+  },
+  "AbpIdentity": {
+    "DisplayName": {
+      "CurrentPassword": "Current Password",
+      "IsActive": "Is Active",
+      "LockoutEnabled": "Lockout Enabled",
+      "Name": "Name",
+      "NewPassword": "New Password",
+      "NewPasswordConfirm": "New Password Confirm",
+      "Surname": "Surname"
+    },
+    "UserName": "User Name",
+    "EmailAddress": "Email Address",
+    "Password": "Password",
+    "PhoneNumber": "Phone Number",
+    "Save": "Save",
+    "PasswordConfirmationFailed": "Password confirmation failed"
+  },
+  "AbpExceptionHandling": {
+    "DefaultErrorMessage": "An error occurred while processing your request"
+  },
+  "AbpValidation": {
+    "ThisFieldIsNotValid": "This field is not valid"
+  },
+  "AbpSettingManagement": {
+    "Settings": "Settings"
+  }
+}

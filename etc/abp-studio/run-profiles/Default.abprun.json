@@ -1,0 +1,194 @@
+{
+  "folders": {
+    "items": {
+      "services": {
+        "execution": {
+          "order": 2
+        }
+      },
+      "apps": {
+        "execution": {
+          "order": 0
+        }
+      },
+      "gateways": {
+        "execution": {
+          "order": 1
+        }
+      }
+    }
+  },
+  "applications": {
+    "KHHub.AuthServer": {
+      "type": "dotnet-project",
+      "path": "../../../apps/auth-server/KHHub.AuthServer/KHHub.AuthServer.csproj",
+      "launchUrl": "http://localhost:44315",
+      "kubernetesService": ".*-authserver$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "folder": "apps",
+      "execution": {
+        "order": 3
+      }
+    },
+    "KHHub.AuditLoggingService": {
+      "type": "dotnet-project",
+      "path": "../../../services/audit-logging/KHHub.AuditLoggingService/KHHub.AuditLoggingService.csproj",
+      "launchUrl": "http://localhost:44390",
+      "folder": "services",
+      "kubernetesService": ".*-auditlogging$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "execution": {
+        "order": 0
+      }
+    },
+    "KHHub.GdprService": {
+      "type": "dotnet-project",
+      "path": "../../../services/gdpr/KHHub.GdprService/KHHub.GdprService.csproj",
+      "launchUrl": "http://localhost:44355",
+      "folder": "services",
+      "kubernetesService": ".*-gdpr$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "execution": {
+        "order": 1
+      }
+    },
+    "KHHub.AIManagementService": {
+      "type": "dotnet-project",
+      "path": "../../../services/ai-management/KHHub.AIManagementService/KHHub.AIManagementService.csproj",
+      "launchUrl": "http://localhost:44350",
+      "folder": "services",
+      "kubernetesService": ".*-aimanagement",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "execution": {
+        "order": 2
+      }
+    },
+    "KHHub.LanguageService": {
+      "type": "dotnet-project",
+      "path": "../../../services/language/KHHub.LanguageService/KHHub.LanguageService.csproj",
+      "launchUrl": "http://localhost:44362",
+      "folder": "services",
+      "kubernetesService": ".*-language",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "execution": {
+        "order": 3
+      }
+    },
+    "KHHub.WebGateway": {
+      "type": "dotnet-project",
+      "path": "../../../gateways/web/KHHub.WebGateway/KHHub.WebGateway.csproj",
+      "launchUrl": "http://localhost:44394",
+      "kubernetesService": ".*-webgateway$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "folder": "gateways",
+      "execution": {
+        "order": 2
+      }
+    },
+    "KHHub.MobileGateway": {
+      "type": "dotnet-project",
+      "path": "../../../gateways/mobile/KHHub.MobileGateway/KHHub.MobileGateway.csproj",
+      "launchUrl": "http://localhost:44369",
+      "kubernetesService": ".*-mobilegateway$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "folder": "gateways",
+      "execution": {
+        "order": 0
+      }
+    },
+    "KHHub.Web": {
+      "type": "dotnet-project",
+      "path": "../../../apps/web/KHHub.Web/KHHub.Web.csproj",
+      "launchUrl": "http://localhost:44347",
+      "kubernetesService": ".*-web$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "folder": "apps",
+      "execution": {
+        "order": 2
+      }
+    },
+    "KHHub.AdministrationService": {
+      "type": "dotnet-project",
+      "path": "../../../services/administration/KHHub.AdministrationService/KHHub.AdministrationService.csproj",
+      "launchUrl": "http://localhost:44396",
+      "kubernetesService": ".*-administration$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "folder": "services",
+      "execution": {
+        "order": 6
+      }
+    },
+    "KHHub.IdentityService": {
+      "type": "dotnet-project",
+      "path": "../../../services/identity/KHHub.IdentityService/KHHub.IdentityService.csproj",
+      "launchUrl": "http://localhost:44333",
+      "kubernetesService": ".*-identity$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "folder": "services",
+      "execution": {
+        "order": 5
+      }
+    }
+  },
+  "containers":{
+    "serviceName": "KHHub-Containers",
+    "files": {
+      "../../docker/containers/elasticsearch.yml": {
+      },
+      "../../docker/containers/grafana.yml": {
+      },
+      "../../docker/containers/kibana.yml": {
+      },
+    "../../docker/containers/postgresql.yml": {
+    },
+      "../../docker/containers/prometheus.yml": {
+      },
+      "../../docker/containers/rabbitmq.yml": {
+      },
+      "../../docker/containers/redis.yml": {
+      },
+      "../../docker/containers/ollama.yml": {
+      }    }
+  },
+  "tools": {
+    "grafana": {
+      "url": "http://localhost:3001",
+      "relatedContainer": "grafana",
+      "relatedKubernetesService": ".*-grafana$"
+    },
+    "kibana": {
+      "url": "http://localhost:5601",
+      "relatedContainer": "kibana",
+      "relatedKubernetesService": ".*-kibana$"
+    },
+    "prometheus": {
+      "url": "http://localhost:9090",
+      "relatedContainer": "prometheus",
+      "relatedKubernetesService": ".*-prometheus$"
+    },
+    "rabbitmq": {
+      "url": "http://localhost:15672",
+      "relatedContainer": "rabbitmq",
+      "relatedKubernetesService": ".*-rabbitmq$",
+      "relatedKubernetesServicePort": 15672
+    }
+  }, 
+  "tasks": {
+      "Initialize Solution":{
+        "behaviour": 2,
+        "startCommand": "./initialize-solution.ps1",
+        "workingDirectory": "../../scripts",
+        "shortDescription": "Installs required UI libraries and creates required certificates."
+      }
+    }
+}
