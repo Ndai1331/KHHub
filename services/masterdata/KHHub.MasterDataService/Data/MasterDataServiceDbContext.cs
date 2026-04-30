@@ -1,3 +1,4 @@
+using KHHub.MasterDataService.Entities.Wards;
 using KHHub.MasterDataService.Entities.Provinces;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace KHHub.MasterDataService.Data;
 [ConnectionStringName(DatabaseName)]
 public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContext>, IHasEventInbox, IHasEventOutbox
 {
+    public DbSet<Ward> Wards { get; set; } = null!;
     public DbSet<Province> Provinces { get; set; } = null!;
 
     public const string DbTablePrefix = "";
@@ -36,6 +38,17 @@ public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContex
                 b.ConfigureByConvention();
                 b.Property(x => x.Code).HasColumnName(nameof(Province.Code)).IsRequired().HasMaxLength(ProvinceConsts.CodeMaxLength);
                 b.Property(x => x.Name).HasColumnName(nameof(Province.Name)).IsRequired().HasMaxLength(ProvinceConsts.NameMaxLength);
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<Ward>(b => {
+                b.ToTable(DbTablePrefix + "Wards", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.Code).HasColumnName(nameof(Ward.Code)).IsRequired().HasMaxLength(WardConsts.CodeMaxLength);
+                b.Property(x => x.Name).HasColumnName(nameof(Ward.Name)).IsRequired().HasMaxLength(WardConsts.NameMaxLength);
+                b.HasOne<Province>().WithMany().IsRequired().HasForeignKey(x => x.ProvinceId).OnDelete(DeleteBehavior.NoAction);
             });
         }
     }

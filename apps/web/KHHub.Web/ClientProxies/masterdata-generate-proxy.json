@@ -777,6 +777,912 @@
               "implementFrom": "KHHub.MasterDataService.Services.Provinces.IProvincesAppService"
             }
           }
+        },
+        "KHHub.MasterDataService.Services.Wards.WardsAppService": {
+          "controllerName": "Wards",
+          "controllerGroupName": "Wards",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "KHHub.MasterDataService.Services.Wards.WardsAppService",
+          "interfaces": [
+            {
+              "type": "KHHub.MasterDataService.Services.Wards.IWardsAppService",
+              "name": "IWardsAppService",
+              "methods": [
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.Wards.GetWardsInput, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.Wards.GetWardsInput",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.GetWardsInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Wards.WardWithNavigationPropertiesDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Wards.WardWithNavigationPropertiesDto>"
+                  }
+                },
+                {
+                  "name": "GetWithNavigationPropertiesAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardWithNavigationPropertiesDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardWithNavigationPropertiesDto"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardDto"
+                  }
+                },
+                {
+                  "name": "GetProvinceLookupAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.Shared.LookupRequestDto, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.Shared.LookupRequestDto",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.Shared.LookupRequestDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Shared.LookupDto<System.Guid>>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Shared.LookupDto<string>>"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.Wards.WardCreateDto, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardCreateDto",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardCreateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.Wards.WardUpdateDto, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardUpdateDto",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardUpdateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardDto"
+                  }
+                },
+                {
+                  "name": "GetListAsExcelFileAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.Wards.WardExcelDownloadDto, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardExcelDownloadDto",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardExcelDownloadDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.IRemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                  }
+                },
+                {
+                  "name": "DeleteByIdsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "wardIds",
+                      "typeAsString": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                      "type": "System.Collections.Generic.List<System.Guid>",
+                      "typeSimple": "[string]",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "DeleteAllAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.Wards.GetWardsInput, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.Wards.GetWardsInput",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.GetWardsInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetDownloadTokenAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.Shared.DownloadTokenResultDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.Shared.DownloadTokenResultDto"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/masterdata/wards",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.Wards.GetWardsInput, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.Wards.GetWardsInput",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.GetWardsInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "FilterText",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Code",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProvinceId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Wards.WardWithNavigationPropertiesDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Wards.WardWithNavigationPropertiesDto>"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Wards",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Wards.IWardsAppService"
+            },
+            "GetWithNavigationPropertiesAsyncById": {
+              "uniqueName": "GetWithNavigationPropertiesAsyncById",
+              "name": "GetWithNavigationPropertiesAsync",
+              "httpMethod": "GET",
+              "url": "api/masterdata/wards/{id}/with-navigation-properties",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardWithNavigationPropertiesDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardWithNavigationPropertiesDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Wards",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Wards.IWardsAppService"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/masterdata/wards/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Wards",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Wards.IWardsAppService"
+            },
+            "GetProvinceLookupAsyncByInput": {
+              "uniqueName": "GetProvinceLookupAsyncByInput",
+              "name": "GetProvinceLookupAsync",
+              "httpMethod": "GET",
+              "url": "api/masterdata/wards/province-lookup",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.Shared.LookupRequestDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.Shared.LookupRequestDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Shared.LookupRequestDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Shared.LookupDto<System.Guid>>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Shared.LookupDto<string>>"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Wards",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Wards.IWardsAppService"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/masterdata/wards/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Wards",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.Wards.Delete",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Wards.IWardsAppService"
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/masterdata/wards",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.Wards.WardCreateDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardCreateDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardCreateDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Wards",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.Wards.Create",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Wards.IWardsAppService"
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/masterdata/wards/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.Wards.WardUpdateDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardUpdateDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardUpdateDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Wards",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.Wards.Edit",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Wards.IWardsAppService"
+            },
+            "GetListAsExcelFileAsyncByInput": {
+              "uniqueName": "GetListAsExcelFileAsyncByInput",
+              "name": "GetListAsExcelFileAsync",
+              "httpMethod": "GET",
+              "url": "api/masterdata/wards/as-excel-file",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.Wards.WardExcelDownloadDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.Wards.WardExcelDownloadDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.WardExcelDownloadDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "DownloadToken",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "FilterText",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Code",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProvinceId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Content.IRemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+              },
+              "allowAnonymous": true,
+              "authorizeDatas": [],
+              "implementFrom": "KHHub.MasterDataService.Services.Wards.IWardsAppService"
+            },
+            "DeleteByIdsAsyncByWardIds": {
+              "uniqueName": "DeleteByIdsAsyncByWardIds",
+              "name": "DeleteByIdsAsync",
+              "httpMethod": "DELETE",
+              "url": "api/masterdata/wards/by-ids",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "wardIds",
+                  "typeAsString": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                  "type": "System.Collections.Generic.List<System.Guid>",
+                  "typeSimple": "[string]",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "wardIds",
+                  "name": "wardIds",
+                  "jsonName": null,
+                  "type": "System.Collections.Generic.List<System.Guid>",
+                  "typeSimple": "[string]",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Wards",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.Wards.Delete",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Wards.IWardsAppService"
+            },
+            "DeleteAllAsyncByInput": {
+              "uniqueName": "DeleteAllAsyncByInput",
+              "name": "DeleteAllAsync",
+              "httpMethod": "DELETE",
+              "url": "api/masterdata/wards/all",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.Wards.GetWardsInput, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.Wards.GetWardsInput",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Wards.GetWardsInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "FilterText",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Code",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProvinceId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Wards",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.Wards.Delete",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Wards.IWardsAppService"
+            },
+            "GetDownloadTokenAsync": {
+              "uniqueName": "GetDownloadTokenAsync",
+              "name": "GetDownloadTokenAsync",
+              "httpMethod": "GET",
+              "url": "api/masterdata/wards/download-token",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.Shared.DownloadTokenResultDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.Shared.DownloadTokenResultDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Wards",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Wards.IWardsAppService"
+            }
+          }
         }
       }
     }

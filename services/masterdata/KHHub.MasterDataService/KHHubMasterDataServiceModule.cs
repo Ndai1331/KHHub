@@ -1,3 +1,4 @@
+using KHHub.MasterDataService.Entities.Wards;
 using KHHub.MasterDataService.Entities.Provinces;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -196,6 +197,7 @@ public class KHHubMasterDataServiceModule : AbpModule
         context.Services.AddAbpDbContext<MasterDataServiceDbContext>(options => {
             options.AddDefaultRepositories();
             options.AddRepository<KHHub.MasterDataService.Entities.Provinces.Province, Data.Provinces.EfCoreProvinceRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.Wards.Ward, Data.Wards.EfCoreWardRepository>();
         });
         Configure<AbpDbContextOptions>(options => {
             options.Configure(opts => {

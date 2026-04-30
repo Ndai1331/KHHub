@@ -82,9 +82,7 @@ public class KHHubWebModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddStaticHttpClientProxies(
-            typeof(KHHubMasterDataServiceContractsModule).Assembly,
-            "MasterDataService");
+        context.Services.AddStaticHttpClientProxies(typeof(KHHubMasterDataServiceContractsModule).Assembly, "MasterDataService");
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
         var redis = CreateRedisConnection(configuration);
@@ -188,6 +186,7 @@ public class KHHubWebModule : AbpModule
         Configure<RazorPagesOptions>(options => {
             options.Conventions.AuthorizePage("/HostDashboard", AdministrationServicePermissions.Dashboard.Host);
             options.Conventions.AuthorizePage("/Provinces/Index", MasterDataServicePermissions.Provinces.Default);
+            options.Conventions.AuthorizePage("/Wards/Index", MasterDataServicePermissions.Wards.Default);
         });
     }
 

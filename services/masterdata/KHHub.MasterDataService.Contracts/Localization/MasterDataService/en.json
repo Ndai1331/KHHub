@@ -32,6 +32,11 @@
     "Code": "Code",
     "Name": "Name",
     "Menu:Provinces": "Provinces",
-    "Menu:MasterDataService": "Master Data Service"
+    "Menu:MasterDataService": "Master Data Service",
+    "Province": "Province",
+    "Permission:Wards": "Wards",
+    "Wards": "Wards",
+    "NewWard": "New Ward",
+    "Menu:Wards": "Wards"
   }
 }

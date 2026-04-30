@@ -68,6 +68,7 @@ public class KHHubMenuContributor : IMenuContributor
         //Administration->Settings
         administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 8);
         context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.Provinces, context.GetLocalizer<MasterDataServiceResource>()["Menu:Provinces"], url: "/Provinces", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.Provinces.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.Wards, context.GetLocalizer<MasterDataServiceResource>()["Menu:Wards"], url: "/Wards", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.Wards.Default));
     }
 
     private Task ConfigureUserMenuAsync(MenuConfigurationContext context)

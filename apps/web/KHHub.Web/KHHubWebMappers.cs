@@ -1,3 +1,5 @@
+using KHHub.MasterDataService.Services.Dtos.Wards;
+using KHHub.Web.Pages.Wards;
 using KHHub.MasterDataService.Services.Dtos.Provinces;
 using KHHub.Web.Pages.Provinces;
 using Riok.Mapperly.Abstractions;
@@ -35,4 +37,25 @@ public partial class ProvinceCreateViewModelToProvinceCreateDto : MapperBase<Pro
 {
     public override partial ProvinceCreateDto Map(ProvinceCreateViewModel source);
     public override partial void Map(ProvinceCreateViewModel source, ProvinceCreateDto destination);
+}
+
+[Mapper]
+public partial class WardDtoToWardUpdateViewModelMapper : MapperBase<WardDto, WardUpdateViewModel>
+{
+    public override partial WardUpdateViewModel Map(WardDto source);
+    public override partial void Map(WardDto source, WardUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class WardUpdateViewModelToWardUpdateDto : MapperBase<WardUpdateViewModel, WardUpdateDto>
+{
+    public override partial WardUpdateDto Map(WardUpdateViewModel source);
+    public override partial void Map(WardUpdateViewModel source, WardUpdateDto destination);
+}
+
+[Mapper]
+public partial class WardCreateViewModelToWardCreateDto : MapperBase<WardCreateViewModel, WardCreateDto>
+{
+    public override partial WardCreateDto Map(WardCreateViewModel source);
+    public override partial void Map(WardCreateViewModel source, WardCreateDto destination);
 }
