@@ -72,6 +72,9 @@
     <ProjectReference Include="../../../services/administration/KHHub.AdministrationService.Contracts/KHHub.AdministrationService.Contracts.csproj" />
     <ProjectReference Include="..\..\..\aspire\service-defaults\KHHub.ServiceDefaults\KHHub.ServiceDefaults.csproj" />
     <ProjectReference Include="../../../services/masterdata/KHHub.MasterDataService.Contracts/KHHub.MasterDataService.Contracts.csproj" />
+
+    <ProjectReference Include="../../../services/masterdata/KHHub.MasterDataService.Contracts/KHHub.MasterDataService.Contracts.csproj" />
+
   </ItemGroup>
   <ItemGroup>
     <None Update="Pages\**\*.js">

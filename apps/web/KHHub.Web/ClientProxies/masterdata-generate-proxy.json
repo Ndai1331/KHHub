@@ -1,0 +1,785 @@
+{
+  "modules": {
+    "masterdata": {
+      "rootPath": "masterdata",
+      "remoteServiceName": "MasterDataService",
+      "controllers": {
+        "KHHub.MasterDataService.Controllers.DemoController": {
+          "controllerName": "Demo",
+          "controllerGroupName": "Demo",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "KHHub.MasterDataService.Controllers.DemoController",
+          "interfaces": [],
+          "actions": {
+            "HelloWorld": {
+              "uniqueName": "HelloWorld",
+              "name": "HelloWorld",
+              "httpMethod": "GET",
+              "url": "api/master-data/demo/hello",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "authorizeDatas": [],
+              "implementFrom": "KHHub.MasterDataService.Controllers.DemoController"
+            },
+            "HelloWorldAuthorized": {
+              "uniqueName": "HelloWorldAuthorized",
+              "name": "HelloWorldAuthorized",
+              "httpMethod": "GET",
+              "url": "api/master-data/demo/hello-authorized",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": null,
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Controllers.DemoController"
+            }
+          }
+        },
+        "KHHub.MasterDataService.Services.Provinces.ProvincesAppService": {
+          "controllerName": "Provinces",
+          "controllerGroupName": "Provinces",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "KHHub.MasterDataService.Services.Provinces.ProvincesAppService",
+          "interfaces": [
+            {
+              "type": "KHHub.MasterDataService.Services.Provinces.IProvincesAppService",
+              "name": "IProvincesAppService",
+              "methods": [
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.Provinces.GetProvincesInput, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.Provinces.GetProvincesInput",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.GetProvincesInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto>"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceCreateDto, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceCreateDto",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceCreateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceUpdateDto, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceUpdateDto",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceUpdateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto"
+                  }
+                },
+                {
+                  "name": "GetListAsExcelFileAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceExcelDownloadDto, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceExcelDownloadDto",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceExcelDownloadDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.IRemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                  }
+                },
+                {
+                  "name": "DeleteByIdsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "provinceIds",
+                      "typeAsString": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                      "type": "System.Collections.Generic.List<System.Guid>",
+                      "typeSimple": "[string]",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "DeleteAllAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.Provinces.GetProvincesInput, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.Provinces.GetProvincesInput",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.GetProvincesInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetDownloadTokenAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.Shared.DownloadTokenResultDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.Shared.DownloadTokenResultDto"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/masterdata/provinces",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.Provinces.GetProvincesInput, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.Provinces.GetProvincesInput",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.GetProvincesInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "FilterText",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Code",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto>"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Provinces",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Provinces.IProvincesAppService"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/masterdata/provinces/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Provinces",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Provinces.IProvincesAppService"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/masterdata/provinces/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Provinces",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.Provinces.Delete",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Provinces.IProvincesAppService"
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/masterdata/provinces",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceCreateDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceCreateDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceCreateDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Provinces",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.Provinces.Create",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Provinces.IProvincesAppService"
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/masterdata/provinces/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceUpdateDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceUpdateDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceUpdateDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Provinces",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.Provinces.Edit",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Provinces.IProvincesAppService"
+            },
+            "GetListAsExcelFileAsyncByInput": {
+              "uniqueName": "GetListAsExcelFileAsyncByInput",
+              "name": "GetListAsExcelFileAsync",
+              "httpMethod": "GET",
+              "url": "api/masterdata/provinces/as-excel-file",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceExcelDownloadDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceExcelDownloadDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.ProvinceExcelDownloadDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "DownloadToken",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "FilterText",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Code",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Content.IRemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+              },
+              "allowAnonymous": true,
+              "authorizeDatas": [],
+              "implementFrom": "KHHub.MasterDataService.Services.Provinces.IProvincesAppService"
+            },
+            "DeleteByIdsAsyncByProvinceIds": {
+              "uniqueName": "DeleteByIdsAsyncByProvinceIds",
+              "name": "DeleteByIdsAsync",
+              "httpMethod": "DELETE",
+              "url": "api/masterdata/provinces/by-ids",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "provinceIds",
+                  "typeAsString": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                  "type": "System.Collections.Generic.List<System.Guid>",
+                  "typeSimple": "[string]",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "provinceIds",
+                  "name": "provinceIds",
+                  "jsonName": null,
+                  "type": "System.Collections.Generic.List<System.Guid>",
+                  "typeSimple": "[string]",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Provinces",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.Provinces.Delete",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Provinces.IProvincesAppService"
+            },
+            "DeleteAllAsyncByInput": {
+              "uniqueName": "DeleteAllAsyncByInput",
+              "name": "DeleteAllAsync",
+              "httpMethod": "DELETE",
+              "url": "api/masterdata/provinces/all",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.Provinces.GetProvincesInput, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.Provinces.GetProvincesInput",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Provinces.GetProvincesInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "FilterText",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Code",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Provinces",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.Provinces.Delete",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Provinces.IProvincesAppService"
+            },
+            "GetDownloadTokenAsync": {
+              "uniqueName": "GetDownloadTokenAsync",
+              "name": "GetDownloadTokenAsync",
+              "httpMethod": "GET",
+              "url": "api/masterdata/provinces/download-token",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.Shared.DownloadTokenResultDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.Shared.DownloadTokenResultDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.Provinces",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.Provinces.IProvincesAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

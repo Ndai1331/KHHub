@@ -82,7 +82,9 @@ public class KHHubWebModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddStaticHttpClientProxies(typeof(KHHubMasterDataServiceContractsModule).Assembly);
+        context.Services.AddStaticHttpClientProxies(
+            typeof(KHHubMasterDataServiceContractsModule).Assembly,
+            "MasterDataService");
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
         var redis = CreateRedisConnection(configuration);
