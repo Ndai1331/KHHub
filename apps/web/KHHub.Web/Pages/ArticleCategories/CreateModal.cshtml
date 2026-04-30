@@ -1,0 +1,36 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using KHHub.Web.Pages.ArticleCategories
+@using System.Globalization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@model CreateModalModel
+@{
+    Layout = null;
+}
+<form data-ajaxForm="true" asp-page="/ArticleCategories/CreateModal" autocomplete="off">
+    <abp-modal id="ArticleCategoryCreateModal">
+        <abp-modal-header title="@L["NewArticleCategory"].Value"></abp-modal-header>
+        <abp-modal-body>
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+            <abp-input asp-for="ArticleCategory.Name"    />
+            <abp-input asp-for="ArticleCategory.Slug"    />
+            <abp-input asp-for="ArticleCategory.Description" text-area   />
+            <abp-input asp-for="ArticleCategory.Icon"    />
+            <abp-input asp-for="ArticleCategory.ParentId"    />
+            <abp-input asp-for="ArticleCategory.DisplayOrder"    />
+            <abp-input asp-for="ArticleCategory.IsActive"    />
+            <abp-input asp-for="ArticleCategory.ThumbnailUrl"    />
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+        </abp-modal-footer>
+    </abp-modal>
+</form>

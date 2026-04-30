@@ -1,0 +1,206 @@
+@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using KHHub.MasterDataService.Permissions
+@using KHHub.Web.Pages.Articles
+@using KHHub.Web.Navigation
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@inject IAuthorizationService Authorization
+@model IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["Articles"].Value;
+    PageLayout.Content.MenuItemName = KHHubMenus.Articles;
+}
+@section styles
+{
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+}
+@section scripts
+{
+    <abp-script src="/Pages/Articles/index.js" />
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+}
+@section content_toolbar {
+    <abp-button id="ExportToExcelButton" text="@L["ExportToExcel"].Value" icon="download" size="Small" button-type="Primary" />
+    @if (await Authorization.IsGrantedAsync(MasterDataServicePermissions.Articles.Create))
+    {
+        <abp-button id="NewArticleButton" text="@L["NewArticle"].Value" icon="plus" size="Small" button-type="Primary" />
+    }
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+}
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+<abp-card>
+    <abp-card-body>
+		<abp-row class="mb-3">
+            <abp-column size-md="_8" size-lg="_10">
+                <div class="mb-3">
+                    <form id="SearchForm" autocomplete="off">
+                        <div class="input-group">
+                            <input class="form-control page-search-filter-text" id="FilterText" placeholder="@L["Search"]"/>
+                            <abp-button button-type="Primary" type="submit" icon="search"/>
+                        </div>
+                    </form>
+                </div>
+            </abp-column>
+            <abp-column size-md="_4" size-lg="_2">
+                <div class="mb-3">
+                    <abp-button style="width:100%" id="AdvancedFilterSectionToggler" button-type="Outline_Primary">
+                        @L["Filters"]<i aria-hidden="true" class="fa ms-1 fa-angle-down"></i>
+                    </abp-button>
+                </div>
+            </abp-column>
+        </abp-row>
+        <abp-row id="AdvancedFilterSection" class="mt-3" style="display: none;">
+            <abp-column size="_3">
+                <abp-input asp-for="TitleFilter" label="@L["Title"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SlugFilter" label="@L["Slug"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SummaryFilter" label="@L["Summary"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ContentFilter" label="@L["Content"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ThumbnailUrlFilter" label="@L["ThumbnailUrl"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="CoverImageUrlFilter" label="@L["CoverImageUrl"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="TypeFilter" label="@L["Type"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="AuthorNameFilter" label="@L["AuthorName"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SourceFilter" label="@L["Source"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SourceUrlFilter" label="@L["SourceUrl"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="StatusFilter" label="@L["Status"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-date-picker auto-update-input="false" today-button-classes="btn-primary" asp-for="PublishedAtFilterMin" label="@L["MinPublishedAt"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-date-picker auto-update-input="false" today-button-classes="btn-primary" asp-for="PublishedAtFilterMax" label="@L["MaxPublishedAt"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="IsFeaturedFilter" label="@L["IsFeatured"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="IsHotFilter" label="@L["IsHot"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="IsTrendingFilter" label="@L["IsTrending"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ViewCountFilterMin" label="@L["MinViewCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ViewCountFilterMax" label="@L["MaxViewCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="LikeCountFilterMin" label="@L["MinLikeCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="LikeCountFilterMax" label="@L["MaxLikeCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ShareCountFilterMin" label="@L["MinShareCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ShareCountFilterMax" label="@L["MaxShareCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="CommentCountFilterMin" label="@L["MinCommentCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="CommentCountFilterMax" label="@L["MaxCommentCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ReadingTimeFilterMin" label="@L["MinReadingTime"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ReadingTimeFilterMax" label="@L["MaxReadingTime"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SeoTitleFilter" label="@L["SeoTitle"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SeoDescriptionFilter" label="@L["SeoDescription"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SeoKeywordsFilter" label="@L["SeoKeywords"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="ArticleCategoryIdFilter" label="@L["ArticleCategory"].Value" />
+            </abp-column>
+@*//<suite-custom-code-block-5>*@
+@*//</suite-custom-code-block-5>*@
+        </abp-row>
+        <div id="bulk-delete-context-menu" class="d-none">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <p class="lead mb-0 d-none" id="items-selected-info-message"></p>
+                <div>
+                    <button class="btn btn-outline-secondary d-none mx-1" id="select-all-items-btn"></button>
+                    <button class="btn btn-outline-secondary d-none mx-1" id="clear-selection-btn">
+                        @L["ClearSelection"]
+                    </button>
+                    <button class="btn btn-danger mx-1" id="delete-selected-items">
+                        <i class="fa fa-trash"></i> @L["Delete"]
+                    </button>
+                </div>
+            </div>
+            <hr class="my-1 mx-0"/>
+        </div>
+        <abp-table striped-rows="true" id="ArticlesTable">
+            <thead>
+				<tr>
+				    <th id="BulkDeleteCheckboxTheader"><input type="checkbox" id="select_all" class="form-check-input" /></th>
+					<th>@L["Actions"]</th>
+					<th>@L["Title"]</th>
+					<th>@L["Slug"]</th>
+					<th>@L["Summary"]</th>
+					<th>@L["Content"]</th>
+					<th>@L["ThumbnailUrl"]</th>
+					<th>@L["CoverImageUrl"]</th>
+					<th>@L["Type"]</th>
+					<th>@L["AuthorName"]</th>
+					<th>@L["Source"]</th>
+					<th>@L["SourceUrl"]</th>
+					<th>@L["Status"]</th>
+					<th>@L["PublishedAt"]</th>
+					<th>@L["IsFeatured"]</th>
+					<th>@L["IsHot"]</th>
+					<th>@L["IsTrending"]</th>
+					<th>@L["ViewCount"]</th>
+					<th>@L["LikeCount"]</th>
+					<th>@L["ShareCount"]</th>
+					<th>@L["CommentCount"]</th>
+					<th>@L["ReadingTime"]</th>
+					<th>@L["SeoTitle"]</th>
+					<th>@L["SeoDescription"]</th>
+					<th>@L["SeoKeywords"]</th>
+					<th>@L["ArticleCategory"]</th>
+@*//<suite-custom-code-block-6>*@
+@*//</suite-custom-code-block-6>*@
+				</tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>
+@*//<suite-custom-code-block-7>*@
+@*//</suite-custom-code-block-7>*@

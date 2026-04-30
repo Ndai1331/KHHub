@@ -1,3 +1,13 @@
+using KHHub.MasterDataService.Services.Dtos.ArticleViews;
+using KHHub.MasterDataService.Entities.ArticleViews;
+using KHHub.MasterDataService.Services.Dtos.ArticleTagMappings;
+using KHHub.MasterDataService.Entities.ArticleTagMappings;
+using KHHub.MasterDataService.Services.Dtos.Articles;
+using KHHub.MasterDataService.Entities.Articles;
+using KHHub.MasterDataService.Services.Dtos.ArticleTags;
+using KHHub.MasterDataService.Entities.ArticleTags;
+using KHHub.MasterDataService.Services.Dtos.ArticleCategories;
+using KHHub.MasterDataService.Entities.ArticleCategories;
 using KHHub.MasterDataService.Services.Dtos.Wards;
 using KHHub.MasterDataService.Entities.Wards;
 using System;
@@ -67,4 +77,131 @@ public partial class ProvinceToLookupDtoGuidMapper : MapperBase<Province, Lookup
     {
         destination.DisplayName = source.Name;
     }
+}
+
+[Mapper]
+public partial class ArticleCategoryToArticleCategoryDtoMappers : MapperBase<ArticleCategory, ArticleCategoryDto>
+{
+    public override partial ArticleCategoryDto Map(ArticleCategory source);
+    public override partial void Map(ArticleCategory source, ArticleCategoryDto destination);
+}
+
+[Mapper]
+public partial class ArticleCategoryToArticleCategoryExcelDtoMappers : MapperBase<ArticleCategory, ArticleCategoryExcelDto>
+{
+    public override partial ArticleCategoryExcelDto Map(ArticleCategory source);
+    public override partial void Map(ArticleCategory source, ArticleCategoryExcelDto destination);
+}
+
+[Mapper]
+public partial class ArticleTagToArticleTagDtoMappers : MapperBase<ArticleTag, ArticleTagDto>
+{
+    public override partial ArticleTagDto Map(ArticleTag source);
+    public override partial void Map(ArticleTag source, ArticleTagDto destination);
+}
+
+[Mapper]
+public partial class ArticleTagToArticleTagExcelDtoMappers : MapperBase<ArticleTag, ArticleTagExcelDto>
+{
+    public override partial ArticleTagExcelDto Map(ArticleTag source);
+    public override partial void Map(ArticleTag source, ArticleTagExcelDto destination);
+}
+
+[Mapper]
+public partial class ArticleToArticleDtoMappers : MapperBase<Article, ArticleDto>
+{
+    public override partial ArticleDto Map(Article source);
+    public override partial void Map(Article source, ArticleDto destination);
+}
+
+[Mapper]
+public partial class ArticleToArticleExcelDtoMappers : MapperBase<Article, ArticleExcelDto>
+{
+    public override partial ArticleExcelDto Map(Article source);
+    public override partial void Map(Article source, ArticleExcelDto destination);
+}
+
+[Mapper]
+public partial class ArticleWithNavigationPropertiesToArticleWithNavigationPropertiesDtoMapper : MapperBase<ArticleWithNavigationProperties, ArticleWithNavigationPropertiesDto>
+{
+    public override partial ArticleWithNavigationPropertiesDto Map(ArticleWithNavigationProperties source);
+    public override partial void Map(ArticleWithNavigationProperties source, ArticleWithNavigationPropertiesDto destination);
+}
+
+[Mapper]
+public partial class ArticleCategoryToLookupDtoGuidMapper : MapperBase<ArticleCategory, LookupDto<Guid>>
+{
+    public override partial LookupDto<Guid> Map(ArticleCategory source);
+    public override partial void Map(ArticleCategory source, LookupDto<Guid> destination);
+
+    public override void AfterMap(ArticleCategory source, LookupDto<Guid> destination)
+    {
+        destination.DisplayName = source.Name;
+    }
+}
+
+[Mapper]
+public partial class ArticleTagMappingToArticleTagMappingDtoMappers : MapperBase<ArticleTagMapping, ArticleTagMappingDto>
+{
+    public override partial ArticleTagMappingDto Map(ArticleTagMapping source);
+    public override partial void Map(ArticleTagMapping source, ArticleTagMappingDto destination);
+}
+
+[Mapper]
+public partial class ArticleTagMappingToArticleTagMappingExcelDtoMappers : MapperBase<ArticleTagMapping, ArticleTagMappingExcelDto>
+{
+    public override partial ArticleTagMappingExcelDto Map(ArticleTagMapping source);
+    public override partial void Map(ArticleTagMapping source, ArticleTagMappingExcelDto destination);
+}
+
+[Mapper]
+public partial class ArticleTagMappingWithNavigationPropertiesToArticleTagMappingWithNavigationPropertiesDtoMapper : MapperBase<ArticleTagMappingWithNavigationProperties, ArticleTagMappingWithNavigationPropertiesDto>
+{
+    public override partial ArticleTagMappingWithNavigationPropertiesDto Map(ArticleTagMappingWithNavigationProperties source);
+    public override partial void Map(ArticleTagMappingWithNavigationProperties source, ArticleTagMappingWithNavigationPropertiesDto destination);
+}
+
+[Mapper]
+public partial class ArticleTagToLookupDtoGuidMapper : MapperBase<ArticleTag, LookupDto<Guid>>
+{
+    public override partial LookupDto<Guid> Map(ArticleTag source);
+    public override partial void Map(ArticleTag source, LookupDto<Guid> destination);
+
+    public override void AfterMap(ArticleTag source, LookupDto<Guid> destination)
+    {
+        destination.DisplayName = source.Slug;
+    }
+}
+
+[Mapper]
+public partial class ArticleToLookupDtoGuidMapper : MapperBase<Article, LookupDto<Guid>>
+{
+    public override partial LookupDto<Guid> Map(Article source);
+    public override partial void Map(Article source, LookupDto<Guid> destination);
+
+    public override void AfterMap(Article source, LookupDto<Guid> destination)
+    {
+        destination.DisplayName = source.Title;
+    }
+}
+
+[Mapper]
+public partial class ArticleViewToArticleViewDtoMappers : MapperBase<ArticleView, ArticleViewDto>
+{
+    public override partial ArticleViewDto Map(ArticleView source);
+    public override partial void Map(ArticleView source, ArticleViewDto destination);
+}
+
+[Mapper]
+public partial class ArticleViewToArticleViewExcelDtoMappers : MapperBase<ArticleView, ArticleViewExcelDto>
+{
+    public override partial ArticleViewExcelDto Map(ArticleView source);
+    public override partial void Map(ArticleView source, ArticleViewExcelDto destination);
+}
+
+[Mapper]
+public partial class ArticleViewWithNavigationPropertiesToArticleViewWithNavigationPropertiesDtoMapper : MapperBase<ArticleViewWithNavigationProperties, ArticleViewWithNavigationPropertiesDto>
+{
+    public override partial ArticleViewWithNavigationPropertiesDto Map(ArticleViewWithNavigationProperties source);
+    public override partial void Map(ArticleViewWithNavigationProperties source, ArticleViewWithNavigationPropertiesDto destination);
 }

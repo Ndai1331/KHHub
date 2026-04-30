@@ -1,3 +1,8 @@
+using KHHub.MasterDataService.Entities.ArticleViews;
+using KHHub.MasterDataService.Entities.ArticleTagMappings;
+using KHHub.MasterDataService.Entities.Articles;
+using KHHub.MasterDataService.Entities.ArticleTags;
+using KHHub.MasterDataService.Entities.ArticleCategories;
 using KHHub.MasterDataService.Entities.Wards;
 using KHHub.MasterDataService.Entities.Provinces;
 using Medallion.Threading;
@@ -198,6 +203,11 @@ public class KHHubMasterDataServiceModule : AbpModule
             options.AddDefaultRepositories();
             options.AddRepository<KHHub.MasterDataService.Entities.Provinces.Province, Data.Provinces.EfCoreProvinceRepository>();
             options.AddRepository<KHHub.MasterDataService.Entities.Wards.Ward, Data.Wards.EfCoreWardRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.ArticleCategories.ArticleCategory, Data.ArticleCategories.EfCoreArticleCategoryRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.ArticleTags.ArticleTag, Data.ArticleTags.EfCoreArticleTagRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.Articles.Article, Data.Articles.EfCoreArticleRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.ArticleTagMappings.ArticleTagMapping, Data.ArticleTagMappings.EfCoreArticleTagMappingRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.ArticleViews.ArticleView, Data.ArticleViews.EfCoreArticleViewRepository>();
         });
         Configure<AbpDbContextOptions>(options => {
             options.Configure(opts => {

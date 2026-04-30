@@ -1,0 +1,55 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@using KHHub.Web.Pages.Articles
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using KHHub.MasterDataService.Services.Articles; 
+@using System.Globalization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@model EditModalModel
+@{
+    Layout = null;
+}
+<form data-ajaxForm="true" asp-page="/Articles/EditModal" autocomplete="off">
+    <abp-modal id="ArticleEditModal">
+        <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
+        <abp-modal-body>
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+            <abp-input asp-for="Id" />
+                    <abp-input asp-for="Article.ConcurrencyStamp" hidden="true" suppress-label="true"/>
+            <abp-input asp-for="Article.Title"    />
+            <abp-input asp-for="Article.Slug"    />
+            <abp-input asp-for="Article.Summary" text-area   />
+            <abp-input asp-for="Article.Content" text-area   />
+            <abp-input asp-for="Article.ThumbnailUrl"    />
+            <abp-input asp-for="Article.CoverImageUrl"    />
+            <abp-select asp-for="Article.Type"    />
+            <abp-input asp-for="Article.AuthorName"    />
+            <abp-input asp-for="Article.Source"    />
+            <abp-input asp-for="Article.SourceUrl"    />
+            <abp-select asp-for="Article.Status"    />
+            <abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="Article.PublishedAt"  />
+            <abp-input asp-for="Article.IsFeatured"    />
+            <abp-input asp-for="Article.IsHot"    />
+            <abp-input asp-for="Article.IsTrending"    />
+            <abp-input asp-for="Article.ViewCount"    />
+            <abp-input asp-for="Article.LikeCount"    />
+            <abp-input asp-for="Article.ShareCount"    />
+            <abp-input asp-for="Article.CommentCount"    />
+            <abp-input asp-for="Article.ReadingTime"    />
+            <abp-input asp-for="Article.SeoTitle"    />
+            <abp-input asp-for="Article.SeoDescription" text-area   />
+            <abp-input asp-for="Article.SeoKeywords"    />
+                                <abp-select asp-for="Article.ArticleCategoryId" asp-items="Model.ArticleCategoryLookupListRequired" label="@L["ArticleCategory"].Value"/>
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+        </abp-modal-footer>
+    </abp-modal>
+</form>

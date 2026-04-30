@@ -7,4 +7,9 @@ public class KHHubMenus
     public const string HostDashboard = Prefix + ".HostDashboard";
     public const string Provinces = Prefix + ".Provinces";
     public const string Wards = Prefix + ".Wards";
+    public const string ArticleCategories = Prefix + ".ArticleCategories";
+    public const string ArticleTags = Prefix + ".ArticleTags";
+    public const string Articles = Prefix + ".Articles";
+    public const string ArticleTagMappings = Prefix + ".ArticleTagMappings";
+    public const string ArticleViews = Prefix + ".ArticleViews";
 }
