@@ -158,7 +158,18 @@
         "order": 14
       },
       "folder": "Applications"
-    }  },
+    },
+    "KHHub.MasterDataService": {
+      "type": "dotnet-project",
+      "path": "../../../services/masterdata/KHHub.MasterDataService/KHHub.MasterDataService.csproj",
+      "launchUrl": "http://localhost:44381",
+      "kubernetesService": ".*-masterdata$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "folder": "Applications",
+      "runnable": false
+    }
+  },
   "tools": {
     "Grafana": {
       "url": "http://localhost:3001",
@@ -189,4 +200,4 @@
       "relatedKubernetesService": ".*-redis$"
     }
   }
-} 
+}

@@ -8,3 +8,4 @@
 ./build-image.ps1 -ProjectPath "../../apps/auth-server/KHHub.AuthServer/KHHub.AuthServer.csproj" -ImageName khhub/authserver
 ./build-image.ps1 -ProjectPath "../../apps/web/KHHub.Web/KHHub.Web.csproj" -ImageName khhub/web
 ./build-image.ps1 -ProjectPath "../../gateways/mobile/KHHub.MobileGateway/KHHub.MobileGateway.csproj" -ImageName khhub/mobilegateway
+./build-image.ps1 -ProjectPath "../../services/masterdata/KHHub.MasterDataService/KHHub.MasterDataService.csproj" -ImageName khhub/masterdata

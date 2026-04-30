@@ -42,7 +42,7 @@ spec:
         - name: "App__SelfUrl"
           value: "{{ include "khhub.hosts.authserver" . }}"
         - name: "App__CorsOrigins"
-          value: "{{ include "khhub.hosts.webgateway" . }},http://{{ .Release.Name }}-auditlogging,http://{{ .Release.Name }}-gdpr,http://{{ .Release.Name }}-language,http://{{ .Release.Name }}-administration,http://{{ .Release.Name }}-identity"
+          value: "{{ include "khhub.hosts.webgateway" . }},http://{{ .Release.Name }}-auditlogging,http://{{ .Release.Name }}-gdpr,http://{{ .Release.Name }}-language,http://{{ .Release.Name }}-administration,http://{{ .Release.Name }}-identity,http://{{ .Release.Name }}-masterdata"
         - name: App__EnablePII
           value: "{{ .Values.global.enablePII }}"
         - name: "App__HealthUiCheckUrl"

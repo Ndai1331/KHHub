@@ -122,6 +122,7 @@ public static class AppHostExtensions
 
         var aiManagementDb = databaseServers.Postgres.AddDatabase("AIManagementService", "KHHub_AIManagement");
         var languageManagementDb = databaseServers.Postgres.AddDatabase("LanguageService", "KHHub_Language");
+        var masterdatadb = databaseServers.Postgres.AddDatabase("MasterDataService", "KHHub_MasterData");
 
         return new DatabaseReferences(
             AdministrationDb: administrationDb,
@@ -130,8 +131,9 @@ public static class AppHostExtensions
             AuditLoggingDb: auditLoggingDb,
             GdprDb: gdprDb,
             AIManagementDb: aiManagementDb,
-            LanguageManagementDb: languageManagementDb
-        );
+            LanguageManagementDb: languageManagementDb,
+        
+            MasterDataDb: masterdatadb);
     }
 
     public static void AddMicroservices(
@@ -409,7 +411,48 @@ public static class AppHostExtensions
         
         // This method is intentionally left as a placeholder for dynamic service addition
 
-    }
+    
+        var masterdata = builder
+            .AddProject<Projects.KHHub_MasterDataService>("masterdata", "KHHub.MasterDataService")
+            .WaitFor(databases.AdministrationDb)
+            .WaitFor(databases.IdentityDb)
+            .WaitFor(databases.MasterDataDb)
+            .WaitFor(databases.AuditLoggingDb)
+            .WaitFor(databases.LanguageManagementDb)
+            .WaitFor(redis)
+            .WaitFor(rabbitMq)
+            .WithReference(databases.AdministrationDb)
+            .WithReference(databases.IdentityDb)
+            .WithReference(databases.BlobStoringDb)
+            .WithReference(databases.MasterDataDb)
+            .WithReference(databases.AuditLoggingDb)
+            .WithReference(databases.LanguageManagementDb)
+            .ConfigureRabbitMq(rabbitMq, infrastructureDefaultUser, infrastructureDefaultUserPassword)
+            .ConfigureRedis(redis)
+            .ConfigureElasticSearch(elasticsearch);
+        applicationResources["MasterData"] = masterdata;
+        
+        {
+            var mobilegateway = applicationResources.FirstOrDefault(x => x.Key == "MobileGateway").Value;
+            if (mobilegateway != null)
+            {
+                mobilegateway
+                    .WaitFor(applicationResources["MasterData"])
+                    .WithReference(applicationResources["MasterData"])
+                    .WithEnvironment("ReverseProxy__Clusters__MasterData__Destinations__MasterData__Address", "http://masterdata");
+            }
+        }
+        {
+            var webgateway = applicationResources.FirstOrDefault(x => x.Key == "WebGateway").Value;
+            if (webgateway != null)
+            {
+                webgateway
+                    .WaitFor(applicationResources["MasterData"])
+                    .WithReference(applicationResources["MasterData"])
+                    .WithEnvironment("ReverseProxy__Clusters__MasterData__Destinations__MasterData__Address", "http://masterdata");
+            }
+        }
+        }
 }
 
 public record EndpointConfiguration(
@@ -472,7 +515,7 @@ public class EnvironmentConfiguration
 
     public void ConfigureAuthServer(IResourceBuilder<ProjectResource> authServer, Dictionary<string, IResourceBuilder<ProjectResource>> applicationResources)
     {
-        var allowedUrls = ReferenceExpression.Create($"{_endpoints.WebEndpoint},{_endpoints.WebGatewayEndpoint},{applicationResources["Administration"].GetEndpoint("http")},{applicationResources["Identity"].GetEndpoint("http")},{_endpoints.MobileGatewayEndpoint},{applicationResources["AuditLogging"].GetEndpoint("http")},{applicationResources["Gdpr"].GetEndpoint("http")},{applicationResources["AIManagement"].GetEndpoint("http")},{applicationResources["LanguageManagement"].GetEndpoint("http")}");
+        var allowedUrls = ReferenceExpression.Create($"{applicationResources["MasterData"].GetEndpoint("http")},{_endpoints.WebEndpoint},{_endpoints.WebGatewayEndpoint},{applicationResources["Administration"].GetEndpoint("http")},{applicationResources["Identity"].GetEndpoint("http")},{_endpoints.MobileGatewayEndpoint},{applicationResources["AuditLogging"].GetEndpoint("http")},{applicationResources["Gdpr"].GetEndpoint("http")},{applicationResources["AIManagement"].GetEndpoint("http")},{applicationResources["LanguageManagement"].GetEndpoint("http")}");
 
         authServer.WithEnvironment("AuthServer__Authority", _endpoints.AuthServerEndpoint)
             .WithEnvironment("App__RedirectAllowedUrls", allowedUrls)
@@ -539,5 +582,6 @@ public record DatabaseReferences(
     IResourceBuilder<PostgresDatabaseResource> AdministrationDb,
     IResourceBuilder<PostgresDatabaseResource> IdentityDb,
     IResourceBuilder<PostgresDatabaseResource> BlobStoringDb,
-    IResourceBuilder<PostgresDatabaseResource> AuditLoggingDb,    IResourceBuilder<PostgresDatabaseResource> GdprDb,    IResourceBuilder<PostgresDatabaseResource> AIManagementDb,    IResourceBuilder<PostgresDatabaseResource> LanguageManagementDb
+    IResourceBuilder<PostgresDatabaseResource> AuditLoggingDb,    IResourceBuilder<PostgresDatabaseResource> GdprDb,    IResourceBuilder<PostgresDatabaseResource> AIManagementDb,
+    IResourceBuilder<PostgresDatabaseResource> MasterDataDb,    IResourceBuilder<PostgresDatabaseResource> LanguageManagementDb
 );

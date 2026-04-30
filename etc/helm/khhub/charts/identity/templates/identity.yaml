@@ -69,6 +69,8 @@ spec:
           value: "{{ include "khhub.hosts.web" . }}"
         - name: "OpenIddict__Applications__WebGateway__RootUrl"
           value: "{{ include "khhub.hosts.webgateway" . }}"
+        - name: "OpenIddict__Resources__MasterDataService__RootUrl"
+          value: "http://{{ .Release.Name }}-masterdata"
         - name: "OpenIddict__Resources__AuthServer__RootUrl"
           value: "http://{{ .Release.Name }}-authserver"
         - name: "OpenIddict__Resources__AdministrationService__RootUrl"

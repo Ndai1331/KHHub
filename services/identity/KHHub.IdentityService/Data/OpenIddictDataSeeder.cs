@@ -1,4 +1,4 @@
-﻿using OpenIddict.Abstractions;
+using OpenIddict.Abstractions;
 using OpenIddict.Core;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -54,6 +54,7 @@ public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransien
         await CreateScopesAsync("AuthServer");
         await CreateScopesAsync("IdentityService");
         await CreateScopesAsync("AdministrationService");
+        await CreateScopesAsync("MasterDataService");
         await CreateScopesAsync("AuditLoggingService");
         await CreateScopesAsync("GdprService");
         await CreateScopesAsync("AIManagementService");
@@ -70,7 +71,8 @@ public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransien
             "GdprService",
             "AIManagementService",
             "LanguageService",
-            "AdministrationService"
+            "AdministrationService",
+            "MasterDataService"
         });
     }
 
@@ -118,7 +120,8 @@ public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransien
                 $"{gdprServiceServiceRootUrl}/swagger/oauth2-redirect.html",
                 $"{languageServiceServiceRootUrl}/swagger/oauth2-redirect.html",
                 $"{aiManagementServiceServiceRootUrl}/swagger/oauth2-redirect.html",
-                $"{administrationServiceRootUrl}/swagger/oauth2-redirect.html"
+                $"{administrationServiceRootUrl}/swagger/oauth2-redirect.html",
+                $"{Configuration["OpenIddict:Resources:MasterDataService:RootUrl"]!.TrimEnd('/')}/swagger/oauth2-redirect.html"
             },
             clientUri: webGatewaySwaggerRootUrl,
             logoUri: "/images/clients/swagger.svg"
@@ -171,7 +174,8 @@ public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransien
                 "GdprService",
                 "LanguageService",
                 "AIManagementService",
-                "AdministrationService"
+                "AdministrationService",
+                "MasterDataService"
             }).ToList(),
             redirectUris: new List<string> { $"{webClientRootUrl}signin-oidc" },
             postLogoutRedirectUris: new List<string>() { $"{webClientRootUrl}signout-callback-oidc" },
@@ -205,7 +209,8 @@ public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransien
                     "GdprService",
                     "LanguageService",
                     "AIManagementService",
-                    "AdministrationService"
+                    "AdministrationService",
+                    "MasterDataService"
                 }).ToList(),
                 redirectUris: new List<string> { reactNativeRootUrl },
                 postLogoutRedirectUris: new List<string> { reactNativeRootUrl }

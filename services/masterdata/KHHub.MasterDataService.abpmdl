@@ -1,0 +1,40 @@
+{
+  "packages": {
+    "KHHub.MasterDataService": {
+      "path": "KHHub.MasterDataService/KHHub.MasterDataService.abppkg"
+    },
+    "KHHub.MasterDataService.Tests": {
+      "path": "KHHub.MasterDataService.Tests/KHHub.MasterDataService.Tests.abppkg"
+    },
+    "KHHub.MasterDataService.Contracts": {
+      "path": "KHHub.MasterDataService.Contracts/KHHub.MasterDataService.Contracts.abppkg"
+    }
+  },
+  "imports": {
+    "Volo.Abp.PermissionManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/30/2026 03:15:03 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/30/2026 03:15:03 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/30/2026 03:15:03 +00:00"
+    },
+    "Volo.Abp.BlobStoring.Database": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/30/2026 03:15:03 +00:00"
+    },
+    "Volo.Abp.LanguageManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "04/30/2026 03:15:03 +00:00"
+    }
+  }
+}

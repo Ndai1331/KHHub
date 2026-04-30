@@ -138,27 +138,30 @@
       "execution": {
         "order": 5
       }
+    },
+    "KHHub.MasterDataService": {
+      "type": "dotnet-project",
+      "path": "../../../services/masterdata/KHHub.MasterDataService/KHHub.MasterDataService.csproj",
+      "launchUrl": "http://localhost:44381",
+      "kubernetesService": ".*-masterdata$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "folder": "services",
+      "runnable": true
     }
   },
-  "containers":{
+  "containers": {
     "serviceName": "KHHub-Containers",
     "files": {
-      "../../docker/containers/elasticsearch.yml": {
-      },
-      "../../docker/containers/grafana.yml": {
-      },
-      "../../docker/containers/kibana.yml": {
-      },
-    "../../docker/containers/postgresql.yml": {
-    },
-      "../../docker/containers/prometheus.yml": {
-      },
-      "../../docker/containers/rabbitmq.yml": {
-      },
-      "../../docker/containers/redis.yml": {
-      },
-      "../../docker/containers/ollama.yml": {
-      }    }
+      "../../docker/containers/elasticsearch.yml": {},
+      "../../docker/containers/grafana.yml": {},
+      "../../docker/containers/kibana.yml": {},
+      "../../docker/containers/postgresql.yml": {},
+      "../../docker/containers/prometheus.yml": {},
+      "../../docker/containers/rabbitmq.yml": {},
+      "../../docker/containers/redis.yml": {},
+      "../../docker/containers/ollama.yml": {}
+    }
   },
   "tools": {
     "grafana": {
@@ -182,13 +185,13 @@
       "relatedKubernetesService": ".*-rabbitmq$",
       "relatedKubernetesServicePort": 15672
     }
-  }, 
+  },
   "tasks": {
-      "Initialize Solution":{
-        "behaviour": 2,
-        "startCommand": "./initialize-solution.ps1",
-        "workingDirectory": "../../scripts",
-        "shortDescription": "Installs required UI libraries and creates required certificates."
-      }
+    "Initialize Solution": {
+      "behaviour": 2,
+      "startCommand": "./initialize-solution.ps1",
+      "workingDirectory": "../../scripts",
+      "shortDescription": "Installs required UI libraries and creates required certificates."
     }
+  }
 }

@@ -1,0 +1,11 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+
+  <Project Path="KHHub.MasterDataService/KHHub.MasterDataService.csproj" />
+  <Project Path="KHHub.MasterDataService.Contracts/KHHub.MasterDataService.Contracts.csproj" />
+  <Project Path="KHHub.MasterDataService.Tests/KHHub.MasterDataService.Tests.csproj" />
+</Solution>

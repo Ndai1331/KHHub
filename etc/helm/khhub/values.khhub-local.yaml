@@ -8,6 +8,7 @@ global:
     web: "[RELEASE_NAME]-web"
     mobilegateway: "[RELEASE_NAME]-mobilegateway"
   connectionStrings:
+    masterdata: "Host=[RELEASE_NAME]-postgresql;Port=5432;Database=KHHub_MasterData;User ID=postgres;Password=myPassword;Timeout=240;"
     administration: "Host=[RELEASE_NAME]-postgresql;Port=5432;Database=KHHub_Administration;User ID=postgres;Password=myPassword;Timeout=240;"
     blobStoring: "Host=[RELEASE_NAME]-postgresql;Port=5432;Database=KHHub_BlobStoring;User ID=postgres;Password=myPassword;Timeout=240;"
     identity: "Host=[RELEASE_NAME]-postgresql;Port=5432;Database=KHHub_Identity;User ID=postgres;Password=myPassword;Timeout=240;"

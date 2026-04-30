@@ -1,3 +1,4 @@
+using KHHub.MasterDataService;
 using Volo.Abp.Identity;
 using Volo.Abp.Account.Admin.Web;
 using Volo.Abp.Identity.Web;
@@ -70,6 +71,7 @@ using KHHub.Web.HealthChecks;
 namespace KHHub.Web;
 
 [DependsOn(
+    typeof(KHHubMasterDataServiceContractsModule),
     typeof(AbpAccountAdminHttpApiClientModule),
     typeof(AbpAccountAdminWebModule),
     typeof(KHHubIdentityServiceContractsModule),
@@ -122,6 +124,8 @@ public class KHHubWebModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddStaticHttpClientProxies(typeof(KHHubMasterDataServiceContractsModule).Assembly);
+
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
         var redis = CreateRedisConnection(configuration);
@@ -379,6 +383,7 @@ public class KHHubWebModule : AbpModule
                 options.Scope.Add("AuthServer");
                 options.Scope.Add("IdentityService");
                 options.Scope.Add("AdministrationService");
+ 				options.Scope.Add("MasterDataService");
                 options.Scope.Add("AuditLoggingService");
                 options.Scope.Add("GdprService");
                 options.Scope.Add("AIManagementService");

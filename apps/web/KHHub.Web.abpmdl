@@ -6,8 +6,8 @@
   },
   "imports": {
     "Volo.Abp.LeptonXTheme": {
-        "version": "5.3.0",
-        "isInstalled": true,
+      "version": "5.3.0",
+      "isInstalled": true,
       "creationTime": "04/29/2026 04:33:23 +00:00"
     },
     "Volo.Abp.Account.Pro": {
@@ -59,7 +59,7 @@
       "path": "../../services/ai-management/KHHub.AIManagementService.abpmdl",
       "isInstalled": true,
       "creationTime": "04/29/2026 04:33:23 +00:00"
-    },    
+    },
     "Volo.Abp.LanguageManagement": {
       "version": "10.3.0",
       "isInstalled": true,
@@ -79,6 +79,10 @@
       "version": "10.3.0",
       "isInstalled": true,
       "creationTime": "04/29/2026 04:33:23 +00:00"
+    },
+    "KHHub.MasterDataService": {
+      "path": "../../services/masterdata/KHHub.MasterDataService.abpmdl",
+      "isInstalled": true
     }
   }
 }

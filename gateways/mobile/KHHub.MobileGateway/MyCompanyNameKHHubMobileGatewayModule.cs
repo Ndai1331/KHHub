@@ -183,6 +183,7 @@ public class MyCompanyNameKHHubMobileGatewayModule : AbpModule
 
         options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
         options.OAuthScopes(
+            "MasterDataService",
             "AdministrationService",
             "AuthServer",
             "IdentityService"

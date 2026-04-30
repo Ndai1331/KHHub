@@ -41,6 +41,8 @@ spec:
           value: "{{ .Values.global.abpStudioClient.isLinkEnabled }}"
         - name: "App__HealthUiCheckUrl"
           value: "http://{{ .Release.Name }}-webgateway/health-status"
+        - name: "ReverseProxy__Clusters__MasterData__Destinations__MasterData__Address"
+          value: "http://{{ .Release.Name }}-masterdata"
         - name: "ReverseProxy__Clusters__AuthServer__Destinations__AuthServer__Address"
           value: "http://{{ .Release.Name }}-authserver"
         - name: "ReverseProxy__Clusters__Administration__Destinations__Administration__Address"

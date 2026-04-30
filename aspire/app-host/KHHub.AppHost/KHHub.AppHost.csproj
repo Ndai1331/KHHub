@@ -52,4 +52,8 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\gateways\mobile\KHHub.MobileGateway\KHHub.MobileGateway.csproj" />
     </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="/Users/user/Documents/KHHub/services/masterdata/KHHub.MasterDataService/KHHub.MasterDataService.csproj" />
+  </ItemGroup>
 </Project>
