@@ -10,4 +10,12 @@ public class MasterDataServicePermissions
     {
         return ReflectionHelper.GetPublicConstantsRecursively(typeof(MasterDataServicePermissions));
     }
+
+    public static class Provinces
+    {
+        public const string Default = GroupName + ".Provinces";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
 }

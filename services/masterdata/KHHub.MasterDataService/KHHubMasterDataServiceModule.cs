@@ -1,3 +1,4 @@
+using KHHub.MasterDataService.Entities.Provinces;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -47,35 +48,14 @@ using KHHub.MasterDataService.HealthChecks;
 
 namespace KHHub.MasterDataService;
 
-[DependsOn(
-    typeof(BlobStoringDatabaseEntityFrameworkCoreModule),
-    typeof(AbpSettingManagementEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCorePostgreSqlModule),
-    typeof(LanguageManagementEntityFrameworkCoreModule),
-    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-    typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-    typeof(KHHubMasterDataServiceContractsModule),
-    typeof(AbpAutofacModule),
-    typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpSwashbuckleModule),
-    typeof(AbpAspNetCoreMvcModule),
-    typeof(AbpEventBusRabbitMqModule),
-    typeof(AbpBackgroundJobsRabbitMqModule),
-    typeof(AbpCachingStackExchangeRedisModule),
-    typeof(AbpDistributedLockingModule),
-    typeof(AbpStudioClientAspNetCoreModule),
-    typeof(AbpHttpClientModule)
-    )]
+[DependsOn(typeof(BlobStoringDatabaseEntityFrameworkCoreModule), typeof(AbpSettingManagementEntityFrameworkCoreModule), typeof(AbpEntityFrameworkCorePostgreSqlModule), typeof(LanguageManagementEntityFrameworkCoreModule), typeof(AbpPermissionManagementEntityFrameworkCoreModule), typeof(AbpFeatureManagementEntityFrameworkCoreModule), typeof(AbpAuditLoggingEntityFrameworkCoreModule), typeof(KHHubMasterDataServiceContractsModule), typeof(AbpAutofacModule), typeof(AbpAspNetCoreSerilogModule), typeof(AbpSwashbuckleModule), typeof(AbpAspNetCoreMvcModule), typeof(AbpEventBusRabbitMqModule), typeof(AbpBackgroundJobsRabbitMqModule), typeof(AbpCachingStackExchangeRedisModule), typeof(AbpDistributedLockingModule), typeof(AbpStudioClientAspNetCoreModule), typeof(AbpHttpClientModule))]
 public class KHHubMasterDataServiceModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
         var env = context.Services.GetHostingEnvironment();
-        
         var redis = CreateRedisConnection(configuration);
-
         ConfigurePII(configuration);
         ConfigureJwtBearer(context, configuration);
         ConfigureCors(context, configuration);
@@ -92,7 +72,6 @@ public class KHHubMasterDataServiceModule : AbpModule
         ConfigureAutoControllers();
         ConfigureDynamicClaims(context);
         ConfigureHealthChecks(context);
-        
         context.Services.TransformAbpClaims();
     }
 
@@ -101,7 +80,6 @@ public class KHHubMasterDataServiceModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
         var configuration = context.GetConfiguration();
-
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
@@ -116,31 +94,29 @@ public class KHHubMasterDataServiceModule : AbpModule
         app.UseHttpMetrics();
         app.UseAuthentication();
         app.UseAuthorization();
-
         if (IsSwaggerEnabled(configuration))
         {
             app.UseSwagger();
-            app.UseAbpSwaggerUI(options => { ConfigureSwaggerUI(options, configuration); });
+            app.UseAbpSwaggerUI(options => {
+                ConfigureSwaggerUI(options, configuration);
+            });
         }
-        
+
         app.UseAbpSerilogEnrichers();
         app.UseAuditing();
         app.UseUnitOfWork();
         app.UseDynamicClaims();
-        app.UseConfiguredEndpoints(endpoints =>
-        {
+        app.UseConfiguredEndpoints(endpoints => {
             endpoints.MapMetrics();
         });
     }
-    
+
     public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         using var scope = context.ServiceProvider.CreateScope();
-        await scope.ServiceProvider
-            .GetRequiredService<MasterDataServiceRuntimeDatabaseMigrator>()
-            .CheckAndApplyDatabaseMigrationsAsync();
+        await scope.ServiceProvider.GetRequiredService<MasterDataServiceRuntimeDatabaseMigrator>().CheckAndApplyDatabaseMigrationsAsync();
     }
-    
+
     private ConnectionMultiplexer CreateRedisConnection(IConfiguration configuration)
     {
         return ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
@@ -150,7 +126,7 @@ public class KHHubMasterDataServiceModule : AbpModule
     {
         context.Services.AddMasterDataServiceHealthChecks();
     }
-    
+
     private void ConfigurePII(IConfiguration configuration)
     {
         if (configuration.GetValue<bool>(configuration["App:EnablePII"] ?? "false"))
@@ -160,23 +136,19 @@ public class KHHubMasterDataServiceModule : AbpModule
         }
     }
 
-    
     private void ConfigureJwtBearer(ServiceConfigurationContext context, IConfiguration configuration)
     {
-        context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddAbpJwtBearer(options =>
-            {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.MetadataAddress = configuration["AuthServer:MetaAddress"]!.EnsureEndsWith('/') + ".well-known/openid-configuration";
-                options.RequireHttpsMetadata = configuration.GetValue<bool>(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.Audience = configuration["AuthServer:Audience"];
-            });
+        context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddAbpJwtBearer(options => {
+            options.Authority = configuration["AuthServer:Authority"];
+            options.MetadataAddress = configuration["AuthServer:MetaAddress"]!.EnsureEndsWith('/') + ".well-known/openid-configuration";
+            options.RequireHttpsMetadata = configuration.GetValue<bool>(configuration["AuthServer:RequireHttpsMetadata"]);
+            options.Audience = configuration["AuthServer:Audience"];
+        });
     }
 
     private void ConfigureVirtualFileSystem()
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
-        {
+        Configure<AbpVirtualFileSystemOptions>(options => {
             options.FileSets.AddEmbedded<KHHubMasterDataServiceModule>();
         });
     }
@@ -184,24 +156,11 @@ public class KHHubMasterDataServiceModule : AbpModule
     private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
     {
         var corsOrigins = configuration["App:CorsOrigins"];
-        context.Services.AddCors(options =>
-        {
-            options.AddDefaultPolicy(builder =>
-            {
+        context.Services.AddCors(options => {
+            options.AddDefaultPolicy(builder => {
                 if (corsOrigins != null)
                 {
-                    builder
-                        .WithOrigins(
-                            corsOrigins
-                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                                .Select(o => o.RemovePostFix("/"))
-                                .ToArray()
-                        )
-                        .WithAbpExposedHeaders()
-                        .SetIsOriginAllowedToAllowWildcardSubdomains()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
+                    builder.WithOrigins(corsOrigins.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(o => o.RemovePostFix("/")).ToArray()).WithAbpExposedHeaders().SetIsOriginAllowedToAllowWildcardSubdomains().AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 }
             });
         });
@@ -211,119 +170,87 @@ public class KHHubMasterDataServiceModule : AbpModule
     {
         if (IsSwaggerEnabled(configuration))
         {
-            context.Services.AddAbpSwaggerGenWithOAuth(
-                authority: configuration["AuthServer:Authority"],
-                scopes: new Dictionary<string, string>
-                {
-                    {"MasterDataService", "MasterDataService Service API"}
-                },
-                options =>
-                {
-                    options.SwaggerDoc("v1", new OpenApiInfo {Title = "MasterDataService API", Version = "v1"});
-                    options.DocInclusionPredicate((_, _) => true);
-                    options.CustomSchemaIds(type => type.FullName);
-                });
+            context.Services.AddAbpSwaggerGenWithOAuth(authority: configuration["AuthServer:Authority"], scopes: new Dictionary<string, string> { { "MasterDataService", "MasterDataService Service API" } }, options => {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "MasterDataService API", Version = "v1" });
+                options.DocInclusionPredicate((_, _) => true);
+                options.CustomSchemaIds(type => type.FullName);
+            });
         }
     }
 
     private void ConfigureDatabase(ServiceConfigurationContext context)
     {
-        Configure<AbpDbConnectionOptions>(options =>
-        {
-            options.Databases.Configure("AdministrationService", database =>
-            {
+        Configure<AbpDbConnectionOptions>(options => {
+            options.Databases.Configure("AdministrationService", database => {
                 database.MappedConnections.Add(AbpPermissionManagementDbProperties.ConnectionStringName);
                 database.MappedConnections.Add(AbpFeatureManagementDbProperties.ConnectionStringName);
                 database.MappedConnections.Add(AbpSettingManagementDbProperties.ConnectionStringName);
             });
-            
-            options.Databases.Configure("AuditLoggingService", database =>
-            {
+            options.Databases.Configure("AuditLoggingService", database => {
                 database.MappedConnections.Add(AbpAuditLoggingDbProperties.ConnectionStringName);
             });
-            
-            options.Databases.Configure("LanguageService", database =>
-            {
+            options.Databases.Configure("LanguageService", database => {
                 database.MappedConnections.Add(LanguageManagementDbProperties.ConnectionStringName);
             });
         });
-
-        context.Services.AddAbpDbContext<MasterDataServiceDbContext>(options =>
-        {
+        context.Services.AddAbpDbContext<MasterDataServiceDbContext>(options => {
             options.AddDefaultRepositories();
+            options.AddRepository<KHHub.MasterDataService.Entities.Provinces.Province, Data.Provinces.EfCoreProvinceRepository>();
         });
-
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.Configure(opts =>
-            {
+        Configure<AbpDbContextOptions>(options => {
+            options.Configure(opts => {
                 /* Sets default DBMS for this service */
                 opts.UseNpgsql();
             });
-            
-            options.Configure<MasterDataServiceDbContext>(c =>
-            {
-                c.UseNpgsql(b =>
-                {
+            options.Configure<MasterDataServiceDbContext>(c => {
+                c.UseNpgsql(b => {
                     b.MigrationsHistoryTable("__MasterDataService_Migrations");
                 });
             });
         });
     }
-    
+
     private void ConfigureDistributedCache(IConfiguration configuration)
     {
-        Configure<AbpDistributedCacheOptions>(options =>
-        {
+        Configure<AbpDistributedCacheOptions>(options => {
             options.KeyPrefix = configuration["AbpDistributedCache:KeyPrefix"] ?? "";
         });
     }
-    
+
     private void ConfigureDataProtection(ServiceConfigurationContext context, IConfiguration configuration, IConnectionMultiplexer redis)
     {
-        context.Services
-            .AddDataProtection()
-            .SetApplicationName(configuration["DataProtection:ApplicationName"]!)
-            .PersistKeysToStackExchangeRedis(redis, configuration["DataProtection:Keys"]);
+        context.Services.AddDataProtection().SetApplicationName(configuration["DataProtection:ApplicationName"]!).PersistKeysToStackExchangeRedis(redis, configuration["DataProtection:Keys"]);
     }
 
     private void ConfigureDistributedLock(ServiceConfigurationContext context, IConnectionMultiplexer redis)
     {
-        context.Services.AddSingleton<IDistributedLockProvider>(
-            _ => new RedisDistributedSynchronizationProvider(redis.GetDatabase())
-        );
+        context.Services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
     }
 
     private void ConfigureDistributedEventBus()
     {
-        Configure<AbpDistributedEventBusOptions>(options =>
-        {
-            options.Inboxes.Configure(config =>
-            {
+        Configure<AbpDistributedEventBusOptions>(options => {
+            options.Inboxes.Configure(config => {
                 config.UseDbContext<MasterDataServiceDbContext>();
             });
-
-            options.Outboxes.Configure(config =>
-            {
+            options.Outboxes.Configure(config => {
                 config.UseDbContext<MasterDataServiceDbContext>();
             });
         });
     }
-    
+
     private void ConfigureIntegrationServices()
     {
-        Configure<AbpAspNetCoreMvcOptions>(options =>
-        {
+        Configure<AbpAspNetCoreMvcOptions>(options => {
             options.ExposeIntegrationServices = true;
         });
     }
-    
+
     private void ConfigureAntiForgery(IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
         {
-            Configure<AbpAntiForgeryOptions>(options =>
-            {
+            Configure<AbpAntiForgeryOptions>(options => {
                 /* Disabling ABP's auto anti forgery validation feature, because
                  * when we run the application in "localhost" domain, it will share
                  * the cookies between other applications (like the authentication server)
@@ -334,33 +261,29 @@ public class KHHubMasterDataServiceModule : AbpModule
             });
         }
     }
-    
+
     private void ConfigureObjectMapper(ServiceConfigurationContext context)
     {
         context.Services.AddMapperlyObjectMapper<KHHubMasterDataServiceModule>();
     }
-    
+
     private void ConfigureAutoControllers()
     {
-        Configure<AbpAspNetCoreMvcOptions>(options =>
-        {
-            options
-                .ConventionalControllers
-                .Create(typeof(KHHubMasterDataServiceModule).Assembly, opts =>
-                {
-                    opts.RemoteServiceName = MasterDataRemoteServiceConsts.RemoteServiceName;
-                    opts.RootPath = MasterDataRemoteServiceConsts.ModuleName;
-                });
+        Configure<AbpAspNetCoreMvcOptions>(options => {
+            options.ConventionalControllers.Create(typeof(KHHubMasterDataServiceModule).Assembly, opts => {
+                opts.RemoteServiceName = MasterDataRemoteServiceConsts.RemoteServiceName;
+                opts.RootPath = MasterDataRemoteServiceConsts.ModuleName;
+            });
         });
     }
-    
+
     private static void ConfigureSwaggerUI(SwaggerUIOptions options, IConfiguration configuration)
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "MasterDataService API");
         options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
         options.OAuthScopes("MasterDataService");
     }
-    
+
     private static bool IsSwaggerEnabled(IConfiguration configuration)
     {
         return bool.Parse(configuration["Swagger:IsEnabled"] ?? "true");
@@ -368,8 +291,7 @@ public class KHHubMasterDataServiceModule : AbpModule
 
     private void ConfigureDynamicClaims(ServiceConfigurationContext context)
     {
-        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
-        {
+        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options => {
             options.IsDynamicClaimsEnabled = true;
         });
     }

@@ -1,3 +1,4 @@
+using KHHub.MasterDataService.Permissions;
 using KHHub.MasterDataService;
 using Volo.Abp.Identity;
 using Volo.Abp.Account.Admin.Web;
@@ -70,50 +71,7 @@ using KHHub.Web.HealthChecks;
 
 namespace KHHub.Web;
 
-[DependsOn(
-    typeof(KHHubMasterDataServiceContractsModule),
-    typeof(AbpAccountAdminHttpApiClientModule),
-    typeof(AbpAccountAdminWebModule),
-    typeof(KHHubIdentityServiceContractsModule),
-    typeof(KHHubAdministrationServiceContractsModule),
-    typeof(AbpOpenIddictProWebModule),
-    typeof(AbpOpenIddictProHttpApiClientModule),
-    typeof(LanguageManagementWebModule),
-    typeof(LanguageManagementHttpApiClientModule),
-    typeof(KHHubLanguageServiceContractsModule),
-    typeof(TextTemplateManagementWebModule),
-    typeof(TextTemplateManagementHttpApiClientModule),
-    typeof(AbpAuditLoggingWebModule),
-    typeof(AbpAuditLoggingHttpApiClientModule),
-    typeof(KHHubAuditLoggingServiceContractsModule),
-    typeof(AbpGdprWebModule),
-    typeof(AbpGdprHttpApiClientModule),
-    typeof(KHHubGdprServiceContractsModule),
-    typeof(KHHubAIManagementServiceContractsModule),
-    typeof(AIManagementWebModule),
-    typeof(AIManagementClientWebModule),
-    typeof(AIManagementHttpApiClientModule),
-    typeof(AIManagementClientHttpApiClientModule),
-    typeof(AbpAccountPublicWebImpersonationModule),
-    typeof(AbpAccountPublicWebSharedModule),
-    typeof(AbpAccountPublicHttpApiClientModule),
-    typeof(AbpIdentityHttpApiClientModule),
-    typeof(AbpIdentityWebModule),
-    typeof(AbpFeatureManagementWebModule),
-    typeof(AbpCachingStackExchangeRedisModule),
-    typeof(AbpEventBusRabbitMqModule),
-    typeof(AbpAspNetCoreMvcClientModule),
-    typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
-    typeof(AbpHttpClientWebModule),
-    typeof(AbpHttpClientIdentityModelWebModule),
-    typeof(AbpAutofacModule),
-    typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpAspNetCoreMvcUiLeptonXThemeModule),
-    typeof(AbpSettingManagementHttpApiClientModule),
-    typeof(AbpPermissionManagementHttpApiClientModule),
-    typeof(AbpFeatureManagementHttpApiClientModule),
-    typeof(AbpStudioClientAspNetCoreModule)
-)]
+[DependsOn(typeof(KHHubMasterDataServiceContractsModule), typeof(AbpAccountAdminHttpApiClientModule), typeof(AbpAccountAdminWebModule), typeof(KHHubIdentityServiceContractsModule), typeof(KHHubAdministrationServiceContractsModule), typeof(AbpOpenIddictProWebModule), typeof(AbpOpenIddictProHttpApiClientModule), typeof(LanguageManagementWebModule), typeof(LanguageManagementHttpApiClientModule), typeof(KHHubLanguageServiceContractsModule), typeof(TextTemplateManagementWebModule), typeof(TextTemplateManagementHttpApiClientModule), typeof(AbpAuditLoggingWebModule), typeof(AbpAuditLoggingHttpApiClientModule), typeof(KHHubAuditLoggingServiceContractsModule), typeof(AbpGdprWebModule), typeof(AbpGdprHttpApiClientModule), typeof(KHHubGdprServiceContractsModule), typeof(KHHubAIManagementServiceContractsModule), typeof(AIManagementWebModule), typeof(AIManagementClientWebModule), typeof(AIManagementHttpApiClientModule), typeof(AIManagementClientHttpApiClientModule), typeof(AbpAccountPublicWebImpersonationModule), typeof(AbpAccountPublicWebSharedModule), typeof(AbpAccountPublicHttpApiClientModule), typeof(AbpIdentityHttpApiClientModule), typeof(AbpIdentityWebModule), typeof(AbpFeatureManagementWebModule), typeof(AbpCachingStackExchangeRedisModule), typeof(AbpEventBusRabbitMqModule), typeof(AbpAspNetCoreMvcClientModule), typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule), typeof(AbpHttpClientWebModule), typeof(AbpHttpClientIdentityModelWebModule), typeof(AbpAutofacModule), typeof(AbpAspNetCoreSerilogModule), typeof(AbpAspNetCoreMvcUiLeptonXThemeModule), typeof(AbpSettingManagementHttpApiClientModule), typeof(AbpPermissionManagementHttpApiClientModule), typeof(AbpFeatureManagementHttpApiClientModule), typeof(AbpStudioClientAspNetCoreModule))]
 public class KHHubWebModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -125,11 +83,9 @@ public class KHHubWebModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddStaticHttpClientProxies(typeof(KHHubMasterDataServiceContractsModule).Assembly);
-
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
         var redis = CreateRedisConnection(configuration);
-
         ConfigureStudio(hostingEnvironment);
         ConfigurePII(configuration);
         ConfigureLocalization(hostingEnvironment);
@@ -145,24 +101,19 @@ public class KHHubWebModule : AbpModule
         ConfigureDynamicClaims(context);
         ConfigureHealthChecks(context);
         ConfigurePages();
-
         if (hostingEnvironment.IsDevelopment())
         {
-            context.Services.AddRazorPages()
-                .AddRazorRuntimeCompilation();
+            context.Services.AddRazorPages().AddRazorRuntimeCompilation();
         }
-
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
-
         if (!env.IsDevelopment())
         {
-            app.Use((ctx, next) =>
-            {
+            app.Use((ctx, next) => {
                 /* This application should act like it is always called as HTTPS.
                  * Because it will work in a HTTPS url in production,
                  * but the HTTPS is stripped out in Ingress controller.
@@ -178,23 +129,15 @@ public class KHHubWebModule : AbpModule
         }
 
         app.UseAbpRequestLocalization();
-
         if (!env.IsDevelopment())
         {
             app.UseErrorPage();
         }
 
-        app.UseForwardedHeaders(new ForwardedHeadersOptions {
-            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-        });
-        
+        app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
         if (env.IsDevelopment())
         {
-            app.UseCookiePolicy(new CookiePolicyOptions
-            {
-                MinimumSameSitePolicy = SameSiteMode.None,
-                Secure = CookieSecurePolicy.Always
-            });
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.None, Secure = CookieSecurePolicy.Always });
         }
 
         app.UseCorrelationId();
@@ -207,39 +150,27 @@ public class KHHubWebModule : AbpModule
         app.UseAbpSerilogEnrichers();
         app.UseDynamicClaims();
         app.UseAuthorization();
-        app.UseConfiguredEndpoints(endpoints =>
-        {
+        app.UseConfiguredEndpoints(endpoints => {
             endpoints.MapMetrics();
         });
     }
-    
+
     private static void PreConfigureDataAnnotations(ServiceConfigurationContext context)
     {
-        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
-        {
-            options.AddAssemblyResource(
-                typeof(LanguageServiceResource),
-                typeof(KHHubWebModule).Assembly
-            );
+        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options => {
+            options.AddAssemblyResource(typeof(LanguageServiceResource), typeof(KHHubWebModule).Assembly);
         });
     }
-    
+
     private void PreConfigureHttpClient()
     {
-        PreConfigure<AbpHttpClientBuilderOptions>(options =>
-        {
-            options.ProxyClientBuildActions.Add((remoteServiceName, clientBuilder) =>
-            {
-                clientBuilder.AddTransientHttpErrorPolicy(policyBuilder =>
-                    policyBuilder.WaitAndRetryAsync(
-                        4,
-                        i => TimeSpan.FromSeconds(Math.Pow(2, i))
-                    )
-                );
+        PreConfigure<AbpHttpClientBuilderOptions>(options => {
+            options.ProxyClientBuildActions.Add((remoteServiceName, clientBuilder) => {
+                clientBuilder.AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.WaitAndRetryAsync(4, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
             });
         });
     }
-    
+
     private ConnectionMultiplexer CreateRedisConnection(IConfiguration configuration)
     {
         return ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
@@ -252,9 +183,9 @@ public class KHHubWebModule : AbpModule
 
     private void ConfigurePages()
     {
-        Configure<RazorPagesOptions>(options =>
-        {
+        Configure<RazorPagesOptions>(options => {
             options.Conventions.AuthorizePage("/HostDashboard", AdministrationServicePermissions.Dashboard.Host);
+            options.Conventions.AuthorizePage("/Provinces/Index", MasterDataServicePermissions.Provinces.Default);
         });
     }
 
@@ -262,13 +193,11 @@ public class KHHubWebModule : AbpModule
     {
         if (hostingEnvironment.IsProduction())
         {
-            Configure<AbpStudioClientOptions>(options =>
-            {
+            Configure<AbpStudioClientOptions>(options => {
                 options.IsLinkEnabled = false;
             });
         }
     }
-
 
     private void ConfigurePII(IConfiguration configuration)
     {
@@ -281,124 +210,84 @@ public class KHHubWebModule : AbpModule
 
     private void ConfigureLocalization(IWebHostEnvironment hostingEnvironment)
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
-        {
+        Configure<AbpVirtualFileSystemOptions>(options => {
             options.FileSets.AddEmbedded<KHHubWebModule>();
         });
-        
         if (hostingEnvironment.IsDevelopment())
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
+            Configure<AbpVirtualFileSystemOptions>(options => {
                 options.FileSets.ReplaceEmbeddedByPhysical<KHHubWebModule>(hostingEnvironment.ContentRootPath);
-                options.FileSets.ReplaceEmbeddedByPhysical<KHHubLanguageServiceContractsModule>(
-                    Path.Combine(
-                        hostingEnvironment.ContentRootPath,
-                        string.Format(
-                            "..{0}..{0}..{0}services{0}language{0}KHHub.LanguageService.Contracts",
-                            Path.DirectorySeparatorChar
-                        )
-                    )
-                );
+                options.FileSets.ReplaceEmbeddedByPhysical<KHHubLanguageServiceContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}services{0}language{0}KHHub.LanguageService.Contracts", Path.DirectorySeparatorChar)));
             });
         }
-
     }
 
     private void ConfigureBundling()
     {
-        Configure<AbpBundlingOptions>(options =>
-        {
-            options.StyleBundles.Configure(
-                LeptonXThemeBundles.Styles.Global,
-                bundle =>
-                {
-                    bundle.AddFiles("/global-styles.css");
-                }
-            );
-
-            options.ScriptBundles.Configure(
-                LeptonXThemeBundles.Scripts.Global,
-                bundle =>
-                {
-                    bundle.AddFiles("/global-scripts.js");
-                }
-            );
+        Configure<AbpBundlingOptions>(options => {
+            options.StyleBundles.Configure(LeptonXThemeBundles.Styles.Global, bundle => {
+                bundle.AddFiles("/global-styles.css");
+            });
+            options.ScriptBundles.Configure(LeptonXThemeBundles.Scripts.Global, bundle => {
+                bundle.AddFiles("/global-scripts.js");
+            });
         });
     }
-    
+
     private void ConfigureDistributedCache(IConfiguration configuration)
     {
-        Configure<AbpDistributedCacheOptions>(options =>
-        {
+        Configure<AbpDistributedCacheOptions>(options => {
             options.KeyPrefix = configuration["AbpDistributedCache:KeyPrefix"]!;
         });
     }
 
     private void ConfigureUrls(IConfiguration configuration)
     {
-        Configure<AppUrlOptions>(options =>
-        {
+        Configure<AppUrlOptions>(options => {
             options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
         });
-
-        Configure<AbpAccountLinkUserOptions>(options =>
-        {
+        Configure<AbpAccountLinkUserOptions>(options => {
             options.LoginUrl = configuration["AuthServer:Authority"];
         });
     }
-    
+
     private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
     {
-        context.Services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = "Cookies";
-                options.DefaultChallengeScheme = "oidc";
-            })
-            .AddCookie("Cookies", options =>
-            {
-                options.ExpireTimeSpan = TimeSpan.FromDays(365);
-            })
-            .AddAbpOpenIdConnect("oidc", options =>
-            {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = configuration.GetValue<bool>(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
-                
-                options.ClientId = configuration["AuthServer:ClientId"];
-                options.ClientSecret = configuration["AuthServer:ClientSecret"];
-
-                options.SaveTokens = true;
-                options.GetClaimsFromUserInfoEndpoint = true;
-                
-                options.TokenValidationParameters.ValidIssuers = new[]
-                {
-                    configuration["AuthServer:Authority"].EnsureEndsWith('/'),
-                    configuration["AuthServer:MetaAddress"].EnsureEndsWith('/')
-                }; 
-
-                options.Scope.Add("roles");
-                options.Scope.Add("email");
-                options.Scope.Add("phone");
-                options.Scope.Add("AuthServer");
-                options.Scope.Add("IdentityService");
-                options.Scope.Add("AdministrationService");
- 				options.Scope.Add("MasterDataService");
-                options.Scope.Add("AuditLoggingService");
-                options.Scope.Add("GdprService");
-                options.Scope.Add("AIManagementService");
-                options.Scope.Add("LanguageService");
-            });
-        
+        context.Services.AddAuthentication(options => {
+            options.DefaultScheme = "Cookies";
+            options.DefaultChallengeScheme = "oidc";
+        }).AddCookie("Cookies", options => {
+            options.ExpireTimeSpan = TimeSpan.FromDays(365);
+        }).AddAbpOpenIdConnect("oidc", options => {
+            options.Authority = configuration["AuthServer:Authority"];
+            options.RequireHttpsMetadata = configuration.GetValue<bool>(configuration["AuthServer:RequireHttpsMetadata"]);
+            options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+            options.ClientId = configuration["AuthServer:ClientId"];
+            options.ClientSecret = configuration["AuthServer:ClientSecret"];
+            options.SaveTokens = true;
+            options.GetClaimsFromUserInfoEndpoint = true;
+            options.TokenValidationParameters.ValidIssuers = new[] {
+                configuration["AuthServer:Authority"].EnsureEndsWith('/'),
+                configuration["AuthServer:MetaAddress"].EnsureEndsWith('/')
+            };
+            options.Scope.Add("roles");
+            options.Scope.Add("email");
+            options.Scope.Add("phone");
+            options.Scope.Add("AuthServer");
+            options.Scope.Add("IdentityService");
+            options.Scope.Add("AdministrationService");
+            options.Scope.Add("MasterDataService");
+            options.Scope.Add("AuditLoggingService");
+            options.Scope.Add("GdprService");
+            options.Scope.Add("AIManagementService");
+            options.Scope.Add("LanguageService");
+        });
         if (Convert.ToBoolean(configuration["AuthServer:IsOnK8s"]))
         {
-            context.Services.Configure<OpenIdConnectOptions>("oidc", options =>
-            {
+            context.Services.Configure<OpenIdConnectOptions>("oidc", options => {
                 options.MetadataAddress = configuration["AuthServer:MetaAddress"].EnsureEndsWith('/') + ".well-known/openid-configuration";
-
                 var previousOnRedirectToIdentityProvider = options.Events.OnRedirectToIdentityProvider;
-                options.Events.OnRedirectToIdentityProvider = async ctx =>
-                {
+                options.Events.OnRedirectToIdentityProvider = async ctx => {
                     // Intercept the redirection so the browser navigates to the right URL in your host
                     ctx.ProtocolMessage.IssuerAddress = configuration["AuthServer:Authority"].EnsureEndsWith('/') + "connect/authorize";
                     if (previousOnRedirectToIdentityProvider != null)
@@ -407,8 +296,7 @@ public class KHHubWebModule : AbpModule
                     }
                 };
                 var previousOnRedirectToIdentityProviderForSignOut = options.Events.OnRedirectToIdentityProviderForSignOut;
-                options.Events.OnRedirectToIdentityProviderForSignOut = async ctx =>
-                {
+                options.Events.OnRedirectToIdentityProviderForSignOut = async ctx => {
                     // Intercept the redirection for signout so the browser navigates to the right URL in your host
                     ctx.ProtocolMessage.IssuerAddress = configuration["AuthServer:Authority"].EnsureEndsWith('/') + "connect/endsession";
                     if (previousOnRedirectToIdentityProviderForSignOut != null)
@@ -419,56 +307,46 @@ public class KHHubWebModule : AbpModule
             });
         }
     }
-    
+
     private static void ConfigureDataProtection(ServiceConfigurationContext context, IConfiguration configuration, ConnectionMultiplexer redis)
     {
-        context.Services
-            .AddDataProtection()
-            .SetApplicationName(configuration["DataProtection:ApplicationName"]!)
-            .PersistKeysToStackExchangeRedis(redis, configuration["DataProtection:Keys"]);
+        context.Services.AddDataProtection().SetApplicationName(configuration["DataProtection:ApplicationName"]!).PersistKeysToStackExchangeRedis(redis, configuration["DataProtection:Keys"]);
     }
-    
+
     private void ConfigureNavigation(IConfiguration configuration)
     {
-        Configure<AbpNavigationOptions>(options =>
-        {
+        Configure<AbpNavigationOptions>(options => {
             options.MenuContributors.Add(new KHHubMenuContributor(configuration));
         });
     }
-    
+
     private void ConfigureToolbar()
     {
-        Configure<AbpToolbarOptions>(options =>
-        {
+        Configure<AbpToolbarOptions>(options => {
             options.Contributors.Add(new KHHubToolbarContributor());
         });
     }
-    
+
     private void ConfigureLeptonXTheme()
     {
-        Configure<LeptonXThemeOptions>(options =>
-        {
+        Configure<LeptonXThemeOptions>(options => {
             options.DefaultStyle = LeptonXStyleNames.System;
         });
-        
-        Configure<LeptonXThemeMvcOptions>(options =>
-        {
+        Configure<LeptonXThemeMvcOptions>(options => {
             options.ApplicationLayout = LeptonXMvcLayouts.SideMenu;
         });
     }
-    
+
     private void ConfigureImpersonation()
     {
-        Configure<AbpIdentityWebOptions>(options =>
-        {
+        Configure<AbpIdentityWebOptions>(options => {
             options.EnableUserImpersonation = true;
         });
     }
 
     private void ConfigureDynamicClaims(ServiceConfigurationContext context)
     {
-        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
-        {
+        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options => {
             options.IsDynamicClaimsEnabled = true;
         });
     }
