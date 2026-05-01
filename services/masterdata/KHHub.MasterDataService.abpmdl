@@ -26,10 +26,10 @@
       "isInstalled": true,
       "creationTime": "04/30/2026 03:15:03 +00:00"
     },
-    "Volo.Abp.BlobStoring.Database": {
+    "Volo.Abp.BlobStoring.Minio": {
       "version": "10.3.0",
       "isInstalled": true,
-      "creationTime": "04/30/2026 03:15:03 +00:00"
+      "creationTime": "05/01/2026 00:00:00 +00:00"
     },
     "Volo.Abp.LanguageManagement": {
       "version": "10.3.0",

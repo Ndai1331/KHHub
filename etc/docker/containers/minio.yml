@@ -1,3 +1,7 @@
+networks:
+  khhub:
+    external: true
+
 services:
   minio:
     image: quay.io/minio/minio:latest
@@ -13,10 +17,3 @@ services:
       - ~/apps/khhub/minio:/data
     networks:
       - khhub
-
-volumes:
-  minio_data:
-
-networks:
-  hc-network:
-    external: true

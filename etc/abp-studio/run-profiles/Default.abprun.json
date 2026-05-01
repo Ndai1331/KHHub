@@ -160,6 +160,7 @@
       "../../docker/containers/prometheus.yml": {},
       "../../docker/containers/rabbitmq.yml": {},
       "../../docker/containers/redis.yml": {},
+      "../../docker/containers/minio.yml": {},
       "../../docker/containers/ollama.yml": {}
     }
   },
@@ -184,6 +185,11 @@
       "relatedContainer": "rabbitmq",
       "relatedKubernetesService": ".*-rabbitmq$",
       "relatedKubernetesServicePort": 15672
+    },
+    "minio": {
+      "url": "http://localhost:9001",
+      "relatedContainer": "minio",
+      "relatedKubernetesService": ".*-minio$"
     }
   },
   "tasks": {

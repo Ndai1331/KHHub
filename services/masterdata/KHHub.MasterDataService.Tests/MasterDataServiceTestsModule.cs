@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using KHHub.MasterDataService.BlobContainers;
 using KHHub.MasterDataService.Data;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.TestBase;
@@ -22,7 +23,8 @@ using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
-using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.BlobStoring.Memory;
 
 namespace KHHub.MasterDataService.Tests;
 
@@ -43,7 +45,7 @@ namespace KHHub.MasterDataService.Tests;
 [DependsOn(
     typeof(AbpAspNetCoreTestBaseModule),
     typeof(AbpEntityFrameworkCoreSqliteModule),
-    typeof(BlobStoringDatabaseEntityFrameworkCoreModule),
+    typeof(AbpBlobStoringMemoryModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
@@ -63,13 +65,20 @@ public class MasterDataServiceTestsModule : AbpModule
     
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var configuration = context.Services.GetConfiguration();
-        
         ConfigureAuthorization(context);
         ConfigureDatabase(context);
         ConfigureDatabaseTransactions(context);
         ConfigureDynamicStores();
         ConfigureBackgroundJobs();
+        ConfigureBlobStoringForTests();
+    }
+
+    private void ConfigureBlobStoringForTests()
+    {
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            options.Containers.Configure<ArticleMediaBlobContainer>(c => c.UseMemory());
+        });
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -191,11 +200,6 @@ public class MasterDataServiceTestsModule : AbpModule
         // SettingManagementDbContext
         new SettingManagementDbContext(
             new DbContextOptionsBuilder<SettingManagementDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
-        
-        // BlobStoringDbContext
-        new BlobStoringDbContext(
-            new DbContextOptionsBuilder<BlobStoringDbContext>().UseSqlite(connection).Options
         ).GetService<IRelationalDatabaseCreator>().CreateTables();
 
         return connection;

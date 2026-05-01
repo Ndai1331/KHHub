@@ -10,6 +10,7 @@ using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
@@ -49,12 +50,14 @@ using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DistributedEvents;
-using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.BlobStoring.Minio;
+using KHHub.MasterDataService.BlobContainers;
 using KHHub.MasterDataService.HealthChecks;
 
 namespace KHHub.MasterDataService;
 
-[DependsOn(typeof(BlobStoringDatabaseEntityFrameworkCoreModule), typeof(AbpSettingManagementEntityFrameworkCoreModule), typeof(AbpEntityFrameworkCorePostgreSqlModule), typeof(LanguageManagementEntityFrameworkCoreModule), typeof(AbpPermissionManagementEntityFrameworkCoreModule), typeof(AbpFeatureManagementEntityFrameworkCoreModule), typeof(AbpAuditLoggingEntityFrameworkCoreModule), typeof(KHHubMasterDataServiceContractsModule), typeof(AbpAutofacModule), typeof(AbpAspNetCoreSerilogModule), typeof(AbpSwashbuckleModule), typeof(AbpAspNetCoreMvcModule), typeof(AbpEventBusRabbitMqModule), typeof(AbpBackgroundJobsRabbitMqModule), typeof(AbpCachingStackExchangeRedisModule), typeof(AbpDistributedLockingModule), typeof(AbpStudioClientAspNetCoreModule), typeof(AbpHttpClientModule))]
+[DependsOn(typeof(AbpBlobStoringMinioModule), typeof(AbpSettingManagementEntityFrameworkCoreModule), typeof(AbpEntityFrameworkCorePostgreSqlModule), typeof(LanguageManagementEntityFrameworkCoreModule), typeof(AbpPermissionManagementEntityFrameworkCoreModule), typeof(AbpFeatureManagementEntityFrameworkCoreModule), typeof(AbpAuditLoggingEntityFrameworkCoreModule), typeof(KHHubMasterDataServiceContractsModule), typeof(AbpAutofacModule), typeof(AbpAspNetCoreSerilogModule), typeof(AbpSwashbuckleModule), typeof(AbpAspNetCoreMvcModule), typeof(AbpEventBusRabbitMqModule), typeof(AbpBackgroundJobsRabbitMqModule), typeof(AbpCachingStackExchangeRedisModule), typeof(AbpDistributedLockingModule), typeof(AbpStudioClientAspNetCoreModule), typeof(AbpHttpClientModule))]
 public class KHHubMasterDataServiceModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -78,7 +81,28 @@ public class KHHubMasterDataServiceModule : AbpModule
         ConfigureAutoControllers();
         ConfigureDynamicClaims(context);
         ConfigureHealthChecks(context);
+        ConfigureBlobStoring(configuration);
         context.Services.TransformAbpClaims();
+    }
+
+    private void ConfigureBlobStoring(IConfiguration configuration)
+    {
+        var minio = configuration.GetSection("BlobStoring:Minio");
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            options.Containers.Configure<ArticleMediaBlobContainer>(container =>
+            {
+                container.UseMinio(cfg =>
+                {
+                    cfg.EndPoint = minio["EndPoint"]!;
+                    cfg.AccessKey = minio["AccessKey"]!;
+                    cfg.SecretKey = minio["SecretKey"]!;
+                    cfg.BucketName = minio["BucketName"]!;
+                    cfg.WithSSL = minio.GetValue("WithSSL", false);
+                    cfg.CreateBucketIfNotExists = minio.GetValue("CreateBucketIfNotExists", true);
+                });
+            });
+        });
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

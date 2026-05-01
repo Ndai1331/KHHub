@@ -52,6 +52,144 @@
             }
           }
         },
+        "KHHub.MasterDataService.IntegrationServices.ArticleMediaIntegrationService": {
+          "controllerName": "ArticleMediaIntegration",
+          "controllerGroupName": "ArticleMediaIntegration",
+          "isRemoteService": true,
+          "isIntegrationService": true,
+          "apiVersion": null,
+          "type": "KHHub.MasterDataService.IntegrationServices.ArticleMediaIntegrationService",
+          "interfaces": [
+            {
+              "type": "KHHub.MasterDataService.IntegrationServices.IArticleMediaIntegrationService",
+              "name": "IArticleMediaIntegrationService",
+              "methods": [
+                {
+                  "name": "UploadImageAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "content",
+                      "typeAsString": "Volo.Abp.Content.IRemoteStreamContent, Volo.Abp.Core",
+                      "type": "Volo.Abp.Content.IRemoteStreamContent",
+                      "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.ArticleMedia.ArticleMediaUploadResultDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleMedia.ArticleMediaUploadResultDto"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.IRemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "UploadImageAsyncByContent": {
+              "uniqueName": "UploadImageAsyncByContent",
+              "name": "UploadImageAsync",
+              "httpMethod": "POST",
+              "url": "integration-api/masterdata/article-media/upload-image",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "content",
+                  "typeAsString": "Volo.Abp.Content.IRemoteStreamContent, Volo.Abp.Core",
+                  "type": "Volo.Abp.Content.IRemoteStreamContent",
+                  "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "content",
+                  "name": "content",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Content.IRemoteStreamContent",
+                  "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "FormFile",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.ArticleMedia.ArticleMediaUploadResultDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleMedia.ArticleMediaUploadResultDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": null,
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.IntegrationServices.IArticleMediaIntegrationService"
+            },
+            "GetAsyncByName": {
+              "uniqueName": "GetAsyncByName",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "integration-api/masterdata/article-media",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Content.IRemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": null,
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.IntegrationServices.IArticleMediaIntegrationService"
+            }
+          }
+        },
         "KHHub.MasterDataService.Services.ArticleCategories.ArticleCategoriesAppService": {
           "controllerName": "ArticleCategories",
           "controllerGroupName": "ArticleCategories",

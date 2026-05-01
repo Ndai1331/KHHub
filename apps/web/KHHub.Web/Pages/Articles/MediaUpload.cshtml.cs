@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Content;
+using KHHub.MasterDataService.IntegrationServices;
 
 namespace KHHub.Web.Pages.Articles;
 
@@ -18,11 +19,11 @@ public class MediaUploadModel : AbpPageModel
 
     private const long MaxBytes = 10 * 1024 * 1024;
 
-    private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly IArticleMediaIntegrationService _articleMediaIntegrationService;
 
-    public MediaUploadModel(IWebHostEnvironment webHostEnvironment)
+    public MediaUploadModel(IArticleMediaIntegrationService articleMediaIntegrationService)
     {
-        _webHostEnvironment = webHostEnvironment;
+        _articleMediaIntegrationService = articleMediaIntegrationService;
     }
 
     public IActionResult OnGet()
@@ -48,19 +49,15 @@ public class MediaUploadModel : AbpPageModel
             return BadRequest(new { error = "File type is not allowed." });
         }
 
-        var relativeDir = Path.Combine("uploads", "articles");
-        var physicalDir = Path.Combine(_webHostEnvironment.WebRootPath, relativeDir);
-        Directory.CreateDirectory(physicalDir);
+        await using var readStream = file.OpenReadStream();
+        using var ms = new MemoryStream();
+        await readStream.CopyToAsync(ms);
+        ms.Position = 0;
 
-        var fileName = GuidGenerator.Create().ToString("N") + ext;
-        var physicalPath = Path.Combine(physicalDir, fileName);
+        var remote = new RemoteStreamContent(ms, file.FileName, file.ContentType ?? "application/octet-stream");
 
-        await using (var stream = System.IO.File.Create(physicalPath))
-        {
-            await file.CopyToAsync(stream);
-        }
-
-        var url = "/" + relativeDir.Replace(Path.DirectorySeparatorChar, '/') + "/" + fileName;
+        var result = await _articleMediaIntegrationService.UploadImageAsync(remote);
+        var url = Url.Page("/Articles/ArticleMediaFile", null, new { name = result.Name })!;
         return new JsonResult(new { url });
     }
 }
