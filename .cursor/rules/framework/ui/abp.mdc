@@ -1,0 +1,22 @@
+---
+description: "ABP UI Mapping"
+alwaysApply: true
+---
+
+# ABP Rules
+
+## Cards
+- Use <abp-card>
+
+## Table
+- Use <abp-table>
+
+## Forms
+- Use abp-dynamic-form when possible
+
+## Buttons
+- Use <abp-button>
+
+## JS
+- Use abp.notify
+- Use abp.message.confirm

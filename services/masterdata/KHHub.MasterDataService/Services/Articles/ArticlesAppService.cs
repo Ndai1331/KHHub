@@ -64,7 +64,12 @@ public abstract class ArticlesAppServiceBase : ApplicationService
 
     public virtual async Task<PagedResultDto<LookupDto<Guid>>> GetArticleCategoryLookupAsync(LookupRequestDto input)
     {
-        var query = (await _articleCategoryRepository.GetQueryableAsync()).WhereIf(!string.IsNullOrWhiteSpace(input.Filter), x => x.Name != null && x.Name.Contains(input.Filter));
+        var normalizedFilter = input.Filter?.Trim();
+        var query = (await _articleCategoryRepository.GetQueryableAsync())
+            .WhereIf(
+                !string.IsNullOrWhiteSpace(normalizedFilter),
+                x => x.Name != null && x.Name.ToUpper().Contains(normalizedFilter!.ToUpper())
+            );
         var lookupData = await query.PageBy(input.SkipCount, input.MaxResultCount).ToDynamicListAsync<KHHub.MasterDataService.Entities.ArticleCategories.ArticleCategory>();
         var totalCount = query.Count();
         return new PagedResultDto<LookupDto<Guid>>

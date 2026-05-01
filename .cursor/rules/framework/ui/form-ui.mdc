@@ -1,0 +1,48 @@
+# Form UI Rules
+
+## Layout
+
+- Use sections (cards):
+
+  1. Basic Info
+  2. Content
+  3. Media
+  4. SEO
+  5. Settings
+
+---
+
+## Grid
+
+- Use 2-column layout
+- Content editor full width
+
+---
+
+## Inputs
+- alway add label with localization. Example "label="@L["Icon"].Value"  (if not exits please add new to /services/{currentservice}/*.KHHub.{currentservice}.Contracts/Localization/*/en.json and any localization file .json )
+
+- Title → text
+- Slug → auto generate
+- Category → select
+- Tags → multi select (typeahead)
+- Thumbnail → upload and preview image 
+- Content → rich text (TinyMceEditor) editor with upload image and can show image in content 
+
+---
+
+## UX
+
+- Show validation inline
+- Save button top-right
+- Cancel button secondary
+
+---
+
+## Actions
+
+Top right:
+- Delete if is edit page
+- Save (if is create page)/ Edit (if is edit page) 
+- Save And Publish (or active) if dto contain status enum 
+- Back to list

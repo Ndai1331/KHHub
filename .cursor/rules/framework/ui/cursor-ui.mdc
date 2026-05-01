@@ -1,0 +1,26 @@
+---
+description: "Cursor UI Generation Behavior"
+alwaysApply: true
+---
+
+# Cursor Behavior
+
+When generating UI:
+
+- Always follow KH HUB design system
+- Prefer clean SaaS UI like LeptonX
+- Avoid default/basic layout
+- Avoid clutter
+
+## Must:
+
+- Use spacing system
+- Use consistent colors
+- Use sections (cards)
+- Use icons for actions
+
+## Never:
+
+- Use modal for main CRUD
+- Create long single-column forms
+- Mix inconsistent styles

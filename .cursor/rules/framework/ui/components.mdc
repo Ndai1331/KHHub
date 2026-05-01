@@ -1,0 +1,25 @@
+---
+description: "KH HUB UI Components"
+alwaysApply: true
+---
+
+# Components
+
+## Cards
+- Always use abp-card
+- Separate sections clearly
+
+## Buttons
+- Primary = main action
+- Secondary = cancel
+- Danger = delete
+
+## Table
+- Hoverable rows
+- Striped rows
+- Action column on right
+
+## Badge
+- Published: green
+- Draft: gray
+- Pending: orange

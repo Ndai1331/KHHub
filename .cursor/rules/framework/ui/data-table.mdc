@@ -1,0 +1,37 @@
+# Data Table Rules
+
+## Table Style
+
+- Use abp-table or DataTables
+- Enable:
+  - hoverable rows
+  - striped rows
+
+## Columns
+
+- First column: thumbnail or icon
+- Main column: title (bold)
+- Secondary: category / date
+- Status: badge
+- Last column: actions (icon buttons)
+
+## Actions
+
+- Edit (icon)
+- Delete (icon)
+- No text buttons
+
+## UX
+
+- Add search input on top
+- Add filters:
+  - category
+  - status
+
+- Pagination bottom right
+
+## Empty State
+
+- Show:
+  "No data available"
+  + button create

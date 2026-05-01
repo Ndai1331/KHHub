@@ -134,6 +134,27 @@ public partial class ArticleCreateViewModelToArticleCreateDto : MapperBase<Artic
 }
 
 [Mapper]
+public partial class ArticleCreatePageViewModelToArticleCreateDto : MapperBase<ArticleCreatePageViewModel, ArticleCreateDto>
+{
+    public override partial ArticleCreateDto Map(ArticleCreatePageViewModel source);
+    public override partial void Map(ArticleCreatePageViewModel source, ArticleCreateDto destination);
+}
+
+[Mapper]
+public partial class ArticleDtoToArticleUpdatePageViewModelMapper : MapperBase<ArticleDto, ArticleUpdatePageViewModel>
+{
+    public override partial ArticleUpdatePageViewModel Map(ArticleDto source);
+    public override partial void Map(ArticleDto source, ArticleUpdatePageViewModel destination);
+}
+
+[Mapper]
+public partial class ArticleUpdatePageViewModelToArticleUpdateDto : MapperBase<ArticleUpdatePageViewModel, ArticleUpdateDto>
+{
+    public override partial ArticleUpdateDto Map(ArticleUpdatePageViewModel source);
+    public override partial void Map(ArticleUpdatePageViewModel source, ArticleUpdateDto destination);
+}
+
+[Mapper]
 public partial class ArticleTagMappingDtoToArticleTagMappingUpdateViewModelMapper : MapperBase<ArticleTagMappingDto, ArticleTagMappingUpdateViewModel>
 {
     public override partial ArticleTagMappingUpdateViewModel Map(ArticleTagMappingDto source);

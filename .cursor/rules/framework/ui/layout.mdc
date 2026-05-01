@@ -1,0 +1,21 @@
+---
+description: "KH HUB Layout System"
+alwaysApply: true
+---
+
+# Layout
+
+## List Page
+- Header: title + create button
+- Search + filter row
+- Table
+- Pagination
+
+## Create/Edit Page
+- Full page (no modal)
+- Split into sections (cards)
+- Use 2-column layout
+
+## Detail Page
+- Use tabs if needed
+- Show content clearly

@@ -1,0 +1,87 @@
+---
+description: "KH HUB UX Rules"
+alwaysApply: true
+---
+
+# UX Rules
+
+## Navigation
+
+### Large / Complex Entities (nhiều field, có content, media)
+- Use full page flow:
+  List → Detail → Edit
+- Do NOT use modal
+- Example:
+  - Article
+  - Place
+  - Job
+  - Event
+
+---
+
+### Simple Entities (ít field, cấu hình đơn giản)
+- Use modal for Create/Edit
+- No need for detail page
+- Example:
+  - Category
+  - Tag
+  - Lookup data
+  - Settings
+
+---
+
+## Decision Rule
+
+Use modal IF:
+- ≤ 5–6 fields
+- No rich content (editor, upload…)
+- No complex relationships
+
+Use full page IF:
+- Has content editor
+- Has images/media
+- Has SEO fields
+- Has multiple sections
+
+---
+
+## Form UX
+
+- Auto generate slug from title
+- Validate inline
+- Show errors clearly
+
+---
+
+## Feedback
+
+- Show success toast after save
+- Confirm before delete
+
+---
+
+## Remote / API calls (Razor Pages + ABP JS)
+
+When the UI calls the backend (application service via client proxy, `abp.ajax`, uploads, etc.):
+
+- Wrap the operation with **`abp.ui.setBusy`** on the relevant container (form, card, or `null` for whole page) and **`abp.ui.clearBusy`** when finished (use `.always` / `.finally` so busy clears on both success and failure).
+- On **failure**, show **`abp.notify.error`** with the server message when available (e.g. `error.message` from ABP remote exception response); avoid silent failures.
+- On **success**, use **`abp.notify.success`** when it helps the user (save, delete, upload).
+
+Docs: [Notify](https://abp.io/docs/latest/framework/ui/mvc-razor-pages/javascript-api/notify), [Block / Busy](https://abp.io/docs/latest/framework/ui/mvc-razor-pages/javascript-api/block-busy).
+
+---
+
+## Empty State
+
+- Show:
+  "No data yet"
+  + Create button
+
+
+
+  ## UX Priority
+
+- Always prefer usability over consistency
+- Avoid forcing modal or page blindly
+- Choose the simplest UI that fits the data complexity

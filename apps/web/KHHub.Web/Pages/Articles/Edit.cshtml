@@ -1,0 +1,148 @@
+@page
+@using KHHub.MasterDataService.Localization
+@using KHHub.Web.Navigation
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@inject IPageLayout PageLayout
+@model KHHub.Web.Pages.Articles.EditModel
+@{
+    PageLayout.Content.Title = L["EditArticle"].Value;
+    PageLayout.Content.MenuItemName = KHHubMenus.Articles;
+    var thumbPreviewClass = string.IsNullOrEmpty(Model.Article.ThumbnailUrl) ? "d-none" : "";
+    var coverPreviewClass = string.IsNullOrEmpty(Model.Article.CoverImageUrl) ? "d-none" : "";
+}
+
+@section scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
+    <abp-script src="/Pages/Articles/article-media-upload.js" />
+    <abp-script src="/Pages/Articles/edit.js" />
+    <abp-script src="/Pages/Articles/seo-keywords-editor.js" />
+    <abp-script src="/Pages/Articles/article-form-save.js" />
+}
+
+@section content_toolbar
+{
+    <a asp-page="./Index" class="btn btn-secondary"><i class="fa fa-arrow-left me-1"></i>@L["BackToList"].Value</a>
+    @if (Model.CanDelete)
+    {
+        <abp-button id="DeleteArticleButton" button-type="Danger" text="@L["DeleteArticle"].Value" icon="trash" />
+    }
+    <abp-button id="SaveAndPublishButton" button-type="Outline_Primary" text="@L["SaveAndPublish"].Value" icon="check-double" form="ArticleEditForm" type="submit" name="action" value="save-and-publish" />
+    <abp-button id="SaveButton" button-type="Primary" text="@L["Save"].Value" icon="save" form="ArticleEditForm" type="submit" name="action" value="save" />
+}
+
+<p class="text-muted mb-4">@L["ArticleFormLayoutHint"]</p>
+
+<form id="ArticleEditForm" method="post" autocomplete="off" data-article-mode="edit">
+    @Html.AntiForgeryToken()
+    <abp-input asp-for="Id" type="hidden" />
+    <abp-input asp-for="Article.ConcurrencyStamp" type="hidden" />
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+    <abp-row>
+        <abp-column size-md="_8">
+            <abp-card class="mb-4">
+                <abp-card-header>
+                    <h5 class="mb-0">@L["BasicInfo"]</h5>
+                </abp-card-header>
+                <abp-card-body>
+                    <abp-input asp-for="Article.Title" id="ArticleTitle" label="@L["Title"].Value" />
+                    <abp-input asp-for="Article.Summary" id="ArticleSummary" text-area="true" label="@L["Summary"].Value" />
+                    <textarea asp-for="Article.Content" id="ArticleContent" class="form-control" rows="20"></textarea>
+                    <span asp-validation-for="Article.Content" class="text-danger d-block mt-1"></span>
+                </abp-card-body>
+            </abp-card>
+
+            <abp-card class="mb-4">
+                <abp-card-header>
+                    <h5 class="mb-0">@L["SeoInformation"].Value</h5>
+                </abp-card-header>
+                <abp-card-body>
+                    <abp-input asp-for="Article.Slug" id="ArticleSlug" label="@L["Slug"].Value" />
+                    <abp-input asp-for="Article.SeoTitle" id="ArticleSeoTitle" label="@L["SeoTitle"].Value" />
+                    <abp-input asp-for="Article.SeoDescription" id="ArticleSeoDescription" text-area="true" label="@L["SeoDescription"].Value" />
+                    <div id="SeoKeywordsEditor" class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                            <label class="form-label mb-0">@L["SeoKeywords"].Value</label>
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="SeoKeywordsAddBtn">
+                                @L["AddNewSeoKeyword"].Value
+                            </button>
+                        </div>
+                        <p class="text-muted small mb-2">@L["SeoKeywordsEditorHint"].Value</p>
+                        <div class="row g-2 mb-1 text-muted small text-uppercase">
+                            <div class="col">@L["SeoKeywordName"].Value</div>
+                            <div class="col-auto" style="width: 42px;"></div>
+                        </div>
+                        <div id="SeoKeywordsRows"></div>
+                        <input type="hidden" asp-for="Article.SeoKeywords" id="ArticleSeoKeywords" />
+                        <span asp-validation-for="Article.SeoKeywords" class="text-danger d-block"></span>
+                    </div>
+                    <abp-input asp-for="Article.Source" label="@L["Source"].Value" />
+                    <abp-input asp-for="Article.SourceUrl" label="@L["SourceUrl"].Value" />
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
+
+        <abp-column size-md="_4">
+            <abp-card class="mb-4">
+                <abp-card-header class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h5 class="mb-0">@L["ArticleInformation"].Value</h5>
+                    @if (Model.LastUpdatedAt.HasValue)
+                    {
+                        <span class="text-muted small">@L["LastModificationTime"]: @Model.LastUpdatedAt.Value.ToString("g")</span>
+                    }
+                </abp-card-header>
+                <abp-card-body>
+                    <h6 class="text-muted text-uppercase small mb-3">@L["Media"]</h6>
+                    <div class="mb-3">
+                        <label class="form-label">@L["ThumbnailUrl"]</label>
+                        <input type="file" class="form-control article-media-upload mb-2" accept="image/*" data-url-target="#ArticleThumbnailUrl" data-preview-target="#ArticleThumbnailPreview" />
+                        <img id="ArticleThumbnailPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 @thumbPreviewClass" src="@Model.Article.ThumbnailUrl" />
+                        <abp-input asp-for="Article.ThumbnailUrl" suppress-label="true" id="ArticleThumbnailUrl" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">@L["CoverImageUrl"]</label>
+                        <input type="file" class="form-control article-media-upload mb-2" accept="image/*" data-url-target="#ArticleCoverImageUrl" data-preview-target="#ArticleCoverPreview" />
+                        <img id="ArticleCoverPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 @coverPreviewClass" src="@Model.Article.CoverImageUrl" />
+                        <abp-input asp-for="Article.CoverImageUrl" suppress-label="true" id="ArticleCoverImageUrl" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Article.ArticleCategoryId">@L["ArticleCategory"].Value</label>
+                        <select asp-for="Article.ArticleCategoryId"
+                                class="auto-complete-select"
+                                data-autocomplete-api-url="@Url.Content("~/api/masterdata/articles/article-category-lookup")"
+                                data-autocomplete-display-property="displayName"
+                                data-autocomplete-value-property="id"
+                                data-autocomplete-items-property="items"
+                                data-autocomplete-filter-param-name="filter"
+                                data-autocomplete-allow-clear="true"
+                                data-autocomplete-placeholder="@L["Search"].Value">
+                            @if (Model.Article.ArticleCategoryId != Guid.Empty && !string.IsNullOrEmpty(Model.SelectedArticleCategoryDisplayName))
+                            {
+                                <option selected value="@Model.Article.ArticleCategoryId">@Model.SelectedArticleCategoryDisplayName</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Article.ArticleCategoryId" class="text-danger d-block"></span>
+                    </div>
+                    <abp-select asp-for="Article.Type" asp-items="@Model.ArticleTypeList" label="@L["Type"].Value" />
+                    <abp-select asp-for="Article.Status" asp-items="@Model.ArticleStatusList" label="@L["Status"].Value" />
+                    <abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="Article.PublishedAt" label="@L["PublishedAt"].Value" />
+                    <abp-input asp-for="Article.AuthorName" label="@L["AuthorName"].Value" />
+                    <abp-input asp-for="Article.ReadingTime" label="@L["ReadingTime"].Value" />
+                    <abp-input asp-for="Article.IsFeatured" label="@L["IsFeatured"].Value" />
+                    <abp-input asp-for="Article.IsHot" label="@L["IsHot"].Value" />
+                    <abp-input asp-for="Article.IsTrending" label="@L["IsTrending"].Value" />
+
+                    <hr class="my-3" />
+                    <h6 class="text-muted text-uppercase small mb-3">@L["Settings"]</h6>
+                    <abp-input asp-for="Article.ViewCount" label="@L["ViewCount"].Value" />
+                    <abp-input asp-for="Article.LikeCount" label="@L["LikeCount"].Value" />
+                    <abp-input asp-for="Article.ShareCount" label="@L["ShareCount"].Value" />
+                    <abp-input asp-for="Article.CommentCount" label="@L["CommentCount"].Value" />
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
+    </abp-row>
+</form>

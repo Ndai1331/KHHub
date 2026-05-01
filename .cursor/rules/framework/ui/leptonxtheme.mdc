@@ -1,0 +1,43 @@
+# LeptonX Theme UI Rules
+
+## General Style
+- Clean, modern SaaS admin UI
+- Inspired by LeptonX (https://x.leptontheme.com)
+- Use soft shadows, rounded corners, clear spacing
+
+## Layout
+- Use container max-width: 1320px
+- Use padding: 24px
+- Section spacing: 24px–32px
+
+## Cards
+- Use abp-card for all sections
+- Rounded corners: 10px–12px
+- Shadow: subtle (not heavy)
+- Header separated from body
+
+## Colors
+- Primary: blue (Lepton style)
+- Background: light gray (#f5f7fb)
+- Card background: white
+- Border: soft gray
+
+## Typography
+- Page title: 22–26px bold
+- Section title: 16–18px semi-bold
+- Body text: 14–15px
+
+## Buttons
+- Primary: filled (main action)
+- Secondary: outline
+- Danger: red (delete)
+- Use icons when possible
+
+## Badges
+- Status should use badges:
+  - Published → green
+  - Draft → gray
+  - Pending → orange
+
+## Icons
+- Use FontAwesome or Bootstrap Icons

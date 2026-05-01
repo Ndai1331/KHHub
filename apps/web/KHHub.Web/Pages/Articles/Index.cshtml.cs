@@ -1,4 +1,5 @@
 using KHHub.MasterDataService.Entities.Articles;
+using KHHub.MasterDataService.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using KHHub.MasterDataService.Services.Articles;
 using KHHub.MasterDataService.Services.Dtos.Articles;
-using KHHub.MasterDataService.Services.Dtos.Shared;
+using Microsoft.Extensions.Localization;
 
 namespace KHHub.Web.Pages.Articles;
 
@@ -29,6 +30,8 @@ public abstract class IndexModelBase : AbpPageModel
     public string? CoverImageUrlFilter { get; set; }
 
     public ArticleType? TypeFilter { get; set; }
+    
+    public List<SelectListItem> ArticleTypeList { get; set; } = [];
 
     public string? AuthorNameFilter { get; set; }
 
@@ -37,6 +40,8 @@ public abstract class IndexModelBase : AbpPageModel
     public string? SourceUrlFilter { get; set; }
 
     public ArticleStatus? StatusFilter { get; set; }
+    
+    public List<SelectListItem> ArticleStatusList { get; set; } = [];
 
     public DateTime? PublishedAtFilterMin { get; set; }
 
@@ -89,21 +94,39 @@ public abstract class IndexModelBase : AbpPageModel
 
     public string? SeoKeywordsFilter { get; set; }
 
-    [SelectItems(nameof(ArticleCategoryLookupList))]
-    public Guid ArticleCategoryIdFilter { get; set; }
-
-    public List<SelectListItem> ArticleCategoryLookupList { get; set; } = new List<SelectListItem> { new SelectListItem(string.Empty, "") };
+    public Guid? ArticleCategoryIdFilter { get; set; }
 
     protected IArticlesAppService _articlesAppService;
+    protected IStringLocalizer<MasterDataServiceResource> _masterDataLocalizer;
 
-    public IndexModelBase(IArticlesAppService articlesAppService)
+    public IndexModelBase(
+        IArticlesAppService articlesAppService,
+        IStringLocalizer<MasterDataServiceResource> masterDataLocalizer)
     {
         _articlesAppService = articlesAppService;
+        _masterDataLocalizer = masterDataLocalizer;
     }
 
     public virtual async Task OnGetAsync()
     {
-        ArticleCategoryLookupList.AddRange((await _articlesAppService.GetArticleCategoryLookupAsync(new LookupRequestDto { MaxResultCount = LimitedResultRequestDto.MaxMaxResultCount })).Items.Select(t => new SelectListItem(t.DisplayName, t.Id.ToString())).ToList());
+        ArticleTypeList =
+        [
+            new SelectListItem(_masterDataLocalizer["All"].Value, string.Empty)
+        ];
+        ArticleTypeList.AddRange(
+            Enum.GetValues<ArticleType>()
+                .Select(t => new SelectListItem(_masterDataLocalizer[$"Enum:{nameof(ArticleType)}.{(int)t}"].Value, ((int)t).ToString()))
+        );
+
+        ArticleStatusList =
+        [
+            new SelectListItem(_masterDataLocalizer["All"].Value, string.Empty)
+        ];
+        ArticleStatusList.AddRange(
+            Enum.GetValues<ArticleStatus>()
+                .Select(s => new SelectListItem(_masterDataLocalizer[$"Enum:{nameof(ArticleStatus)}.{(int)s}"].Value, ((int)s).ToString()))
+        );
+
         await Task.CompletedTask;
     }
 }
