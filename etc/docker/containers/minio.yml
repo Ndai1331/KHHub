@@ -1,0 +1,22 @@
+services:
+  minio:
+    image: quay.io/minio/minio:latest
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: khHub@2026
+    command: ["server", "--console-address", ":9001", "/data"]
+    volumes:
+      - ~/apps/khhub/minio:/data
+    networks:
+      - khhub
+
+volumes:
+  minio_data:
+
+networks:
+  hc-network:
+    external: true
