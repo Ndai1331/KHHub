@@ -15,9 +15,11 @@
         <abp-modal-body>
 @*//<suite-custom-code-block-1>*@
 @*//</suite-custom-code-block-1>*@
-            <abp-input asp-for="Ward.Code"    />
-            <abp-input asp-for="Ward.Name"    />
-                                <abp-select asp-for="Ward.ProvinceId" asp-items="Model.ProvinceLookupListRequired" label="@L["Province"].Value"/>
+            <abp-input asp-for="Ward.Code" label="@L["WardCode"].Value" />
+            <abp-input asp-for="Ward.Name" label="@L["WardName"].Value" />
+            <abp-select asp-for="Ward.ProvinceId"
+                        asp-items="Model.ProvinceLookupListRequired"
+                        label="@L["Province"].Value" />
 @*//<suite-custom-code-block-2>*@
 @*//</suite-custom-code-block-2>*@
 @*//<suite-custom-code-block-3>*@

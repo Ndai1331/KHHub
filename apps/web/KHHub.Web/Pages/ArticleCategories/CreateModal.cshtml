@@ -10,27 +10,90 @@
     Layout = null;
 }
 <form data-ajaxForm="true" asp-page="/ArticleCategories/CreateModal" autocomplete="off">
-    <abp-modal id="ArticleCategoryCreateModal">
+    @Html.AntiForgeryToken()
+    <abp-modal id="ArticleCategoryCreateModal"
+               size="ExtraLarge"
+               scrollable="true"
+               centered="true">
         <abp-modal-header title="@L["NewArticleCategory"].Value"></abp-modal-header>
         <abp-modal-body>
-@*//<suite-custom-code-block-1>*@
-@*//</suite-custom-code-block-1>*@
-            <abp-input asp-for="ArticleCategory.Name"    />
-            <abp-input asp-for="ArticleCategory.Slug"    />
-            <abp-input asp-for="ArticleCategory.Description" text-area   />
-            <abp-input asp-for="ArticleCategory.Icon"    />
-            <abp-input asp-for="ArticleCategory.ParentId"    />
-            <abp-input asp-for="ArticleCategory.DisplayOrder"    />
-            <abp-input asp-for="ArticleCategory.IsActive"    />
-            <abp-input asp-for="ArticleCategory.ThumbnailUrl"    />
-@*//<suite-custom-code-block-2>*@
-@*//</suite-custom-code-block-2>*@
-@*//<suite-custom-code-block-3>*@
-@*//</suite-custom-code-block-3>*@
+            <abp-row class="g-3 mb-0 align-items-start">
+                <abp-column size-md="_8">
+                    <abp-row class="g-3 align-items-start">
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="ArticleCategory.Name" label="@L["ArticleCategoryName"].Value" />
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <div class="mb-0">
+                                <label class="form-label" asp-for="ArticleCategory.ParentId">@L["ArticleCategoryParentId"].Value</label>
+                                <select asp-for="ArticleCategory.ParentId"
+                                        class="auto-complete-select"
+                                        data-autocomplete-api-url="@Url.Content("~/api/masterdata/articles/article-category-lookup")"
+                                        data-autocomplete-display-property="displayName"
+                                        data-autocomplete-value-property="id"
+                                        data-autocomplete-items-property="items"
+                                        data-autocomplete-filter-param-name="filter"
+                                        data-autocomplete-allow-clear="true"
+                                        data-autocomplete-placeholder="@L["Search"].Value">
+                                </select>
+                                <span asp-validation-for="ArticleCategory.ParentId" class="text-danger d-block"></span>
+                            </div>
+                        </abp-column>
+                    </abp-row>
+                    <abp-row class="g-3 align-items-start">
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="ArticleCategory.Slug" label="@L["ArticleCategorySlug"].Value" />
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="ArticleCategory.Icon" label="@L["ArticleCategoryIcon"].Value" />
+                        </abp-column>
+                    </abp-row>
+                    <abp-row class="g-3 align-items-start">
+                        <abp-column size-md="_12">
+                            <abp-input asp-for="ArticleCategory.Description" text-area="true" label="@L["ArticleCategoryDescription"].Value" />
+                        </abp-column>
+                    </abp-row>
+                    <abp-row class="g-3 align-items-start">
+                        <abp-column size-md="_6">
+                            <label class="form-label" asp-for="ArticleCategory.DisplayOrder">@L["ArticleCategoryDisplayOrder"].Value</label>
+                            <input asp-for="ArticleCategory.DisplayOrder"
+                                   type="number"
+                                   class="form-control"
+                                   autocomplete="off" />
+                            <span asp-validation-for="ArticleCategory.DisplayOrder" class="text-danger d-block"></span>
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <label class="form-label" asp-for="ArticleCategory.IsActive">@L["ArticleCategoryIsActive"].Value</label>
+                            <div class="d-flex align-items-center" style="min-height: 38px;">
+                                <input asp-for="ArticleCategory.IsActive"
+                                       type="checkbox"
+                                       class="form-check-input mb-0" />
+                            </div>
+                            <span asp-validation-for="ArticleCategory.IsActive" class="text-danger d-block"></span>
+                        </abp-column>
+                    </abp-row>
+                </abp-column>
+                <abp-column size-md="_4">
+                    <h6 class="text-muted text-uppercase small mb-3">@L["Media"].Value</h6>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="ArticleCategory.ThumbnailUrl">@L["ArticleCategoryThumbnailUrl"].Value</label>
+                        <input type="file"
+                               class="form-control article-media-upload mb-2"
+                               accept="image/*"
+                               data-url-target=".article-category-thumbnail-url"
+                               data-preview-target="#ArticleCategoryThumbnailPreview" />
+                        <input asp-for="ArticleCategory.ThumbnailUrl"
+                               class="form-control article-category-thumbnail-url mb-2"
+                               autocomplete="off" />
+                        <span asp-validation-for="ArticleCategory.ThumbnailUrl" class="text-danger d-block"></span>
+                        <img id="ArticleCategoryThumbnailPreview"
+                             alt="@L["ImagePreview"].Value"
+                             class="img-fluid rounded border d-none mt-2" />
+                    </div>
+                </abp-column>
+            </abp-row>
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
-@*//<suite-custom-code-block-4>*@
-@*//</suite-custom-code-block-4>*@
         </abp-modal-footer>
     </abp-modal>
-</form>
+</form>

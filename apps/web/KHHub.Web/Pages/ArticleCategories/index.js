@@ -16,6 +16,23 @@ $(function () {
         modalClass: 'articleCategoryEdit',
     });
 
+    function trySyncArticleCategoryThumb(modalMgr, label) {
+        var sync = window.KHHub && window.KHHub.syncArticleCategoryPreviewInModal;
+        if (typeof sync !== 'function') {
+            console.warn('[ArticleCategories]', label, 'syncArticleCategoryPreviewInModal missing');
+            return;
+        }
+        var $modal = modalMgr.getModal && modalMgr.getModal();
+        if (!$modal || !$modal.length) {
+            console.warn('[ArticleCategories]', label, 'getModal empty');
+            return;
+        }
+        console.log('[ArticleCategories]', label, 'trySyncArticleCategoryThumb', {
+            hasUrlInput: $modal.find('.article-category-thumbnail-url').length,
+        });
+        sync($modal);
+    }
+
     var getFilter = function () {
         var isActiveVal = $('#IsActiveFilter').val();
         var isActive =
@@ -40,7 +57,7 @@ $(function () {
             paging: true,
             searching: false,
             responsive: true,
-            order: [[6, 'asc']],
+            order: [[7, 'asc']],
             ajax: abp.libs.datatables.createAjax(articleCategoryService.getList, getFilter),
             columnDefs: [
                 {
@@ -69,6 +86,28 @@ $(function () {
 
                         html += '</div>';
                         return html;
+                    },
+                },
+                {
+                    data: 'thumbnailUrl',
+                    defaultContent: '',
+                    orderable: false,
+                    className: 'text-nowrap',
+                    render: function (url) {
+                        if (!url || !String(url).trim()) {
+                            return '-';
+                        }
+                        var u = String(url).trim();
+                        var safe = u.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+                        return (
+                            '<a href="' +
+                            safe +
+                            '" target="_blank" rel="noopener noreferrer" class="d-inline-block">' +
+                            '<img src="' +
+                            safe +
+                            '" alt="" class="rounded border" loading="lazy" ' +
+                            'style="width:48px;height:48px;object-fit:cover;display:block;" /></a>'
+                        );
                     },
                 },
                 { data: 'name' },
@@ -107,26 +146,29 @@ $(function () {
                                   '</span>';
                     },
                 },
-                {
-                    data: 'thumbnailUrl',
-                    defaultContent: '',
-                    orderable: false,
-                    render: function (url) {
-                        if (!url) {
-                            return '-';
-                        }
-                        return (
-                            '<a href="' +
-                            url +
-                            '" target="_blank" rel="noopener">' +
-                            l('ThumbnailUrl') +
-                            '</a>'
-                        );
-                    },
-                },
             ],
         })
     );
+
+    createModal.onOpen(function () {
+        trySyncArticleCategoryThumb(createModal, 'createModal.onOpen');
+        setTimeout(function () {
+            trySyncArticleCategoryThumb(createModal, 'createModal deferred 0');
+        }, 0);
+        setTimeout(function () {
+            trySyncArticleCategoryThumb(createModal, 'createModal deferred 150ms');
+        }, 150);
+    });
+
+    editModal.onOpen(function () {
+        trySyncArticleCategoryThumb(editModal, 'editModal.onOpen');
+        setTimeout(function () {
+            trySyncArticleCategoryThumb(editModal, 'editModal deferred 0');
+        }, 0);
+        setTimeout(function () {
+            trySyncArticleCategoryThumb(editModal, 'editModal deferred 150ms');
+        }, 150);
+    });
 
     $('#NewArticleCategoryButton').click(function (e) {
         e.preventDefault();

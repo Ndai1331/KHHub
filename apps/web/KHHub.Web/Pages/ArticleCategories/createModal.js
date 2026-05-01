@@ -1,20 +1,9 @@
 var abp = abp || {};
 
-//<suite-custom-code-block-1>
-//</suite-custom-code-block-1>
+/* Thumbnail preview for create modal is handled by article-media-upload.js (shown.bs.modal + class .article-category-thumbnail-url). */
 
 abp.modals.articleCategoryCreate = function () {
-    var initModal = function (publicApi, args) {
-        var l = abp.localization.getResource('MasterDataService');
-    };
-
-    //<suite-custom-code-block-2>
-    //</suite-custom-code-block-2>
-
     return {
-        initModal: initModal,
+        initModal: function () {},
     };
 };
-
-//<suite-custom-code-block-3>
-//</suite-custom-code-block-3>

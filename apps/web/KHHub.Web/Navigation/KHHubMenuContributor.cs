@@ -67,13 +67,75 @@ public class KHHubMenuContributor : IMenuContributor
         administration.SetSubItemOrder(AbpAuditLoggingMainMenuNames.GroupName, 7);
         //Administration->Settings
         administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 8);
-        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.Provinces, context.GetLocalizer<MasterDataServiceResource>()["Menu:Provinces"], url: "/Provinces", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.Provinces.Default));
-        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.Wards, context.GetLocalizer<MasterDataServiceResource>()["Menu:Wards"], url: "/Wards", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.Wards.Default));
-        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.ArticleCategories, context.GetLocalizer<MasterDataServiceResource>()["Menu:ArticleCategories"], url: "/ArticleCategories", icon: "fa fa-list-alt", requiredPermissionName: MasterDataServicePermissions.ArticleCategories.Default));
-        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.ArticleTags, context.GetLocalizer<MasterDataServiceResource>()["Menu:ArticleTags"], url: "/ArticleTags", icon: "fa fa-tag", requiredPermissionName: MasterDataServicePermissions.ArticleTags.Default));
-        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.Articles, context.GetLocalizer<MasterDataServiceResource>()["Menu:Articles"], url: "/Articles", icon: "fa fa-newspaper", requiredPermissionName: MasterDataServicePermissions.Articles.Default));
-        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.ArticleTagMappings, context.GetLocalizer<MasterDataServiceResource>()["Menu:ArticleTagMappings"], url: "/ArticleTagMappings", icon: "fa fa-link", requiredPermissionName: MasterDataServicePermissions.ArticleTagMappings.Default));
-        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.ArticleViews, context.GetLocalizer<MasterDataServiceResource>()["Menu:ArticleViews"], url: "/ArticleViews", icon: "fa fa-eye", requiredPermissionName: MasterDataServicePermissions.ArticleViews.Default));
+
+        var md = context.GetLocalizer<MasterDataServiceResource>();
+
+        var masterDataCatalogMenu = new ApplicationMenuItem(
+            KHHubMenus.MasterDataCatalogGroup,
+            md["Menu:MasterDataCatalogGroup"],
+            url: "#",
+            icon: "fa fa-map",
+            order: 3);
+
+        masterDataCatalogMenu.AddItem(new ApplicationMenuItem(
+            KHHubMenus.Provinces,
+            md["Menu:Provinces"],
+            url: "/Provinces",
+            icon: "fa fa-map-marker",
+            requiredPermissionName: MasterDataServicePermissions.Provinces.Default));
+
+        masterDataCatalogMenu.AddItem(new ApplicationMenuItem(
+            KHHubMenus.Wards,
+            md["Menu:Wards"],
+            url: "/Wards",
+            icon: "fa fa-map-marker",
+            requiredPermissionName: MasterDataServicePermissions.Wards.Default));
+
+        context.Menu.AddItem(masterDataCatalogMenu);
+
+        var articleContentMenu = new ApplicationMenuItem(
+            KHHubMenus.ArticleContentGroup,
+            md["Menu:ArticleContentGroup"],
+            url: "#",
+            icon: "fa fa-newspaper",
+            order: 4);
+
+        articleContentMenu.AddItem(new ApplicationMenuItem(
+            KHHubMenus.ArticleCategories,
+            md["Menu:ArticleCategories"],
+            url: "/ArticleCategories",
+            icon: "fa fa-list-alt",
+            requiredPermissionName: MasterDataServicePermissions.ArticleCategories.Default));
+
+        articleContentMenu.AddItem(new ApplicationMenuItem(
+            KHHubMenus.Articles,
+            md["Menu:Articles"],
+            url: "/Articles",
+            icon: "fa fa-file-text",
+            requiredPermissionName: MasterDataServicePermissions.Articles.Default));
+
+        articleContentMenu.AddItem(new ApplicationMenuItem(
+            KHHubMenus.ArticleTags,
+            md["Menu:ArticleTags"],
+            url: "/ArticleTags",
+            icon: "fa fa-tag",
+            requiredPermissionName: MasterDataServicePermissions.ArticleTags.Default));
+
+        articleContentMenu.AddItem(new ApplicationMenuItem(
+            KHHubMenus.ArticleTagMappings,
+            md["Menu:ArticleTagMappings"],
+            url: "/ArticleTagMappings",
+            icon: "fa fa-link",
+            requiredPermissionName: MasterDataServicePermissions.ArticleTagMappings.Default));
+
+        articleContentMenu.AddItem(new ApplicationMenuItem(
+            KHHubMenus.ArticleViews,
+            md["Menu:ArticleViews"],
+            url: "/ArticleViews",
+            icon: "fa fa-eye",
+            requiredPermissionName: MasterDataServicePermissions.ArticleViews.Default));
+
+        context.Menu.AddItem(articleContentMenu);
     }
 
     private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
