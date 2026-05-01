@@ -3,7 +3,6 @@
 @using KHHub.MasterDataService.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using KHHub.Web.Pages.ArticleTags
-@using System.Globalization
 @inject IHtmlLocalizer<MasterDataServiceResource> L
 @model CreateModalModel
 @{
@@ -13,20 +12,31 @@
     <abp-modal id="ArticleTagCreateModal">
         <abp-modal-header title="@L["NewArticleTag"].Value"></abp-modal-header>
         <abp-modal-body>
-@*//<suite-custom-code-block-1>*@
-@*//</suite-custom-code-block-1>*@
-            <abp-input asp-for="ArticleTag.Name"    />
-            <abp-input asp-for="ArticleTag.Slug"    />
-            <abp-input asp-for="ArticleTag.Description" text-area   />
-            <abp-input asp-for="ArticleTag.UsageCount"    />
-@*//<suite-custom-code-block-2>*@
-@*//</suite-custom-code-block-2>*@
-@*//<suite-custom-code-block-3>*@
-@*//</suite-custom-code-block-3>*@
-        </abp-modal-body>
-        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
-@*//<suite-custom-code-block-4>*@
-@*//</suite-custom-code-block-4>*@
+            <!-- Plain inputs so slug sync finds reliable #ids (see article-tag-slug.js) -->
+            <div class="mb-3">
+                <label class="form-label" for="article-tag-name-input">@L["Name"].Value</label>
+                <input asp-for="ArticleTag.Name"
+                       type="text"
+                       class="form-control"
+                       id="article-tag-name-input"
+                       autocomplete="off" />
+                <span asp-validation-for="ArticleTag.Name" class="text-danger d-block"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="article-tag-slug-input">@L["ArticleTagSlug"].Value</label>
+                <input asp-for="ArticleTag.Slug"
+                       type="text"
+                       class="form-control bg-body-secondary"
+                       id="article-tag-slug-input"
+                       readonly="readonly"
+                       tabindex="-1"
+                       aria-readonly="true"
+                       autocomplete="off" />
+                <span asp-validation-for="ArticleTag.Slug" class="text-danger d-block"></span>
+            </div>
+            <abp-input asp-for="ArticleTag.Description" text-area="true" label="@L["Description"].Value" />
+            <abp-input asp-for="ArticleTag.UsageCount" label="@L["UsageCount"].Value" />
+        </abp-modal-body>        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
         </abp-modal-footer>
     </abp-modal>
-</form>
+</form>

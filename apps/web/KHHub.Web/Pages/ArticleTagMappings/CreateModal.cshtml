@@ -3,7 +3,6 @@
 @using KHHub.MasterDataService.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using KHHub.Web.Pages.ArticleTagMappings
-@using System.Globalization
 @inject IHtmlLocalizer<MasterDataServiceResource> L
 @model CreateModalModel
 @{
@@ -13,20 +12,48 @@
     <abp-modal id="ArticleTagMappingCreateModal">
         <abp-modal-header title="@L["NewArticleTagMapping"].Value"></abp-modal-header>
         <abp-modal-body>
-@*//<suite-custom-code-block-1>*@
-@*//</suite-custom-code-block-1>*@
-            <abp-input asp-for="ArticleTagMapping.IsPrimary"    />
-            <abp-input asp-for="ArticleTagMapping.Order"    />
-                                <abp-select asp-for="ArticleTagMapping.ArticleTagId" asp-items="Model.ArticleTagLookupListRequired" label="@L["ArticleTag"].Value"/>
-            <abp-select asp-for="ArticleTagMapping.ArticleId" asp-items="Model.ArticleLookupListRequired" label="@L["Article"].Value"/>
-@*//<suite-custom-code-block-2>*@
-@*//</suite-custom-code-block-2>*@
-@*//<suite-custom-code-block-3>*@
-@*//</suite-custom-code-block-3>*@
+            <abp-row class="align-items-start">
+               
+                <abp-column size-md="_12">
+                    <abp-input asp-for="ArticleTagMapping.Order" label="@L["Order"].Value" />
+                </abp-column>
+            </abp-row>
+            <abp-row class="align-items-start">
+                <abp-column size-md="_12">
+                    <label class="form-label" asp-for="ArticleTagMapping.ArticleTagId">@L["ArticleTag"].Value</label>
+                    <select asp-for="ArticleTagMapping.ArticleTagId"
+                            class="auto-complete-select"
+                            data-autocomplete-api-url="@Url.Content("~/api/masterdata/article-tag-mappings/article-tag-lookup")"
+                            data-autocomplete-display-property="displayName"
+                            data-autocomplete-value-property="id"
+                            data-autocomplete-items-property="items"
+                            data-autocomplete-filter-param-name="filter"
+                            data-autocomplete-allow-clear="false"
+                            data-autocomplete-placeholder="@L["Search"].Value">
+                    </select>
+                    <span asp-validation-for="ArticleTagMapping.ArticleTagId" class="text-danger d-block"></span>
+                </abp-column>
+                <abp-column size-md="_12">
+                    <label class="form-label" asp-for="ArticleTagMapping.ArticleId">@L["Article"].Value</label>
+                    <select asp-for="ArticleTagMapping.ArticleId"
+                            class="auto-complete-select"
+                            data-autocomplete-api-url="@Url.Content("~/api/masterdata/article-tag-mappings/article-lookup")"
+                            data-autocomplete-display-property="displayName"
+                            data-autocomplete-value-property="id"
+                            data-autocomplete-items-property="items"
+                            data-autocomplete-filter-param-name="filter"
+                            data-autocomplete-allow-clear="false"
+                            data-autocomplete-placeholder="@L["Search"].Value">
+                    </select>
+                    <span asp-validation-for="ArticleTagMapping.ArticleId" class="text-danger d-block"></span>
+                </abp-column>
+
+                 <abp-column size-md="_12">
+                    <abp-input asp-for="ArticleTagMapping.IsPrimary" label="@L["IsPrimary"].Value" />
+                </abp-column>
+            </abp-row>
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
-@*//<suite-custom-code-block-4>*@
-@*//</suite-custom-code-block-4>*@
         </abp-modal-footer>
     </abp-modal>
-</form>
+</form>
