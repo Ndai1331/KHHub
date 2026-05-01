@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.Application.Dtos;
 using KHHub.MasterDataService.Services.PlaceViews;
 using KHHub.MasterDataService.Services.Dtos.PlaceViews;
+using KHHub.MasterDataService.Services.Dtos.Places;
 
 namespace KHHub.Web.Pages.PlaceViews;
 

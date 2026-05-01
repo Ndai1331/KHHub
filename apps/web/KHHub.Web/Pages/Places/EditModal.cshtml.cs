@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.Application.Dtos;
 using KHHub.MasterDataService.Services.Places;
 using KHHub.MasterDataService.Services.Dtos.Places;
+using KHHub.MasterDataService.Services.Dtos.PlaceCategories;
+using KHHub.MasterDataService.Services.Dtos.Provinces;
+using KHHub.MasterDataService.Services.Dtos.Wards;
 
 namespace KHHub.Web.Pages.Places;
 

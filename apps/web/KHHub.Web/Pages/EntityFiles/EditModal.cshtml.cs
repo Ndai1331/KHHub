@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.Application.Dtos;
 using KHHub.MasterDataService.Services.EntityFiles;
 using KHHub.MasterDataService.Services.Dtos.EntityFiles;
+using KHHub.MasterDataService.Services.Dtos.MediaFiles;
 
 namespace KHHub.Web.Pages.EntityFiles;
 

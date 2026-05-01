@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.Application.Dtos;
 using KHHub.MasterDataService.Services.PlaceFavorites;
 using KHHub.MasterDataService.Services.Dtos.PlaceFavorites;
+using KHHub.MasterDataService.Services.Dtos.Places;
 
 namespace KHHub.Web.Pages.PlaceFavorites;
 

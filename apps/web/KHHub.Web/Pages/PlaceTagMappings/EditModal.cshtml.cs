@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.Application.Dtos;
 using KHHub.MasterDataService.Services.PlaceTagMappings;
 using KHHub.MasterDataService.Services.Dtos.PlaceTagMappings;
+using KHHub.MasterDataService.Services.Dtos.Places;
+using KHHub.MasterDataService.Services.Dtos.PlaceTags;
 
 namespace KHHub.Web.Pages.PlaceTagMappings;
 
