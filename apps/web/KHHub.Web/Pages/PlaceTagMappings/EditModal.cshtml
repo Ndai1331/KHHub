@@ -1,0 +1,57 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@using KHHub.Web.Pages.PlaceTagMappings
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using KHHub.MasterDataService.Services.PlaceTagMappings; 
+@using System.Globalization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@model EditModalModel
+@{
+    Layout = null;
+}
+<form data-ajaxForm="true" asp-page="/PlaceTagMappings/EditModal" autocomplete="off">
+    <abp-modal id="PlaceTagMappingEditModal">
+        <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
+        <abp-modal-body>
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+            <abp-input asp-for="Id" />
+                    <abp-input asp-for="PlaceTagMapping.ConcurrencyStamp" hidden="true" suppress-label="true"/>
+            <abp-input asp-for="PlaceTagMapping.IsPrimary"    />
+            <abp-input asp-for="PlaceTagMapping.SortOrder"    />
+                                <div class="form-group">
+                <label for="PlaceTagMapping_PlaceTagId">@L["PlaceTag"]</label>
+                <select id="PlaceTagMapping_PlaceTagId"
+                         name="PlaceTagMapping.PlaceTagId"
+                         class="custom-select form-control"
+                         data-value="@Model.PlaceTagMapping.PlaceTagId" required>
+                    @if (Model.PlaceTag != null)
+                    {
+                        <option value="@Model.PlaceTagMapping.PlaceTagId">@Model.PlaceTag.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="PlaceTagMapping_PlaceId">@L["Place"]</label>
+                <select id="PlaceTagMapping_PlaceId"
+                         name="PlaceTagMapping.PlaceId"
+                         class="custom-select form-control"
+                         data-value="@Model.PlaceTagMapping.PlaceId" required>
+                    @if (Model.Place != null)
+                    {
+                        <option value="@Model.PlaceTagMapping.PlaceId">@Model.Place.Name</option>
+                    }
+                </select>
+            </div>
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+        </abp-modal-footer>
+    </abp-modal>
+</form>

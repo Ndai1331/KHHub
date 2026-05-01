@@ -1,3 +1,19 @@
+using KHHub.MasterDataService.Services.Dtos.PlaceViews;
+using KHHub.Web.Pages.PlaceViews;
+using KHHub.MasterDataService.Services.Dtos.PlaceFavorites;
+using KHHub.Web.Pages.PlaceFavorites;
+using KHHub.MasterDataService.Services.Dtos.PlaceReviews;
+using KHHub.Web.Pages.PlaceReviews;
+using KHHub.MasterDataService.Services.Dtos.EntityFiles;
+using KHHub.Web.Pages.EntityFiles;
+using KHHub.MasterDataService.Services.Dtos.PlaceTagMappings;
+using KHHub.Web.Pages.PlaceTagMappings;
+using KHHub.MasterDataService.Services.Dtos.Places;
+using KHHub.Web.Pages.Places;
+using KHHub.MasterDataService.Services.Dtos.PlaceTags;
+using KHHub.Web.Pages.PlaceTags;
+using KHHub.MasterDataService.Services.Dtos.PlaceCategories;
+using KHHub.Web.Pages.PlaceCategories;
 using KHHub.MasterDataService.Services.Dtos.MediaFiles;
 using KHHub.Web.Pages.MediaFiles;
 using KHHub.MasterDataService.Services.Dtos.ArticleViews;
@@ -217,4 +233,172 @@ public partial class MediaFileCreateViewModelToMediaFileCreateDto : MapperBase<M
 {
     public override partial MediaFileCreateDto Map(MediaFileCreateViewModel source);
     public override partial void Map(MediaFileCreateViewModel source, MediaFileCreateDto destination);
+}
+
+[Mapper]
+public partial class PlaceCategoryDtoToPlaceCategoryUpdateViewModelMapper : MapperBase<PlaceCategoryDto, PlaceCategoryUpdateViewModel>
+{
+    public override partial PlaceCategoryUpdateViewModel Map(PlaceCategoryDto source);
+    public override partial void Map(PlaceCategoryDto source, PlaceCategoryUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class PlaceCategoryUpdateViewModelToPlaceCategoryUpdateDto : MapperBase<PlaceCategoryUpdateViewModel, PlaceCategoryUpdateDto>
+{
+    public override partial PlaceCategoryUpdateDto Map(PlaceCategoryUpdateViewModel source);
+    public override partial void Map(PlaceCategoryUpdateViewModel source, PlaceCategoryUpdateDto destination);
+}
+
+[Mapper]
+public partial class PlaceCategoryCreateViewModelToPlaceCategoryCreateDto : MapperBase<PlaceCategoryCreateViewModel, PlaceCategoryCreateDto>
+{
+    public override partial PlaceCategoryCreateDto Map(PlaceCategoryCreateViewModel source);
+    public override partial void Map(PlaceCategoryCreateViewModel source, PlaceCategoryCreateDto destination);
+}
+
+[Mapper]
+public partial class PlaceTagDtoToPlaceTagUpdateViewModelMapper : MapperBase<PlaceTagDto, PlaceTagUpdateViewModel>
+{
+    public override partial PlaceTagUpdateViewModel Map(PlaceTagDto source);
+    public override partial void Map(PlaceTagDto source, PlaceTagUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class PlaceTagUpdateViewModelToPlaceTagUpdateDto : MapperBase<PlaceTagUpdateViewModel, PlaceTagUpdateDto>
+{
+    public override partial PlaceTagUpdateDto Map(PlaceTagUpdateViewModel source);
+    public override partial void Map(PlaceTagUpdateViewModel source, PlaceTagUpdateDto destination);
+}
+
+[Mapper]
+public partial class PlaceTagCreateViewModelToPlaceTagCreateDto : MapperBase<PlaceTagCreateViewModel, PlaceTagCreateDto>
+{
+    public override partial PlaceTagCreateDto Map(PlaceTagCreateViewModel source);
+    public override partial void Map(PlaceTagCreateViewModel source, PlaceTagCreateDto destination);
+}
+
+[Mapper]
+public partial class PlaceDtoToPlaceUpdateViewModelMapper : MapperBase<PlaceDto, PlaceUpdateViewModel>
+{
+    public override partial PlaceUpdateViewModel Map(PlaceDto source);
+    public override partial void Map(PlaceDto source, PlaceUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class PlaceUpdateViewModelToPlaceUpdateDto : MapperBase<PlaceUpdateViewModel, PlaceUpdateDto>
+{
+    public override partial PlaceUpdateDto Map(PlaceUpdateViewModel source);
+    public override partial void Map(PlaceUpdateViewModel source, PlaceUpdateDto destination);
+}
+
+[Mapper]
+public partial class PlaceCreateViewModelToPlaceCreateDto : MapperBase<PlaceCreateViewModel, PlaceCreateDto>
+{
+    public override partial PlaceCreateDto Map(PlaceCreateViewModel source);
+    public override partial void Map(PlaceCreateViewModel source, PlaceCreateDto destination);
+}
+
+[Mapper]
+public partial class PlaceTagMappingDtoToPlaceTagMappingUpdateViewModelMapper : MapperBase<PlaceTagMappingDto, PlaceTagMappingUpdateViewModel>
+{
+    public override partial PlaceTagMappingUpdateViewModel Map(PlaceTagMappingDto source);
+    public override partial void Map(PlaceTagMappingDto source, PlaceTagMappingUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class PlaceTagMappingUpdateViewModelToPlaceTagMappingUpdateDto : MapperBase<PlaceTagMappingUpdateViewModel, PlaceTagMappingUpdateDto>
+{
+    public override partial PlaceTagMappingUpdateDto Map(PlaceTagMappingUpdateViewModel source);
+    public override partial void Map(PlaceTagMappingUpdateViewModel source, PlaceTagMappingUpdateDto destination);
+}
+
+[Mapper]
+public partial class PlaceTagMappingCreateViewModelToPlaceTagMappingCreateDto : MapperBase<PlaceTagMappingCreateViewModel, PlaceTagMappingCreateDto>
+{
+    public override partial PlaceTagMappingCreateDto Map(PlaceTagMappingCreateViewModel source);
+    public override partial void Map(PlaceTagMappingCreateViewModel source, PlaceTagMappingCreateDto destination);
+}
+
+[Mapper]
+public partial class EntityFileDtoToEntityFileUpdateViewModelMapper : MapperBase<EntityFileDto, EntityFileUpdateViewModel>
+{
+    public override partial EntityFileUpdateViewModel Map(EntityFileDto source);
+    public override partial void Map(EntityFileDto source, EntityFileUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class EntityFileUpdateViewModelToEntityFileUpdateDto : MapperBase<EntityFileUpdateViewModel, EntityFileUpdateDto>
+{
+    public override partial EntityFileUpdateDto Map(EntityFileUpdateViewModel source);
+    public override partial void Map(EntityFileUpdateViewModel source, EntityFileUpdateDto destination);
+}
+
+[Mapper]
+public partial class EntityFileCreateViewModelToEntityFileCreateDto : MapperBase<EntityFileCreateViewModel, EntityFileCreateDto>
+{
+    public override partial EntityFileCreateDto Map(EntityFileCreateViewModel source);
+    public override partial void Map(EntityFileCreateViewModel source, EntityFileCreateDto destination);
+}
+
+[Mapper]
+public partial class PlaceReviewDtoToPlaceReviewUpdateViewModelMapper : MapperBase<PlaceReviewDto, PlaceReviewUpdateViewModel>
+{
+    public override partial PlaceReviewUpdateViewModel Map(PlaceReviewDto source);
+    public override partial void Map(PlaceReviewDto source, PlaceReviewUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class PlaceReviewUpdateViewModelToPlaceReviewUpdateDto : MapperBase<PlaceReviewUpdateViewModel, PlaceReviewUpdateDto>
+{
+    public override partial PlaceReviewUpdateDto Map(PlaceReviewUpdateViewModel source);
+    public override partial void Map(PlaceReviewUpdateViewModel source, PlaceReviewUpdateDto destination);
+}
+
+[Mapper]
+public partial class PlaceReviewCreateViewModelToPlaceReviewCreateDto : MapperBase<PlaceReviewCreateViewModel, PlaceReviewCreateDto>
+{
+    public override partial PlaceReviewCreateDto Map(PlaceReviewCreateViewModel source);
+    public override partial void Map(PlaceReviewCreateViewModel source, PlaceReviewCreateDto destination);
+}
+
+[Mapper]
+public partial class PlaceFavoriteDtoToPlaceFavoriteUpdateViewModelMapper : MapperBase<PlaceFavoriteDto, PlaceFavoriteUpdateViewModel>
+{
+    public override partial PlaceFavoriteUpdateViewModel Map(PlaceFavoriteDto source);
+    public override partial void Map(PlaceFavoriteDto source, PlaceFavoriteUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class PlaceFavoriteUpdateViewModelToPlaceFavoriteUpdateDto : MapperBase<PlaceFavoriteUpdateViewModel, PlaceFavoriteUpdateDto>
+{
+    public override partial PlaceFavoriteUpdateDto Map(PlaceFavoriteUpdateViewModel source);
+    public override partial void Map(PlaceFavoriteUpdateViewModel source, PlaceFavoriteUpdateDto destination);
+}
+
+[Mapper]
+public partial class PlaceFavoriteCreateViewModelToPlaceFavoriteCreateDto : MapperBase<PlaceFavoriteCreateViewModel, PlaceFavoriteCreateDto>
+{
+    public override partial PlaceFavoriteCreateDto Map(PlaceFavoriteCreateViewModel source);
+    public override partial void Map(PlaceFavoriteCreateViewModel source, PlaceFavoriteCreateDto destination);
+}
+
+[Mapper]
+public partial class PlaceViewDtoToPlaceViewUpdateViewModelMapper : MapperBase<PlaceViewDto, PlaceViewUpdateViewModel>
+{
+    public override partial PlaceViewUpdateViewModel Map(PlaceViewDto source);
+    public override partial void Map(PlaceViewDto source, PlaceViewUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class PlaceViewUpdateViewModelToPlaceViewUpdateDto : MapperBase<PlaceViewUpdateViewModel, PlaceViewUpdateDto>
+{
+    public override partial PlaceViewUpdateDto Map(PlaceViewUpdateViewModel source);
+    public override partial void Map(PlaceViewUpdateViewModel source, PlaceViewUpdateDto destination);
+}
+
+[Mapper]
+public partial class PlaceViewCreateViewModelToPlaceViewCreateDto : MapperBase<PlaceViewCreateViewModel, PlaceViewCreateDto>
+{
+    public override partial PlaceViewCreateDto Map(PlaceViewCreateViewModel source);
+    public override partial void Map(PlaceViewCreateViewModel source, PlaceViewCreateDto destination);
 }

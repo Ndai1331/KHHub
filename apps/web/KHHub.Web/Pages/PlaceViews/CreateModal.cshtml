@@ -1,0 +1,42 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using KHHub.Web.Pages.PlaceViews
+@using System.Globalization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@model CreateModalModel
+@{
+    Layout = null;
+}
+<form data-ajaxForm="true" asp-page="/PlaceViews/CreateModal" autocomplete="off">
+    <abp-modal id="PlaceViewCreateModal">
+        <abp-modal-header title="@L["NewPlaceView"].Value"></abp-modal-header>
+        <abp-modal-body>
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+            <abp-input asp-for="PlaceView.UserId"    />
+            <abp-input asp-for="PlaceView.IpAddress"    />
+            <abp-input asp-for="PlaceView.Device"    />
+            <abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="PlaceView.ViewedAt" data-date="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            <abp-input asp-for="PlaceView.Duration"    />
+            <abp-input asp-for="PlaceView.Source"    />
+                    <div class="form-group">
+                <label for="PlaceView_PlaceId">@L["Place"]</label>
+                <select id="PlaceView_PlaceId"
+                        class="custom-select form-control"
+                        name="PlaceView.PlaceId"
+                        data-value="@Model.PlaceView.PlaceId" required>
+                </select>
+            </div>
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+        </abp-modal-footer>
+    </abp-modal>
+</form>

@@ -1,0 +1,49 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@using KHHub.Web.Pages.PlaceViews
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using KHHub.MasterDataService.Services.PlaceViews; 
+@using System.Globalization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@model EditModalModel
+@{
+    Layout = null;
+}
+<form data-ajaxForm="true" asp-page="/PlaceViews/EditModal" autocomplete="off">
+    <abp-modal id="PlaceViewEditModal">
+        <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
+        <abp-modal-body>
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+            <abp-input asp-for="Id" />
+                    <abp-input asp-for="PlaceView.ConcurrencyStamp" hidden="true" suppress-label="true"/>
+            <abp-input asp-for="PlaceView.UserId"    />
+            <abp-input asp-for="PlaceView.IpAddress"    />
+            <abp-input asp-for="PlaceView.Device"    />
+            <abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="PlaceView.ViewedAt"  />
+            <abp-input asp-for="PlaceView.Duration"    />
+            <abp-input asp-for="PlaceView.Source"    />
+                                <div class="form-group">
+                <label for="PlaceView_PlaceId">@L["Place"]</label>
+                <select id="PlaceView_PlaceId"
+                         name="PlaceView.PlaceId"
+                         class="custom-select form-control"
+                         data-value="@Model.PlaceView.PlaceId" required>
+                    @if (Model.Place != null)
+                    {
+                        <option value="@Model.PlaceView.PlaceId">@Model.Place.Name</option>
+                    }
+                </select>
+            </div>
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+        </abp-modal-footer>
+    </abp-modal>
+</form>

@@ -1,3 +1,11 @@
+using KHHub.MasterDataService.Entities.PlaceViews;
+using KHHub.MasterDataService.Entities.PlaceFavorites;
+using KHHub.MasterDataService.Entities.PlaceReviews;
+using KHHub.MasterDataService.Entities.EntityFiles;
+using KHHub.MasterDataService.Entities.PlaceTagMappings;
+using KHHub.MasterDataService.Entities.Places;
+using KHHub.MasterDataService.Entities.PlaceTags;
+using KHHub.MasterDataService.Entities.PlaceCategories;
 using KHHub.MasterDataService.Entities.MediaFiles;
 using KHHub.MasterDataService.Entities.ArticleViews;
 using KHHub.MasterDataService.Entities.ArticleTagMappings;
@@ -231,6 +239,14 @@ public class KHHubMasterDataServiceModule : AbpModule
             options.AddRepository<KHHub.MasterDataService.Entities.ArticleTagMappings.ArticleTagMapping, Data.ArticleTagMappings.EfCoreArticleTagMappingRepository>();
             options.AddRepository<KHHub.MasterDataService.Entities.ArticleViews.ArticleView, Data.ArticleViews.EfCoreArticleViewRepository>();
             options.AddRepository<KHHub.MasterDataService.Entities.MediaFiles.MediaFile, Data.MediaFiles.EfCoreMediaFileRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.PlaceCategories.PlaceCategory, Data.PlaceCategories.EfCorePlaceCategoryRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.PlaceTags.PlaceTag, Data.PlaceTags.EfCorePlaceTagRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.Places.Place, Data.Places.EfCorePlaceRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.PlaceTagMappings.PlaceTagMapping, Data.PlaceTagMappings.EfCorePlaceTagMappingRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.EntityFiles.EntityFile, Data.EntityFiles.EfCoreEntityFileRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.PlaceReviews.PlaceReview, Data.PlaceReviews.EfCorePlaceReviewRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.PlaceFavorites.PlaceFavorite, Data.PlaceFavorites.EfCorePlaceFavoriteRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.PlaceViews.PlaceView, Data.PlaceViews.EfCorePlaceViewRepository>();
         });
         Configure<AbpDbContextOptions>(options => {
             options.Configure(opts => {

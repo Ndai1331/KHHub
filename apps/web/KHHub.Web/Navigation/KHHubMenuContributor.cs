@@ -80,6 +80,14 @@ public class KHHubMenuContributor : IMenuContributor
         articleContentMenu.AddItem(new ApplicationMenuItem(KHHubMenus.ArticleViews, md["Menu:ArticleViews"], url: "/ArticleViews", icon: "fa fa-eye", requiredPermissionName: MasterDataServicePermissions.ArticleViews.Default));
         context.Menu.AddItem(articleContentMenu);
         context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.MediaFiles, context.GetLocalizer<MasterDataServiceResource>()["Menu:MediaFiles"], url: "/MediaFiles", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.MediaFiles.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.PlaceCategories, context.GetLocalizer<MasterDataServiceResource>()["Menu:PlaceCategories"], url: "/PlaceCategories", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.PlaceCategories.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.PlaceTags, context.GetLocalizer<MasterDataServiceResource>()["Menu:PlaceTags"], url: "/PlaceTags", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.PlaceTags.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.Places, context.GetLocalizer<MasterDataServiceResource>()["Menu:Places"], url: "/Places", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.Places.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.PlaceTagMappings, context.GetLocalizer<MasterDataServiceResource>()["Menu:PlaceTagMappings"], url: "/PlaceTagMappings", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.PlaceTagMappings.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.EntityFiles, context.GetLocalizer<MasterDataServiceResource>()["Menu:EntityFiles"], url: "/EntityFiles", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.EntityFiles.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.PlaceReviews, context.GetLocalizer<MasterDataServiceResource>()["Menu:PlaceReviews"], url: "/PlaceReviews", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.PlaceReviews.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.PlaceFavorites, context.GetLocalizer<MasterDataServiceResource>()["Menu:PlaceFavorites"], url: "/PlaceFavorites", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.PlaceFavorites.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.PlaceViews, context.GetLocalizer<MasterDataServiceResource>()["Menu:PlaceViews"], url: "/PlaceViews", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.PlaceViews.Default));
     }
 
     private Task ConfigureUserMenuAsync(MenuConfigurationContext context)

@@ -41,6 +41,38 @@ public class MasterDataServicePermissionDefinitionProvider : PermissionDefinitio
         mediaFilePermission.AddChild(MasterDataServicePermissions.MediaFiles.Create, L("Permission:Create"));
         mediaFilePermission.AddChild(MasterDataServicePermissions.MediaFiles.Edit, L("Permission:Edit"));
         mediaFilePermission.AddChild(MasterDataServicePermissions.MediaFiles.Delete, L("Permission:Delete"));
+        var placeCategoryPermission = myGroup.AddPermission(MasterDataServicePermissions.PlaceCategories.Default, L("Permission:PlaceCategories"));
+        placeCategoryPermission.AddChild(MasterDataServicePermissions.PlaceCategories.Create, L("Permission:Create"));
+        placeCategoryPermission.AddChild(MasterDataServicePermissions.PlaceCategories.Edit, L("Permission:Edit"));
+        placeCategoryPermission.AddChild(MasterDataServicePermissions.PlaceCategories.Delete, L("Permission:Delete"));
+        var placeTagPermission = myGroup.AddPermission(MasterDataServicePermissions.PlaceTags.Default, L("Permission:PlaceTags"));
+        placeTagPermission.AddChild(MasterDataServicePermissions.PlaceTags.Create, L("Permission:Create"));
+        placeTagPermission.AddChild(MasterDataServicePermissions.PlaceTags.Edit, L("Permission:Edit"));
+        placeTagPermission.AddChild(MasterDataServicePermissions.PlaceTags.Delete, L("Permission:Delete"));
+        var placePermission = myGroup.AddPermission(MasterDataServicePermissions.Places.Default, L("Permission:Places"));
+        placePermission.AddChild(MasterDataServicePermissions.Places.Create, L("Permission:Create"));
+        placePermission.AddChild(MasterDataServicePermissions.Places.Edit, L("Permission:Edit"));
+        placePermission.AddChild(MasterDataServicePermissions.Places.Delete, L("Permission:Delete"));
+        var placeTagMappingPermission = myGroup.AddPermission(MasterDataServicePermissions.PlaceTagMappings.Default, L("Permission:PlaceTagMappings"));
+        placeTagMappingPermission.AddChild(MasterDataServicePermissions.PlaceTagMappings.Create, L("Permission:Create"));
+        placeTagMappingPermission.AddChild(MasterDataServicePermissions.PlaceTagMappings.Edit, L("Permission:Edit"));
+        placeTagMappingPermission.AddChild(MasterDataServicePermissions.PlaceTagMappings.Delete, L("Permission:Delete"));
+        var entityFilePermission = myGroup.AddPermission(MasterDataServicePermissions.EntityFiles.Default, L("Permission:EntityFiles"));
+        entityFilePermission.AddChild(MasterDataServicePermissions.EntityFiles.Create, L("Permission:Create"));
+        entityFilePermission.AddChild(MasterDataServicePermissions.EntityFiles.Edit, L("Permission:Edit"));
+        entityFilePermission.AddChild(MasterDataServicePermissions.EntityFiles.Delete, L("Permission:Delete"));
+        var placeReviewPermission = myGroup.AddPermission(MasterDataServicePermissions.PlaceReviews.Default, L("Permission:PlaceReviews"));
+        placeReviewPermission.AddChild(MasterDataServicePermissions.PlaceReviews.Create, L("Permission:Create"));
+        placeReviewPermission.AddChild(MasterDataServicePermissions.PlaceReviews.Edit, L("Permission:Edit"));
+        placeReviewPermission.AddChild(MasterDataServicePermissions.PlaceReviews.Delete, L("Permission:Delete"));
+        var placeFavoritePermission = myGroup.AddPermission(MasterDataServicePermissions.PlaceFavorites.Default, L("Permission:PlaceFavorites"));
+        placeFavoritePermission.AddChild(MasterDataServicePermissions.PlaceFavorites.Create, L("Permission:Create"));
+        placeFavoritePermission.AddChild(MasterDataServicePermissions.PlaceFavorites.Edit, L("Permission:Edit"));
+        placeFavoritePermission.AddChild(MasterDataServicePermissions.PlaceFavorites.Delete, L("Permission:Delete"));
+        var placeViewPermission = myGroup.AddPermission(MasterDataServicePermissions.PlaceViews.Default, L("Permission:PlaceViews"));
+        placeViewPermission.AddChild(MasterDataServicePermissions.PlaceViews.Create, L("Permission:Create"));
+        placeViewPermission.AddChild(MasterDataServicePermissions.PlaceViews.Edit, L("Permission:Edit"));
+        placeViewPermission.AddChild(MasterDataServicePermissions.PlaceViews.Delete, L("Permission:Delete"));
     }
 
     private static LocalizableString L(string name)

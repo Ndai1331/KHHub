@@ -1,3 +1,11 @@
+using KHHub.MasterDataService.Entities.PlaceViews;
+using KHHub.MasterDataService.Entities.PlaceFavorites;
+using KHHub.MasterDataService.Entities.PlaceReviews;
+using KHHub.MasterDataService.Entities.EntityFiles;
+using KHHub.MasterDataService.Entities.PlaceTagMappings;
+using KHHub.MasterDataService.Entities.Places;
+using KHHub.MasterDataService.Entities.PlaceTags;
+using KHHub.MasterDataService.Entities.PlaceCategories;
 using KHHub.MasterDataService.Entities.MediaFiles;
 using KHHub.MasterDataService.Entities.ArticleViews;
 using KHHub.MasterDataService.Entities.ArticleTagMappings;
@@ -17,6 +25,14 @@ namespace KHHub.MasterDataService.Data;
 [ConnectionStringName(DatabaseName)]
 public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContext>, IHasEventInbox, IHasEventOutbox
 {
+    public DbSet<PlaceView> PlaceViews { get; set; } = null!;
+    public DbSet<PlaceFavorite> PlaceFavorites { get; set; } = null!;
+    public DbSet<PlaceReview> PlaceReviews { get; set; } = null!;
+    public DbSet<EntityFile> EntityFiles { get; set; } = null!;
+    public DbSet<PlaceTagMapping> PlaceTagMappings { get; set; } = null!;
+    public DbSet<Place> Places { get; set; } = null!;
+    public DbSet<PlaceTag> PlaceTags { get; set; } = null!;
+    public DbSet<PlaceCategory> PlaceCategories { get; set; } = null!;
     public DbSet<MediaFile> MediaFiles { get; set; } = null!;
     public DbSet<ArticleView> ArticleViews { get; set; } = null!;
     public DbSet<ArticleTagMapping> ArticleTagMappings { get; set; } = null!;
@@ -172,6 +188,138 @@ public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContex
                 b.Property(x => x.Duration).HasColumnName(nameof(MediaFile.Duration));
                 b.Property(x => x.FileType).HasColumnName(nameof(MediaFile.FileType));
                 b.Property(x => x.Status).HasColumnName(nameof(MediaFile.Status));
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<PlaceCategory>(b => {
+                b.ToTable(DbTablePrefix + "PlaceCategories", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.Name).HasColumnName(nameof(PlaceCategory.Name)).IsRequired().HasMaxLength(PlaceCategoryConsts.NameMaxLength);
+                b.Property(x => x.Slug).HasColumnName(nameof(PlaceCategory.Slug)).IsRequired().HasMaxLength(PlaceCategoryConsts.SlugMaxLength);
+                b.Property(x => x.Description).HasColumnName(nameof(PlaceCategory.Description)).HasMaxLength(PlaceCategoryConsts.DescriptionMaxLength);
+                b.Property(x => x.Icon).HasColumnName(nameof(PlaceCategory.Icon)).HasMaxLength(PlaceCategoryConsts.IconMaxLength);
+                b.Property(x => x.Color).HasColumnName(nameof(PlaceCategory.Color)).HasMaxLength(PlaceCategoryConsts.ColorMaxLength);
+                b.Property(x => x.ParentId).HasColumnName(nameof(PlaceCategory.ParentId));
+                b.Property(x => x.DisplayOrder).HasColumnName(nameof(PlaceCategory.DisplayOrder));
+                b.Property(x => x.IsActive).HasColumnName(nameof(PlaceCategory.IsActive));
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<PlaceTag>(b => {
+                b.ToTable(DbTablePrefix + "PlaceTags", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.Name).HasColumnName(nameof(PlaceTag.Name)).IsRequired().HasMaxLength(PlaceTagConsts.NameMaxLength);
+                b.Property(x => x.Slug).HasColumnName(nameof(PlaceTag.Slug)).IsRequired().HasMaxLength(PlaceTagConsts.SlugMaxLength);
+                b.Property(x => x.Description).HasColumnName(nameof(PlaceTag.Description)).HasMaxLength(PlaceTagConsts.DescriptionMaxLength);
+                b.Property(x => x.UsageCount).HasColumnName(nameof(PlaceTag.UsageCount));
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<Place>(b => {
+                b.ToTable(DbTablePrefix + "Places", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.Name).HasColumnName(nameof(Place.Name)).IsRequired().HasMaxLength(PlaceConsts.NameMaxLength);
+                b.Property(x => x.Slug).HasColumnName(nameof(Place.Slug)).IsRequired().HasMaxLength(PlaceConsts.SlugMaxLength);
+                b.Property(x => x.ShortDescription).HasColumnName(nameof(Place.ShortDescription)).HasMaxLength(PlaceConsts.ShortDescriptionMaxLength);
+                b.Property(x => x.Description).HasColumnName(nameof(Place.Description));
+                b.Property(x => x.ThumbnailUrl).HasColumnName(nameof(Place.ThumbnailUrl)).HasMaxLength(PlaceConsts.ThumbnailUrlMaxLength);
+                b.Property(x => x.CoverImageUrl).HasColumnName(nameof(Place.CoverImageUrl)).HasMaxLength(PlaceConsts.CoverImageUrlMaxLength);
+                b.Property(x => x.Address).HasColumnName(nameof(Place.Address)).HasMaxLength(PlaceConsts.AddressMaxLength);
+                b.Property(x => x.Latitude).HasColumnName(nameof(Place.Latitude));
+                b.Property(x => x.Longituded).HasColumnName(nameof(Place.Longituded));
+                b.Property(x => x.PhoneNumber).HasColumnName(nameof(Place.PhoneNumber)).HasMaxLength(PlaceConsts.PhoneNumberMaxLength);
+                b.Property(x => x.Email).HasColumnName(nameof(Place.Email)).HasMaxLength(PlaceConsts.EmailMaxLength);
+                b.Property(x => x.Website).HasColumnName(nameof(Place.Website)).HasMaxLength(PlaceConsts.WebsiteMaxLength);
+                b.Property(x => x.OpeningHours).HasColumnName(nameof(Place.OpeningHours)).HasMaxLength(PlaceConsts.OpeningHoursMaxLength);
+                b.Property(x => x.PriceRange).HasColumnName(nameof(Place.PriceRange));
+                b.Property(x => x.GoogleMapUrl).HasColumnName(nameof(Place.GoogleMapUrl)).HasMaxLength(PlaceConsts.GoogleMapUrlMaxLength);
+                b.Property(x => x.Status).HasColumnName(nameof(Place.Status));
+                b.Property(x => x.ViewCount).HasColumnName(nameof(Place.ViewCount));
+                b.Property(x => x.FavoriteCount).HasColumnName(nameof(Place.FavoriteCount));
+                b.Property(x => x.ReviewCount).HasColumnName(nameof(Place.ReviewCount));
+                b.Property(x => x.RatingAveraged).HasColumnName(nameof(Place.RatingAveraged));
+                b.Property(x => x.RatingTotal).HasColumnName(nameof(Place.RatingTotal));
+                b.Property(x => x.IsFeatured).HasColumnName(nameof(Place.IsFeatured));
+                b.Property(x => x.IsHot).HasColumnName(nameof(Place.IsHot));
+                b.Property(x => x.IsVerified).HasColumnName(nameof(Place.IsVerified));
+                b.Property(x => x.SeoTitle).HasColumnName(nameof(Place.SeoTitle)).IsRequired().HasMaxLength(PlaceConsts.SeoTitleMaxLength);
+                b.Property(x => x.SeoDescription).HasColumnName(nameof(Place.SeoDescription)).HasMaxLength(PlaceConsts.SeoDescriptionMaxLength);
+                b.Property(x => x.SeoKeywords).HasColumnName(nameof(Place.SeoKeywords)).HasMaxLength(PlaceConsts.SeoKeywordsMaxLength);
+                b.HasOne<PlaceCategory>().WithMany().IsRequired().HasForeignKey(x => x.PlaceCategoryId).OnDelete(DeleteBehavior.NoAction);
+                b.HasOne<Province>().WithMany().IsRequired().HasForeignKey(x => x.ProvinceId).OnDelete(DeleteBehavior.NoAction);
+                b.HasOne<Ward>().WithMany().IsRequired().HasForeignKey(x => x.WardId).OnDelete(DeleteBehavior.NoAction);
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<PlaceTagMapping>(b => {
+                b.ToTable(DbTablePrefix + "PlaceTagMappings", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.IsPrimary).HasColumnName(nameof(PlaceTagMapping.IsPrimary));
+                b.Property(x => x.SortOrder).HasColumnName(nameof(PlaceTagMapping.SortOrder));
+                b.HasOne<PlaceTag>().WithMany().IsRequired().HasForeignKey(x => x.PlaceTagId).OnDelete(DeleteBehavior.NoAction);
+                b.HasOne<Place>().WithMany().IsRequired().HasForeignKey(x => x.PlaceId).OnDelete(DeleteBehavior.NoAction);
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<EntityFile>(b => {
+                b.ToTable(DbTablePrefix + "EntityFiles", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.EntityType).HasColumnName(nameof(EntityFile.EntityType)).IsRequired().HasMaxLength(EntityFileConsts.EntityTypeMaxLength);
+                b.Property(x => x.EntityId).HasColumnName(nameof(EntityFile.EntityId));
+                b.Property(x => x.Collection).HasColumnName(nameof(EntityFile.Collection)).HasMaxLength(EntityFileConsts.CollectionMaxLength);
+                b.Property(x => x.SortOrder).HasColumnName(nameof(EntityFile.SortOrder));
+                b.Property(x => x.IsPrimary).HasColumnName(nameof(EntityFile.IsPrimary));
+                b.HasOne<MediaFile>().WithMany().IsRequired().HasForeignKey(x => x.MediaFileId).OnDelete(DeleteBehavior.NoAction);
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<PlaceReview>(b => {
+                b.ToTable(DbTablePrefix + "PlaceReviews", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.Rating).HasColumnName(nameof(PlaceReview.Rating)).IsRequired().HasMaxLength(PlaceReviewConsts.RatingMaxLength);
+                b.Property(x => x.Title).HasColumnName(nameof(PlaceReview.Title)).IsRequired().HasMaxLength(PlaceReviewConsts.TitleMaxLength);
+                b.Property(x => x.Comment).HasColumnName(nameof(PlaceReview.Comment));
+                b.Property(x => x.LikeCount).HasColumnName(nameof(PlaceReview.LikeCount));
+                b.Property(x => x.Status).HasColumnName(nameof(PlaceReview.Status));
+                b.Property(x => x.UserId).HasColumnName(nameof(PlaceReview.UserId));
+                b.HasOne<Place>().WithMany().IsRequired().HasForeignKey(x => x.PlaceId).OnDelete(DeleteBehavior.NoAction);
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<PlaceFavorite>(b => {
+                b.ToTable(DbTablePrefix + "PlaceFavorites", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.UserId).HasColumnName(nameof(PlaceFavorite.UserId));
+                b.HasOne<Place>().WithMany().IsRequired().HasForeignKey(x => x.PlaceId).OnDelete(DeleteBehavior.NoAction);
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<PlaceView>(b => {
+                b.ToTable(DbTablePrefix + "PlaceViews", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.UserId).HasColumnName(nameof(PlaceView.UserId));
+                b.Property(x => x.IpAddress).HasColumnName(nameof(PlaceView.IpAddress)).HasMaxLength(PlaceViewConsts.IpAddressMaxLength);
+                b.Property(x => x.Device).HasColumnName(nameof(PlaceView.Device)).HasMaxLength(PlaceViewConsts.DeviceMaxLength);
+                b.Property(x => x.ViewedAt).HasColumnName(nameof(PlaceView.ViewedAt));
+                b.Property(x => x.Duration).HasColumnName(nameof(PlaceView.Duration));
+                b.Property(x => x.Source).HasColumnName(nameof(PlaceView.Source)).HasMaxLength(PlaceViewConsts.SourceMaxLength);
+                b.HasOne<Place>().WithMany().IsRequired().HasForeignKey(x => x.PlaceId).OnDelete(DeleteBehavior.NoAction);
             });
         }
     }

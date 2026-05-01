@@ -1,0 +1,79 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using KHHub.Web.Pages.Places
+@using System.Globalization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@model CreateModalModel
+@{
+    Layout = null;
+}
+<form data-ajaxForm="true" asp-page="/Places/CreateModal" autocomplete="off">
+    <abp-modal id="PlaceCreateModal">
+        <abp-modal-header title="@L["NewPlace"].Value"></abp-modal-header>
+        <abp-modal-body>
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+            <abp-input asp-for="Place.Name"    />
+            <abp-input asp-for="Place.Slug"    />
+            <abp-input asp-for="Place.ShortDescription" text-area   />
+            <abp-input asp-for="Place.Description" text-area   />
+            <abp-input asp-for="Place.ThumbnailUrl"    />
+            <abp-input asp-for="Place.CoverImageUrl"    />
+            <abp-input asp-for="Place.Address"    />
+            <abp-input asp-for="Place.Latitude"   data-val="false" />
+            <abp-input asp-for="Place.Longituded"   data-val="false" />
+            <abp-input asp-for="Place.PhoneNumber"    />
+            <abp-input asp-for="Place.Email"    />
+            <abp-input asp-for="Place.Website"    />
+            <abp-input asp-for="Place.OpeningHours"    />
+            <abp-select asp-for="Place.PriceRange"    />
+            <abp-input asp-for="Place.GoogleMapUrl"    />
+            <abp-select asp-for="Place.Status"    />
+            <abp-input asp-for="Place.ViewCount"    />
+            <abp-input asp-for="Place.FavoriteCount"    />
+            <abp-input asp-for="Place.ReviewCount"    />
+            <abp-input asp-for="Place.RatingAveraged"   data-val="false" />
+            <abp-input asp-for="Place.RatingTotal"    />
+            <abp-input asp-for="Place.IsFeatured"    />
+            <abp-input asp-for="Place.IsHot"    />
+            <abp-input asp-for="Place.IsVerified"    />
+            <abp-input asp-for="Place.SeoTitle"    />
+            <abp-input asp-for="Place.SeoDescription" text-area   />
+            <abp-input asp-for="Place.SeoKeywords"    />
+                    <div class="form-group">
+                <label for="Place_PlaceCategoryId">@L["PlaceCategory"]</label>
+                <select id="Place_PlaceCategoryId"
+                        class="custom-select form-control"
+                        name="Place.PlaceCategoryId"
+                        data-value="@Model.Place.PlaceCategoryId" required>
+                </select>
+            </div>
+<div class="form-group">
+                <label for="Place_ProvinceId">@L["Province"]</label>
+                <select id="Place_ProvinceId"
+                        class="custom-select form-control"
+                        name="Place.ProvinceId"
+                        data-value="@Model.Place.ProvinceId" required>
+                </select>
+            </div>
+<div class="form-group">
+                <label for="Place_WardId">@L["Ward"]</label>
+                <select id="Place_WardId"
+                        class="custom-select form-control"
+                        name="Place.WardId"
+                        data-value="@Model.Place.WardId" required>
+                </select>
+            </div>
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+        </abp-modal-footer>
+    </abp-modal>
+</form>

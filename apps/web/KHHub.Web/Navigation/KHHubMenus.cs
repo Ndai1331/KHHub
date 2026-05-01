@@ -15,4 +15,12 @@ public class KHHubMenus
     public const string ArticleTagMappings = Prefix + ".ArticleTagMappings";
     public const string ArticleViews = Prefix + ".ArticleViews";
     public const string MediaFiles = Prefix + ".MediaFiles";
+    public const string PlaceCategories = Prefix + ".PlaceCategories";
+    public const string PlaceTags = Prefix + ".PlaceTags";
+    public const string Places = Prefix + ".Places";
+    public const string PlaceTagMappings = Prefix + ".PlaceTagMappings";
+    public const string EntityFiles = Prefix + ".EntityFiles";
+    public const string PlaceReviews = Prefix + ".PlaceReviews";
+    public const string PlaceFavorites = Prefix + ".PlaceFavorites";
+    public const string PlaceViews = Prefix + ".PlaceViews";
 }

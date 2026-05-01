@@ -193,6 +193,14 @@ public class KHHubWebModule : AbpModule
             options.Conventions.AuthorizePage("/ArticleTagMappings/Index", MasterDataServicePermissions.ArticleTagMappings.Default);
             options.Conventions.AuthorizePage("/ArticleViews/Index", MasterDataServicePermissions.ArticleViews.Default);
             options.Conventions.AuthorizePage("/MediaFiles/Index", MasterDataServicePermissions.MediaFiles.Default);
+            options.Conventions.AuthorizePage("/PlaceCategories/Index", MasterDataServicePermissions.PlaceCategories.Default);
+            options.Conventions.AuthorizePage("/PlaceTags/Index", MasterDataServicePermissions.PlaceTags.Default);
+            options.Conventions.AuthorizePage("/Places/Index", MasterDataServicePermissions.Places.Default);
+            options.Conventions.AuthorizePage("/PlaceTagMappings/Index", MasterDataServicePermissions.PlaceTagMappings.Default);
+            options.Conventions.AuthorizePage("/EntityFiles/Index", MasterDataServicePermissions.EntityFiles.Default);
+            options.Conventions.AuthorizePage("/PlaceReviews/Index", MasterDataServicePermissions.PlaceReviews.Default);
+            options.Conventions.AuthorizePage("/PlaceFavorites/Index", MasterDataServicePermissions.PlaceFavorites.Default);
+            options.Conventions.AuthorizePage("/PlaceViews/Index", MasterDataServicePermissions.PlaceViews.Default);
         });
     }
 

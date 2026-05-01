@@ -74,4 +74,68 @@ public class MasterDataServicePermissions
         public const string Create = Default + ".Create";
         public const string Delete = Default + ".Delete";
     }
+
+    public static class PlaceCategories
+    {
+        public const string Default = GroupName + ".PlaceCategories";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class PlaceTags
+    {
+        public const string Default = GroupName + ".PlaceTags";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class Places
+    {
+        public const string Default = GroupName + ".Places";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class PlaceTagMappings
+    {
+        public const string Default = GroupName + ".PlaceTagMappings";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class EntityFiles
+    {
+        public const string Default = GroupName + ".EntityFiles";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class PlaceReviews
+    {
+        public const string Default = GroupName + ".PlaceReviews";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class PlaceFavorites
+    {
+        public const string Default = GroupName + ".PlaceFavorites";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class PlaceViews
+    {
+        public const string Default = GroupName + ".PlaceViews";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
 }

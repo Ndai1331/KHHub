@@ -1,0 +1,42 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using KHHub.Web.Pages.PlaceReviews
+@using System.Globalization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@model CreateModalModel
+@{
+    Layout = null;
+}
+<form data-ajaxForm="true" asp-page="/PlaceReviews/CreateModal" autocomplete="off">
+    <abp-modal id="PlaceReviewCreateModal">
+        <abp-modal-header title="@L["NewPlaceReview"].Value"></abp-modal-header>
+        <abp-modal-body>
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+            <abp-input asp-for="PlaceReview.Rating"    />
+            <abp-input asp-for="PlaceReview.Title"    />
+            <abp-input asp-for="PlaceReview.Comment" text-area   />
+            <abp-input asp-for="PlaceReview.LikeCount"    />
+            <abp-select asp-for="PlaceReview.Status"    />
+            <abp-input asp-for="PlaceReview.UserId"    />
+                    <div class="form-group">
+                <label for="PlaceReview_PlaceId">@L["Place"]</label>
+                <select id="PlaceReview_PlaceId"
+                        class="custom-select form-control"
+                        name="PlaceReview.PlaceId"
+                        data-value="@Model.PlaceReview.PlaceId" required>
+                </select>
+            </div>
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+        </abp-modal-footer>
+    </abp-modal>
+</form>
