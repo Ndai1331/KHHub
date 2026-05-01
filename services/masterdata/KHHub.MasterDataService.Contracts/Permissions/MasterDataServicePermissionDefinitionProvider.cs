@@ -37,6 +37,10 @@ public class MasterDataServicePermissionDefinitionProvider : PermissionDefinitio
         articleViewPermission.AddChild(MasterDataServicePermissions.ArticleViews.Create, L("Permission:Create"));
         articleViewPermission.AddChild(MasterDataServicePermissions.ArticleViews.Edit, L("Permission:Edit"));
         articleViewPermission.AddChild(MasterDataServicePermissions.ArticleViews.Delete, L("Permission:Delete"));
+        var mediaFilePermission = myGroup.AddPermission(MasterDataServicePermissions.MediaFiles.Default, L("Permission:MediaFiles"));
+        mediaFilePermission.AddChild(MasterDataServicePermissions.MediaFiles.Create, L("Permission:Create"));
+        mediaFilePermission.AddChild(MasterDataServicePermissions.MediaFiles.Edit, L("Permission:Edit"));
+        mediaFilePermission.AddChild(MasterDataServicePermissions.MediaFiles.Delete, L("Permission:Delete"));
     }
 
     private static LocalizableString L(string name)

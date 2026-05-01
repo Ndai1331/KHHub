@@ -14,4 +14,5 @@ public class KHHubMenus
     public const string Articles = Prefix + ".Articles";
     public const string ArticleTagMappings = Prefix + ".ArticleTagMappings";
     public const string ArticleViews = Prefix + ".ArticleViews";
+    public const string MediaFiles = Prefix + ".MediaFiles";
 }

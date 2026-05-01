@@ -1,0 +1,44 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using KHHub.Web.Pages.MediaFiles
+@using System.Globalization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@model CreateModalModel
+@{
+    Layout = null;
+}
+<form data-ajaxForm="true" asp-page="/MediaFiles/CreateModal" autocomplete="off">
+    <abp-modal id="MediaFileCreateModal">
+        <abp-modal-header title="@L["NewMediaFile"].Value"></abp-modal-header>
+        <abp-modal-body>
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+            <abp-input asp-for="MediaFile.FileName"    />
+            <abp-input asp-for="MediaFile.OriginalFileName"    />
+            <abp-input asp-for="MediaFile.Extension"    />
+            <abp-input asp-for="MediaFile.ContentType"    />
+            <abp-input asp-for="MediaFile.Size"    />
+            <abp-input asp-for="MediaFile.StorageProvider"    />
+            <abp-input asp-for="MediaFile.Bucket"    />
+            <abp-input asp-for="MediaFile.Folder"    />
+            <abp-input asp-for="MediaFile.Path"    />
+            <abp-input asp-for="MediaFile.Url"    />
+            <abp-input asp-for="MediaFile.Checksum"    />
+            <abp-input asp-for="MediaFile.Width"    />
+            <abp-input asp-for="MediaFile.Height"    />
+            <abp-input asp-for="MediaFile.Duration"    />
+            <abp-select asp-for="MediaFile.FileType"    />
+            <abp-select asp-for="MediaFile.Status"    />
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+        </abp-modal-footer>
+    </abp-modal>
+</form>

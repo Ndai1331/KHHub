@@ -1,3 +1,4 @@
+using KHHub.MasterDataService.Entities.MediaFiles;
 using KHHub.MasterDataService.Entities.ArticleViews;
 using KHHub.MasterDataService.Entities.ArticleTagMappings;
 using KHHub.MasterDataService.Entities.Articles;
@@ -16,6 +17,7 @@ namespace KHHub.MasterDataService.Data;
 [ConnectionStringName(DatabaseName)]
 public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContext>, IHasEventInbox, IHasEventOutbox
 {
+    public DbSet<MediaFile> MediaFiles { get; set; } = null!;
     public DbSet<ArticleView> ArticleViews { get; set; } = null!;
     public DbSet<ArticleTagMapping> ArticleTagMappings { get; set; } = null!;
     public DbSet<Article> Articles { get; set; } = null!;
@@ -146,6 +148,30 @@ public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContex
                 b.Property(x => x.Duration).HasColumnName(nameof(ArticleView.Duration));
                 b.Property(x => x.UserId).HasColumnName(nameof(ArticleView.UserId));
                 b.HasOne<Article>().WithMany().IsRequired().HasForeignKey(x => x.ArticleId).OnDelete(DeleteBehavior.NoAction);
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<MediaFile>(b => {
+                b.ToTable(DbTablePrefix + "MediaFiles", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.FileName).HasColumnName(nameof(MediaFile.FileName)).HasMaxLength(MediaFileConsts.FileNameMaxLength);
+                b.Property(x => x.OriginalFileName).HasColumnName(nameof(MediaFile.OriginalFileName)).HasMaxLength(MediaFileConsts.OriginalFileNameMaxLength);
+                b.Property(x => x.Extension).HasColumnName(nameof(MediaFile.Extension)).HasMaxLength(MediaFileConsts.ExtensionMaxLength);
+                b.Property(x => x.ContentType).HasColumnName(nameof(MediaFile.ContentType)).HasMaxLength(MediaFileConsts.ContentTypeMaxLength);
+                b.Property(x => x.Size).HasColumnName(nameof(MediaFile.Size));
+                b.Property(x => x.StorageProvider).HasColumnName(nameof(MediaFile.StorageProvider)).HasMaxLength(MediaFileConsts.StorageProviderMaxLength);
+                b.Property(x => x.Bucket).HasColumnName(nameof(MediaFile.Bucket)).HasMaxLength(MediaFileConsts.BucketMaxLength);
+                b.Property(x => x.Folder).HasColumnName(nameof(MediaFile.Folder)).HasMaxLength(MediaFileConsts.FolderMaxLength);
+                b.Property(x => x.Path).HasColumnName(nameof(MediaFile.Path)).HasMaxLength(MediaFileConsts.PathMaxLength);
+                b.Property(x => x.Url).HasColumnName(nameof(MediaFile.Url)).HasMaxLength(MediaFileConsts.UrlMaxLength);
+                b.Property(x => x.Checksum).HasColumnName(nameof(MediaFile.Checksum)).HasMaxLength(MediaFileConsts.ChecksumMaxLength);
+                b.Property(x => x.Width).HasColumnName(nameof(MediaFile.Width));
+                b.Property(x => x.Height).HasColumnName(nameof(MediaFile.Height));
+                b.Property(x => x.Duration).HasColumnName(nameof(MediaFile.Duration));
+                b.Property(x => x.FileType).HasColumnName(nameof(MediaFile.FileType));
+                b.Property(x => x.Status).HasColumnName(nameof(MediaFile.Status));
             });
         }
     }

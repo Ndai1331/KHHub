@@ -1,3 +1,5 @@
+using KHHub.MasterDataService.Services.Dtos.MediaFiles;
+using KHHub.MasterDataService.Entities.MediaFiles;
 using KHHub.MasterDataService.Services.Dtos.ArticleViews;
 using KHHub.MasterDataService.Entities.ArticleViews;
 using KHHub.MasterDataService.Services.Dtos.ArticleTagMappings;
@@ -204,4 +206,18 @@ public partial class ArticleViewWithNavigationPropertiesToArticleViewWithNavigat
 {
     public override partial ArticleViewWithNavigationPropertiesDto Map(ArticleViewWithNavigationProperties source);
     public override partial void Map(ArticleViewWithNavigationProperties source, ArticleViewWithNavigationPropertiesDto destination);
+}
+
+[Mapper]
+public partial class MediaFileToMediaFileDtoMappers : MapperBase<MediaFile, MediaFileDto>
+{
+    public override partial MediaFileDto Map(MediaFile source);
+    public override partial void Map(MediaFile source, MediaFileDto destination);
+}
+
+[Mapper]
+public partial class MediaFileToMediaFileExcelDtoMappers : MapperBase<MediaFile, MediaFileExcelDto>
+{
+    public override partial MediaFileExcelDto Map(MediaFile source);
+    public override partial void Map(MediaFile source, MediaFileExcelDto destination);
 }

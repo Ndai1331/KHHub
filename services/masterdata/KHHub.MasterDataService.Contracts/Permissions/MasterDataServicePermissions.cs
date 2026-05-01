@@ -66,4 +66,12 @@ public class MasterDataServicePermissions
         public const string Create = Default + ".Create";
         public const string Delete = Default + ".Delete";
     }
+
+    public static class MediaFiles
+    {
+        public const string Default = GroupName + ".MediaFiles";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
 }

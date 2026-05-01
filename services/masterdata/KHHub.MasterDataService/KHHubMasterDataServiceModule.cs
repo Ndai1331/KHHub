@@ -1,3 +1,4 @@
+using KHHub.MasterDataService.Entities.MediaFiles;
 using KHHub.MasterDataService.Entities.ArticleViews;
 using KHHub.MasterDataService.Entities.ArticleTagMappings;
 using KHHub.MasterDataService.Entities.Articles;
@@ -88,12 +89,9 @@ public class KHHubMasterDataServiceModule : AbpModule
     private void ConfigureBlobStoring(IConfiguration configuration)
     {
         var minio = configuration.GetSection("BlobStoring:Minio");
-        Configure<AbpBlobStoringOptions>(options =>
-        {
-            options.Containers.Configure<ArticleMediaBlobContainer>(container =>
-            {
-                container.UseMinio(cfg =>
-                {
+        Configure<AbpBlobStoringOptions>(options => {
+            options.Containers.Configure<ArticleMediaBlobContainer>(container => {
+                container.UseMinio(cfg => {
                     cfg.EndPoint = minio["EndPoint"]!;
                     cfg.AccessKey = minio["AccessKey"]!;
                     cfg.SecretKey = minio["SecretKey"]!;
@@ -232,6 +230,7 @@ public class KHHubMasterDataServiceModule : AbpModule
             options.AddRepository<KHHub.MasterDataService.Entities.Articles.Article, Data.Articles.EfCoreArticleRepository>();
             options.AddRepository<KHHub.MasterDataService.Entities.ArticleTagMappings.ArticleTagMapping, Data.ArticleTagMappings.EfCoreArticleTagMappingRepository>();
             options.AddRepository<KHHub.MasterDataService.Entities.ArticleViews.ArticleView, Data.ArticleViews.EfCoreArticleViewRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.MediaFiles.MediaFile, Data.MediaFiles.EfCoreMediaFileRepository>();
         });
         Configure<AbpDbContextOptions>(options => {
             options.Configure(opts => {

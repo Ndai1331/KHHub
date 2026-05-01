@@ -1,3 +1,5 @@
+using KHHub.MasterDataService.Services.Dtos.MediaFiles;
+using KHHub.Web.Pages.MediaFiles;
 using KHHub.MasterDataService.Services.Dtos.ArticleViews;
 using KHHub.Web.Pages.ArticleViews;
 using KHHub.MasterDataService.Services.Dtos.ArticleTagMappings;
@@ -194,4 +196,25 @@ public partial class ArticleViewCreateViewModelToArticleViewCreateDto : MapperBa
 {
     public override partial ArticleViewCreateDto Map(ArticleViewCreateViewModel source);
     public override partial void Map(ArticleViewCreateViewModel source, ArticleViewCreateDto destination);
+}
+
+[Mapper]
+public partial class MediaFileDtoToMediaFileUpdateViewModelMapper : MapperBase<MediaFileDto, MediaFileUpdateViewModel>
+{
+    public override partial MediaFileUpdateViewModel Map(MediaFileDto source);
+    public override partial void Map(MediaFileDto source, MediaFileUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class MediaFileUpdateViewModelToMediaFileUpdateDto : MapperBase<MediaFileUpdateViewModel, MediaFileUpdateDto>
+{
+    public override partial MediaFileUpdateDto Map(MediaFileUpdateViewModel source);
+    public override partial void Map(MediaFileUpdateViewModel source, MediaFileUpdateDto destination);
+}
+
+[Mapper]
+public partial class MediaFileCreateViewModelToMediaFileCreateDto : MapperBase<MediaFileCreateViewModel, MediaFileCreateDto>
+{
+    public override partial MediaFileCreateDto Map(MediaFileCreateViewModel source);
+    public override partial void Map(MediaFileCreateViewModel source, MediaFileCreateDto destination);
 }

@@ -192,6 +192,7 @@ public class KHHubWebModule : AbpModule
             options.Conventions.AuthorizePage("/Articles/Index", MasterDataServicePermissions.Articles.Default);
             options.Conventions.AuthorizePage("/ArticleTagMappings/Index", MasterDataServicePermissions.ArticleTagMappings.Default);
             options.Conventions.AuthorizePage("/ArticleViews/Index", MasterDataServicePermissions.ArticleViews.Default);
+            options.Conventions.AuthorizePage("/MediaFiles/Index", MasterDataServicePermissions.MediaFiles.Default);
         });
     }
 
