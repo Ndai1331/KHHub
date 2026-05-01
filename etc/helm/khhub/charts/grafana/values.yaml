@@ -2,3 +2,10 @@
 image:
   repository: "grafana/grafana"
   tag: "10.2.0"
+
+# Match Docker dev setup (etc/docker/containers/grafana/config/grafana.ini).
+# Disable for any cluster exposed beyond local dev.
+anonymousAuth:
+  enabled: true
+  orgName: "Main Org."
+  orgRole: Admin

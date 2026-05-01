@@ -44,7 +44,10 @@ Run `install.ps1` to install or upgrade the helm charts to the Kubernetes cluste
 
 ## Add Entries to the Hosts File
 
-Ensure that the following entries are added to the `C:\Windows\System32\drivers\etc\hosts` file:
+Add the lines below to your hosts file:
+
+- **Windows**: `C:\Windows\System32\drivers\etc\hosts`
+- **macOS / Linux**: `/etc/hosts` (edit with sudo, e.g. `sudo nano /etc/hosts`)
 
 ```
 127.0.0.1 khhub-local-web

@@ -15,6 +15,15 @@ spec:
       containers:
         - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+          {{- if .Values.anonymousAuth.enabled }}
+          env:
+            - name: GF_AUTH_ANONYMOUS_ENABLED
+              value: "true"
+            - name: GF_AUTH_ANONYMOUS_ORG_NAME
+              value: {{ .Values.anonymousAuth.orgName | quote }}
+            - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+              value: {{ .Values.anonymousAuth.orgRole | quote }}
+          {{- end }}
           ports:
             - name: "{{ .Chart.Name }}"
               containerPort: {{ .Values.port }}
