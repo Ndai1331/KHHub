@@ -177,6 +177,17 @@
     "DownloadSelectedFile": "Tải file đã chọn",
     "RemoveSelectedFile": "Xóa file đã chọn",
     "FileUploading": "Đang tải lên...",
-    "MaxFileSizeLimit": "Dung lượng tối đa: {0} MB"
+    "MaxFileSizeLimit": "Dung lượng tối đa: {0} MB",
+    "Menu:PlacesGroup": "Địa điểm",
+    "Menu:PlaceCategories": "Danh mục địa điểm",
+    "Menu:PlaceTags": "Thẻ địa điểm",
+    "Menu:Places": "Danh sách địa điểm",
+    "Menu:PlaceTagMappings": "Gán thẻ địa điểm",
+    "Menu:PlaceReviews": "Đánh giá địa điểm",
+    "Menu:PlaceFavorites": "Yêu thích địa điểm",
+    "Menu:PlaceViews": "Lượt xem địa điểm",
+    "Menu:MediaFilesGroup": "Tệp media",
+    "Menu:MediaFilesFiles": "Tệp tin",
+    "Menu:EntityFiles": "Tệp gắn thực thể"
   }
 }
