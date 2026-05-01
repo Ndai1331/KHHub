@@ -3,7 +3,6 @@
 @using KHHub.MasterDataService.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using KHHub.Web.Pages.PlaceTags
-@using System.Globalization
 @inject IHtmlLocalizer<MasterDataServiceResource> L
 @model CreateModalModel
 @{
@@ -13,20 +12,31 @@
     <abp-modal id="PlaceTagCreateModal">
         <abp-modal-header title="@L["NewPlaceTag"].Value"></abp-modal-header>
         <abp-modal-body>
-@*//<suite-custom-code-block-1>*@
-@*//</suite-custom-code-block-1>*@
-            <abp-input asp-for="PlaceTag.Name"    />
-            <abp-input asp-for="PlaceTag.Slug"    />
-            <abp-input asp-for="PlaceTag.Description" text-area   />
-            <abp-input asp-for="PlaceTag.UsageCount"    />
-@*//<suite-custom-code-block-2>*@
-@*//</suite-custom-code-block-2>*@
-@*//<suite-custom-code-block-3>*@
-@*//</suite-custom-code-block-3>*@
+            <div class="mb-3">
+                <label class="form-label" for="place-tag-name-input">@L["Name"].Value</label>
+                <input asp-for="PlaceTag.Name"
+                       type="text"
+                       class="form-control"
+                       id="place-tag-name-input"
+                       autocomplete="off" />
+                <span asp-validation-for="PlaceTag.Name" class="text-danger d-block"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="place-tag-slug-input">@L["PlaceTagSlug"].Value</label>
+                <input asp-for="PlaceTag.Slug"
+                       type="text"
+                       class="form-control bg-body-secondary"
+                       id="place-tag-slug-input"
+                       readonly="readonly"
+                       tabindex="-1"
+                       aria-readonly="true"
+                       autocomplete="off" />
+                <span asp-validation-for="PlaceTag.Slug" class="text-danger d-block"></span>
+            </div>
+            <abp-input asp-for="PlaceTag.Description" text-area="true" label="@L["Description"].Value" />
+            <abp-input asp-for="PlaceTag.UsageCount" label="@L["UsageCount"].Value" />
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
-@*//<suite-custom-code-block-4>*@
-@*//</suite-custom-code-block-4>*@
         </abp-modal-footer>
     </abp-modal>
-</form>
+</form>

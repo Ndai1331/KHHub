@@ -3,25 +3,6 @@ $(function () {
 
     var placeViewService = window.kHHub.masterDataService.services.placeViews.placeViews;
 
-    var lastNpIdId = '';
-    var lastNpDisplayNameId = '';
-
-    var _lookupModal = new abp.ModalManager({
-        viewUrl: abp.appPath + 'Shared/LookupModal',
-        scriptUrl: abp.appPath + 'Pages/Shared/lookupModal.js',
-        modalClass: 'navigationPropertyLookup',
-    });
-
-    $('.lookupCleanButton').on('click', '', function () {
-        $(this).parent().find('input').val('');
-    });
-
-    _lookupModal.onClose(function () {
-        var modal = $(_lookupModal.getModal());
-        $('#' + lastNpIdId).val(modal.find('#CurrentLookupId').val());
-        $('#' + lastNpDisplayNameId).val(modal.find('#CurrentLookupDisplayName').val());
-    });
-
     var createModal = new abp.ModalManager({
         viewUrl: abp.appPath + 'PlaceViews/CreateModal',
         scriptUrl: abp.appPath + 'Pages/PlaceViews/createModal.js',
@@ -37,89 +18,12 @@ $(function () {
     var getFilter = function () {
         return {
             filterText: $('#FilterText').val(),
-            userId: $('#UserIdFilter').val(),
-            ipAddress: $('#IpAddressFilter').val(),
-            device: $('#DeviceFilter').val(),
-            viewedAtMin: $('#ViewedAtFilterMin').val(),
-            viewedAtMax: $('#ViewedAtFilterMax').val(),
-            durationMin: $('#DurationFilterMin').val(),
-            durationMax: $('#DurationFilterMax').val(),
-            source: $('#SourceFilter').val(),
             placeId: $('#PlaceIdFilter').val(),
         };
     };
 
-    var dataTableColumns = [
-        {
-            rowAction: {
-                items: [
-                    {
-                        text: l('Edit'),
-                        visible: abp.auth.isGranted('MasterDataService.PlaceViews.Edit'),
-                        action: function (data) {
-                            editModal.open({
-                                id: data.record.placeView.id,
-                            });
-                        },
-                    },
-                    {
-                        text: l('Delete'),
-                        visible: abp.auth.isGranted('MasterDataService.PlaceViews.Delete'),
-                        confirmMessage: function () {
-                            return l('DeleteConfirmationMessage');
-                        },
-                        action: function (data) {
-                            placeViewService.delete(data.record.placeView.id).then(function () {
-                                abp.notify.success(l('SuccessfullyDeleted'));
-                                dataTable.ajax.reloadEx();
-                            });
-                        },
-                    },
-                ],
-            },
-        },
-        { data: 'placeView.userId' },
-        { data: 'placeView.ipAddress' },
-        { data: 'placeView.device' },
-        {
-            data: 'placeView.viewedAt',
-
-            render: function (viewedAt) {
-                if (!viewedAt) {
-                    return '';
-                }
-
-                var date = Date.parse(viewedAt);
-                return new Date(date).toLocaleDateString(abp.localization.currentCulture.name);
-            },
-        },
-        { data: 'placeView.duration' },
-        { data: 'placeView.source' },
-        {
-            data: 'place.name',
-
-            defaultContent: '',
-        },
-    ];
-
-    if (abp.auth.isGranted('MasterDataService.PlaceViews.Delete')) {
-        dataTableColumns.unshift({
-            targets: 0,
-            data: null,
-            orderable: false,
-            className: 'select-checkbox',
-            width: '0.5rem',
-            render: function (data) {
-                return (
-                    '<input type="checkbox" class="form-check-input select-row-checkbox" data-id="' +
-                    data.placeView.id +
-                    '"/>'
-                );
-            },
-        });
-    } else {
-        $('#BulkDeleteCheckboxTheader').remove();
-    }
+    var canEdit = abp.auth.isGranted('MasterDataService.PlaceViews.Edit');
+    var canDelete = abp.auth.isGranted('MasterDataService.PlaceViews.Delete');
 
     var dataTable = $('#PlaceViewsTable').DataTable(
         abp.libs.datatables.normalizeConfiguration({
@@ -128,168 +32,121 @@ $(function () {
             paging: true,
             searching: false,
             responsive: true,
-            order: [[2, 'desc']],
+            order: [[4, 'desc']],
             ajax: abp.libs.datatables.createAjax(placeViewService.getList, getFilter),
-            columnDefs: dataTableColumns,
+            columnDefs: [
+                {
+                    data: null,
+                    orderable: false,
+                    render: function (data, type, row) {
+                        var html = '<div class="d-flex gap-1">';
+                        var id = row.placeView.id;
+
+                        if (canEdit) {
+                            html +=
+                                '<button type="button" class="btn btn-sm btn-outline-primary action-edit" data-id="' +
+                                id +
+                                '" title="' +
+                                l('Edit') +
+                                '"><i class="fa fa-pen"></i></button>';
+                        }
+
+                        if (canDelete) {
+                            html +=
+                                '<button type="button" class="btn btn-sm btn-outline-danger action-delete" data-id="' +
+                                id +
+                                '" title="' +
+                                l('Delete') +
+                                '"><i class="fa fa-trash"></i></button>';
+                        }
+
+                        html += '</div>';
+                        return html;
+                    },
+                },
+                {
+                    data: 'placeView.userId',
+                    defaultContent: '',
+                    render: function (userId) {
+                        return userId || '-';
+                    },
+                },
+                {
+                    data: 'placeView.ipAddress',
+                    defaultContent: '',
+                },
+                {
+                    data: 'placeView.device',
+                    defaultContent: '',
+                },
+                {
+                    data: 'placeView.viewedAt',
+                    render: function (viewedAt) {
+                        if (!viewedAt) {
+                            return '-';
+                        }
+                        return new Date(Date.parse(viewedAt)).toLocaleString(abp.localization.currentCulture.name);
+                    },
+                },
+                { data: 'placeView.duration' },
+                {
+                    data: 'placeView.source',
+                    defaultContent: '',
+                },
+                {
+                    data: 'place.name',
+                    defaultContent: '',
+                    render: function (name) {
+                        return name || '-';
+                    },
+                },
+            ],
         })
     );
-
-    dataTable.on('xhr', function () {
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-        $('#select_all').prop('indeterminate', false);
-        $('#select_all').prop('checked', false);
-    });
-
-    function selectOrUnselectAllCheckboxes(selectAll) {
-        $('.select-row-checkbox').each(function () {
-            $(this).prop('checked', selectAll);
-        });
-    }
-
-    $('#select_all').click(function () {
-        if ($(this).is(':checked')) {
-            selectOrUnselectAllCheckboxes(true);
-        } else {
-            $('.select-row-checkbox').each(function () {
-                selectOrUnselectAllCheckboxes(false);
-            });
-        }
-
-        showOrHideContextMenu();
-    });
-
-    dataTable.on('change', "input[type='checkbox'].select-row-checkbox", function () {
-        var unSelectedCheckboxes = $("input[type='checkbox'].select-row-checkbox:not(:checked)");
-
-        if (unSelectedCheckboxes.length >= 1) {
-            var dataRecordTotal = dataTable.context[0].json.data.length;
-            if (unSelectedCheckboxes.length === dataRecordTotal) {
-                $('#select_all').prop('indeterminate', false);
-                $('#select_all').prop('checked', false);
-            } else {
-                $('#select_all').prop('indeterminate', true);
-            }
-        } else {
-            $('#select_all').prop('indeterminate', false);
-            $('#select_all').prop('checked', true);
-        }
-
-        showOrHideContextMenu();
-    });
-
-    var showOrHideContextMenu = function () {
-        var selectedCheckboxes = $("input[type='checkbox'].select-row-checkbox:is(:checked)");
-        var selectedCheckboxCount = selectedCheckboxes.length;
-        var dataRecordTotal = dataTable.context[0].json.data.length;
-        var recordsTotal = dataTable.context[0].json.recordsTotal;
-
-        if (selectedCheckboxCount >= 1) {
-            $('#bulk-delete-context-menu').removeClass('d-none');
-
-            $('#items-selected-info-message').html(
-                selectedCheckboxCount === 1
-                    ? l('OneItemOnThisPageIsSelected')
-                    : l('NumberOfItemsOnThisPageAreSelected', selectedCheckboxCount)
-            );
-
-            $('#items-selected-info-message').removeClass('d-none');
-
-            if (selectedCheckboxCount === dataRecordTotal && recordsTotal > dataRecordTotal) {
-                $('#select-all-items-btn').html(l('SelectAllItems', recordsTotal));
-                $('#select-all-items-btn').removeClass('d-none');
-
-                $('#select-all-items-btn').off('click');
-                $('#select-all-items-btn').click(function () {
-                    $(this).data('selected', true);
-                    $(this).addClass('d-none');
-                    $('#items-selected-info-message').html(l('AllItemsAreSelected', recordsTotal));
-                    $('#clear-selection-btn').removeClass('d-none');
-                });
-
-                $('#clear-selection-btn').off('click');
-                $('#clear-selection-btn').click(function () {
-                    $('#select-all-items-btn').data('selected', false);
-                    $('#select_all').prop('checked', false);
-                    selectOrUnselectAllCheckboxes(false);
-                    showOrHideContextMenu();
-                });
-            } else {
-                $('#select-all-items-btn').addClass('d-none');
-                $('#select-all-items-btn').data('selected', false);
-                $('#clear-selection-btn').addClass('d-none');
-            }
-
-            $('#delete-selected-items').off('click');
-            $('#delete-selected-items').click(function () {
-                if ($('#select-all-items-btn').data('selected') === true) {
-                    abp.message.confirm(l('DeleteAllRecords'), function (confirmed) {
-                        if (!confirmed) {
-                            return;
-                        }
-
-                        placeViewService.deleteAll(getFilter()).then(function () {
-                            dataTable.ajax.reloadEx();
-                            selectOrUnselectAllCheckboxes(false);
-                            showOrHideContextMenu();
-                        });
-                    });
-                } else {
-                    var selectedCheckboxes = $(
-                        "input[type='checkbox'].select-row-checkbox:is(:checked)"
-                    );
-                    var selectedRecordsIds = [];
-
-                    for (var i = 0; i < selectedCheckboxes.length; i++) {
-                        selectedRecordsIds.push($(selectedCheckboxes[i]).data('id'));
-                    }
-
-                    abp.message.confirm(
-                        l('DeleteSelectedRecords', selectedCheckboxes.length),
-                        function (confirmed) {
-                            if (!confirmed) {
-                                return;
-                            }
-
-                            placeViewService.deleteByIds(selectedRecordsIds).then(function () {
-                                dataTable.ajax.reloadEx();
-                                selectOrUnselectAllCheckboxes(false);
-                                showOrHideContextMenu();
-                            });
-                        }
-                    );
-                }
-            });
-        } else {
-            $('#bulk-delete-context-menu').addClass('d-none');
-            $('#select-all-items-btn').addClass('d-none');
-            $('#items-selected-info-message').addClass('d-none');
-            $('#clear-selection-btn').addClass('d-none');
-        }
-    };
-
-    createModal.onResult(function () {
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-    });
-
-    editModal.onResult(function () {
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-    });
 
     $('#NewPlaceViewButton').click(function (e) {
         e.preventDefault();
         createModal.open();
     });
 
-    $('#SearchForm').submit(function (e) {
+    $('#PlaceViewsTable').on('click', '.action-edit', function (e) {
         e.preventDefault();
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
+        e.stopPropagation();
+        editModal.open({ id: $(this).data('id') });
+    });
+
+    $('#PlaceViewsTable').on('click', '.action-delete', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var id = $(this).data('id');
+
+        abp.message.confirm(l('DeleteConfirmationMessage')).then(function (confirmed) {
+            if (!confirmed) {
+                return;
+            }
+
+            placeViewService.delete(id).then(function () {
+                abp.notify.success(l('SuccessfullyDeleted'));
+                dataTable.ajax.reload();
+            });
+        });
+    });
+
+    $('#SearchForm').on('submit', function (e) {
+        e.preventDefault();
+        dataTable.ajax.reload();
+    });
+
+    $('#PlaceIdFilter').on('change', function () {
+        dataTable.ajax.reload();
+    });
+
+    createModal.onResult(function () {
+        dataTable.ajax.reload();
+    });
+
+    editModal.onResult(function () {
+        dataTable.ajax.reload();
     });
 
     $('#ExportToExcelButton').click(function (e) {
@@ -303,14 +160,6 @@ $(function () {
                 abp.utils.buildQueryString([
                     { name: 'downloadToken', value: result.token },
                     { name: 'filterText', value: input.filterText },
-                    { name: 'userId', value: input.userId },
-                    { name: 'ipAddress', value: input.ipAddress },
-                    { name: 'device', value: input.device },
-                    { name: 'viewedAtMin', value: input.viewedAtMin },
-                    { name: 'viewedAtMax', value: input.viewedAtMax },
-                    { name: 'durationMin', value: input.durationMin },
-                    { name: 'durationMax', value: input.durationMax },
-                    { name: 'source', value: input.source },
                     { name: 'placeId', value: input.placeId },
                 ]);
 
@@ -318,35 +167,4 @@ $(function () {
             downloadWindow.focus();
         });
     });
-
-    $('#AdvancedFilterSectionToggler').on('click', function (e) {
-        $('#AdvancedFilterSection').toggle();
-        var iconCss = $('#AdvancedFilterSection').is(':visible')
-            ? 'fa ms-1 fa-angle-up'
-            : 'fa ms-1 fa-angle-down';
-        $(this).find('i').attr('class', iconCss);
-    });
-
-    $('#AdvancedFilterSection').on('keypress', function (e) {
-        if (e.which === 13) {
-            dataTable.ajax.reloadEx();
-            selectOrUnselectAllCheckboxes(false);
-            showOrHideContextMenu();
-        }
-    });
-
-    //<suite-custom-code-block-1>
-    //</suite-custom-code-block-1>
-
-    //<suite-custom-code-block-2>
-    //</suite-custom-code-block-2>
-
-    $('#AdvancedFilterSection select').change(function () {
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-    });
-
-    //<suite-custom-code-block-3>
-    //</suite-custom-code-block-3>
 });

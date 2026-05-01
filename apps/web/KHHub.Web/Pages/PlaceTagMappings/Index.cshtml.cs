@@ -1,51 +1,38 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using KHHub.MasterDataService.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Volo.Abp.Application.Dtos;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
-using KHHub.MasterDataService.Services.PlaceTagMappings;
-using KHHub.MasterDataService.Services.Dtos.PlaceTagMappings;
-using KHHub.MasterDataService.Services.Dtos.Shared;
 
 namespace KHHub.Web.Pages.PlaceTagMappings;
 
 public abstract class IndexModelBase : AbpPageModel
 {
-    [SelectItems(nameof(IsPrimaryBoolFilterItems))]
-    public string IsPrimaryFilter { get; set; }
+    public Guid? PlaceIdFilter { get; set; }
 
-    public List<SelectListItem> IsPrimaryBoolFilterItems { get; set; } = new List<SelectListItem> { new SelectListItem("", ""),
-        new SelectListItem("Yes", "true"),
-        new SelectListItem("No", "false"),
-    };
-    public int? SortOrderFilterMin { get; set; }
+    public Guid? PlaceTagIdFilter { get; set; }
 
-    public int? SortOrderFilterMax { get; set; }
+    public string IsPrimaryFilter { get; set; } = string.Empty;
 
-    [SelectItems(nameof(PlaceTagLookupList))]
-    public Guid PlaceTagIdFilter { get; set; }
+    public List<SelectListItem> IsPrimaryFilterItems { get; set; } = [];
 
-    public List<SelectListItem> PlaceTagLookupList { get; set; } = new List<SelectListItem> { new SelectListItem(string.Empty, "") };
-    [SelectItems(nameof(PlaceLookupList))]
-    public Guid PlaceIdFilter { get; set; }
+    protected IStringLocalizer<MasterDataServiceResource> _masterDataLocalizer;
 
-    public List<SelectListItem> PlaceLookupList { get; set; } = new List<SelectListItem> { new SelectListItem(string.Empty, "") };
-
-    protected IPlaceTagMappingsAppService _placeTagMappingsAppService;
-
-    public IndexModelBase(IPlaceTagMappingsAppService placeTagMappingsAppService)
+    public IndexModelBase(IStringLocalizer<MasterDataServiceResource> masterDataLocalizer)
     {
-        _placeTagMappingsAppService = placeTagMappingsAppService;
+        _masterDataLocalizer = masterDataLocalizer;
     }
 
     public virtual async Task OnGetAsync()
     {
-        PlaceTagLookupList.AddRange((await _placeTagMappingsAppService.GetPlaceTagLookupAsync(new LookupRequestDto { MaxResultCount = LimitedResultRequestDto.MaxMaxResultCount })).Items.Select(t => new SelectListItem(t.DisplayName, t.Id.ToString())).ToList());
-        PlaceLookupList.AddRange((await _placeTagMappingsAppService.GetPlaceLookupAsync(new LookupRequestDto { MaxResultCount = LimitedResultRequestDto.MaxMaxResultCount })).Items.Select(t => new SelectListItem(t.DisplayName, t.Id.ToString())).ToList());
+        IsPrimaryFilterItems =
+        [
+            new SelectListItem(_masterDataLocalizer["All"].Value, string.Empty),
+            new SelectListItem(_masterDataLocalizer["Yes"].Value, "true"),
+            new SelectListItem(_masterDataLocalizer["No"].Value, "false"),
+        ];
         await Task.CompletedTask;
     }
 }

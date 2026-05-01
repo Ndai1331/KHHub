@@ -3,127 +3,77 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using KHHub.MasterDataService.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Volo.Abp.Application.Dtos;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
-using KHHub.MasterDataService.Services.Places;
-using KHHub.MasterDataService.Services.Dtos.Places;
-using KHHub.MasterDataService.Services.Dtos.Shared;
 
 namespace KHHub.Web.Pages.Places;
 
 public abstract class IndexModelBase : AbpPageModel
 {
-    public string? NameFilter { get; set; }
+    public Guid? PlaceCategoryIdFilter { get; set; }
 
-    public string? SlugFilter { get; set; }
+    public Guid? ProvinceIdFilter { get; set; }
 
-    public string? ShortDescriptionFilter { get; set; }
+    public Guid? WardIdFilter { get; set; }
 
-    public string? DescriptionFilter { get; set; }
+    public List<SelectListItem> PlaceStatusList { get; set; } = [];
 
-    public string? ThumbnailUrlFilter { get; set; }
-
-    public string? CoverImageUrlFilter { get; set; }
-
-    public string? AddressFilter { get; set; }
-
-    public decimal? LatitudeFilterMin { get; set; }
-
-    public decimal? LatitudeFilterMax { get; set; }
-
-    public decimal? LongitudedFilterMin { get; set; }
-
-    public decimal? LongitudedFilterMax { get; set; }
-
-    public string? PhoneNumberFilter { get; set; }
-
-    public string? EmailFilter { get; set; }
-
-    public string? WebsiteFilter { get; set; }
-
-    public string? OpeningHoursFilter { get; set; }
-
-    public PriceRange? PriceRangeFilter { get; set; }
-
-    public string? GoogleMapUrlFilter { get; set; }
+    public List<SelectListItem> PriceRangeList { get; set; } = [];
 
     public PlaceStatus? StatusFilter { get; set; }
 
-    public int? ViewCountFilterMin { get; set; }
+    public PriceRange? PriceRangeFilter { get; set; }
 
-    public int? ViewCountFilterMax { get; set; }
+    public string IsFeaturedFilter { get; set; } = string.Empty;
 
-    public int? FavoriteCountFilterMin { get; set; }
+    public List<SelectListItem> IsFeaturedFilterItems { get; set; } = [];
 
-    public int? FavoriteCountFilterMax { get; set; }
+    public string IsHotFilter { get; set; } = string.Empty;
 
-    public int? ReviewCountFilterMin { get; set; }
+    public List<SelectListItem> IsHotFilterItems { get; set; } = [];
 
-    public int? ReviewCountFilterMax { get; set; }
+    public string IsVerifiedFilter { get; set; } = string.Empty;
 
-    public decimal? RatingAveragedFilterMin { get; set; }
+    public List<SelectListItem> IsVerifiedFilterItems { get; set; } = [];
 
-    public decimal? RatingAveragedFilterMax { get; set; }
+    protected IStringLocalizer<MasterDataServiceResource> _masterDataLocalizer;
 
-    public int? RatingTotalFilterMin { get; set; }
-
-    public int? RatingTotalFilterMax { get; set; }
-
-    [SelectItems(nameof(IsFeaturedBoolFilterItems))]
-    public string IsFeaturedFilter { get; set; }
-
-    public List<SelectListItem> IsFeaturedBoolFilterItems { get; set; } = new List<SelectListItem> { new SelectListItem("", ""),
-        new SelectListItem("Yes", "true"),
-        new SelectListItem("No", "false"),
-    };
-    [SelectItems(nameof(IsHotBoolFilterItems))]
-    public string IsHotFilter { get; set; }
-
-    public List<SelectListItem> IsHotBoolFilterItems { get; set; } = new List<SelectListItem> { new SelectListItem("", ""),
-        new SelectListItem("Yes", "true"),
-        new SelectListItem("No", "false"),
-    };
-    [SelectItems(nameof(IsVerifiedBoolFilterItems))]
-    public string IsVerifiedFilter { get; set; }
-
-    public List<SelectListItem> IsVerifiedBoolFilterItems { get; set; } = new List<SelectListItem> { new SelectListItem("", ""),
-        new SelectListItem("Yes", "true"),
-        new SelectListItem("No", "false"),
-    };
-    public string? SeoTitleFilter { get; set; }
-
-    public string? SeoDescriptionFilter { get; set; }
-
-    public string? SeoKeywordsFilter { get; set; }
-
-    [SelectItems(nameof(PlaceCategoryLookupList))]
-    public Guid PlaceCategoryIdFilter { get; set; }
-
-    public List<SelectListItem> PlaceCategoryLookupList { get; set; } = new List<SelectListItem> { new SelectListItem(string.Empty, "") };
-    [SelectItems(nameof(ProvinceLookupList))]
-    public Guid ProvinceIdFilter { get; set; }
-
-    public List<SelectListItem> ProvinceLookupList { get; set; } = new List<SelectListItem> { new SelectListItem(string.Empty, "") };
-    [SelectItems(nameof(WardLookupList))]
-    public Guid WardIdFilter { get; set; }
-
-    public List<SelectListItem> WardLookupList { get; set; } = new List<SelectListItem> { new SelectListItem(string.Empty, "") };
-
-    protected IPlacesAppService _placesAppService;
-
-    public IndexModelBase(IPlacesAppService placesAppService)
+    public IndexModelBase(IStringLocalizer<MasterDataServiceResource> masterDataLocalizer)
     {
-        _placesAppService = placesAppService;
+        _masterDataLocalizer = masterDataLocalizer;
     }
 
     public virtual async Task OnGetAsync()
     {
-        PlaceCategoryLookupList.AddRange((await _placesAppService.GetPlaceCategoryLookupAsync(new LookupRequestDto { MaxResultCount = LimitedResultRequestDto.MaxMaxResultCount })).Items.Select(t => new SelectListItem(t.DisplayName, t.Id.ToString())).ToList());
-        ProvinceLookupList.AddRange((await _placesAppService.GetProvinceLookupAsync(new LookupRequestDto { MaxResultCount = LimitedResultRequestDto.MaxMaxResultCount })).Items.Select(t => new SelectListItem(t.DisplayName, t.Id.ToString())).ToList());
-        WardLookupList.AddRange((await _placesAppService.GetWardLookupAsync(new LookupRequestDto { MaxResultCount = LimitedResultRequestDto.MaxMaxResultCount })).Items.Select(t => new SelectListItem(t.DisplayName, t.Id.ToString())).ToList());
+        PlaceStatusList =
+        [
+            new SelectListItem(_masterDataLocalizer["All"].Value, string.Empty),
+        ];
+        PlaceStatusList.AddRange(
+            Enum.GetValues<PlaceStatus>()
+                .Select(s => new SelectListItem(_masterDataLocalizer[$"Enum:{nameof(PlaceStatus)}.{(int)s}"].Value, ((int)s).ToString())));
+
+        PriceRangeList =
+        [
+            new SelectListItem(_masterDataLocalizer["All"].Value, string.Empty),
+        ];
+        PriceRangeList.AddRange(
+            Enum.GetValues<PriceRange>()
+                .Select(p => new SelectListItem(_masterDataLocalizer[$"Enum:{nameof(PriceRange)}.{(int)p}"].Value, ((int)p).ToString())));
+
+        static List<SelectListItem> BoolFilterItems(IStringLocalizer<MasterDataServiceResource> loc) =>
+        [
+            new SelectListItem(loc["All"].Value, string.Empty),
+            new SelectListItem(loc["Yes"].Value, "true"),
+            new SelectListItem(loc["No"].Value, "false"),
+        ];
+
+        IsFeaturedFilterItems = BoolFilterItems(_masterDataLocalizer);
+        IsHotFilterItems = BoolFilterItems(_masterDataLocalizer);
+        IsVerifiedFilterItems = BoolFilterItems(_masterDataLocalizer);
+
         await Task.CompletedTask;
     }
 }

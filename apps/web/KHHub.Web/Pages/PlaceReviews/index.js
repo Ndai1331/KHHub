@@ -3,25 +3,6 @@ $(function () {
 
     var placeReviewService = window.kHHub.masterDataService.services.placeReviews.placeReviews;
 
-    var lastNpIdId = '';
-    var lastNpDisplayNameId = '';
-
-    var _lookupModal = new abp.ModalManager({
-        viewUrl: abp.appPath + 'Shared/LookupModal',
-        scriptUrl: abp.appPath + 'Pages/Shared/lookupModal.js',
-        modalClass: 'navigationPropertyLookup',
-    });
-
-    $('.lookupCleanButton').on('click', '', function () {
-        $(this).parent().find('input').val('');
-    });
-
-    _lookupModal.onClose(function () {
-        var modal = $(_lookupModal.getModal());
-        $('#' + lastNpIdId).val(modal.find('#CurrentLookupId').val());
-        $('#' + lastNpDisplayNameId).val(modal.find('#CurrentLookupDisplayName').val());
-    });
-
     var createModal = new abp.ModalManager({
         viewUrl: abp.appPath + 'PlaceReviews/CreateModal',
         scriptUrl: abp.appPath + 'Pages/PlaceReviews/createModal.js',
@@ -37,96 +18,26 @@ $(function () {
     var getFilter = function () {
         return {
             filterText: $('#FilterText').val(),
-            ratingMin: $('#RatingFilterMin').val(),
-            ratingMax: $('#RatingFilterMax').val(),
-            title: $('#TitleFilter').val(),
-            comment: $('#CommentFilter').val(),
-            likeCountMin: $('#LikeCountFilterMin').val(),
-            likeCountMax: $('#LikeCountFilterMax').val(),
-            status: $('#StatusFilter').val(),
-            userId: $('#UserIdFilter').val(),
             placeId: $('#PlaceIdFilter').val(),
+            status: $('#StatusFilter').val(),
         };
     };
 
-    var dataTableColumns = [
-        {
-            rowAction: {
-                items: [
-                    {
-                        text: l('Edit'),
-                        visible: abp.auth.isGranted('MasterDataService.PlaceReviews.Edit'),
-                        action: function (data) {
-                            editModal.open({
-                                id: data.record.placeReview.id,
-                            });
-                        },
-                    },
-                    {
-                        text: l('Delete'),
-                        visible: abp.auth.isGranted('MasterDataService.PlaceReviews.Delete'),
-                        confirmMessage: function () {
-                            return l('DeleteConfirmationMessage');
-                        },
-                        action: function (data) {
-                            placeReviewService.delete(data.record.placeReview.id).then(function () {
-                                abp.notify.success(l('SuccessfullyDeleted'));
-                                dataTable.ajax.reloadEx();
-                            });
-                        },
-                    },
-                ],
-            },
-        },
-        { data: 'placeReview.rating' },
-        { data: 'placeReview.title' },
-        { data: 'placeReview.comment' },
-        { data: 'placeReview.likeCount' },
-        {
-            data: 'placeReview.status',
+    var canEdit = abp.auth.isGranted('MasterDataService.PlaceReviews.Edit');
+    var canDelete = abp.auth.isGranted('MasterDataService.PlaceReviews.Delete');
 
-            render: function (status) {
-                if (status === undefined || status === null) {
-                    return '';
-                }
-
-                var localizationKey = 'Enum:PlaceReviewStatus.' + status;
-                var localized = l(localizationKey);
-
-                if (localized === localizationKey) {
-                    abp.log.warn('No localization found for ' + localizationKey);
-                    return '';
-                }
-
-                return localized;
-            },
-        },
-        { data: 'placeReview.userId' },
-        {
-            data: 'place.name',
-
-            defaultContent: '',
-        },
-    ];
-
-    if (abp.auth.isGranted('MasterDataService.PlaceReviews.Delete')) {
-        dataTableColumns.unshift({
-            targets: 0,
-            data: null,
-            orderable: false,
-            className: 'select-checkbox',
-            width: '0.5rem',
-            render: function (data) {
-                return (
-                    '<input type="checkbox" class="form-check-input select-row-checkbox" data-id="' +
-                    data.placeReview.id +
-                    '"/>'
-                );
-            },
-        });
-    } else {
-        $('#BulkDeleteCheckboxTheader').remove();
-    }
+    var getReviewStatusBadge = function (status) {
+        if (status === 1) {
+            return '<span class="badge bg-success-subtle text-success">' + l('Enum:PlaceReviewStatus.1') + '</span>';
+        }
+        if (status === 0) {
+            return '<span class="badge bg-warning-subtle text-warning">' + l('Enum:PlaceReviewStatus.0') + '</span>';
+        }
+        if (status === 2) {
+            return '<span class="badge bg-danger-subtle text-danger">' + l('Enum:PlaceReviewStatus.2') + '</span>';
+        }
+        return '<span class="badge bg-light text-dark">' + l('Enum:PlaceReviewStatus.' + status) + '</span>';
+    };
 
     var dataTable = $('#PlaceReviewsTable').DataTable(
         abp.libs.datatables.normalizeConfiguration({
@@ -135,168 +46,124 @@ $(function () {
             paging: true,
             searching: false,
             responsive: true,
-            order: [[2, 'desc']],
+            order: [[1, 'desc']],
             ajax: abp.libs.datatables.createAjax(placeReviewService.getList, getFilter),
-            columnDefs: dataTableColumns,
+            columnDefs: [
+                {
+                    data: null,
+                    orderable: false,
+                    render: function (data, type, row) {
+                        var html = '<div class="d-flex gap-1">';
+                        var id = row.placeReview.id;
+
+                        if (canEdit) {
+                            html +=
+                                '<button type="button" class="btn btn-sm btn-outline-primary action-edit" data-id="' +
+                                id +
+                                '" title="' +
+                                l('Edit') +
+                                '"><i class="fa fa-pen"></i></button>';
+                        }
+
+                        if (canDelete) {
+                            html +=
+                                '<button type="button" class="btn btn-sm btn-outline-danger action-delete" data-id="' +
+                                id +
+                                '" title="' +
+                                l('Delete') +
+                                '"><i class="fa fa-trash"></i></button>';
+                        }
+
+                        html += '</div>';
+                        return html;
+                    },
+                },
+                { data: 'placeReview.rating' },
+                {
+                    data: 'placeReview.title',
+                    defaultContent: '',
+                    render: function (v) {
+                        return v || '-';
+                    },
+                },
+                {
+                    data: 'placeReview.comment',
+                    defaultContent: '',
+                    render: function (v) {
+                        return v ? String(v).substring(0, 80) + (String(v).length > 80 ? '…' : '') : '-';
+                    },
+                },
+                { data: 'placeReview.likeCount' },
+                {
+                    data: 'placeReview.status',
+                    render: function (status) {
+                        if (status === undefined || status === null) {
+                            return '-';
+                        }
+                        return getReviewStatusBadge(status);
+                    },
+                },
+                {
+                    data: 'placeReview.userId',
+                    defaultContent: '',
+                    render: function (userId) {
+                        return userId || '-';
+                    },
+                },
+                {
+                    data: 'place.name',
+                    defaultContent: '',
+                    render: function (name) {
+                        return name || '-';
+                    },
+                },
+            ],
         })
     );
-
-    dataTable.on('xhr', function () {
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-        $('#select_all').prop('indeterminate', false);
-        $('#select_all').prop('checked', false);
-    });
-
-    function selectOrUnselectAllCheckboxes(selectAll) {
-        $('.select-row-checkbox').each(function () {
-            $(this).prop('checked', selectAll);
-        });
-    }
-
-    $('#select_all').click(function () {
-        if ($(this).is(':checked')) {
-            selectOrUnselectAllCheckboxes(true);
-        } else {
-            $('.select-row-checkbox').each(function () {
-                selectOrUnselectAllCheckboxes(false);
-            });
-        }
-
-        showOrHideContextMenu();
-    });
-
-    dataTable.on('change', "input[type='checkbox'].select-row-checkbox", function () {
-        var unSelectedCheckboxes = $("input[type='checkbox'].select-row-checkbox:not(:checked)");
-
-        if (unSelectedCheckboxes.length >= 1) {
-            var dataRecordTotal = dataTable.context[0].json.data.length;
-            if (unSelectedCheckboxes.length === dataRecordTotal) {
-                $('#select_all').prop('indeterminate', false);
-                $('#select_all').prop('checked', false);
-            } else {
-                $('#select_all').prop('indeterminate', true);
-            }
-        } else {
-            $('#select_all').prop('indeterminate', false);
-            $('#select_all').prop('checked', true);
-        }
-
-        showOrHideContextMenu();
-    });
-
-    var showOrHideContextMenu = function () {
-        var selectedCheckboxes = $("input[type='checkbox'].select-row-checkbox:is(:checked)");
-        var selectedCheckboxCount = selectedCheckboxes.length;
-        var dataRecordTotal = dataTable.context[0].json.data.length;
-        var recordsTotal = dataTable.context[0].json.recordsTotal;
-
-        if (selectedCheckboxCount >= 1) {
-            $('#bulk-delete-context-menu').removeClass('d-none');
-
-            $('#items-selected-info-message').html(
-                selectedCheckboxCount === 1
-                    ? l('OneItemOnThisPageIsSelected')
-                    : l('NumberOfItemsOnThisPageAreSelected', selectedCheckboxCount)
-            );
-
-            $('#items-selected-info-message').removeClass('d-none');
-
-            if (selectedCheckboxCount === dataRecordTotal && recordsTotal > dataRecordTotal) {
-                $('#select-all-items-btn').html(l('SelectAllItems', recordsTotal));
-                $('#select-all-items-btn').removeClass('d-none');
-
-                $('#select-all-items-btn').off('click');
-                $('#select-all-items-btn').click(function () {
-                    $(this).data('selected', true);
-                    $(this).addClass('d-none');
-                    $('#items-selected-info-message').html(l('AllItemsAreSelected', recordsTotal));
-                    $('#clear-selection-btn').removeClass('d-none');
-                });
-
-                $('#clear-selection-btn').off('click');
-                $('#clear-selection-btn').click(function () {
-                    $('#select-all-items-btn').data('selected', false);
-                    $('#select_all').prop('checked', false);
-                    selectOrUnselectAllCheckboxes(false);
-                    showOrHideContextMenu();
-                });
-            } else {
-                $('#select-all-items-btn').addClass('d-none');
-                $('#select-all-items-btn').data('selected', false);
-                $('#clear-selection-btn').addClass('d-none');
-            }
-
-            $('#delete-selected-items').off('click');
-            $('#delete-selected-items').click(function () {
-                if ($('#select-all-items-btn').data('selected') === true) {
-                    abp.message.confirm(l('DeleteAllRecords'), function (confirmed) {
-                        if (!confirmed) {
-                            return;
-                        }
-
-                        placeReviewService.deleteAll(getFilter()).then(function () {
-                            dataTable.ajax.reloadEx();
-                            selectOrUnselectAllCheckboxes(false);
-                            showOrHideContextMenu();
-                        });
-                    });
-                } else {
-                    var selectedCheckboxes = $(
-                        "input[type='checkbox'].select-row-checkbox:is(:checked)"
-                    );
-                    var selectedRecordsIds = [];
-
-                    for (var i = 0; i < selectedCheckboxes.length; i++) {
-                        selectedRecordsIds.push($(selectedCheckboxes[i]).data('id'));
-                    }
-
-                    abp.message.confirm(
-                        l('DeleteSelectedRecords', selectedCheckboxes.length),
-                        function (confirmed) {
-                            if (!confirmed) {
-                                return;
-                            }
-
-                            placeReviewService.deleteByIds(selectedRecordsIds).then(function () {
-                                dataTable.ajax.reloadEx();
-                                selectOrUnselectAllCheckboxes(false);
-                                showOrHideContextMenu();
-                            });
-                        }
-                    );
-                }
-            });
-        } else {
-            $('#bulk-delete-context-menu').addClass('d-none');
-            $('#select-all-items-btn').addClass('d-none');
-            $('#items-selected-info-message').addClass('d-none');
-            $('#clear-selection-btn').addClass('d-none');
-        }
-    };
-
-    createModal.onResult(function () {
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-    });
-
-    editModal.onResult(function () {
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-    });
 
     $('#NewPlaceReviewButton').click(function (e) {
         e.preventDefault();
         createModal.open();
     });
 
-    $('#SearchForm').submit(function (e) {
+    $('#PlaceReviewsTable').on('click', '.action-edit', function (e) {
         e.preventDefault();
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
+        e.stopPropagation();
+        editModal.open({ id: $(this).data('id') });
+    });
+
+    $('#PlaceReviewsTable').on('click', '.action-delete', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var id = $(this).data('id');
+
+        abp.message.confirm(l('DeleteConfirmationMessage')).then(function (confirmed) {
+            if (!confirmed) {
+                return;
+            }
+
+            placeReviewService.delete(id).then(function () {
+                abp.notify.success(l('SuccessfullyDeleted'));
+                dataTable.ajax.reload();
+            });
+        });
+    });
+
+    $('#SearchForm').on('submit', function (e) {
+        e.preventDefault();
+        dataTable.ajax.reload();
+    });
+
+    $('#PlaceIdFilter, #StatusFilter').on('change', function () {
+        dataTable.ajax.reload();
+    });
+
+    createModal.onResult(function () {
+        dataTable.ajax.reload();
+    });
+
+    editModal.onResult(function () {
+        dataTable.ajax.reload();
     });
 
     $('#ExportToExcelButton').click(function (e) {
@@ -310,50 +177,12 @@ $(function () {
                 abp.utils.buildQueryString([
                     { name: 'downloadToken', value: result.token },
                     { name: 'filterText', value: input.filterText },
-                    { name: 'ratingMin', value: input.ratingMin },
-                    { name: 'ratingMax', value: input.ratingMax },
-                    { name: 'title', value: input.title },
-                    { name: 'comment', value: input.comment },
-                    { name: 'likeCountMin', value: input.likeCountMin },
-                    { name: 'likeCountMax', value: input.likeCountMax },
-                    { name: 'status', value: input.status },
-                    { name: 'userId', value: input.userId },
                     { name: 'placeId', value: input.placeId },
+                    { name: 'status', value: input.status },
                 ]);
 
             var downloadWindow = window.open(url, '_blank');
             downloadWindow.focus();
         });
     });
-
-    $('#AdvancedFilterSectionToggler').on('click', function (e) {
-        $('#AdvancedFilterSection').toggle();
-        var iconCss = $('#AdvancedFilterSection').is(':visible')
-            ? 'fa ms-1 fa-angle-up'
-            : 'fa ms-1 fa-angle-down';
-        $(this).find('i').attr('class', iconCss);
-    });
-
-    $('#AdvancedFilterSection').on('keypress', function (e) {
-        if (e.which === 13) {
-            dataTable.ajax.reloadEx();
-            selectOrUnselectAllCheckboxes(false);
-            showOrHideContextMenu();
-        }
-    });
-
-    //<suite-custom-code-block-1>
-    //</suite-custom-code-block-1>
-
-    //<suite-custom-code-block-2>
-    //</suite-custom-code-block-2>
-
-    $('#AdvancedFilterSection select').change(function () {
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-    });
-
-    //<suite-custom-code-block-3>
-    //</suite-custom-code-block-3>
 });

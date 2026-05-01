@@ -14,16 +14,9 @@
     PageLayout.Content.Title = L["Places"].Value;
     PageLayout.Content.MenuItemName = KHHubMenus.Places;
 }
-@section styles
-{
-@*//<suite-custom-code-block-1>*@
-@*//</suite-custom-code-block-1>*@
-}
 @section scripts
 {
     <abp-script src="/Pages/Places/index.js" />
-@*//<suite-custom-code-block-2>*@
-@*//</suite-custom-code-block-2>*@
 }
 @section content_toolbar {
     <abp-button id="ExportToExcelButton" text="@L["ExportToExcel"].Value" icon="download" size="Small" button-type="Primary" />
@@ -31,203 +24,92 @@
     {
         <abp-button id="NewPlaceButton" text="@L["NewPlace"].Value" icon="plus" size="Small" button-type="Primary" />
     }
-@*//<suite-custom-code-block-3>*@
-@*//</suite-custom-code-block-3>*@
 }
-@*//<suite-custom-code-block-4>*@
-@*//</suite-custom-code-block-4>*@
 <abp-card>
     <abp-card-body>
-		<abp-row class="mb-3">
-            <abp-column size-md="_8" size-lg="_10">
-                <div class="mb-3">
-                    <form id="SearchForm" autocomplete="off">
-                        <div class="input-group">
-                            <input class="form-control page-search-filter-text" id="FilterText" placeholder="@L["Search"]"/>
-                            <abp-button button-type="Primary" type="submit" icon="search"/>
-                        </div>
-                    </form>
-                </div>
+        <abp-row class="mb-3">
+            <abp-column size-md="_12">
+                <label class="form-label" for="FilterText">@L["Search"].Value</label>
+                <form id="SearchForm" autocomplete="off">
+                    <div class="input-group">
+                        <input class="form-control page-search-filter-text" id="FilterText" placeholder="@L["Search"]" />
+                        <abp-button button-type="Primary" type="submit" icon="search" />
+                    </div>
+                </form>
             </abp-column>
-            <abp-column size-md="_4" size-lg="_2">
-                <div class="mb-3">
-                    <abp-button style="width:100%" id="AdvancedFilterSectionToggler" button-type="Outline_Primary">
-                        @L["Filters"]<i aria-hidden="true" class="fa ms-1 fa-angle-down"></i>
-                    </abp-button>
-                </div>
+            <abp-column size-md="_4">
+                <abp-select asp-for="StatusFilter" asp-items="@Model.PlaceStatusList" label="@L["Status"].Value" />
+            </abp-column>
+            <abp-column size-md="_4">
+                <abp-select asp-for="PriceRangeFilter" asp-items="@Model.PriceRangeList" label="@L["PriceRange"].Value" />
+            </abp-column>
+            <abp-column size-md="_4">
+                <label class="form-label" asp-for="PlaceCategoryIdFilter">@L["PlaceCategory"].Value</label>
+                <select asp-for="PlaceCategoryIdFilter"
+                        class="auto-complete-select"
+                        data-autocomplete-api-url="@Url.Content("~/api/masterdata/places/place-category-lookup")"
+                        data-autocomplete-display-property="displayName"
+                        data-autocomplete-value-property="id"
+                        data-autocomplete-items-property="items"
+                        data-autocomplete-filter-param-name="filter"
+                        data-autocomplete-allow-clear="true"
+                        data-autocomplete-placeholder="@L["Search"].Value">
+                </select>
+            </abp-column>
+            <abp-column size-md="_4">
+                <label class="form-label" asp-for="ProvinceIdFilter">@L["Province"].Value</label>
+                <select asp-for="ProvinceIdFilter"
+                        class="auto-complete-select"
+                        data-autocomplete-api-url="@Url.Content("~/api/masterdata/places/province-lookup")"
+                        data-autocomplete-display-property="displayName"
+                        data-autocomplete-value-property="id"
+                        data-autocomplete-items-property="items"
+                        data-autocomplete-filter-param-name="filter"
+                        data-autocomplete-allow-clear="true"
+                        data-autocomplete-placeholder="@L["Search"].Value">
+                </select>
+            </abp-column>
+            <abp-column size-md="_4">
+                <label class="form-label" asp-for="WardIdFilter">@L["Ward"].Value</label>
+                <select asp-for="WardIdFilter"
+                        class="auto-complete-select"
+                        data-autocomplete-api-url="@Url.Content("~/api/masterdata/places/ward-lookup")"
+                        data-autocomplete-display-property="displayName"
+                        data-autocomplete-value-property="id"
+                        data-autocomplete-items-property="items"
+                        data-autocomplete-filter-param-name="filter"
+                        data-autocomplete-allow-clear="true"
+                        data-autocomplete-placeholder="@L["Search"].Value">
+                </select>
+            </abp-column>
+            <abp-column size-md="_4">
+                <label class="form-label" asp-for="IsFeaturedFilter">@L["IsFeatured"].Value</label>
+                <select asp-for="IsFeaturedFilter" asp-items="Model.IsFeaturedFilterItems" class="form-select"></select>
+            </abp-column>
+            <abp-column size-md="_4">
+                <label class="form-label" asp-for="IsHotFilter">@L["IsHot"].Value</label>
+                <select asp-for="IsHotFilter" asp-items="Model.IsHotFilterItems" class="form-select"></select>
+            </abp-column>
+            <abp-column size-md="_4">
+                <label class="form-label" asp-for="IsVerifiedFilter">@L["IsVerified"].Value</label>
+                <select asp-for="IsVerifiedFilter" asp-items="Model.IsVerifiedFilterItems" class="form-select"></select>
             </abp-column>
         </abp-row>
-        <abp-row id="AdvancedFilterSection" class="mt-3" style="display: none;">
-            <abp-column size="_3">
-                <abp-input asp-for="NameFilter" label="@L["Name"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="SlugFilter" label="@L["Slug"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="ShortDescriptionFilter" label="@L["ShortDescription"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="DescriptionFilter" label="@L["Description"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="ThumbnailUrlFilter" label="@L["ThumbnailUrl"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="CoverImageUrlFilter" label="@L["CoverImageUrl"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="AddressFilter" label="@L["Address"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="LatitudeFilterMin" label="@L["MinLatitude"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="LatitudeFilterMax" label="@L["MaxLatitude"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="LongitudedFilterMin" label="@L["MinLongituded"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="LongitudedFilterMax" label="@L["MaxLongituded"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="PhoneNumberFilter" label="@L["PhoneNumber"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="EmailFilter" label="@L["Email"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="WebsiteFilter" label="@L["Website"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="OpeningHoursFilter" label="@L["OpeningHours"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-select asp-for="PriceRangeFilter" label="@L["PriceRange"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="GoogleMapUrlFilter" label="@L["GoogleMapUrl"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-select asp-for="StatusFilter" label="@L["Status"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="ViewCountFilterMin" label="@L["MinViewCount"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="ViewCountFilterMax" label="@L["MaxViewCount"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="FavoriteCountFilterMin" label="@L["MinFavoriteCount"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="FavoriteCountFilterMax" label="@L["MaxFavoriteCount"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="ReviewCountFilterMin" label="@L["MinReviewCount"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="ReviewCountFilterMax" label="@L["MaxReviewCount"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="RatingAveragedFilterMin" label="@L["MinRatingAveraged"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="RatingAveragedFilterMax" label="@L["MaxRatingAveraged"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="RatingTotalFilterMin" label="@L["MinRatingTotal"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="RatingTotalFilterMax" label="@L["MaxRatingTotal"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-select asp-for="IsFeaturedFilter" label="@L["IsFeatured"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-select asp-for="IsHotFilter" label="@L["IsHot"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-select asp-for="IsVerifiedFilter" label="@L["IsVerified"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="SeoTitleFilter" label="@L["SeoTitle"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="SeoDescriptionFilter" label="@L["SeoDescription"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="SeoKeywordsFilter" label="@L["SeoKeywords"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-select asp-for="PlaceCategoryIdFilter" label="@L["PlaceCategory"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-select asp-for="ProvinceIdFilter" label="@L["Province"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-select asp-for="WardIdFilter" label="@L["Ward"].Value" />
-            </abp-column>
-@*//<suite-custom-code-block-5>*@
-@*//</suite-custom-code-block-5>*@
-        </abp-row>
-        <div id="bulk-delete-context-menu" class="d-none">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <p class="lead mb-0 d-none" id="items-selected-info-message"></p>
-                <div>
-                    <button class="btn btn-outline-secondary d-none mx-1" id="select-all-items-btn"></button>
-                    <button class="btn btn-outline-secondary d-none mx-1" id="clear-selection-btn">
-                        @L["ClearSelection"]
-                    </button>
-                    <button class="btn btn-danger mx-1" id="delete-selected-items">
-                        <i class="fa fa-trash"></i> @L["Delete"]
-                    </button>
-                </div>
-            </div>
-            <hr class="my-1 mx-0"/>
-        </div>
-        <abp-table striped-rows="true" id="PlacesTable">
+        <abp-table striped-rows="true" hoverable-rows="true" id="PlacesTable">
             <thead>
-				<tr>
-				    <th id="BulkDeleteCheckboxTheader"><input type="checkbox" id="select_all" class="form-check-input" /></th>
-					<th>@L["Actions"]</th>
-					<th>@L["Name"]</th>
-					<th>@L["Slug"]</th>
-					<th>@L["ShortDescription"]</th>
-					<th>@L["Description"]</th>
-					<th>@L["ThumbnailUrl"]</th>
-					<th>@L["CoverImageUrl"]</th>
-					<th>@L["Address"]</th>
-					<th>@L["Latitude"]</th>
-					<th>@L["Longituded"]</th>
-					<th>@L["PhoneNumber"]</th>
-					<th>@L["Email"]</th>
-					<th>@L["Website"]</th>
-					<th>@L["OpeningHours"]</th>
-					<th>@L["PriceRange"]</th>
-					<th>@L["GoogleMapUrl"]</th>
-					<th>@L["Status"]</th>
-					<th>@L["ViewCount"]</th>
-					<th>@L["FavoriteCount"]</th>
-					<th>@L["ReviewCount"]</th>
-					<th>@L["RatingAveraged"]</th>
-					<th>@L["RatingTotal"]</th>
-					<th>@L["IsFeatured"]</th>
-					<th>@L["IsHot"]</th>
-					<th>@L["IsVerified"]</th>
-					<th>@L["SeoTitle"]</th>
-					<th>@L["SeoDescription"]</th>
-					<th>@L["SeoKeywords"]</th>
-					<th>@L["PlaceCategory"]</th>
-					<th>@L["Province"]</th>
-					<th>@L["Ward"]</th>
-@*//<suite-custom-code-block-6>*@
-@*//</suite-custom-code-block-6>*@
-				</tr>
+                <tr>
+                    <th style="width: 90px;">@L["Actions"]</th>
+                    <th>@L["Name"]</th>
+                    <th>@L["PlaceCategory"]</th>
+                    <th>@L["Province"]</th>
+                    <th>@L["Ward"]</th>
+                    <th>@L["PriceRange"]</th>
+                    <th>@L["Status"]</th>
+                    <th>@L["IsFeatured"]</th>
+                    <th>@L["IsHot"]</th>
+                    <th>@L["IsVerified"]</th>
+                </tr>
             </thead>
         </abp-table>
     </abp-card-body>
 </abp-card>
-@*//<suite-custom-code-block-7>*@
-@*//</suite-custom-code-block-7>*@

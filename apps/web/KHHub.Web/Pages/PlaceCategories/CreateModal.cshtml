@@ -3,34 +3,94 @@
 @using KHHub.MasterDataService.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using KHHub.Web.Pages.PlaceCategories
-@using System.Globalization
 @inject IHtmlLocalizer<MasterDataServiceResource> L
 @model CreateModalModel
 @{
     Layout = null;
 }
 <form data-ajaxForm="true" asp-page="/PlaceCategories/CreateModal" autocomplete="off">
-    <abp-modal id="PlaceCategoryCreateModal">
+    @Html.AntiForgeryToken()
+    <abp-modal id="PlaceCategoryCreateModal"
+               size="ExtraLarge"
+               scrollable="true"
+               centered="true">
         <abp-modal-header title="@L["NewPlaceCategory"].Value"></abp-modal-header>
         <abp-modal-body>
-@*//<suite-custom-code-block-1>*@
-@*//</suite-custom-code-block-1>*@
-            <abp-input asp-for="PlaceCategory.Name"    />
-            <abp-input asp-for="PlaceCategory.Slug"    />
-            <abp-input asp-for="PlaceCategory.Description" text-area   />
-            <abp-input asp-for="PlaceCategory.Icon"    />
-            <abp-input asp-for="PlaceCategory.Color"    />
-            <abp-input asp-for="PlaceCategory.ParentId"    />
-            <abp-input asp-for="PlaceCategory.DisplayOrder"    />
-            <abp-input asp-for="PlaceCategory.IsActive"    />
-@*//<suite-custom-code-block-2>*@
-@*//</suite-custom-code-block-2>*@
-@*//<suite-custom-code-block-3>*@
-@*//</suite-custom-code-block-3>*@
+            <abp-row class="g-3 mb-0 align-items-start">
+                <abp-column size-md="_8">
+                    <abp-row class="g-3 align-items-start">
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="PlaceCategory.Name" label="@L["Name"].Value" />
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <div class="mb-0">
+                                <label class="form-label" asp-for="PlaceCategory.ParentId">@L["PlaceCategoryParentId"].Value</label>
+                                <select asp-for="PlaceCategory.ParentId"
+                                        class="auto-complete-select"
+                                        data-autocomplete-api-url="@Url.Content("~/api/masterdata/places/place-category-lookup")"
+                                        data-autocomplete-display-property="displayName"
+                                        data-autocomplete-value-property="id"
+                                        data-autocomplete-items-property="items"
+                                        data-autocomplete-filter-param-name="filter"
+                                        data-autocomplete-allow-clear="true"
+                                        data-autocomplete-placeholder="@L["Search"].Value">
+                                </select>
+                                <span asp-validation-for="PlaceCategory.ParentId" class="text-danger d-block"></span>
+                            </div>
+                        </abp-column>
+                    </abp-row>
+                    <abp-row class="g-3 align-items-start">
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="PlaceCategory.Slug" label="@L["Slug"].Value" />
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="PlaceCategory.Icon" label="@L["Icon"].Value" />
+                        </abp-column>
+                    </abp-row>
+                    <abp-row class="g-3 align-items-start">
+                        <abp-column size-md="_12">
+                            <abp-input asp-for="PlaceCategory.Description" text-area="true" label="@L["Description"].Value" />
+                        </abp-column>
+                    </abp-row>
+                    <abp-row class="g-3 align-items-start">
+                        <abp-column size-md="_6">
+                            <label class="form-label" asp-for="PlaceCategory.DisplayOrder">@L["DisplayOrder"].Value</label>
+                            <input asp-for="PlaceCategory.DisplayOrder"
+                                   type="number"
+                                   class="form-control"
+                                   autocomplete="off" />
+                            <span asp-validation-for="PlaceCategory.DisplayOrder" class="text-danger d-block"></span>
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <label class="form-label" asp-for="PlaceCategory.IsActive">@L["IsActive"].Value</label>
+                            <div class="d-flex align-items-center" style="min-height: 38px;">
+                                <input asp-for="PlaceCategory.IsActive"
+                                       type="checkbox"
+                                       class="form-check-input mb-0" />
+                            </div>
+                            <span asp-validation-for="PlaceCategory.IsActive" class="text-danger d-block"></span>
+                        </abp-column>
+                    </abp-row>
+                </abp-column>
+                <abp-column size-md="_4">
+                    <h6 class="text-muted text-uppercase small mb-3">@L["Color"].Value</h6>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="PlaceCategory.Color">@L["Color"].Value</label>
+                        <input asp-for="PlaceCategory.Color"
+                               type="text"
+                               class="form-control"
+                               placeholder="#3B82F6"
+                               autocomplete="off" />
+                        <span asp-validation-for="PlaceCategory.Color" class="text-danger d-block"></span>
+                        <div id="PlaceCategoryColorPreview"
+                             class="rounded border mt-3"
+                             style="width: 100%; height: 96px; background-color: #e5e7eb;"
+                             aria-hidden="true"></div>
+                    </div>
+                </abp-column>
+            </abp-row>
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
-@*//<suite-custom-code-block-4>*@
-@*//</suite-custom-code-block-4>*@
         </abp-modal-footer>
     </abp-modal>
-</form>
+</form>

@@ -1,0 +1,183 @@
+@page
+@using KHHub.MasterDataService.Localization
+@using KHHub.Web.Navigation
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@inject IPageLayout PageLayout
+@model KHHub.Web.Pages.Places.EditModel
+@{
+    PageLayout.Content.Title = L["EditPlace"].Value;
+    PageLayout.Content.MenuItemName = KHHubMenus.Places;
+    var thumbPreviewClass = string.IsNullOrEmpty(Model.Place.ThumbnailUrl) ? "d-none" : "";
+    var coverPreviewClass = string.IsNullOrEmpty(Model.Place.CoverImageUrl) ? "d-none" : "";
+}
+
+@section scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
+    <abp-script src="/Pages/Articles/article-media-upload.js" />
+    <abp-script src="/Pages/Places/place-description-tinymce.js" />
+    <abp-script src="/Pages/Places/place-edit.js" />
+    <abp-script src="/Pages/Places/place-form-save.js" />
+}
+
+@section content_toolbar
+{
+    <a asp-page="./Index" class="btn btn-secondary"><i class="fa fa-arrow-left me-1"></i>@L["BackToList"].Value</a>
+    @if (Model.CanDelete)
+    {
+        <abp-button id="DeletePlaceButton" button-type="Danger" text="@L["DeletePlace"].Value" icon="trash" />
+    }
+    <abp-button id="SaveAndPublishButton" button-type="Outline_Primary" text="@L["SaveAndPublish"].Value" icon="check-double" form="PlaceEditForm" type="submit" name="action" value="save-and-publish" />
+    <abp-button id="SaveButton" button-type="Primary" text="@L["Save"].Value" icon="save" form="PlaceEditForm" type="submit" name="action" value="save" />
+}
+
+<p class="text-muted mb-4">@L["PlaceFormLayoutHint"].Value</p>
+
+<form id="PlaceEditForm" method="post" autocomplete="off" data-place-mode="edit">
+    @Html.AntiForgeryToken()
+    <abp-input asp-for="Id" type="hidden" />
+    <abp-input asp-for="Place.ConcurrencyStamp" type="hidden" />
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+    <abp-row>
+        <abp-column size-md="_8">
+            <abp-card class="mb-4">
+                <abp-card-header>
+                    <h5 class="mb-0">@L["BasicInfo"].Value</h5>
+                </abp-card-header>
+                <abp-card-body>
+                    <abp-input asp-for="Place.Name" id="PlaceName" label="@L["Name"].Value" />
+                    <abp-input asp-for="Place.Slug" id="PlaceSlug" label="@L["PlaceSlug"].Value" />
+                    <abp-input asp-for="Place.ShortDescription" id="PlaceShortDescription" text-area="true" label="@L["ShortDescription"].Value" />
+                    <label class="form-label" asp-for="Place.Description">@L["Description"].Value</label>
+                    <textarea asp-for="Place.Description" id="PlaceDescription" class="form-control" rows="20"></textarea>
+                    <span asp-validation-for="Place.Description" class="text-danger d-block mt-1"></span>
+                    <abp-input asp-for="Place.Address" label="@L["Address"].Value" />
+                    <abp-row>
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="Place.Latitude" data-val="false" label="@L["Latitude"].Value" />
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="Place.Longituded" data-val="false" label="@L["Longituded"].Value" />
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+            </abp-card>
+
+            <abp-card class="mb-4">
+                <abp-card-header>
+                    <h5 class="mb-0">@L["SeoInformation"].Value</h5>
+                </abp-card-header>
+                <abp-card-body>
+                    <abp-input asp-for="Place.SeoTitle" id="PlaceSeoTitle" label="@L["SeoTitle"].Value" />
+                    <abp-input asp-for="Place.SeoDescription" id="PlaceSeoDescription" text-area="true" label="@L["SeoDescription"].Value" />
+                    <abp-input asp-for="Place.SeoKeywords" label="@L["SeoKeywords"].Value" />
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
+
+        <abp-column size-md="_4">
+            <abp-card class="mb-4">
+                <abp-card-header class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h5 class="mb-0">@L["PlaceInformation"].Value</h5>
+                    @if (Model.LastUpdatedAt.HasValue)
+                    {
+                        <span class="text-muted small">@L["LastModificationTime"]: @Model.LastUpdatedAt.Value.ToString("g")</span>
+                    }
+                </abp-card-header>
+                <abp-card-body>
+                    <h6 class="text-muted text-uppercase small mb-3">@L["Media"].Value</h6>
+                    <div class="mb-3">
+                        <label class="form-label">@L["ThumbnailUrl"].Value</label>
+                        <input type="file" class="form-control article-media-upload mb-2" accept="image/*" data-url-target="#PlaceThumbnailUrl" data-preview-target="#PlaceThumbnailPreview" />
+                        <img id="PlaceThumbnailPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 @thumbPreviewClass" src="@Model.Place.ThumbnailUrl" />
+                        <abp-input asp-for="Place.ThumbnailUrl" suppress-label="true" id="PlaceThumbnailUrl" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">@L["CoverImageUrl"].Value</label>
+                        <input type="file" class="form-control article-media-upload mb-2" accept="image/*" data-url-target="#PlaceCoverImageUrl" data-preview-target="#PlaceCoverPreview" />
+                        <img id="PlaceCoverPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 @coverPreviewClass" src="@Model.Place.CoverImageUrl" />
+                        <abp-input asp-for="Place.CoverImageUrl" suppress-label="true" id="PlaceCoverImageUrl" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Place.PlaceCategoryId">@L["PlaceCategory"].Value</label>
+                        <select asp-for="Place.PlaceCategoryId"
+                                class="auto-complete-select"
+                                data-autocomplete-api-url="@Url.Content("~/api/masterdata/places/place-category-lookup")"
+                                data-autocomplete-display-property="displayName"
+                                data-autocomplete-value-property="id"
+                                data-autocomplete-items-property="items"
+                                data-autocomplete-filter-param-name="filter"
+                                data-autocomplete-allow-clear="true"
+                                data-autocomplete-placeholder="@L["Search"].Value">
+                            @if (Model.Place.PlaceCategoryId != Guid.Empty && !string.IsNullOrEmpty(Model.SelectedPlaceCategoryDisplayName))
+                            {
+                                <option selected value="@Model.Place.PlaceCategoryId">@Model.SelectedPlaceCategoryDisplayName</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Place.PlaceCategoryId" class="text-danger d-block"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Place.ProvinceId">@L["Province"].Value</label>
+                        <select asp-for="Place.ProvinceId"
+                                class="auto-complete-select"
+                                data-autocomplete-api-url="@Url.Content("~/api/masterdata/places/province-lookup")"
+                                data-autocomplete-display-property="displayName"
+                                data-autocomplete-value-property="id"
+                                data-autocomplete-items-property="items"
+                                data-autocomplete-filter-param-name="filter"
+                                data-autocomplete-allow-clear="true"
+                                data-autocomplete-placeholder="@L["Search"].Value">
+                            @if (Model.Place.ProvinceId != Guid.Empty && !string.IsNullOrEmpty(Model.SelectedProvinceDisplayName))
+                            {
+                                <option selected value="@Model.Place.ProvinceId">@Model.SelectedProvinceDisplayName</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Place.ProvinceId" class="text-danger d-block"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Place.WardId">@L["Ward"].Value</label>
+                        <select asp-for="Place.WardId"
+                                class="auto-complete-select"
+                                data-autocomplete-api-url="@Url.Content("~/api/masterdata/places/ward-lookup")"
+                                data-autocomplete-display-property="displayName"
+                                data-autocomplete-value-property="id"
+                                data-autocomplete-items-property="items"
+                                data-autocomplete-filter-param-name="filter"
+                                data-autocomplete-allow-clear="true"
+                                data-autocomplete-placeholder="@L["Search"].Value">
+                            @if (Model.Place.WardId != Guid.Empty && !string.IsNullOrEmpty(Model.SelectedWardDisplayName))
+                            {
+                                <option selected value="@Model.Place.WardId">@Model.SelectedWardDisplayName</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Place.WardId" class="text-danger d-block"></span>
+                    </div>
+
+                    <abp-select asp-for="Place.PriceRange" asp-items="@Model.PriceRangeList" label="@L["PriceRange"].Value" />
+                    <abp-select asp-for="Place.Status" asp-items="@Model.PlaceStatusList" label="@L["Status"].Value" />
+
+                    <abp-input asp-for="Place.PhoneNumber" label="@L["PhoneNumber"].Value" />
+                    <abp-input asp-for="Place.Email" label="@L["Email"].Value" />
+                    <abp-input asp-for="Place.Website" label="@L["Website"].Value" />
+                    <abp-input asp-for="Place.OpeningHours" label="@L["OpeningHours"].Value" />
+                    <abp-input asp-for="Place.GoogleMapUrl" label="@L["GoogleMapUrl"].Value" />
+
+                    <abp-input asp-for="Place.IsFeatured" label="@L["IsFeatured"].Value" />
+                    <abp-input asp-for="Place.IsHot" label="@L["IsHot"].Value" />
+                    <abp-input asp-for="Place.IsVerified" label="@L["IsVerified"].Value" />
+
+                    <hr class="my-3" />
+                    <h6 class="text-muted text-uppercase small mb-3">@L["Settings"].Value</h6>
+                    <abp-input asp-for="Place.ViewCount" label="@L["ViewCount"].Value" />
+                    <abp-input asp-for="Place.FavoriteCount" label="@L["FavoriteCount"].Value" />
+                    <abp-input asp-for="Place.ReviewCount" label="@L["ReviewCount"].Value" />
+                    <abp-input asp-for="Place.RatingAveraged" data-val="false" label="@L["RatingAveraged"].Value" />
+                    <abp-input asp-for="Place.RatingTotal" label="@L["RatingTotal"].Value" />
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
+    </abp-row>
+</form>

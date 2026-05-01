@@ -3,47 +3,53 @@
 @using KHHub.MasterDataService.Localization
 @using KHHub.Web.Pages.PlaceReviews
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
-@using KHHub.MasterDataService.Services.PlaceReviews; 
-@using System.Globalization
 @inject IHtmlLocalizer<MasterDataServiceResource> L
 @model EditModalModel
 @{
     Layout = null;
 }
 <form data-ajaxForm="true" asp-page="/PlaceReviews/EditModal" autocomplete="off">
-    <abp-modal id="PlaceReviewEditModal">
+    <abp-modal id="PlaceReviewEditModal"
+               size="ExtraLarge"
+               scrollable="true"
+               centered="true">
         <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
         <abp-modal-body>
-@*//<suite-custom-code-block-1>*@
-@*//</suite-custom-code-block-1>*@
             <abp-input asp-for="Id" />
-                    <abp-input asp-for="PlaceReview.ConcurrencyStamp" hidden="true" suppress-label="true"/>
-            <abp-input asp-for="PlaceReview.Rating"    />
-            <abp-input asp-for="PlaceReview.Title"    />
-            <abp-input asp-for="PlaceReview.Comment" text-area   />
-            <abp-input asp-for="PlaceReview.LikeCount"    />
-            <abp-select asp-for="PlaceReview.Status"    />
-            <abp-input asp-for="PlaceReview.UserId"    />
-                                <div class="form-group">
-                <label for="PlaceReview_PlaceId">@L["Place"]</label>
-                <select id="PlaceReview_PlaceId"
-                         name="PlaceReview.PlaceId"
-                         class="custom-select form-control"
-                         data-value="@Model.PlaceReview.PlaceId" required>
-                    @if (Model.Place != null)
-                    {
-                        <option value="@Model.PlaceReview.PlaceId">@Model.Place.Name</option>
-                    }
-                </select>
-            </div>
-@*//<suite-custom-code-block-2>*@
-@*//</suite-custom-code-block-2>*@
-@*//<suite-custom-code-block-3>*@
-@*//</suite-custom-code-block-3>*@
+            <abp-input asp-for="PlaceReview.ConcurrencyStamp" hidden="true" suppress-label="true" />
+            <abp-row class="g-3 align-items-start">
+                <abp-column size-md="_6">
+                    <label class="form-label" asp-for="PlaceReview.PlaceId">@L["Place"].Value</label>
+                    <select asp-for="PlaceReview.PlaceId"
+                            class="auto-complete-select"
+                            data-autocomplete-api-url="@Url.Content("~/api/masterdata/place-reviews/place-lookup")"
+                            data-autocomplete-display-property="displayName"
+                            data-autocomplete-value-property="id"
+                            data-autocomplete-items-property="items"
+                            data-autocomplete-filter-param-name="filter"
+                            data-autocomplete-allow-clear="false"
+                            data-autocomplete-placeholder="@L["Search"].Value">
+                    </select>
+                    <span asp-validation-for="PlaceReview.PlaceId" class="text-danger d-block"></span>
+                    <div class="mt-3">
+                        <abp-input asp-for="PlaceReview.Rating" label="@L["Rating"].Value" />
+                    </div>
+                    <abp-input asp-for="PlaceReview.Title" label="@L["Title"].Value" />
+                    <abp-select asp-for="PlaceReview.Status" label="@L["Status"].Value" />
+                    <abp-input asp-for="PlaceReview.LikeCount" label="@L["LikeCount"].Value" />
+                    <abp-input asp-for="PlaceReview.UserId" label="@L["UserId"].Value" />
+                </abp-column>
+                <abp-column size-md="_6">
+                    <label class="form-label" asp-for="PlaceReview.Comment">@L["Comment"].Value</label>
+                    <textarea asp-for="PlaceReview.Comment"
+                              class="form-control"
+                              rows="14"
+                              autocomplete="off"></textarea>
+                    <span asp-validation-for="PlaceReview.Comment" class="text-danger d-block"></span>
+                </abp-column>
+            </abp-row>
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
-@*//<suite-custom-code-block-4>*@
-@*//</suite-custom-code-block-4>*@
         </abp-modal-footer>
     </abp-modal>
-</form>
+</form>
