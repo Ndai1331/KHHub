@@ -14,6 +14,8 @@
 # Setup:
 #   cp khub.env.example khub.env
 #   # edit POSTGRES_PASSWORD + public URLs to match your domain
+#   Place OpenIddict signing cert next to this file: certs/openiddict.pfx (Production).
+#   Override passphrase: AuthServer__CertificatePassPhrase in khub.env if not using image default.
 # From repo root: cd etc/docker/containers
 #   docker compose --env-file khub.env -f postgresql.yml -f khub.yml up -d
 # (Postgres must be in the same compose invocation so depends_on + healthcheck work.)
@@ -42,6 +44,8 @@ services:
     image: longnguyen1331/khub:authserver-latest
     ports:
       - "127.0.0.1:44315:80"
+    volumes:
+      - ./certs/openiddict.pfx:/app/openiddict.pfx:ro
     environment:
       <<: *common-env
       App__SelfUrl: ${KHUB_PUBLIC_AUTH}
@@ -190,5 +194,6 @@ services:
       AuthServer__Authority: ${KHUB_PUBLIC_AUTH}
       AuthServer__MetaAddress: ${KHUB_PUBLIC_AUTH}
       AuthServer__RequireHttpsMetadata: "true"
-      RemoteServices__Default__BaseUrl: ${KHUB_PUBLIC_API}
-      RemoteServices__MasterDataService__BaseUrl: ${KHUB_PUBLIC_API}
+      # Server-side HttpClient (localization, API): use gateway on Docker network; avoids public TLS/DNS issues from inside the container.
+      RemoteServices__Default__BaseUrl: http://webgateway:80/
+      RemoteServices__MasterDataService__BaseUrl: http://webgateway:80/

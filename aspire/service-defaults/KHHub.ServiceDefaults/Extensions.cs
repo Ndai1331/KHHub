@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,8 +32,13 @@ public static class Extensions
             // Turn on resilience by default
             http.AddStandardResilienceHandler();
 
-            // Turn on service discovery by default
-            http.AddServiceDiscovery();
+            // HttpClient service discovery only when orchestrated by .NET Aspire. Outside AppHost
+            // (Docker, IIS, plain Kestrel), the resolver can turn loopback/implicit endpoints into
+            // http://[::]:80, which is not a valid outbound target and breaks HealthChecks.UI etc.
+            if (IsAspireResourceServiceConfigured())
+            {
+                http.AddServiceDiscovery();
+            }
         });
 
         // Uncomment the following to restrict the allowed schemes for service discovery.
@@ -126,5 +132,11 @@ public static class Extensions
         }
 
         return app;
+    }
+
+    private static bool IsAspireResourceServiceConfigured()
+    {
+        return !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL"))
+            || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DOTNET_RESOURCE_SERVICE_ENDPOINT_URL"));
     }
 }
