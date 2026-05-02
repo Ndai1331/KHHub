@@ -86,6 +86,8 @@ Workflow file: [`.github/workflows/docker-hub-khub.yml`](../../.github/workflows
 It runs on every `push` to `main`, `master`, or `develop`. **What gets built depends on the commit message** (first `[...]` block anywhere in the message):
 
 
+
+
 | Commit message pattern | Behaviour |
 | --- | --- |
 | `[All] ...` or `[all] ...` | Build and push **all** images (`-All`). |
