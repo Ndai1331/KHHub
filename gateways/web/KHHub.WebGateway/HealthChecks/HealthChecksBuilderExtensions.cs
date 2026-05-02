@@ -1,6 +1,6 @@
 ﻿using HealthChecks.UI.Client;
+using KHHub.ServiceDefaults.HealthChecks;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 
@@ -23,12 +23,10 @@ public static class HealthChecksBuilderExtensions
 
         services.ConfigureHealthCheckEndpoint(healthCheckUrl);
 
-        var healthUiEndpointUri = ResolveHealthUiCheckEndpointUri(configuration, healthCheckUrl);
+        var healthUiEndpointUri = HealthChecksUiEndpointUri.Resolve(configuration, healthCheckUrl);
 
         var healthChecksUiBuilder = services.AddHealthChecksUI(settings =>
         {
-            // Must be an absolute URI: default HttpClient has Aspire service discovery; a relative path
-            // becomes http://[::]/... outside Aspire and breaks the background collector.
             settings.AddHealthCheckEndpoint("WebGateway Health Status", healthUiEndpointUri);
         });
 
@@ -40,44 +38,6 @@ public static class HealthChecksBuilderExtensions
             options.UIPath = "/health-ui";
             options.ApiPath = "/health-api";
         });
-    }
-
-    /// <summary>
-    /// Builds an absolute URL for HealthChecks UI's HTTP collector.
-    /// Uses App:HealthUiCheckUrl when it is already absolute; otherwise derives loopback URL from ASPNETCORE_URLS.
-    /// </summary>
-    private static string ResolveHealthUiCheckEndpointUri(IConfiguration configuration, string healthCheckPath)
-    {
-        var explicitUri = configuration["App:HealthUiCheckUrl"];
-        if (!string.IsNullOrWhiteSpace(explicitUri) &&
-            explicitUri.StartsWith("http", StringComparison.OrdinalIgnoreCase))
-        {
-            return explicitUri;
-        }
-
-        var path = healthCheckPath.EnsureStartsWith('/');
-        var urls = configuration["ASPNETCORE_URLS"];
-        if (string.IsNullOrWhiteSpace(urls))
-        {
-            return $"http://127.0.0.1:80{path}";
-        }
-
-        var firstUrl = urls.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)[0];
-        var normalized = NormalizeLoopbackListenUrl(firstUrl);
-
-        return $"{normalized.TrimEnd('/')}{path}";
-    }
-
-    /// <summary>
-    /// Map Kestrel listen URLs (e.g. http://+:80, http://0.0.0.0:80) to a loopback base the in-process HTTP client can call.
-    /// </summary>
-    private static string NormalizeLoopbackListenUrl(string url)
-    {
-        return url
-            .Replace("://+", "://127.0.0.1", StringComparison.OrdinalIgnoreCase)
-            .Replace("://*", "://127.0.0.1", StringComparison.OrdinalIgnoreCase)
-            .Replace("://0.0.0.0", "://127.0.0.1", StringComparison.OrdinalIgnoreCase)
-            .Replace("://[::]", "://127.0.0.1", StringComparison.OrdinalIgnoreCase);
     }
 
     private static IServiceCollection ConfigureHealthCheckEndpoint(this IServiceCollection services, string path)

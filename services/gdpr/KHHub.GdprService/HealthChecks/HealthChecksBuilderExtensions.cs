@@ -1,4 +1,5 @@
 ﻿using HealthChecks.UI.Client;
+using KHHub.ServiceDefaults.HealthChecks;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 namespace KHHub.GdprService.HealthChecks;
@@ -23,7 +24,7 @@ public static class HealthChecksBuilderExtensions
 
         var healthChecksUiBuilder = services.AddHealthChecksUI(settings =>
         {
-            settings.AddHealthCheckEndpoint("GdprService Health Status", configuration["App:HealthUiCheckUrl"] ?? healthCheckUrl);
+            settings.AddHealthCheckEndpoint("GdprService Health Status", HealthChecksUiEndpointUri.Resolve(configuration, healthCheckUrl));
         });
 
         // Set your HealthCheck UI Storage here

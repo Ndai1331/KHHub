@@ -1,4 +1,5 @@
 ﻿using HealthChecks.UI.Client;
+using KHHub.ServiceDefaults.HealthChecks;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 namespace KHHub.AuthServer.HealthChecks;
@@ -22,7 +23,7 @@ public static class HealthChecksBuilderExtensions
 
         var healthChecksUiBuilder = services.AddHealthChecksUI(settings =>
         {
-            settings.AddHealthCheckEndpoint("AuthServer Health Status", configuration["App:HealthUiCheckUrl"] ?? healthCheckUrl);
+            settings.AddHealthCheckEndpoint("AuthServer Health Status", HealthChecksUiEndpointUri.Resolve(configuration, healthCheckUrl));
         });
 
         // Set your HealthCheck UI Storage here

@@ -1,4 +1,5 @@
 ﻿using HealthChecks.UI.Client;
+using KHHub.ServiceDefaults.HealthChecks;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 namespace KHHub.LanguageService.HealthChecks;
@@ -23,7 +24,7 @@ public static class HealthChecksBuilderExtensions
 
         var healthChecksUiBuilder = services.AddHealthChecksUI(settings =>
         {
-            settings.AddHealthCheckEndpoint("LanguageService Health Status", configuration["App:HealthUiCheckUrl"] ?? healthCheckUrl);
+            settings.AddHealthCheckEndpoint("LanguageService Health Status", HealthChecksUiEndpointUri.Resolve(configuration, healthCheckUrl));
         });
 
         // Set your HealthCheck UI Storage here
