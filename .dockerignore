@@ -1,9 +1,0 @@
-**/.git
-**/.vs
-**/.vscode
-**/node_modules
-**/Logs
-**/*.user
-**/TestResults
-**/.abpstudio
-**/apps/mobile/react-native

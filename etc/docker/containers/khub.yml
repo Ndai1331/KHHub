@@ -4,7 +4,7 @@
 # Suggested subdomains for khub.id.vn (4 DNS A records → your Ubuntu public IP; nginx → ports below):
 #   www.khub.id.vn         → Web UI (MVC)           → 127.0.0.1:44347
 #   auth.khub.id.vn        → AuthServer (OpenIddict) → 127.0.0.1:44315
-#   api.khub.id.vn         → WebGateway (BFF/API)   → 127.0.0.1:44394
+#   api.khub.id.vn         → WebGateway (BFF) ONLY → 127.0.0.1:44394 — YARP routes /api/* to Identity, Administration, MasterData, etc. Do NOT proxy this host to a single microservice.
 #   m-api.khub.id.vn       → MobileGateway          → 127.0.0.1:44395
 # Internal microservices are not exposed; only these four need public vhost config.
 # Optional extras (if you expose ops UIs): grafana.khub.id.vn, prometheus.khub.id.vn, …
@@ -192,9 +192,11 @@ services:
       App__SelfUrl: ${KHUB_PUBLIC_WEB}
       App__DefaultCulture: en
       App__HealthUiCheckUrl: http://127.0.0.1:80/health-status
+      # Browser redirects use public Authority; server-side metadata fetch uses http://authserver (see KHHubWebModule IsOnK8s).
       AuthServer__Authority: ${KHUB_PUBLIC_AUTH}
-      AuthServer__MetaAddress: ${KHUB_PUBLIC_AUTH}
-      AuthServer__RequireHttpsMetadata: "true"
+      AuthServer__MetaAddress: http://authserver
+      AuthServer__RequireHttpsMetadata: "false"
+      AuthServer__IsOnK8s: "true"
       # Server-side HttpClient (localization, API): use gateway on Docker network; avoids public TLS/DNS issues from inside the container.
       RemoteServices__Default__BaseUrl: http://webgateway:80/
       RemoteServices__MasterDataService__BaseUrl: http://webgateway:80/

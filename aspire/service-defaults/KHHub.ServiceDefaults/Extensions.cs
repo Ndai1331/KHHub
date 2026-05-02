@@ -1,4 +1,5 @@
 using System;
+using KHHub;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,7 +36,7 @@ public static class Extensions
             // HttpClient service discovery only when orchestrated by .NET Aspire. Outside AppHost
             // (Docker, IIS, plain Kestrel), the resolver can turn loopback/implicit endpoints into
             // http://[::]:80, which is not a valid outbound target and breaks HealthChecks.UI etc.
-            if (IsAspireResourceServiceConfigured())
+            if (AspireOrchestration.IsEnabled)
             {
                 http.AddServiceDiscovery();
             }
@@ -134,9 +135,4 @@ public static class Extensions
         return app;
     }
 
-    private static bool IsAspireResourceServiceConfigured()
-    {
-        return !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL"))
-            || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DOTNET_RESOURCE_SERVICE_ENDPOINT_URL"));
-    }
 }

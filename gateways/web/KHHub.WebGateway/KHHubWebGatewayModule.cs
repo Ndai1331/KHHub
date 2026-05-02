@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using KHHub;
 using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
@@ -110,10 +111,16 @@ public class KHHubWebGatewayModule : AbpModule
 
     private void ConfigureYarp(ServiceConfigurationContext context, IConfiguration configuration)
     {
-        context.Services.AddReverseProxy()
+        var proxyBuilder = context.Services.AddReverseProxy()
             .LoadFromConfig(configuration.GetSection("ReverseProxy"))
-            .AddConfigFilter<WebGatewayConfigFilter>()
-            .AddServiceDiscoveryDestinationResolver();
+            .AddConfigFilter<WebGatewayConfigFilter>();
+
+        // Plain Docker / nginx: full destination URIs in config must forward as-is. The Aspire service
+        // discovery resolver can break clusters when SERVICES__* env vars are absent.
+        if (AspireOrchestration.IsEnabled)
+        {
+            proxyBuilder.AddServiceDiscoveryDestinationResolver();
+        }
     }
 
     private void ConfigureHealthChecks(ServiceConfigurationContext context)

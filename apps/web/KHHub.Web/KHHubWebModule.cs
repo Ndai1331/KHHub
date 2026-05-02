@@ -285,7 +285,7 @@ public class KHHubWebModule : AbpModule
             options.ExpireTimeSpan = TimeSpan.FromDays(365);
         }).AddAbpOpenIdConnect("oidc", options => {
             options.Authority = configuration["AuthServer:Authority"];
-            options.RequireHttpsMetadata = configuration.GetValue<bool>(configuration["AuthServer:RequireHttpsMetadata"]);
+            options.RequireHttpsMetadata = configuration.GetValue("AuthServer:RequireHttpsMetadata", defaultValue: false);
             options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
             options.ClientId = configuration["AuthServer:ClientId"];
             options.ClientSecret = configuration["AuthServer:ClientSecret"];
