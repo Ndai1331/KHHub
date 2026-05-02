@@ -48,11 +48,18 @@ try
 
     Write-Host "Building Docker Image: ${ImageName}" -ForegroundColor Green -BackgroundColor Black
     $Env:DOCKER_SCAN_SUGGEST="false"
+
+    $noCacheArgs = @()
+    if ($env:DOCKER_BUILD_NO_CACHE -eq 'true' -or $env:DOCKER_BUILD_NO_CACHE -eq '1') {
+        Write-Host "docker build --no-cache (DOCKER_BUILD_NO_CACHE)" -ForegroundColor DarkYellow
+        $noCacheArgs += '--no-cache'
+    }
+
     if (-not [string]::IsNullOrWhiteSpace($Platform)) {
-        docker build --platform $Platform . -f Dockerfile -t ${ImageName}:${Version}
+        docker build @noCacheArgs --platform $Platform . -f Dockerfile -t ${ImageName}:${Version}
     }
     else {
-        docker build . -f Dockerfile -t ${ImageName}:${Version}
+        docker build @noCacheArgs . -f Dockerfile -t ${ImageName}:${Version}
     }
 
     # BEGIN: UPDATE values.localdev.yaml
