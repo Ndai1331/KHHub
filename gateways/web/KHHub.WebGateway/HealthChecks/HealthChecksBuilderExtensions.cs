@@ -63,12 +63,21 @@ public static class HealthChecksBuilderExtensions
         }
 
         var firstUrl = urls.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)[0];
-        // Kestrel in Docker: http://+:80 → loopback for in-process collector
-        var normalized = firstUrl
-            .Replace("://+", "://127.0.0.1", StringComparison.Ordinal)
-            .Replace("://*", "://127.0.0.1", StringComparison.Ordinal);
+        var normalized = NormalizeLoopbackListenUrl(firstUrl);
 
         return $"{normalized.TrimEnd('/')}{path}";
+    }
+
+    /// <summary>
+    /// Map Kestrel listen URLs (e.g. http://+:80, http://0.0.0.0:80) to a loopback base the in-process HTTP client can call.
+    /// </summary>
+    private static string NormalizeLoopbackListenUrl(string url)
+    {
+        return url
+            .Replace("://+", "://127.0.0.1", StringComparison.OrdinalIgnoreCase)
+            .Replace("://*", "://127.0.0.1", StringComparison.OrdinalIgnoreCase)
+            .Replace("://0.0.0.0", "://127.0.0.1", StringComparison.OrdinalIgnoreCase)
+            .Replace("://[::]", "://127.0.0.1", StringComparison.OrdinalIgnoreCase);
     }
 
     private static IServiceCollection ConfigureHealthCheckEndpoint(this IServiceCollection services, string path)

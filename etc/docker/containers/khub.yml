@@ -14,7 +14,9 @@
 # Setup:
 #   cp khub.env.example khub.env
 #   # edit POSTGRES_PASSWORD + public URLs to match your domain
-# From repo: cd etc/docker && docker compose --env-file containers/khub.env -f containers/khub.yml up -d
+# From repo root: cd etc/docker/containers
+#   docker compose --env-file khub.env -f postgresql.yml -f khub.yml up -d
+# (Postgres must be in the same compose invocation so depends_on + healthcheck work.)
 #
 networks:
   khhub:
@@ -24,6 +26,9 @@ x-common: &common
   restart: unless-stopped
   networks:
     - khhub
+  depends_on:
+    postgres:
+      condition: service_healthy
   environment: &common-env
     ASPNETCORE_ENVIRONMENT: Production
     Redis__Configuration: redis:6379
@@ -146,6 +151,8 @@ services:
     environment:
       <<: *common-env
       App__CorsOrigins: ${KHUB_PUBLIC_WEB},${KHUB_PUBLIC_API},${KHUB_PUBLIC_AUTH},${KHUB_PUBLIC_MOBILE_API}
+      # HealthChecks.UI collector needs an absolute URL (Aspire service discovery breaks relative paths in Docker)
+      App__HealthUiCheckUrl: http://127.0.0.1:80/health-status
       ReverseProxy__Clusters__AuthServer__Destinations__AuthServer__Address: http://authserver:80/
       ReverseProxy__Clusters__Administration__Destinations__Administration__Address: http://administration:80/
       ReverseProxy__Clusters__AuditLogging__Destinations__AuditLogging__Address: http://auditlogging:80/
@@ -179,6 +186,7 @@ services:
     environment:
       <<: *common-env
       App__SelfUrl: ${KHUB_PUBLIC_WEB}
+      App__HealthUiCheckUrl: http://127.0.0.1:80/health-status
       AuthServer__Authority: ${KHUB_PUBLIC_AUTH}
       AuthServer__MetaAddress: ${KHUB_PUBLIC_AUTH}
       AuthServer__RequireHttpsMetadata: "true"
