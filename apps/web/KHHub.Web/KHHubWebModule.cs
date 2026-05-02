@@ -23,6 +23,7 @@ using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.Libs;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.Mapperly;
@@ -90,6 +91,10 @@ public class KHHubWebModule : AbpModule
         ConfigurePII(configuration);
         ConfigureLocalization(hostingEnvironment);
         ConfigureBundling();
+        context.Services.Configure<AbpMvcLibsOptions>(options =>
+        {
+            options.CheckLibs = false;
+        });
         ConfigureDistributedCache(configuration);
         ConfigureUrls(configuration);
         ConfigureAuthentication(context, configuration);

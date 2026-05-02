@@ -1,0 +1,186 @@
+# KHHub application stack — uses images from Docker Hub on the shared `khhub` network.
+# Start infrastructure first (postgres, redis, rabbitmq, elasticsearch, …) on the same network.
+#
+# Suggested subdomains for khub.id.vn (4 DNS A records → your Ubuntu public IP; nginx → ports below):
+#   www.khub.id.vn         → Web UI (MVC)           → 127.0.0.1:44347
+#   auth.khub.id.vn        → AuthServer (OpenIddict) → 127.0.0.1:44315
+#   api.khub.id.vn         → WebGateway (BFF/API)   → 127.0.0.1:44394
+#   m-api.khub.id.vn       → MobileGateway          → 127.0.0.1:44395
+# Internal microservices are not exposed; only these four need public vhost config.
+# Optional extras (if you expose ops UIs): grafana.khub.id.vn, prometheus.khub.id.vn, …
+#
+# Nginx sample: containers/nginx/khhub.conf → /etc/nginx/conf.d/khhub.conf
+#
+# Setup:
+#   cp khub.env.example khub.env
+#   # edit POSTGRES_PASSWORD + public URLs to match your domain
+# From repo: cd etc/docker && docker compose --env-file containers/khub.env -f containers/khub.yml up -d
+#
+networks:
+  khhub:
+    external: true
+
+x-common: &common
+  restart: unless-stopped
+  networks:
+    - khhub
+  environment: &common-env
+    ASPNETCORE_ENVIRONMENT: Production
+    Redis__Configuration: redis:6379
+    RabbitMQ__Connections__Default__HostName: rabbitmq
+    ElasticSearch__Url: http://elasticsearch:9200
+
+services:
+  authserver:
+    <<: *common
+    container_name: authserver
+    image: longnguyen1331/khub:authserver-latest
+    ports:
+      - "127.0.0.1:44315:80"
+    environment:
+      <<: *common-env
+      App__SelfUrl: ${KHUB_PUBLIC_AUTH}
+      App__CorsOrigins: ${KHUB_PUBLIC_API},${KHUB_PUBLIC_WEB},${KHUB_PUBLIC_AUTH},${KHUB_PUBLIC_MOBILE_API}
+      App__RedirectAllowedUrls: ${KHUB_PUBLIC_API},${KHUB_PUBLIC_WEB},${KHUB_PUBLIC_AUTH},${KHUB_PUBLIC_MOBILE_API}
+      AuthServer__Authority: ${KHUB_PUBLIC_AUTH}
+      ConnectionStrings__IdentityService: Host=postgres;Port=5432;Database=KHHub_Identity;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AdministrationService: Host=postgres;Port=5432;Database=KHHub_Administration;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AuditLoggingService: Host=postgres;Port=5432;Database=KHHub_AuditLogging;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__LanguageService: Host=postgres;Port=5432;Database=KHHub_Language;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AbpBlobStoring: Host=postgres;Port=5432;Database=KHHub_BlobStoring;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+
+  identity:
+    <<: *common
+    container_name: identity
+    image: longnguyen1331/khub:identity-latest
+    environment:
+      <<: *common-env
+      App__CorsOrigins: ${KHUB_PUBLIC_API}
+      ConnectionStrings__IdentityService: Host=postgres;Port=5432;Database=KHHub_Identity;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AuditLoggingService: Host=postgres;Port=5432;Database=KHHub_AuditLogging;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__LanguageService: Host=postgres;Port=5432;Database=KHHub_Language;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AdministrationService: Host=postgres;Port=5432;Database=KHHub_Administration;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AbpBlobStoring: Host=postgres;Port=5432;Database=KHHub_BlobStoring;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+
+  administration:
+    <<: *common
+    container_name: administration
+    image: longnguyen1331/khub:administration-latest
+    environment:
+      <<: *common-env
+      App__CorsOrigins: ${KHUB_PUBLIC_API}
+      ConnectionStrings__AdministrationService: Host=postgres;Port=5432;Database=KHHub_Administration;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AuditLoggingService: Host=postgres;Port=5432;Database=KHHub_AuditLogging;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__LanguageService: Host=postgres;Port=5432;Database=KHHub_Language;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AbpBlobStoring: Host=postgres;Port=5432;Database=KHHub_BlobStoring;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+
+  auditlogging:
+    <<: *common
+    container_name: auditlogging
+    image: longnguyen1331/khub:auditlogging-latest
+    environment:
+      <<: *common-env
+      App__CorsOrigins: ${KHUB_PUBLIC_API}
+      ConnectionStrings__AdministrationService: Host=postgres;Port=5432;Database=KHHub_Administration;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AuditLoggingService: Host=postgres;Port=5432;Database=KHHub_AuditLogging;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__LanguageService: Host=postgres;Port=5432;Database=KHHub_Language;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AbpBlobStoring: Host=postgres;Port=5432;Database=KHHub_BlobStoring;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+
+  gdpr:
+    <<: *common
+    container_name: gdpr
+    image: longnguyen1331/khub:gdpr-latest
+    environment:
+      <<: *common-env
+      App__CorsOrigins: ${KHUB_PUBLIC_API}
+      ConnectionStrings__AdministrationService: Host=postgres;Port=5432;Database=KHHub_Administration;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AuditLoggingService: Host=postgres;Port=5432;Database=KHHub_AuditLogging;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__LanguageService: Host=postgres;Port=5432;Database=KHHub_Language;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AbpBlobStoring: Host=postgres;Port=5432;Database=KHHub_BlobStoring;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__GdprService: Host=postgres;Port=5432;Database=KHHub_Gdpr;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+
+  aimanagement:
+    <<: *common
+    container_name: aimanagement
+    image: longnguyen1331/khub:aimanagement-latest
+    environment:
+      <<: *common-env
+      App__CorsOrigins: ${KHUB_PUBLIC_API}
+      ConnectionStrings__AuditLoggingService: Host=postgres;Port=5432;Database=KHHub_AuditLogging;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__LanguageService: Host=postgres;Port=5432;Database=KHHub_Language;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AdministrationService: Host=postgres;Port=5432;Database=KHHub_Administration;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AIManagementService: Host=postgres;Port=5432;Database=KHHub_AIManagement;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AbpBlobStoring: Host=postgres;Port=5432;Database=KHHub_BlobStoring;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+
+  language:
+    <<: *common
+    container_name: language
+    image: longnguyen1331/khub:language-latest
+    environment:
+      <<: *common-env
+      App__CorsOrigins: ${KHUB_PUBLIC_API}
+      ConnectionStrings__AdministrationService: Host=postgres;Port=5432;Database=KHHub_Administration;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AuditLoggingService: Host=postgres;Port=5432;Database=KHHub_AuditLogging;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AbpBlobStoring: Host=postgres;Port=5432;Database=KHHub_BlobStoring;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__GdprService: Host=postgres;Port=5432;Database=KHHub_Gdpr;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__LanguageService: Host=postgres;Port=5432;Database=KHHub_Language;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+
+  masterdata:
+    <<: *common
+    container_name: masterdata
+    image: longnguyen1331/khub:masterdata-latest
+    environment:
+      <<: *common-env
+      App__CorsOrigins: ${KHUB_PUBLIC_WEB},${KHUB_PUBLIC_API}
+      ConnectionStrings__AdministrationService: Host=postgres;Port=5432;Database=KHHub_Administration;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__AuditLoggingService: Host=postgres;Port=5432;Database=KHHub_AuditLogging;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__LanguageService: Host=postgres;Port=5432;Database=KHHub_Language;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+      ConnectionStrings__MasterDataService: Host=postgres;Port=5432;Database=KHHub_MasterData;User ID=postgres;Password=${POSTGRES_PASSWORD};Timeout=240;
+
+  webgateway:
+    <<: *common
+    container_name: webgateway
+    image: longnguyen1331/khub:webgateway-latest
+    ports:
+      - "127.0.0.1:44394:80"
+    environment:
+      <<: *common-env
+      App__CorsOrigins: ${KHUB_PUBLIC_WEB},${KHUB_PUBLIC_API},${KHUB_PUBLIC_AUTH},${KHUB_PUBLIC_MOBILE_API}
+      ReverseProxy__Clusters__AuthServer__Destinations__AuthServer__Address: http://authserver:80/
+      ReverseProxy__Clusters__Administration__Destinations__Administration__Address: http://administration:80/
+      ReverseProxy__Clusters__AuditLogging__Destinations__AuditLogging__Address: http://auditlogging:80/
+      ReverseProxy__Clusters__Gdpr__Destinations__Gdpr__Address: http://gdpr:80/
+      ReverseProxy__Clusters__AIManagement__Destinations__AIManagement__Address: http://aimanagement:80/
+      ReverseProxy__Clusters__Language__Destinations__Language__Address: http://language:80/
+      ReverseProxy__Clusters__Identity__Destinations__Identity__Address: http://identity:80/
+      ReverseProxy__Clusters__MasterData__Destinations__MasterData__Address: http://masterdata:80/
+
+  mobilegateway:
+    <<: *common
+    container_name: mobilegateway
+    image: longnguyen1331/khub:mobilegateway-latest
+    ports:
+      - "127.0.0.1:44395:80"
+    environment:
+      <<: *common-env
+      App__CorsOrigins: ${KHUB_PUBLIC_MOBILE_API},${KHUB_PUBLIC_AUTH}
+      ReverseProxy__Clusters__AuthServer__Destinations__AuthServer__Address: http://authserver:80/
+      ReverseProxy__Clusters__Administration__Destinations__Administration__Address: http://administration:80/
+      ReverseProxy__Clusters__Identity__Destinations__Identity__Address: http://identity:80/
+      ReverseProxy__Clusters__Language__Destinations__Language__Address: http://language:80/
+      ReverseProxy__Clusters__MasterData__Destinations__MasterData__Address: http://masterdata:80/
+
+  web:
+    <<: *common
+    container_name: web
+    image: longnguyen1331/khub:web-latest
+    ports:
+      - "127.0.0.1:44347:80"
+    environment:
+      <<: *common-env
+      App__SelfUrl: ${KHUB_PUBLIC_WEB}
+      AuthServer__Authority: ${KHUB_PUBLIC_AUTH}
+      AuthServer__MetaAddress: ${KHUB_PUBLIC_AUTH}
+      AuthServer__RequireHttpsMetadata: "true"
+      RemoteServices__Default__BaseUrl: ${KHUB_PUBLIC_API}
+      RemoteServices__MasterDataService__BaseUrl: ${KHUB_PUBLIC_API}

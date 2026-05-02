@@ -210,3 +210,12 @@ You can see the following resources to learn more about your solution and the AB
 
 * [Microservice Development Tutorial](https://abp.io/docs/latest/tutorials/microservice)
 * [Microservice Solution Template](https://abp.io/docs/latest/solution-templates/microservice)
+
+
+
+deploy 
+sudo apt update
+sudo apt install -y dotnet-sdk-10.0
+sudo apt install -y nodejs npm
+dotnet tool install -g Volo.Abp.Cli
+abp install-libs
