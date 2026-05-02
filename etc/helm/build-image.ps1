@@ -2,7 +2,9 @@ param (
     $ProjectPath,
     $ImageName,
     $Version="auto",
-    $ProjectType="dotnet"
+    $ProjectType="dotnet",
+    # e.g. linux/amd64 for images that run on x64 Linux (build from Apple Silicon, etc.)
+    [string]$Platform = ""
 )
 
 if ($Version -eq 'auto') {
@@ -22,7 +24,21 @@ try
     if($ProjectType -eq "dotnet")
     {
         Write-Host "Publishing Dotnet Project: ${projectFileName}" -ForegroundColor Green -BackgroundColor Black
-        dotnet publish -c Release
+
+        $rid = $null
+        switch ($Platform.ToLowerInvariant()) {
+            "linux/amd64" { $rid = "linux-x64" }
+            "linux/arm64" { $rid = "linux-arm64" }
+        }
+
+        if ($rid) {
+            # Same output folder as Dockerfile COPY (bin/Release/net10.0/publish/)
+            Write-Host "dotnet publish RID: $rid (Docker --platform $Platform)" -ForegroundColor DarkCyan
+            dotnet publish -c Release -r $rid --self-contained false -o bin/Release/net10.0/publish
+        }
+        else {
+            dotnet publish -c Release
+        }
 
         if (-Not $?) {
             Write-Error "Publishing Dotnet Project failed: $projectFileName"
@@ -32,7 +48,12 @@ try
 
     Write-Host "Building Docker Image: ${ImageName}" -ForegroundColor Green -BackgroundColor Black
     $Env:DOCKER_SCAN_SUGGEST="false"
-    docker build . -f Dockerfile -t ${ImageName}:${Version}
+    if (-not [string]::IsNullOrWhiteSpace($Platform)) {
+        docker build --platform $Platform . -f Dockerfile -t ${ImageName}:${Version}
+    }
+    else {
+        docker build . -f Dockerfile -t ${ImageName}:${Version}
+    }
 
     # BEGIN: UPDATE values.localdev.yaml
 

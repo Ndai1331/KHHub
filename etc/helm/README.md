@@ -36,6 +36,100 @@ Run `build-all-images.ps1` to build all Docker images for the solution. Do this 
 
 > Note that you can also use ABP Studio to build one or all the images.
 
+### Build and push all images to Docker Hub (`khub`)
+
+To build every service once and push rolling tags (`<service>-latest`) to your registry in a single run, use `build-all-khub-images.ps1` from this folder.
+
+1. Sign in to Docker Hub (or your registry): `docker login`
+2. Run from the repo root (or `cd` into `etc/helm` first).
+
+**Windows (PowerShell):**
+
+```powershell
+cd etc/helm
+./build-all-khub-images.ps1
+```
+
+**macOS / Linux (zsh, bash):** do not run `./build-all-khub-images.ps1` by itself — the file is not a shell script and usually has no execute bit, so you get `permission denied`. Invoke PowerShell Core instead:
+
+```bash
+cd etc/helm
+pwsh -File ./build-all-khub-images.ps1
+```
+
+Optional: after `chmod +x build-all-khub-images.ps1`, `./build-all-khub-images.ps1` works if `pwsh` is on your `PATH` (the script includes a `pwsh` shebang).
+
+**Target OS/CPU (Linux AMD64):** by default the script uses `-Platform "linux/amd64"`. That passes `--platform linux/amd64` to `docker build` and runs `dotnet publish -r linux-x64` into `bin/Release/net10.0/publish` so binaries match x64 Linux servers when you build on another architecture (e.g. Apple Silicon). For Linux arm64 hosts, use `-Platform "linux/arm64"`. To build for the runner’s native arch only (e.g. local testing), pass an empty platform:
+
+```powershell
+pwsh -File ./build-all-khub-images.ps1 -Platform ""
+```
+
+You can also pass `-Platform` when calling `build-image.ps1` for a single project.
+
+By default images are pushed to `longnguyen1331/khub` (e.g. `longnguyen1331/khub:web-latest`). Override the registry if needed:
+
+```powershell
+pwsh -File ./build-all-khub-images.ps1 -Registry "youruser/yourrepo"
+```
+
+Optional: set a fixed local build tag for `build-image.ps1` / `values.localdev.yaml` (remote tags stay `<service>-latest` only):
+
+```powershell
+pwsh -File ./build-all-khub-images.ps1 -Version "20260101.120000"
+```
+
+### GitHub Actions — build and push on push
+
+Workflow file: [`.github/workflows/docker-hub-khub.yml`](../../.github/workflows/docker-hub-khub.yml).
+
+It runs on every `push` to `main`, `master`, or `develop`. **What gets built depends on the commit message** (first `[...]` block anywhere in the message):
+
+| Commit message pattern | Behaviour |
+| --- | --- |
+| `[All] ...` or `[all] ...` | Build and push **all** images (`-All`). |
+| `[services/masterdata, apps/web] ...` | Build and push **only** images for those repo path segments (comma-separated; spaces ignored). Unknown paths fail the job. |
+| No `[...]` in the message | Workflow succeeds; **no** Docker build/push (saves CI time). |
+
+**Manual run** (Actions → Run workflow): always builds **all** images.
+
+**Allowed path segments** (must match the repo tree; use lowercase as below):
+
+| Segment | Image tag suffix |
+| --- | --- |
+| `services/administration` | `administration-latest` |
+| `services/identity` | `identity-latest` |
+| `services/audit-logging` | `auditlogging-latest` |
+| `services/gdpr` | `gdpr-latest` |
+| `services/ai-management` | `aimanagement-latest` |
+| `services/language` | `language-latest` |
+| `services/masterdata` | `masterdata-latest` |
+| `gateways/web` | `webgateway-latest` |
+| `gateways/mobile` | `mobilegateway-latest` |
+| `apps/auth-server` | `authserver-latest` |
+| `apps/web` | `web-latest` |
+
+Example:
+
+```text
+[services/masterdata, apps/web] fix report export
+```
+
+**Repository secrets** (Settings → Secrets and variables → Actions → Secrets):
+
+| Name | Required | Description |
+| --- | --- | --- |
+| `DOCKERHUB_USERNAME` | Yes | Docker Hub user name |
+| `DOCKERHUB_TOKEN` | Yes | [Access token](https://hub.docker.com/settings/security) (recommended; do not use password if token is available) |
+| `DOCKER_IMAGE_REGISTRY` | No | Image prefix, e.g. `longnguyen1331/khub`. If omitted, the workflow defaults to `longnguyen1331/khub`. |
+
+Locally you can mirror CI: build **all** with `-All`, or filter with `-PathsSpec`:
+
+```powershell
+pwsh -File ./build-all-khub-images.ps1 -PathsSpec "services/masterdata,apps/web"
+pwsh -File ./build-all-khub-images.ps1 -All
+```
+
 ## Install Charts
 
 Run `install.ps1` to install or upgrade the helm charts to the Kubernetes cluster.
