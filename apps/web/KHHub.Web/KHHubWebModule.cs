@@ -92,10 +92,10 @@ public class KHHubWebModule : AbpModule
         ConfigurePII(configuration);
         ConfigureLocalization(hostingEnvironment);
         ConfigureBundling();
-        context.Services.Configure<AbpMvcLibsOptions>(options =>
-        {
-            options.CheckLibs = false;
-        });
+        // context.Services.Configure<AbpMvcLibsOptions>(options =>
+        // {
+        //     options.CheckLibs = false;
+        // });
         ConfigureDistributedCache(configuration);
         ConfigureUrls(configuration);
         ConfigureAuthentication(context, configuration);
