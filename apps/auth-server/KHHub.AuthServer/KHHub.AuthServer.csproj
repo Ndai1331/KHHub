@@ -82,4 +82,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\aspire\service-defaults\KHHub.ServiceDefaults\KHHub.ServiceDefaults.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="wwwroot\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
