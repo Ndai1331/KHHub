@@ -1,3 +1,4 @@
+using System.Globalization;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
@@ -20,6 +21,21 @@ public class Program
             Log.Information($"Starting {GetCurrentAssemblyName()}");
 
             AbpStudioEnvironmentVariableLoader.Load();
+
+            // Remote MVC client (application-localization) uses thread UI culture for cultureName query.
+            // In Linux containers default is often InvariantCulture with empty name → API validation 400.
+            var defaultCultureName = Environment.GetEnvironmentVariable("App__DefaultCulture") ?? "en";
+            CultureInfo defaultCulture;
+            try
+            {
+                defaultCulture = CultureInfo.GetCultureInfo(defaultCultureName);
+            }
+            catch (CultureNotFoundException)
+            {
+                defaultCulture = CultureInfo.GetCultureInfo("en");
+            }
+            CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
 
             var builder = WebApplication.CreateBuilder(args);
 

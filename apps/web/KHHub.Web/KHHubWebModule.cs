@@ -6,6 +6,7 @@ using Volo.Abp.Identity.Web;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -116,30 +117,34 @@ public class KHHubWebModule : AbpModule
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
-        if (!env.IsDevelopment())
-        {
-            app.Use((ctx, next) => {
-                /* This application should act like it is always called as HTTPS.
-                 * Because it will work in a HTTPS url in production,
-                 * but the HTTPS is stripped out in Ingress controller.
-                 */
-                ctx.Request.Scheme = "https";
-                return next();
-            });
-        }
 
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
         }
 
-        app.UseAbpRequestLocalization();
+        app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
+
+        if (!env.IsDevelopment())
+        {
+            app.Use((ctx, next) => {
+                if (!IsHealthOrMetricsProbePath(ctx.Request.Path))
+                {
+                    ctx.Request.Scheme = "https";
+                }
+                return next();
+            });
+        }
+
+        app.UseWhen(
+            ctx => !IsHealthOrMetricsProbePath(ctx.Request.Path),
+            branch => branch.UseAbpRequestLocalization());
+
         if (!env.IsDevelopment())
         {
             app.UseErrorPage();
         }
 
-        app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
         if (env.IsDevelopment())
         {
             app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.None, Secure = CookieSecurePolicy.Always });
@@ -369,5 +374,13 @@ public class KHHubWebModule : AbpModule
         context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options => {
             options.IsDynamicClaimsEnabled = true;
         });
+    }
+
+    private static bool IsHealthOrMetricsProbePath(PathString path)
+    {
+        return path.StartsWithSegments("/health-status")
+            || path.StartsWithSegments("/health-ui")
+            || path.StartsWithSegments("/health-api")
+            || path.StartsWithSegments("/metrics");
     }
 }

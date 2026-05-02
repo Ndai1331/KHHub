@@ -190,6 +190,7 @@ services:
     environment:
       <<: *common-env
       App__SelfUrl: ${KHUB_PUBLIC_WEB}
+      App__DefaultCulture: en
       App__HealthUiCheckUrl: http://127.0.0.1:80/health-status
       AuthServer__Authority: ${KHUB_PUBLIC_AUTH}
       AuthServer__MetaAddress: ${KHUB_PUBLIC_AUTH}
