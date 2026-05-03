@@ -28,6 +28,14 @@ public partial class MediaFilesClientProxy : ClientProxyBase<IMediaFilesAppServi
         });
     }
 
+    public virtual async Task<string> GetPresignedReadUrlByPublicPathAsync(string publicPath)
+    {
+        return await RequestAsync<string>(nameof(GetPresignedReadUrlByPublicPathAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), publicPath }
+        });
+    }
+
     public virtual async Task<MediaFileDto> CreateFolderAsync(CreateMediaFolderDto input)
     {
         return await RequestAsync<MediaFileDto>(nameof(CreateFolderAsync), new ClientProxyRequestTypeValue

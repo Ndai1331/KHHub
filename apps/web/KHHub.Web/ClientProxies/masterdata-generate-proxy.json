@@ -7378,6 +7378,23 @@
                     "type": "System.Void",
                     "typeSimple": "System.Void"
                   }
+                },
+                {
+                  "name": "GetPresignedReadUrlByPublicPathAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "publicPath",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string"
+                  }
                 }
               ]
             }
@@ -7464,6 +7481,49 @@
               "returnValue": {
                 "type": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto>",
                 "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto>"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.MediaFiles",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.MediaFiles.IMediaFilesAppService"
+            },
+            "GetPresignedReadUrlByPublicPathAsyncByPublicPath": {
+              "uniqueName": "GetPresignedReadUrlByPublicPathAsyncByPublicPath",
+              "name": "GetPresignedReadUrlByPublicPathAsync",
+              "httpMethod": "GET",
+              "url": "api/masterdata/media-files/presigned-read-url-by-public-path",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "publicPath",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "publicPath",
+                  "name": "publicPath",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
               },
               "allowAnonymous": false,
               "authorizeDatas": [

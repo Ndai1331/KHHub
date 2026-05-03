@@ -71,6 +71,91 @@ public static class MediaExplorerPathHelper
         return $"{publicBaseUrl}/{blobStorageKey}";
     }
 
+    /// <summary>
+    /// Builds a relative public path for CMS fields (no host, no presign params).
+    /// Example: PublicBaseUrl http://127.0.0.1:9000/khhub-articles + key host/a.png → /khhub-articles/host/a.png
+    /// </summary>
+    public static string? BuildStablePublicPath(string? publicBaseUrl, string? blobStorageKey)
+    {
+        if (string.IsNullOrWhiteSpace(blobStorageKey))
+        {
+            return null;
+        }
+
+        var key = blobStorageKey.Replace('\\', '/').TrimStart('/');
+        if (string.IsNullOrWhiteSpace(key))
+        {
+            return null;
+        }
+
+        if (string.IsNullOrWhiteSpace(publicBaseUrl))
+        {
+            return "/" + key;
+        }
+
+        var trimmed = publicBaseUrl.Trim();
+        if (Uri.TryCreate(trimmed, UriKind.Absolute, out var absolute))
+        {
+            var basePath = absolute.AbsolutePath.TrimEnd('/');
+            return string.IsNullOrEmpty(basePath) ? "/" + key : $"{basePath}/{key}";
+        }
+
+        var prefix = trimmed.TrimEnd('/');
+        if (!prefix.StartsWith('/'))
+        {
+            prefix = "/" + prefix;
+        }
+
+        return $"{prefix}/{key}";
+    }
+
+    /// <summary>
+    /// Maps a persisted stable public path back to the blob object key (e.g. <c>host/guid.png</c>).
+    /// Supports paths from <see cref="BuildStablePublicPath"/> with or without bucket prefix in the path.
+    /// </summary>
+    public static bool TryGetBlobKeyFromStablePublicPath(string? publicBaseUrl, string? stablePublicPath, out string? objectKey)
+    {
+        objectKey = null;
+        var path = (stablePublicPath ?? string.Empty).Trim();
+        if (path.Length == 0 || path[0] != '/')
+        {
+            return false;
+        }
+
+        var baseRaw = (publicBaseUrl ?? string.Empty).Trim();
+        if (baseRaw.Length > 0 && Uri.TryCreate(baseRaw, UriKind.Absolute, out var abs))
+        {
+            var urlPrefix = abs.AbsolutePath.TrimEnd('/');
+            if (urlPrefix.Length > 0 &&
+                path.Length > urlPrefix.Length + 1 &&
+                path.StartsWith(urlPrefix + "/", StringComparison.Ordinal))
+            {
+                objectKey = path[(urlPrefix.Length + 1)..].TrimStart('/');
+                return objectKey.Length > 0;
+            }
+        }
+        else if (baseRaw.Length > 0)
+        {
+            var relPrefix = "/" + baseRaw.Trim().Trim('/').TrimStart('/');
+            if (path.Length > relPrefix.Length + 1 && path.StartsWith(relPrefix + "/", StringComparison.Ordinal))
+            {
+                objectKey = path[(relPrefix.Length + 1)..].TrimStart('/');
+                return objectKey.Length > 0;
+            }
+        }
+
+        // Paths like "/host/..." when PublicBaseUrl was not configured at save time
+        var tail = path.TrimStart('/');
+        if (tail.StartsWith("host/", StringComparison.OrdinalIgnoreCase) ||
+            tail.StartsWith("tenants/", StringComparison.OrdinalIgnoreCase))
+        {
+            objectKey = tail;
+            return true;
+        }
+
+        return false;
+    }
+
     public static FileType InferFileTypeFromExtension(string? extensionOrFileName)
     {
         var ext = Path.GetExtension(extensionOrFileName ?? string.Empty).ToLowerInvariant();

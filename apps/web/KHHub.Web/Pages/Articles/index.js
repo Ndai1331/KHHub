@@ -2,6 +2,17 @@ $(function () {
     var l = abp.localization.getResource('MasterDataService');
 
     var articleService = window.kHHub.masterDataService.services.articles.articles;
+    var MP = window.KHHubMediaPreview;
+    var thumbPlaceholder =
+        (MP && MP.PLACEHOLDER_THUMB_SRC) ||
+        'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+    function escapeAttr(s) {
+        return String(s || '')
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;');
+    }
 
     var getFilter = function () {
         return {
@@ -81,9 +92,11 @@ $(function () {
                         }
                         return (
                             '<img class="article-thumb border" src="' +
-                            src +
+                            thumbPlaceholder +
+                            '" data-khhub-thumb-path="' +
+                            escapeAttr(src) +
                             '" alt="' +
-                            (row.article.title || 'thumbnail') +
+                            escapeAttr(row.article.title || 'thumbnail') +
                             '" />'
                         );
                     },
@@ -140,6 +153,12 @@ $(function () {
             ],
         })
     );
+
+    $('#ArticlesTable').on('draw.dt', function () {
+        if (MP && typeof MP.hydrateThumbImages === 'function') {
+            MP.hydrateThumbImages('#ArticlesTable');
+        }
+    });
 
     $('#NewArticleButton').click(function (e) {
         e.preventDefault();

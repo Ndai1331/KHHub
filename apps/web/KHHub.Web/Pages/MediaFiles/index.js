@@ -331,7 +331,7 @@
 
 
 
-        function openExplorerImagePreview(url, displayTitle) {
+        function openExplorerImagePreview(url, displayTitle, pickUrlForForm) {
 
 
             var modalInst = getExplorerImageBootstrapModal();
@@ -380,7 +380,11 @@
 
             elImg.src = url || '';
 
-            explorerPreviewPickUrl = (url || '').trim();
+            var pickVal =
+                pickUrlForForm !== undefined && pickUrlForForm !== null && String(pickUrlForForm).trim() !== ''
+                    ? String(pickUrlForForm).trim()
+                    : String(url || '').trim();
+            explorerPreviewPickUrl = pickVal;
 
             if (pickerMode) {
                 mf('img-pick-btn').removeClass('d-none');
@@ -498,6 +502,20 @@
 
         function buildItemMarkup(record) {
 
+            function explorerDisplayImageUrl(rec) {
+                return rec && rec.url ? String(rec.url).trim() : '';
+            }
+
+            function explorerPickUrlForForm(rec) {
+                if (!rec) {
+                    return '';
+                }
+                var pp = rec.publicPath ? String(rec.publicPath).trim() : '';
+                if (pp) {
+                    return pp;
+                }
+                return rec.url ? String(rec.url).trim() : '';
+            }
 
             var isFolder = record.fileType === 6;
 
@@ -645,10 +663,10 @@
 
 
 
-                var u = record.url;
+                var displayUrl = explorerDisplayImageUrl(record);
 
 
-                if (!(u || '').trim()) {
+                if (!displayUrl) {
 
 
                     abp.notify.warn(l('MediaExplorer:NoImageUrlHint'));
@@ -660,7 +678,11 @@
 
 
 
-                if (notifyPickerSelection(u)) {
+                var pickUrl = explorerPickUrlForForm(record) || displayUrl;
+
+
+
+                if (notifyPickerSelection(pickUrl)) {
 
                     return;
 
@@ -668,7 +690,7 @@
 
 
 
-                openExplorerImagePreview(u, record.originalFileName || record.fileName || '');
+                openExplorerImagePreview(displayUrl, record.originalFileName || record.fileName || '', pickUrl);
 
             });
 
@@ -685,13 +707,13 @@
                 e.preventDefault();
                 e.stopPropagation();
 
-                var u = record.url;
-                if (!(u || '').trim()) {
+                var pickUrl = explorerPickUrlForForm(record);
+                if (!pickUrl) {
                     abp.notify.warn(l('MediaExplorer:NoImageUrlHint'));
                     return;
                 }
 
-                notifyPickerSelection(u);
+                notifyPickerSelection(pickUrl);
             });
 
 

@@ -17,4 +17,9 @@ public partial interface IMediaFilesAppService
     Task<MediaFileDto> RenameExplorerItemAsync(Guid id, RenameMediaFileExplorerDto input);
 
     Task DeleteExplorerEntryAsync(Guid id);
+
+    /// <summary>
+    /// Returns a short-lived presigned GET URL for a stored public path (e.g. /khhub-articles/host/file.png), or a public URL when presign is disabled.
+    /// </summary>
+    Task<string?> GetPresignedReadUrlByPublicPathAsync(string publicPath);
 }

@@ -62,9 +62,50 @@ public class MediaFilesAppService : MediaFilesAppServiceBase, IMediaFilesAppServ
 
         var dtos = ObjectMapper.Map<List<MediaFile>, List<MediaFileDto>>(items);
 
+        SetStablePublicPathsOnExplorerDtos(dtos);
+
         await EnrichExplorerReadUrlsAsync(dtos);
 
         return new PagedResultDto<MediaFileDto>(total, dtos);
+    }
+
+    public virtual async Task<string?> GetPresignedReadUrlByPublicPathAsync(string publicPath)
+    {
+        var trimmed = publicPath?.Trim() ?? string.Empty;
+        if (trimmed.Length == 0)
+        {
+            return null;
+        }
+
+        var opts = _mediaStorageOptions.Value;
+        if (!MediaExplorerPathHelper.TryGetBlobKeyFromStablePublicPath(opts.PublicBaseUrl, trimmed, out var objectKey) ||
+            string.IsNullOrWhiteSpace(objectKey))
+        {
+            return null;
+        }
+
+        var bucket = (_configuration["BlobStoring:Minio:BucketName"] ?? string.Empty).Trim();
+        if (bucket.Length == 0)
+        {
+            return null;
+        }
+
+        var expiry = opts.PresignedReadExpirySeconds;
+        var signed = await _minioBlobReadUrlSigner
+            .TryGetPresignedReadUrlAsync(bucket, objectKey!, expiry)
+            .ConfigureAwait(false);
+
+        if (!string.IsNullOrWhiteSpace(signed))
+        {
+            return signed;
+        }
+
+        if (!string.IsNullOrWhiteSpace(opts.PublicBaseUrl))
+        {
+            return MediaExplorerPathHelper.CombinePublicUrl(opts.PublicBaseUrl, objectKey!);
+        }
+
+        return null;
     }
 
     [Authorize(MasterDataServicePermissions.MediaFiles.Create)]
@@ -101,7 +142,7 @@ public class MediaFilesAppService : MediaFilesAppServiceBase, IMediaFilesAppServ
             url: null,
             checksum: null);
 
-        return ObjectMapper.Map<MediaFile, MediaFileDto>(folderRecord);
+        return SetStablePublicPathOnSingleDto(ObjectMapper.Map<MediaFile, MediaFileDto>(folderRecord));
     }
 
     [Authorize(MasterDataServicePermissions.MediaFiles.Create)]
@@ -172,7 +213,7 @@ public class MediaFilesAppService : MediaFilesAppServiceBase, IMediaFilesAppServ
             url: publicUrl,
             checksum: null);
 
-        return ObjectMapper.Map<MediaFile, MediaFileDto>(entity);
+        return SetStablePublicPathOnSingleDto(ObjectMapper.Map<MediaFile, MediaFileDto>(entity));
     }
 
     [Authorize(MasterDataServicePermissions.MediaFiles.Edit)]
@@ -216,7 +257,7 @@ public class MediaFilesAppService : MediaFilesAppServiceBase, IMediaFilesAppServ
             entity.Checksum,
             entity.ConcurrencyStamp);
 
-        return ObjectMapper.Map<MediaFile, MediaFileDto>(updated);
+        return SetStablePublicPathOnSingleDto(ObjectMapper.Map<MediaFile, MediaFileDto>(updated));
     }
 
     [Authorize(MasterDataServicePermissions.MediaFiles.Delete)]
@@ -305,6 +346,23 @@ public class MediaFilesAppService : MediaFilesAppServiceBase, IMediaFilesAppServ
         {
             dto.Url = signed;
         }
+    }
+
+    private void SetStablePublicPathsOnExplorerDtos(List<MediaFileDto> items)
+    {
+        var publicBaseUrl = _mediaStorageOptions.Value.PublicBaseUrl;
+        foreach (var dto in items)
+        {
+            dto.PublicPath = MediaExplorerPathHelper.BuildStablePublicPath(publicBaseUrl, dto.Path);
+        }
+    }
+
+    private MediaFileDto SetStablePublicPathOnSingleDto(MediaFileDto dto)
+    {
+        dto.PublicPath = MediaExplorerPathHelper.BuildStablePublicPath(
+            _mediaStorageOptions.Value.PublicBaseUrl,
+            dto.Path);
+        return dto;
     }
 
     private async Task TryDeleteBlobAsync(string storageKey)

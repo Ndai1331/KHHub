@@ -1,5 +1,6 @@
 $(function () {
     var l = abp.localization.getResource('MasterDataService');
+    var MP = window.KHHubMediaPreview;
 
     function getAntiForgeryToken() {
         return $('input[name="__RequestVerificationToken"]').val();
@@ -20,13 +21,34 @@ $(function () {
             });
             return;
         }
-        if (!(url || '').trim()) {
-            $img.attr('src', '').addClass('d-none');
+        if (!MP || typeof MP.applyPreviewToImg !== 'function') {
+            console.error('[article-media-upload] KHHubMediaPreview not loaded; include khhub-media-preview.js before this file.');
             return;
         }
-        var trimmed = url.trim();
-        $img.attr('src', trimmed).removeClass('d-none');
-        console.log('[article-media-upload] setPreview applied src length=', trimmed.length);
+        MP.applyPreviewToImg($img, url);
+    }
+
+    function hydrateRelativeMediaPreviewsOnLoad() {
+        if (window.__khhubMediaUsePresignedReadUrls !== true) {
+            return;
+        }
+        var pairs = [
+            ['#ArticleThumbnailUrl', '#ArticleThumbnailPreview'],
+            ['#ArticleCoverImageUrl', '#ArticleCoverPreview'],
+            ['#PlaceThumbnailUrl', '#PlaceThumbnailPreview'],
+            ['#PlaceCoverImageUrl', '#PlaceCoverPreview'],
+        ];
+        pairs.forEach(function (pair) {
+            var $inp = $(pair[0]);
+            if (!$inp.length) {
+                return;
+            }
+            var v = ($inp.val() || '').trim();
+            if (!v) {
+                return;
+            }
+            setPreview(pair[1], v);
+        });
     }
 
     function syncArticleCategoryPreviewInModal($modal) {
@@ -36,13 +58,12 @@ $(function () {
         }
         var $inp = $modal.find('.article-category-thumbnail-url').first();
         var url = ($inp.val() || '').trim();
-        var $img = $modal.find('#ArticleCategoryThumbnailPreview');
         console.log('[article-media-upload] sync thumbnail', {
             modalFound: !!$modal.length,
             inputFound: $inp.length,
             urlLength: url.length,
             urlPreview: url.slice(0, 80),
-            imgFound: $img.length,
+            imgFound: $modal.find('#ArticleCategoryThumbnailPreview').length,
         });
         setPreview('#ArticleCategoryThumbnailPreview', url, $modal);
     }
@@ -50,22 +71,14 @@ $(function () {
     window.KHHub = window.KHHub || {};
     window.KHHub.syncArticleCategoryPreviewInModal = syncArticleCategoryPreviewInModal;
 
-    /**
-     * ABP ModalManager `modalClass` maps to `abp.modals.*` JS hooks — it does not guarantee a DOM class on `.modal`.
-     * Delegate on `.modal` and gate by markup used only in Article Category modals.
-     */
     $(document).on('shown.bs.modal', '.modal', function () {
         var $modal = $(this);
         if (!$modal.find('.article-category-thumbnail-url').length) {
             return;
         }
-        console.log('[article-media-upload] shown.bs.modal (article category)', {
-            modalClasses: this.className,
-        });
         syncArticleCategoryPreviewInModal($modal);
     });
 
-    // Delegated: works when inputs are injected (e.g. modal partials via ModalManager).
     $(document).on('change', '.article-media-upload', function () {
         var $fileInput = $(this);
         var file = $fileInput[0].files && $fileInput[0].files[0];
@@ -143,4 +156,6 @@ $(function () {
         var $m = $(this).closest('.modal');
         setPreview('#ArticleCategoryThumbnailPreview', $(this).val(), $m.length ? $m : undefined);
     });
+
+    hydrateRelativeMediaPreviewsOnLoad();
 });

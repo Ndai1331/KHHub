@@ -2,6 +2,17 @@ $(function () {
     var l = abp.localization.getResource('MasterDataService');
 
     var placeService = window.kHHub.masterDataService.services.places.places;
+    var MP = window.KHHubMediaPreview;
+    var thumbPlaceholder =
+        (MP && MP.PLACEHOLDER_THUMB_SRC) ||
+        'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+    function escapeAttr(s) {
+        return String(s || '')
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;');
+    }
 
     function parseBoolFilter(sel) {
         var value = $(sel).val();
@@ -51,7 +62,7 @@ $(function () {
             paging: true,
             searching: false,
             responsive: true,
-            order: [[1, 'asc']],
+            order: [[2, 'asc']],
             ajax: abp.libs.datatables.createAjax(placeService.getList, getFilter),
             rowCallback: function (row, data) {
                 $(row).attr('data-id', data.place.id);
@@ -85,6 +96,25 @@ $(function () {
 
                         html += '</div>';
                         return html;
+                    },
+                },
+                {
+                    data: 'place.thumbnailUrl',
+                    orderable: false,
+                    render: function (thumb, type, row) {
+                        var src = row.place.thumbnailUrl || '';
+                        if (!src) {
+                            return '<div class="place-thumb bg-light border"></div>';
+                        }
+                        return (
+                            '<img class="place-thumb border" src="' +
+                            thumbPlaceholder +
+                            '" data-khhub-thumb-path="' +
+                            escapeAttr(src) +
+                            '" alt="' +
+                            escapeAttr(row.place.name || 'thumbnail') +
+                            '" />'
+                        );
                     },
                 },
                 {
@@ -165,6 +195,12 @@ $(function () {
             ],
         })
     );
+
+    $('#PlacesTable').on('draw.dt', function () {
+        if (MP && typeof MP.hydrateThumbImages === 'function') {
+            MP.hydrateThumbImages('#PlacesTable');
+        }
+    });
 
     $('#NewPlaceButton').click(function (e) {
         e.preventDefault();

@@ -14,8 +14,23 @@
     PageLayout.Content.Title = L["Places"].Value;
     PageLayout.Content.MenuItemName = KHHubMenus.Places;
 }
+@section styles
+{
+<style>
+    .place-thumb {
+        height: 36px;
+        width: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        border-radius: 50% !important;
+        object-fit: cover;
+    }
+</style>
+}
 @section scripts
 {
+    <partial name="~/Pages/Shared/_MediaPreviewSettings.cshtml" />
+    <script src="~/Pages/Shared/khhub-media-preview.js" asp-append-version="true"></script>
     <abp-script src="/Pages/Places/index.js" />
 }
 @section content_toolbar {
@@ -99,6 +114,7 @@
             <thead>
                 <tr>
                     <th style="width: 90px;">@L["Actions"]</th>
+                    <th style="width: 56px;">@L["ThumbnailUrl"]</th>
                     <th>@L["Name"]</th>
                     <th>@L["PlaceCategory"]</th>
                     <th>@L["Province"]</th>

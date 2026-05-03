@@ -1,0 +1,10 @@
+@using System.Text.Json
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{
+    var baseUrl = Configuration["MediaFilesStorage:PublicBaseUrl"] ?? string.Empty;
+    var usePresigned = Configuration.GetValue("MediaFilesStorage:UsePresignedReadUrls", true);
+}
+<script>
+    window.__khhubMediaPublicBaseUrl = @Html.Raw(JsonSerializer.Serialize(baseUrl));
+    window.__khhubMediaUsePresignedReadUrls = @(usePresigned ? "true" : "false");
+</script>
