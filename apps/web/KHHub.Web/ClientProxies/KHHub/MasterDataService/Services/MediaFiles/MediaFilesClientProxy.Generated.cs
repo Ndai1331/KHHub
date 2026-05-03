@@ -20,6 +20,48 @@ namespace KHHub.MasterDataService.Services.MediaFiles;
 [ExposeServices(typeof(IMediaFilesAppService), typeof(MediaFilesClientProxy))]
 public partial class MediaFilesClientProxy : ClientProxyBase<IMediaFilesAppService>, IMediaFilesAppService
 {
+    public virtual async Task<PagedResultDto<MediaFileDto>> GetExplorerListAsync(GetMediaFilesExplorerInput input)
+    {
+        return await RequestAsync<PagedResultDto<MediaFileDto>>(nameof(GetExplorerListAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(GetMediaFilesExplorerInput), input }
+        });
+    }
+
+    public virtual async Task<MediaFileDto> CreateFolderAsync(CreateMediaFolderDto input)
+    {
+        return await RequestAsync<MediaFileDto>(nameof(CreateFolderAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(CreateMediaFolderDto), input }
+        });
+    }
+
+    public virtual async Task<MediaFileDto> UploadExplorerFileAsync(string parentFolderPath, IRemoteStreamContent content)
+    {
+        return await RequestAsync<MediaFileDto>(nameof(UploadExplorerFileAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), parentFolderPath },
+            { typeof(IRemoteStreamContent), content }
+        });
+    }
+
+    public virtual async Task<MediaFileDto> RenameExplorerItemAsync(Guid id, RenameMediaFileExplorerDto input)
+    {
+        return await RequestAsync<MediaFileDto>(nameof(RenameExplorerItemAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id },
+            { typeof(RenameMediaFileExplorerDto), input }
+        });
+    }
+
+    public virtual async Task DeleteExplorerEntryAsync(Guid id)
+    {
+        await RequestAsync(nameof(DeleteExplorerEntryAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id }
+        });
+    }
+
     public virtual async Task<PagedResultDto<MediaFileDto>> GetListAsync(GetMediaFilesInput input)
     {
         return await RequestAsync<PagedResultDto<MediaFileDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue

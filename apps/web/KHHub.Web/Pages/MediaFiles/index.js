@@ -1,13 +1,6 @@
-$(function () {
+(function () {
     var l = abp.localization.getResource('MasterDataService');
-
     var mediaFileService = window.kHHub.masterDataService.services.mediaFiles.mediaFiles;
-
-    var createModal = new abp.ModalManager({
-        viewUrl: abp.appPath + 'MediaFiles/CreateModal',
-        scriptUrl: abp.appPath + 'Pages/MediaFiles/createModal.js',
-        modalClass: 'mediaFileCreate',
-    });
 
     var editModal = new abp.ModalManager({
         viewUrl: abp.appPath + 'MediaFiles/EditModal',
@@ -15,363 +8,1256 @@ $(function () {
         modalClass: 'mediaFileEdit',
     });
 
-    var getFilter = function () {
-        return {
-            filterText: $('#FilterText').val(),
-            fileName: $('#FileNameFilter').val(),
-            originalFileName: $('#OriginalFileNameFilter').val(),
-            extension: $('#ExtensionFilter').val(),
-            contentType: $('#ContentTypeFilter').val(),
-            storageProvider: $('#StorageProviderFilter').val(),
-            bucket: $('#BucketFilter').val(),
-            folder: $('#FolderFilter').val(),
-            path: $('#PathFilter').val(),
-            url: $('#UrlFilter').val(),
-            checksum: $('#ChecksumFilter').val(),
-            widthMin: $('#WidthFilterMin').val(),
-            widthMax: $('#WidthFilterMax').val(),
-            heightMin: $('#HeightFilterMin').val(),
-            heightMax: $('#HeightFilterMax').val(),
-            fileType: $('#FileTypeFilter').val(),
-            status: $('#StatusFilter').val(),
-        };
+    var pageSize = 48;
+    var state = {
+        parentPath: null,
+        filterText: '',
+        sortMode: 'lastMod',
+        viewMode: 'grid',
+        skip: 0,
+        totalCount: 0,
     };
 
-    var dataTableColumns = [
-        {
-            rowAction: {
-                items: [
-                    {
-                        text: l('Edit'),
-                        visible: abp.auth.isGranted('MasterDataService.MediaFiles.Edit'),
-                        action: function (data) {
-                            editModal.open({
-                                id: data.record.id,
-                            });
-                        },
-                    },
-                    {
-                        text: l('Delete'),
-                        visible: abp.auth.isGranted('MasterDataService.MediaFiles.Delete'),
-                        confirmMessage: function () {
-                            return l('DeleteConfirmationMessage');
-                        },
-                        action: function (data) {
-                            mediaFileService.delete(data.record.id).then(function () {
-                                abp.notify.success(l('SuccessfullyDeleted'));
-                                dataTable.ajax.reloadEx();
-                            });
-                        },
-                    },
-                ],
-            },
-        },
-        { data: 'fileName' },
-        { data: 'originalFileName' },
-        { data: 'extension' },
-        { data: 'contentType' },
-        { data: 'size' },
-        { data: 'storageProvider' },
-        { data: 'bucket' },
-        { data: 'folder' },
-        { data: 'path' },
-        { data: 'url' },
-        { data: 'checksum' },
-        { data: 'width' },
-        { data: 'height' },
-        { data: 'duration' },
-        {
-            data: 'fileType',
+    var $busyRoot = $('#mf-main-card');
 
-            render: function (fileType) {
-                if (fileType === undefined || fileType === null) {
-                    return '';
-                }
-
-                var localizationKey = 'Enum:FileType.' + fileType;
-                var localized = l(localizationKey);
-
-                if (localized === localizationKey) {
-                    abp.log.warn('No localization found for ' + localizationKey);
-                    return '';
-                }
-
-                return localized;
-            },
-        },
-        {
-            data: 'status',
-
-            render: function (status) {
-                if (status === undefined || status === null) {
-                    return '';
-                }
-
-                var localizationKey = 'Enum:FileStatus.' + status;
-                var localized = l(localizationKey);
-
-                if (localized === localizationKey) {
-                    abp.log.warn('No localization found for ' + localizationKey);
-                    return '';
-                }
-
-                return localized;
-            },
-        },
-    ];
-
-    if (abp.auth.isGranted('MasterDataService.MediaFiles.Delete')) {
-        dataTableColumns.unshift({
-            targets: 0,
-            data: null,
-            orderable: false,
-            className: 'select-checkbox',
-            width: '0.5rem',
-            render: function (data) {
-                return (
-                    '<input type="checkbox" class="form-check-input select-row-checkbox" data-id="' +
-                    data.id +
-                    '"/>'
-                );
-            },
-        });
-    } else {
-        $('#BulkDeleteCheckboxTheader').remove();
+    function getAntiForgeryToken() {
+        return $('input[name="__RequestVerificationToken"]').first().val();
     }
 
-    var dataTable = $('#MediaFilesTable').DataTable(
-        abp.libs.datatables.normalizeConfiguration({
-            processing: true,
-            serverSide: true,
-            paging: true,
-            searching: false,
-            responsive: true,
-            order: [[2, 'desc']],
-            ajax: abp.libs.datatables.createAjax(mediaFileService.getList, getFilter),
-            columnDefs: dataTableColumns,
-        })
-    );
+    function getSortingParam() {
+        if (state.sortMode === 'name') {
+            return 'OriginalFileName asc';
+        }
+        return 'LastModificationTime DESC';
+    }
 
-    dataTable.on('xhr', function () {
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-        $('#select_all').prop('indeterminate', false);
-        $('#select_all').prop('checked', false);
-    });
+    function truncate(name, len) {
+        if (!name) {
+            return '';
+        }
 
-    function selectOrUnselectAllCheckboxes(selectAll) {
-        $('.select-row-checkbox').each(function () {
-            $(this).prop('checked', selectAll);
+        len = len || 32;
+        return name.length > len ? name.substring(0, len - 1) + '\u2026' : name;
+    }
+
+    function formatBytes(bytes) {
+        bytes = Number(bytes) || 0;
+        if (bytes === 0) {
+            return '\u2014';
+        }
+
+        var u = ['B', 'KB', 'MB', 'GB'];
+        var i = Math.floor(Math.log(bytes) / Math.log(1024));
+        var v = bytes / Math.pow(1024, i);
+        return v.toFixed(i > 1 ? (v >= 100 ? 0 : v >= 10 ? 1 : 2) : 0) + ' ' + u[i];
+    }
+
+    function friendlyDate(dateStr) {
+        if (!dateStr) {
+            return '';
+        }
+
+        var d = new Date(dateStr);
+        var now = new Date();
+        var startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        var startY = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        var diffDays = Math.round((startToday - startY) / (24 * 3600 * 1000));
+
+        if (diffDays === 0) {
+            return l('MediaExplorer:Today');
+        }
+
+        if (diffDays === 1) {
+            return l('MediaExplorer:Yesterday');
+        }
+
+        return d.toLocaleDateString(undefined, { day: '2-digit', month: 'short' });
+    }
+
+
+
+    var explorerImagePreviewExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'];
+
+
+
+    function explorerNormalizeExt(ext) {
+
+
+        if (!ext) {
+            return '';
+        }
+
+
+
+        return String(ext)
+            .replace(/^\./, '')
+            .toLowerCase();
+
+
+    }
+
+
+
+    function fileIcon(record) {
+        if (record.fileType === 6) {
+            return '<i class="fa fa-folder text-primary"></i>';
+        }
+
+        var ext = explorerNormalizeExt(record.extension || '');
+        if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].indexOf(ext) >= 0) {
+            return '<i class="fa fa-file-photo-o text-success"></i>';
+        }
+
+        if (ext === 'pdf') {
+            return '<i class="fa fa-file-pdf-o text-danger"></i>';
+        }
+
+        if (['zip', 'rar', '7z'].indexOf(ext) >= 0) {
+            return '<i class="fa fa-file-archive-o text-info"></i>';
+        }
+
+        if (['doc', 'docx'].indexOf(ext) >= 0) {
+            return '<i class="fa fa-file-word-o text-primary"></i>';
+        }
+
+        if (['xls', 'xlsx', 'csv'].indexOf(ext) >= 0) {
+            return '<i class="fa fa-file-excel-o text-success"></i>';
+        }
+
+        return '<i class="fa fa-file-o text-muted"></i>';
+    }
+
+
+    function isExplorerImageRecord(record) {
+        if (!record || record.fileType === 6) {
+
+
+            return false;
+
+        }
+
+
+
+        var ex = explorerNormalizeExt(record.extension || '');
+
+
+        return explorerImagePreviewExts.indexOf(ex) >= 0;
+
+    }
+
+    function buildExplorerItemThumb(record, isFolder) {
+        var rawUrl =
+            record &&
+            record.url &&
+            String(record.url)
+
+
+
+                .trim();
+
+
+        var $wrap = $('<div class="mf-icon-wrap"></div>');
+
+
+
+        if (!isFolder && isExplorerImageRecord(record) && rawUrl) {
+
+
+            var $frame = $('<div class="mf-thumb-frame" role="presentation"></div>');
+
+
+
+
+
+            var $img = $('<img class="mf-thumb-img" draggable="false" decoding="async" loading="lazy" alt="" />');
+
+
+
+            $img.attr('src', rawUrl);
+
+
+            $img.one('error', function () {
+
+
+                $wrap.removeClass('mf-thumb-image');
+
+
+                $wrap.empty();
+
+
+                $wrap.html(fileIcon(record));
+
+
+            });
+
+
+            $wrap.addClass('mf-thumb-image');
+
+
+            $frame.append($img);
+
+
+            $wrap.append($frame);
+
+
+            return $wrap;
+
+
+        }
+
+
+        $wrap.html(fileIcon(record));
+
+
+        return $wrap;
+
+
+    }
+
+
+
+    var explorerImageZoomScale = 1;
+
+
+    function getExplorerImageBootstrapModal() {
+        var el = document.getElementById('mf-image-preview-modal');
+
+        if (!el || !(window.bootstrap && bootstrap.Modal)) {
+            return null;
+        }
+
+
+        return bootstrap.Modal.getOrCreateInstance(el);
+
+    }
+
+
+
+    function clampExplorerImageZoom(scale) {
+
+
+        var s = Number(scale) || 1;
+
+        if (s < 0.25) {
+            return 0.25;
+        }
+
+
+
+        if (s > 6) {
+            return 6;
+
+
+        }
+
+
+
+        return s;
+
+    }
+
+    function refreshExplorerImageZoomChrome() {
+
+
+        explorerImageZoomScale = clampExplorerImageZoom(explorerImageZoomScale);
+
+        $('.mf-img-preview-inner').css('transform', 'scale(' + explorerImageZoomScale + ')');
+
+
+        $('#mf-img-zoom-indicator').text(Math.round(explorerImageZoomScale * 100) + '%');
+
+
+        $('#mf-img-zoom-out').prop('disabled', explorerImageZoomScale <= 0.2501);
+
+
+
+        $('#mf-img-zoom-in').prop('disabled', explorerImageZoomScale >= 5.999);
+
+    }
+
+    function resetExplorerImageZoomForModal() {
+
+
+        explorerImageZoomScale = 1;
+
+        refreshExplorerImageZoomChrome();
+
+    }
+
+
+
+
+    function openExplorerImagePreview(url, displayTitle) {
+
+
+        var modalInst = getExplorerImageBootstrapModal();
+
+
+
+        if (!modalInst) {
+            if (url) {
+                window.open(url, '_blank');
+
+            }
+
+
+
+            return;
+
+        }
+
+
+
+        $('#mf-image-preview-stage').scrollTop(0).scrollLeft(0);
+
+
+        resetExplorerImageZoomForModal();
+
+
+        $('#mf-image-preview-title').text(displayTitle || l('MediaExplorer:ImagePreview'));
+
+
+
+        var elImg = document.getElementById('mf-img-preview-img');
+
+        if (!elImg) {
+            modalInst.hide();
+
+            return;
+
+        }
+
+
+
+        elImg.alt = displayTitle || '';
+
+
+        elImg.removeAttribute('src');
+
+        elImg.src = url || '';
+
+
+
+
+
+        modalInst.show();
+
+
+    }
+
+
+
+
+
+    function caption() {
+        var text = state.parentPath ? truncate(state.parentPath, 220) : l('MediaExplorer:BreadcrumbRoot');
+        $('#mf-folder-caption').text(text);
+    }
+
+    function renderBreadcrumbs() {
+        var $bc = $('#mf-breadcrumbs').empty();
+
+        var $root = $('<a href="#" class="mf-bc-item"></a>').text(l('MediaExplorer:BreadcrumbRoot'));
+        $bc.append($root);
+
+        $root.on('click', function (ev) {
+            ev.preventDefault();
+            navigateTo(null);
+        });
+
+        if (!state.parentPath) {
+            return;
+        }
+
+        var segments = state.parentPath.split('/');
+        var acc = '';
+
+        segments.forEach(function (seg) {
+            if (!seg) {
+                return;
+            }
+
+            acc = acc ? acc + '/' + seg : seg;
+            $bc.append($('<span class="mf-bc-sep">/</span>'));
+
+            var $a = $('<a href="#" class="mf-bc-item"></a>').text(seg);
+            $a.data('path', acc);
+
+            $bc.append($a);
+
+            $a.on('click', function (ev) {
+                ev.preventDefault();
+                var p = $(this).data('path');
+                navigateTo(p || null);
+            });
         });
     }
 
-    $('#select_all').click(function () {
-        if ($(this).is(':checked')) {
-            selectOrUnselectAllCheckboxes(true);
-        } else {
-            $('.select-row-checkbox').each(function () {
-                selectOrUnselectAllCheckboxes(false);
-            });
+    function navigateTo(path) {
+        state.parentPath = path || null;
+
+        state.skip = 0;
+        caption();
+
+        reload();
+    }
+
+    function renderPagination() {
+        var $p = $('#mf-pager').empty();
+        if (state.totalCount <= pageSize) {
+            return;
         }
 
-        showOrHideContextMenu();
-    });
+        var cur = Math.floor(state.skip / pageSize);
 
-    dataTable.on('change', "input[type='checkbox'].select-row-checkbox", function () {
-        var unSelectedCheckboxes = $("input[type='checkbox'].select-row-checkbox:not(:checked)");
+        function addBtn(label, dis, cb) {
 
-        if (unSelectedCheckboxes.length >= 1) {
-            var dataRecordTotal = dataTable.context[0].json.data.length;
-            if (unSelectedCheckboxes.length === dataRecordTotal) {
-                $('#select_all').prop('indeterminate', false);
-                $('#select_all').prop('checked', false);
-            } else {
-                $('#select_all').prop('indeterminate', true);
-            }
-        } else {
-            $('#select_all').prop('indeterminate', false);
-            $('#select_all').prop('checked', true);
+            $('<button type="button" class="btn btn-outline-secondary btn-sm rounded-2"></button>')
+                .text(label)
+                .prop('disabled', dis)
+                .on('click', cb)
+
+                .appendTo($p);
+
         }
 
-        showOrHideContextMenu();
-    });
 
-    var showOrHideContextMenu = function () {
-        var selectedCheckboxes = $("input[type='checkbox'].select-row-checkbox:is(:checked)");
-        var selectedCheckboxCount = selectedCheckboxes.length;
-        var dataRecordTotal = dataTable.context[0].json.data.length;
-        var recordsTotal = dataTable.context[0].json.recordsTotal;
+        addBtn('Prev', cur <= 0, function () {
 
-        if (selectedCheckboxCount >= 1) {
-            $('#bulk-delete-context-menu').removeClass('d-none');
 
-            $('#items-selected-info-message').html(
-                selectedCheckboxCount === 1
-                    ? l('OneItemOnThisPageIsSelected')
-                    : l('NumberOfItemsOnThisPageAreSelected', selectedCheckboxCount)
-            );
+            state.skip = Math.max(0, state.skip - pageSize);
+            reload();
 
-            $('#items-selected-info-message').removeClass('d-none');
-
-            if (selectedCheckboxCount === dataRecordTotal && recordsTotal > dataRecordTotal) {
-                $('#select-all-items-btn').html(l('SelectAllItems', recordsTotal));
-                $('#select-all-items-btn').removeClass('d-none');
-
-                $('#select-all-items-btn').off('click');
-                $('#select-all-items-btn').click(function () {
-                    $(this).data('selected', true);
-                    $(this).addClass('d-none');
-                    $('#items-selected-info-message').html(l('AllItemsAreSelected', recordsTotal));
-                    $('#clear-selection-btn').removeClass('d-none');
-                });
-
-                $('#clear-selection-btn').off('click');
-                $('#clear-selection-btn').click(function () {
-                    $('#select-all-items-btn').data('selected', false);
-                    $('#select_all').prop('checked', false);
-                    selectOrUnselectAllCheckboxes(false);
-                    showOrHideContextMenu();
-                });
-            } else {
-                $('#select-all-items-btn').addClass('d-none');
-                $('#select-all-items-btn').data('selected', false);
-                $('#clear-selection-btn').addClass('d-none');
-            }
-
-            $('#delete-selected-items').off('click');
-            $('#delete-selected-items').click(function () {
-                if ($('#select-all-items-btn').data('selected') === true) {
-                    abp.message.confirm(l('DeleteAllRecords'), function (confirmed) {
-                        if (!confirmed) {
-                            return;
-                        }
-
-                        mediaFileService.deleteAll(getFilter()).then(function () {
-                            dataTable.ajax.reloadEx();
-                            selectOrUnselectAllCheckboxes(false);
-                            showOrHideContextMenu();
-                        });
-                    });
-                } else {
-                    var selectedCheckboxes = $(
-                        "input[type='checkbox'].select-row-checkbox:is(:checked)"
-                    );
-                    var selectedRecordsIds = [];
-
-                    for (var i = 0; i < selectedCheckboxes.length; i++) {
-                        selectedRecordsIds.push($(selectedCheckboxes[i]).data('id'));
-                    }
-
-                    abp.message.confirm(
-                        l('DeleteSelectedRecords', selectedCheckboxes.length),
-                        function (confirmed) {
-                            if (!confirmed) {
-                                return;
-                            }
-
-                            mediaFileService.deleteByIds(selectedRecordsIds).then(function () {
-                                dataTable.ajax.reloadEx();
-                                selectOrUnselectAllCheckboxes(false);
-                                showOrHideContextMenu();
-                            });
-                        }
-                    );
-                }
-            });
-        } else {
-            $('#bulk-delete-context-menu').addClass('d-none');
-            $('#select-all-items-btn').addClass('d-none');
-            $('#items-selected-info-message').addClass('d-none');
-            $('#clear-selection-btn').addClass('d-none');
-        }
-    };
-
-    createModal.onResult(function () {
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-    });
-
-    editModal.onResult(function () {
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-    });
-
-    $('#NewMediaFileButton').click(function (e) {
-        e.preventDefault();
-        createModal.open();
-    });
-
-    $('#SearchForm').submit(function (e) {
-        e.preventDefault();
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-    });
-
-    $('#ExportToExcelButton').click(function (e) {
-        e.preventDefault();
-
-        mediaFileService.getDownloadToken().then(function (result) {
-            var input = getFilter();
-            var url =
-                abp.appPath +
-                'api/masterdata/media-files/as-excel-file' +
-                abp.utils.buildQueryString([
-                    { name: 'downloadToken', value: result.token },
-                    { name: 'filterText', value: input.filterText },
-                    { name: 'fileName', value: input.fileName },
-                    { name: 'originalFileName', value: input.originalFileName },
-                    { name: 'extension', value: input.extension },
-                    { name: 'contentType', value: input.contentType },
-                    { name: 'storageProvider', value: input.storageProvider },
-                    { name: 'bucket', value: input.bucket },
-                    { name: 'folder', value: input.folder },
-                    { name: 'path', value: input.path },
-                    { name: 'url', value: input.url },
-                    { name: 'checksum', value: input.checksum },
-                    { name: 'widthMin', value: input.widthMin },
-                    { name: 'widthMax', value: input.widthMax },
-                    { name: 'heightMin', value: input.heightMin },
-                    { name: 'heightMax', value: input.heightMax },
-                    { name: 'fileType', value: input.fileType },
-                    { name: 'status', value: input.status },
-                ]);
-
-            var downloadWindow = window.open(url, '_blank');
-            downloadWindow.focus();
         });
-    });
 
-    $('#AdvancedFilterSectionToggler').on('click', function (e) {
-        $('#AdvancedFilterSection').toggle();
-        var iconCss = $('#AdvancedFilterSection').is(':visible')
-            ? 'fa ms-1 fa-angle-up'
-            : 'fa ms-1 fa-angle-down';
-        $(this).find('i').attr('class', iconCss);
-    });
 
-    $('#AdvancedFilterSection').on('keypress', function (e) {
-        if (e.which === 13) {
-            dataTable.ajax.reloadEx();
-            selectOrUnselectAllCheckboxes(false);
-            showOrHideContextMenu();
+        addBtn(
+            'Next',
+            state.skip + pageSize >= state.totalCount,
+            function () {
+
+                state.skip += pageSize;
+                reload();
+
+            },
+
+        );
+
+
+    }
+
+
+
+    function buildItemMarkup(record) {
+
+
+        var isFolder = record.fileType === 6;
+
+        var name = record.originalFileName || record.fileName || '';
+
+
+
+        var dateLbl =
+            friendlyDate(record.lastModificationTime || record.creationTime) || '';
+
+        var metaLine = isFolder
+            ? '<div class="mf-meta">' + dateLbl + '</div>'
+            : '<div class="mf-meta">' + dateLbl + ' \u2022 ' + formatBytes(record.size) + '</div>';
+
+        var permissionEdit = abp.auth.isGranted('MasterDataService.MediaFiles.Edit');
+
+
+        var permissionDel = abp.auth.isGranted('MasterDataService.MediaFiles.Delete');
+
+
+        var menuParts = '';
+
+        menuParts +=
+            '<li><a href="#" class="dropdown-item mf-open-url">' +
+            l('MediaExplorer:OpenUrl') +
+            '</a></li>';
+
+        menuParts +=
+            '<li><a href="#" class="dropdown-item mf-download-url">' +
+            l('MediaExplorer:Download') +
+            '</a></li>';
+
+        if (permissionEdit && !isFolder) {
+            menuParts +=
+                '<li><a href="#" class="dropdown-item mf-rename">' +
+                l('Rename') +
+                '</a></li>';
+
+            menuParts +=
+                '<li><a href="#" class="dropdown-item mf-edit-details">' +
+                l('MediaExplorer:EditDetails') +
+                '</a></li>';
+
         }
+
+
+
+        if (permissionDel) {
+            menuParts +=
+                '<li><a href="#" class="dropdown-item mf-delete text-danger">' +
+                l('Delete') +
+                '</a></li>';
+        }
+
+        var $card = $('<div class="mf-item-card" tabindex="0"></div>');
+
+        $card.attr('data-id', record.id);
+
+        var $dots = $('<div class="dropdown mf-item-menu-btn"></div>');
+
+        $dots.html(
+
+            '<button class="btn btn-sm btn-link text-muted rounded-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">' +
+
+                '<i class="fa fa-ellipsis-v"></i>' +
+
+                '</button>' +
+
+                '<ul class="dropdown-menu dropdown-menu-end">' +
+
+
+                menuParts +
+
+                '</ul>',
+
+        );
+
+
+
+        if (!record.url || isFolder) {
+            $dots.find('.mf-open-url').closest('li').hide();
+
+            $dots.find('.mf-download-url').closest('li').hide();
+
+        }
+
+
+
+        var $wrap = buildExplorerItemThumb(record, isFolder);
+
+
+
+        var $nm = $('<div class="mf-name"></div>').text(truncate(name, 56));
+
+
+        $card.append($dots);
+
+
+        $card.append($wrap);
+
+        $card.append($('<div></div>').append($nm).append(metaLine));
+
+
+        $card.on('click', function (e) {
+
+            if ($(e.target).closest('.dropdown').length > 0) {
+                return;
+            }
+
+            if (isFolder) {
+                navigateTo(record.path);
+
+
+            }
+
+
+        });
+
+
+        $card.on('dblclick', function (e) {
+
+
+            if ($(e.target).closest('.dropdown').length > 0) {
+
+
+                return;
+
+
+            }
+
+
+
+            if (isFolder || !isExplorerImageRecord(record)) {
+                return;
+
+
+            }
+
+
+
+            var u = record.url;
+
+
+            if (!(u || '').trim()) {
+
+
+                abp.notify.warn(l('MediaExplorer:NoImageUrlHint'));
+
+
+                return;
+
+            }
+
+
+
+            openExplorerImagePreview(u, record.originalFileName || record.fileName || '');
+
+        });
+
+
+        function openHref(u) {
+
+            window.open(u, '_blank');
+
+        }
+
+
+
+        $card.find('.mf-open-url').on('click', function (e) {
+
+
+            e.preventDefault();
+
+            e.stopPropagation();
+
+
+            openHref(record.url);
+
+
+        });
+
+
+        $card.find('.mf-download-url').on('click', function (e) {
+
+
+            e.preventDefault();
+
+            e.stopPropagation();
+
+
+            openHref(record.url);
+
+        });
+
+
+        $card.find('.mf-edit-details').on('click', function (e) {
+
+            e.preventDefault();
+
+            e.stopPropagation();
+
+            editModal.open({
+                id: record.id,
+
+            });
+
+        });
+
+
+        $card.find('.mf-rename').on('click', function (e) {
+
+            e.preventDefault();
+
+            e.stopPropagation();
+
+            var nx = window.prompt(l('MediaExplorer:RenamePrompt'), record.originalFileName || '');
+
+            if (!(nx || '').trim()) {
+                return;
+            }
+
+
+
+            callRenameExplorer(record.id, nx.trim());
+
+        });
+
+
+        $card.find('.mf-delete').on('click', function (e) {
+
+            e.preventDefault();
+
+            e.stopPropagation();
+
+            abp.message.confirm(l('MediaExplorer:DeleteConfirm')).then(function (ok) {
+
+
+                if (!ok) {
+
+
+                    return;
+
+                }
+
+
+
+                deleteExplorer(record.id);
+
+
+
+            });
+
+
+        });
+
+
+        return $card;
+
+    }
+
+
+
+    function applyViewMode(host) {
+
+
+        host.toggleClass('list-view', state.viewMode === 'list');
+
+    }
+
+
+
+    function renderItems(items) {
+
+        var host = $('#mf-items-host').empty();
+
+
+        applyViewMode(host);
+
+
+
+        caption();
+
+        if (!items.length) {
+
+
+            $('<div class="text-center text-muted py-32"></div>')
+
+                .text(l('MediaExplorer:EmptyState'))
+
+
+                .appendTo(host);
+
+            return;
+
+        }
+
+
+
+        items.forEach(function (r) {
+
+            host.append(buildItemMarkup(r));
+
+        });
+
+    }
+
+
+
+    async function reload() {
+        abp.ui.setBusy($busyRoot);
+
+        try {            var input = {
+
+
+                skipCount: state.skip,
+
+
+                maxResultCount: pageSize,
+
+
+                sorting: getSortingParam(),
+
+
+
+                filterText: state.filterText || undefined,
+
+                parentFolderPath: state.parentPath || undefined,
+
+
+            };
+
+
+
+            var result = await mediaFileService.getExplorerList(input);
+
+
+
+            state.totalCount = result.totalCount;
+
+            renderItems(result.items);
+
+            renderBreadcrumbs();
+
+
+            caption();
+
+
+            renderPagination();
+
+        } catch (error) {
+
+            notifyError(error);
+
+        } finally {
+
+            abp.ui.clearBusy($busyRoot);
+
+        }
+
+    }
+
+
+
+    function notifyError(error) {
+
+
+        var msg =
+
+            error &&
+
+
+            error.responseJSON &&
+
+
+            error.responseJSON.error &&
+
+
+            error.responseJSON.error.message
+
+                ? error.responseJSON.error.message
+
+                : error && error.message
+
+                  ? error.message
+
+                  : l('AnErrorOccurred');
+
+        abp.notify.error(msg);
+
+
+
+    }
+
+
+
+    async function uploadOne(file) {
+
+
+        var formData = new FormData();
+
+        formData.append('file', file);
+
+        formData.append('parentFolderPath', state.parentPath || '');
+
+
+
+        var token = getAntiForgeryToken();
+
+        if (token) {
+
+            formData.append('__RequestVerificationToken', token);
+
+        }
+
+
+
+        return abp.ajax({
+
+            url: abp.appPath + 'MediaFiles/ExplorerUpload',
+
+            type: 'POST',
+
+            data: formData,
+
+            processData: false,
+
+            contentType: false,
+
+        });
+
+    }
+
+
+
+    async function handleFiles(fileList) {
+
+        if (!fileList || !fileList.length) {
+            return;
+        }
+
+
+
+        abp.ui.setBusy($busyRoot);
+
+
+
+        try {
+
+            for (var i = 0; i < fileList.length; i++) {
+
+                await uploadOne(fileList[i]);
+
+
+            }
+
+
+
+            abp.notify.success(l('MediaExplorer:UploadSuccess'));
+
+            state.skip = 0;
+
+            await reload();
+
+
+        } catch (error) {
+
+            notifyError(error);
+
+        } finally {
+
+
+            abp.ui.clearBusy($busyRoot);
+
+        }
+
+    }
+
+
+
+    async function deleteExplorer(id) {
+
+
+        abp.ui.setBusy($busyRoot);
+
+        try {
+
+            await mediaFileService.deleteExplorerEntry(id);
+
+            abp.notify.success(l('SuccessfullyDeleted'));
+
+            state.skip = 0;
+
+            await reload();
+
+        } catch (error) {
+
+            notifyError(error);
+
+
+        } finally {
+
+            abp.ui.clearBusy($busyRoot);
+
+        }
+
+    }
+
+
+
+    async function callRenameExplorer(id, displayName) {
+
+
+        abp.ui.setBusy($busyRoot);
+
+        try {
+
+            await mediaFileService.renameExplorerItem(id, {
+
+                displayName: displayName,
+
+
+            });
+
+            abp.notify.success(l('Successful'));
+
+            await reload();
+
+        } catch (error) {
+
+            notifyError(error);
+
+        } finally {
+
+
+            abp.ui.clearBusy($busyRoot);
+
+
+
+        }
+
+
+
+    }
+
+
+
+    $(function () {
+
+
+        renderBreadcrumbs();
+
+        caption();
+
+
+        reload();
+
+
+        $('#mf-img-zoom-in').on('click', function () {
+
+            explorerImageZoomScale *= 1.2;
+
+
+            refreshExplorerImageZoomChrome();
+
+        });
+
+
+        $('#mf-img-zoom-out').on('click', function () {
+
+
+            explorerImageZoomScale /= 1.2;
+
+
+            refreshExplorerImageZoomChrome();
+
+
+        });
+
+
+        $('#mf-img-zoom-reset').on('click', function () {
+
+
+            resetExplorerImageZoomForModal();
+
+        });
+
+
+        $('#mf-image-preview-modal').on('hidden.bs.modal', function () {
+
+
+            var imgEl = document.getElementById('mf-img-preview-img');
+
+
+            if (imgEl) {
+
+
+                imgEl.removeAttribute('src');
+
+
+                imgEl.alt = '';
+
+            }
+
+
+            explorerImageZoomScale = 1;
+
+
+            refreshExplorerImageZoomChrome();
+
+
+            $('#mf-image-preview-stage').scrollTop(0).scrollLeft(0);
+
+        });
+
+
+
+        $('#mf-search-input').on('keydown', function (e) {
+
+
+            if (e.key === 'Enter') {
+
+                e.preventDefault();
+
+                state.filterText = ($(this).val() || '').trim();
+
+
+                state.skip = 0;
+
+                reload();
+
+
+            }
+
+
+        });
+
+
+        $('#mf-sort-select').on('change', function () {
+
+            state.sortMode = $(this).val();
+
+
+            reload();
+
+        });
+
+
+
+        $('#mf-view-grid').on('click', function () {
+
+
+            state.viewMode = 'grid';
+
+            $('#mf-view-grid').addClass('active');
+
+
+            $('#mf-view-list').removeClass('active');
+
+            applyViewMode($('#mf-items-host'));
+
+        });
+
+
+
+        $('#mf-view-list').on('click', function () {
+
+
+            state.viewMode = 'list';
+
+
+            $('#mf-view-list').addClass('active');
+
+            $('#mf-view-grid').removeClass('active');
+
+
+            applyViewMode($('#mf-items-host'));
+
+        });
+
+
+
+        $('#mf-new-folder-action').on('click', async function (e) {
+            e.preventDefault();
+            if (!abp.auth.isGranted('MasterDataService.MediaFiles.Create')) {
+                return;
+            }
+
+            var name = window.prompt(l('MediaExplorer:NewFolderPrompt'), '');
+            if (!(name || '').trim()) {
+                return;
+            }
+
+            abp.ui.setBusy($busyRoot);
+
+            try {
+                await mediaFileService.createFolder({
+                    name: name.trim(),
+                    parentFolderPath: state.parentPath || '',
+                });
+                abp.notify.success(l('Successful'));
+                state.skip = 0;
+                await reload();
+            } catch (error) {
+                notifyError(error);
+            } finally {
+                abp.ui.clearBusy($busyRoot);
+            }
+        });
+
+        $('#mf-open-file-picker-btn,#mf-browse-btn').on('click', function (e) {
+
+            e.preventDefault();
+
+            $('#mf-file-input').trigger('click');
+
+
+        });
+
+
+
+        $('#mf-file-input').on('change', function () {
+
+
+            var fs = this.files;
+
+            handleFiles(fs);
+
+            $(this).val('');
+
+
+        });
+
+
+
+        var $zone = $('#mf-upload-zone');
+
+
+        $zone.on('dragenter dragover', function (e) {
+
+
+            e.preventDefault();
+
+            $zone.addClass('mf-drag');
+
+        });
+
+
+        $zone.on('dragleave', function () {
+
+
+            $zone.removeClass('mf-drag');
+
+        });
+
+
+
+        $zone.on('drop', function (e) {
+
+
+            e.preventDefault();
+
+            $zone.removeClass('mf-drag');
+
+
+            var dt =
+
+
+                e.originalEvent &&
+
+
+
+                e.originalEvent.dataTransfer;
+
+
+
+            if (!dt || !dt.files || !dt.files.length) {
+
+
+                return;
+
+
+
+            }
+
+
+
+            handleFiles(dt.files);
+
+
+
+        });
+
+
+        editModal.onResult(function () {
+
+
+            reload();
+
+
+        });
+
+
+        window.kHHub = window.kHHub || {};
+
+        window.kHHub.mediaExplorerReload = reload;
+
     });
 
-    //<suite-custom-code-block-1>
-    //</suite-custom-code-block-1>
 
-    //<suite-custom-code-block-2>
-    //</suite-custom-code-block-2>
+})();
 
-    $('#AdvancedFilterSection select').change(function () {
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-    });
-
-    //<suite-custom-code-block-3>
-    //</suite-custom-code-block-3>
-});

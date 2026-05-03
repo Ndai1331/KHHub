@@ -11,146 +11,131 @@
 @model IndexModel
 @inject IPageLayout PageLayout
 @{
-    PageLayout.Content.Title = L["MediaFiles"].Value;
+    PageLayout.Content.Title = L["MediaExplorer:FileManager"].Value;
     PageLayout.Content.MenuItemName = KHHubMenus.MediaFiles;
 }
 @section styles
 {
-@*//<suite-custom-code-block-1>*@
-@*//</suite-custom-code-block-1>*@
+    <link rel="stylesheet" href="~/Pages/MediaFiles/media-explorer.css" asp-append-version="true" />
 }
 @section scripts
 {
     <abp-script src="/Pages/MediaFiles/index.js" />
-@*//<suite-custom-code-block-2>*@
-@*//</suite-custom-code-block-2>*@
 }
 @section content_toolbar {
-    <abp-button id="ExportToExcelButton" text="@L["ExportToExcel"].Value" icon="download" size="Small" button-type="Primary" />
-    @if (await Authorization.IsGrantedAsync(MasterDataServicePermissions.MediaFiles.Create))
-    {
-        <abp-button id="NewMediaFileButton" text="@L["NewMediaFile"].Value" icon="plus" size="Small" button-type="Primary" />
-    }
-@*//<suite-custom-code-block-3>*@
-@*//</suite-custom-code-block-3>*@
 }
-@*//<suite-custom-code-block-4>*@
-@*//</suite-custom-code-block-4>*@
-<abp-card>
-    <abp-card-body>
-		<abp-row class="mb-3">
-            <abp-column size-md="_8" size-lg="_10">
-                <div class="mb-3">
-                    <form id="SearchForm" autocomplete="off">
-                        <div class="input-group">
-                            <input class="form-control page-search-filter-text" id="FilterText" placeholder="@L["Search"]"/>
-                            <abp-button button-type="Primary" type="submit" icon="search"/>
-                        </div>
-                    </form>
+
+
+<div class="mf-explorer-layout">
+
+    <!-- Sidebar mirroring DashLite file manager chrome -->
+    <aside class="mf-sidebar">
+        <div class="mf-brand">
+            <i class="fa fa-folder-open text-primary"></i>
+            <span>@L["MediaExplorer:Apps"] / @L["MediaExplorer:FileManager"]</span>
+        </div>
+        <nav class="mf-nav d-flex flex-column">
+            <a class="mf-nav-link" href="#"><i class="fa fa-home"></i>@L["MediaExplorer:Home"]</a>
+            <span class="mf-nav-link active"><i class="fa fa-folder"></i>@L["MediaExplorer:SidebarFiles"]</span>
+            <a class="mf-nav-link" href="#"><i class="fa fa-star-o"></i>@L["MediaExplorer:Starred"]</a>
+            <a class="mf-nav-link" href="#"><i class="fa fa-share-alt"></i>@L["MediaExplorer:Shared"]</a>
+            <a class="mf-nav-link" href="#"><i class="fa fa-trash-o"></i>@L["MediaExplorer:Recovery"]</a>
+            <a class="mf-nav-link" href="#"><i class="fa fa-cog"></i>@L["MediaExplorer:Settings"]</a>
+        </nav>
+        <div class="mf-sidebar-foot">
+            <div class="mf-sidebar-foot-title"><i class="fa fa-database"></i> @L["MediaExplorer:StorageTitle"]</div>
+            <div class="mf-meter"><div class="mf-meter-fill"></div></div>
+            <small class="text-muted d-block mt-2">12.47 GB / 50 GB</small>
+            <a href="#" class="mf-upgrade">@L["MediaExplorer:UpgradeStorage"]</a>
+        </div>
+    </aside>
+
+    <div id="mf-main-card" class="mf-main-inner">
+        @Html.AntiForgeryToken()
+        <div class="mf-topbar">
+            <div class="mf-search">
+                <i class="fa fa-search"></i>
+                <input type="text" id="mf-search-input" maxlength="256"
+                       placeholder="@L["MediaExplorer:SearchPlaceholder"]" autocomplete="off" />
+            </div>
+            @if (await Authorization.IsGrantedAsync(MasterDataServicePermissions.MediaFiles.Create))
+            {
+                <div class="mf-actions">
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle rounded-2" data-bs-toggle="dropdown" aria-expanded="false">
+                            @L["MediaExplorer:Create"]
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a href="#" id="mf-new-folder-action" class="dropdown-item"><i class="fa fa-folder-o me-2"></i>@L["MediaExplorer:NewFolderAction"]</a></li>
+                        </ul>
+                    </div>
+                    <abp-button button-type="Primary"
+                                id="mf-open-file-picker-btn"
+                                text="@L["MediaExplorer:Upload"].Value"
+                                icon="upload" />
                 </div>
-            </abp-column>
-            <abp-column size-md="_4" size-lg="_2">
-                <div class="mb-3">
-                    <abp-button style="width:100%" id="AdvancedFilterSectionToggler" button-type="Outline_Primary">
-                        @L["Filters"]<i aria-hidden="true" class="fa ms-1 fa-angle-down"></i>
-                    </abp-button>
-                </div>
-            </abp-column>
-        </abp-row>
-        <abp-row id="AdvancedFilterSection" class="mt-3" style="display: none;">
-            <abp-column size="_3">
-                <abp-input asp-for="FileNameFilter" label="@L["FileName"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="OriginalFileNameFilter" label="@L["OriginalFileName"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="ExtensionFilter" label="@L["Extension"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="ContentTypeFilter" label="@L["ContentType"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="StorageProviderFilter" label="@L["StorageProvider"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="BucketFilter" label="@L["Bucket"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="FolderFilter" label="@L["Folder"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="PathFilter" label="@L["Path"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="UrlFilter" label="@L["Url"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="ChecksumFilter" label="@L["Checksum"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="WidthFilterMin" label="@L["MinWidth"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="WidthFilterMax" label="@L["MaxWidth"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="HeightFilterMin" label="@L["MinHeight"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-input asp-for="HeightFilterMax" label="@L["MaxHeight"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-select asp-for="FileTypeFilter" label="@L["FileType"].Value" />
-            </abp-column>
-            <abp-column size="_3">
-                <abp-select asp-for="StatusFilter" label="@L["Status"].Value" />
-            </abp-column>
-@*//<suite-custom-code-block-5>*@
-@*//</suite-custom-code-block-5>*@
-        </abp-row>
-        <div id="bulk-delete-context-menu" class="d-none">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <p class="lead mb-0 d-none" id="items-selected-info-message"></p>
-                <div>
-                    <button class="btn btn-outline-secondary d-none mx-1" id="select-all-items-btn"></button>
-                    <button class="btn btn-outline-secondary d-none mx-1" id="clear-selection-btn">
-                        @L["ClearSelection"]
-                    </button>
-                    <button class="btn btn-danger mx-1" id="delete-selected-items">
-                        <i class="fa fa-trash"></i> @L["Delete"]
-                    </button>
+            }
+        </div>
+
+        <div id="mf-upload-zone"
+             class="mf-upload-zone @((await Authorization.IsGrantedAsync(MasterDataServicePermissions.MediaFiles.Create)) ? "" : "d-none")">
+            <p class="mb-16 fw-semibold text-secondary">@L["MediaExplorer:DragDropHint"]</p>
+            <button type="button" class="btn btn-outline-primary btn-sm rounded-2" id="mf-browse-btn">
+                @L["MediaExplorer:BrowseFiles"]
+            </button>
+            <input type="file" id="mf-file-input" class="d-none" multiple />
+        </div>
+
+        <div class="mf-breadcrumb-row">
+            <div class="mf-breadcrumbs" id="mf-breadcrumbs" aria-live="polite"></div>
+            <div class="mf-controls">
+                <select id="mf-sort-select" class="form-select form-select-sm rounded-2" style="width: auto; min-width: 170px;">
+                    <option value="lastMod">@L["MediaExplorer:SortModified"]</option>
+                    <option value="name">@L["MediaExplorer:SortName"]</option>
+                </select>
+                <div class="btn-group rounded-2" role="group" aria-label="view">
+                    <button type="button" class="btn btn-outline-secondary px-24 active mf-view-btn" id="mf-view-grid" title="@L["MediaExplorer:ToggleGrid"].Value"><i class="fa fa-th-large"></i></button>
+                    <button type="button" class="btn btn-outline-secondary px-24 mf-view-btn" id="mf-view-list" title="@L["MediaExplorer:ToggleList"].Value"><i class="fa fa-list"></i></button>
                 </div>
             </div>
-            <hr class="my-1 mx-0"/>
         </div>
-        <abp-table striped-rows="true" id="MediaFilesTable">
-            <thead>
-				<tr>
-				    <th id="BulkDeleteCheckboxTheader"><input type="checkbox" id="select_all" class="form-check-input" /></th>
-					<th>@L["Actions"]</th>
-					<th>@L["FileName"]</th>
-					<th>@L["OriginalFileName"]</th>
-					<th>@L["Extension"]</th>
-					<th>@L["ContentType"]</th>
-					<th>@L["Size"]</th>
-					<th>@L["StorageProvider"]</th>
-					<th>@L["Bucket"]</th>
-					<th>@L["Folder"]</th>
-					<th>@L["Path"]</th>
-					<th>@L["Url"]</th>
-					<th>@L["Checksum"]</th>
-					<th>@L["Width"]</th>
-					<th>@L["Height"]</th>
-					<th>@L["Duration"]</th>
-					<th>@L["FileType"]</th>
-					<th>@L["Status"]</th>
-@*//<suite-custom-code-block-6>*@
-@*//</suite-custom-code-block-6>*@
-				</tr>
-            </thead>
-        </abp-table>
-    </abp-card-body>
-</abp-card>
-@*//<suite-custom-code-block-7>*@
-@*//</suite-custom-code-block-7>*@
+
+        <div class="mf-title">@L["MediaExplorer:SidebarFiles"]</div>
+        <p class="mf-sub text-muted mb-24" id="mf-folder-caption"></p>
+
+        <div id="mf-items-host" class="mf-grid mb-24"></div>
+        <nav id="mf-pager" class="mf-pagination" aria-label="pagination"></nav>
+    </div>
+</div>
+
+<div class="modal fade" id="mf-image-preview-modal" tabindex="-1" aria-labelledby="mf-image-preview-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-lg-down mf-img-preview-dialog">
+        <div class="modal-content mf-img-preview-modal-content shadow-lg">
+            <div class="modal-header border-bottom align-items-center flex-wrap gap-2 py-3 px-3">
+                <h5 class="modal-title text-truncate flex-grow-1 me-2 mb-0" id="mf-image-preview-title"></h5>
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="btn-group" role="group" aria-label="zoom">
+                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-2" id="mf-img-zoom-out" title="@L["MediaExplorer:ZoomOut"].Value">
+                            <i class="fa fa-search-minus" aria-hidden="true"></i><span class="visually-hidden">@L["MediaExplorer:ZoomOut"].Value</span>
+                        </button>
+                        <span id="mf-img-zoom-indicator" class="small fw-semibold text-muted user-select-none" style="min-width: 3.25rem; text-align: center;">100%</span>
+                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-2" id="mf-img-zoom-in" title="@L["MediaExplorer:ZoomIn"].Value">
+                            <i class="fa fa-search-plus" aria-hidden="true"></i><span class="visually-hidden">@L["MediaExplorer:ZoomIn"].Value</span>
+                        </button>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary btn-sm rounded-2" id="mf-img-zoom-reset">
+                        @L["MediaExplorer:ResetZoom"].Value
+                    </button>
+                </div>
+                <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0 mf-img-preview-body">
+                <div class="mf-img-preview-stage" id="mf-img-preview-stage">
+                    <div class="mf-img-preview-inner">
+                        <img src="" alt="" id="mf-img-preview-img" draggable="false" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

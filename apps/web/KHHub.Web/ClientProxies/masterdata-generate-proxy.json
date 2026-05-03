@@ -7277,11 +7277,431 @@
                     "type": "KHHub.MasterDataService.Services.Dtos.Shared.DownloadTokenResultDto",
                     "typeSimple": "KHHub.MasterDataService.Services.Dtos.Shared.DownloadTokenResultDto"
                   }
+                },
+                {
+                  "name": "GetExplorerListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.MediaFiles.GetMediaFilesExplorerInput, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.GetMediaFilesExplorerInput",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.GetMediaFilesExplorerInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto>"
+                  }
+                },
+                {
+                  "name": "CreateFolderAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.MediaFiles.CreateMediaFolderDto, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.CreateMediaFolderDto",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.CreateMediaFolderDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto"
+                  }
+                },
+                {
+                  "name": "UploadExplorerFileAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "parentFolderPath",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "content",
+                      "typeAsString": "Volo.Abp.Content.IRemoteStreamContent, Volo.Abp.Core",
+                      "type": "Volo.Abp.Content.IRemoteStreamContent",
+                      "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto"
+                  }
+                },
+                {
+                  "name": "RenameExplorerItemAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.MediaFiles.RenameMediaFileExplorerDto, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.RenameMediaFileExplorerDto",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.RenameMediaFileExplorerDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto"
+                  }
+                },
+                {
+                  "name": "DeleteExplorerEntryAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
                 }
               ]
             }
           ],
           "actions": {
+            "GetExplorerListAsyncByInput": {
+              "uniqueName": "GetExplorerListAsyncByInput",
+              "name": "GetExplorerListAsync",
+              "httpMethod": "GET",
+              "url": "api/masterdata/media-files/explorer-list",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.MediaFiles.GetMediaFilesExplorerInput, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.GetMediaFilesExplorerInput",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.GetMediaFilesExplorerInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ParentFolderPath",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "FilterText",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto>"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.MediaFiles",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.MediaFiles.IMediaFilesAppService"
+            },
+            "CreateFolderAsyncByInput": {
+              "uniqueName": "CreateFolderAsyncByInput",
+              "name": "CreateFolderAsync",
+              "httpMethod": "POST",
+              "url": "api/masterdata/media-files/folder",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.MediaFiles.CreateMediaFolderDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.CreateMediaFolderDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.CreateMediaFolderDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.CreateMediaFolderDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.CreateMediaFolderDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.MediaFiles",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.MediaFiles.Create",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.MediaFiles.IMediaFilesAppService"
+            },
+            "UploadExplorerFileAsyncByParentFolderPathAndContent": {
+              "uniqueName": "UploadExplorerFileAsyncByParentFolderPathAndContent",
+              "name": "UploadExplorerFileAsync",
+              "httpMethod": "POST",
+              "url": "api/masterdata/media-files/upload-explorer-file",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "parentFolderPath",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "content",
+                  "typeAsString": "Volo.Abp.Content.IRemoteStreamContent, Volo.Abp.Core",
+                  "type": "Volo.Abp.Content.IRemoteStreamContent",
+                  "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "parentFolderPath",
+                  "name": "parentFolderPath",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "content",
+                  "name": "content",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Content.IRemoteStreamContent",
+                  "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "FormFile",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.MediaFiles",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.MediaFiles.Create",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.MediaFiles.IMediaFilesAppService"
+            },
+            "RenameExplorerItemAsyncByIdAndInput": {
+              "uniqueName": "RenameExplorerItemAsyncByIdAndInput",
+              "name": "RenameExplorerItemAsync",
+              "httpMethod": "POST",
+              "url": "api/masterdata/media-files/{id}/rename-explorer-item",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.MediaFiles.RenameMediaFileExplorerDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.RenameMediaFileExplorerDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.RenameMediaFileExplorerDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.RenameMediaFileExplorerDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.RenameMediaFileExplorerDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.MediaFiles.MediaFileDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.MediaFiles",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.MediaFiles.Edit",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.MediaFiles.IMediaFilesAppService"
+            },
+            "DeleteExplorerEntryAsyncById": {
+              "uniqueName": "DeleteExplorerEntryAsyncById",
+              "name": "DeleteExplorerEntryAsync",
+              "httpMethod": "DELETE",
+              "url": "api/masterdata/media-files/{id}/explorer-entry",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.MediaFiles",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.MediaFiles.Delete",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.MediaFiles.IMediaFilesAppService"
+            },
             "GetListAsyncByInput": {
               "uniqueName": "GetListAsyncByInput",
               "name": "GetListAsync",
