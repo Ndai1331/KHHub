@@ -10,6 +10,38 @@
 
     var pageSize = 48;
 
+    /** Place gallery batch selection — persisted on DOM so it cannot diverge from window.kHHub APIs (closure / mount order). */
+    function getGalleryBatchStore() {
+        var $er = $('#khhub-mlp-explorer-root');
+        if (!$er.length) {
+            return null;
+        }
+        var st = $er.data('khhub-batch-selection');
+        if (
+            !st ||
+            Object.prototype.toString.call(st.order) !== '[object Array]' ||
+            typeof st.map !== 'object' ||
+            st.map === null
+        ) {
+            st = { order: [], map: {} };
+            $er.data('khhub-batch-selection', st);
+        }
+        return st;
+    }
+
+    function clearGalleryBatchItemsUi() {
+        $('#khhub-mlp-explorer-root')
+            .find('[data-mf="items-host"] .mf-item-card')
+            .removeClass('mf-item-selected');
+    }
+
+    function syncGalleryBatchFooterAfterChange() {
+        $(document).trigger('khhub:mlp-gallery-batch-selection-changed');
+        if (typeof window.__KHHubSyncGalleryBatchFooter === 'function') {
+            window.__KHHubSyncGalleryBatchFooter();
+        }
+    }
+
     function mountMediaExplorer($root) {
         if ($root.data('mf-mounted')) {
             return;
@@ -20,24 +52,67 @@
             return $root.find('[data-mf="' + name + '"]');
         }
 
+        function explorerDisplayImageUrl(rec) {
+            return rec && rec.url ? String(rec.url).trim() : '';
+        }
+
+        function explorerPickUrlForForm(rec) {
+            if (!rec) {
+                return '';
+            }
+            var pp = rec.publicPath ? String(rec.publicPath).trim() : '';
+            if (pp) {
+                return pp;
+            }
+            var pth = rec.path ? String(rec.path).trim() : '';
+            if (pth) {
+                return pth;
+            }
+            return rec.url ? String(rec.url).trim() : '';
+        }
+
         var pickerMode =
             $root.attr('data-picker-mode') === 'true' ||
             $root.data('picker-mode') === true;
 
-        function notifyPickerSelection(url) {
+        function explorerRecordKey(rec) {
+            if (!rec) {
+                return '';
+            }
+            var v = rec.id !== undefined && rec.id !== null ? rec.id : rec.Id;
+            return v !== undefined && v !== null ? String(v) : '';
+        }
+
+        function notifyPickerSelection(url, pickRecord) {
             if (!pickerMode) {
                 return false;
             }
 
             var u = (url || '').trim();
-            if (!u) {
-                return false;
+            if (!u && pickRecord) {
+                u = explorerPickUrlForForm(pickRecord) || explorerDisplayImageUrl(pickRecord);
+                u = (u || '').trim();
             }
 
             var hook = window.__KHHubMediaExplorerOnPick;
             if (typeof hook === 'function') {
-                hook(u);
+                if (!u && pickRecord && explorerRecordKey(pickRecord)) {
+                    // Hooks that only need mediaFileId (e.g. legacy pick flows).
+                    u = '/';
+                }
+                if (!u) {
+                    return false;
+                }
+                var hookResult = hook(u, pickRecord);
+                // Gallery batch mode: return '__KHHub_KEEP_OPEN__' to stay in explorer (no preview on double-click).
+                if (hookResult === '__KHHub_KEEP_OPEN__') {
+                    return true;
+                }
                 return true;
+            }
+
+            if (!u) {
+                return false;
             }
 
             if (window.parent && window.parent !== window) {
@@ -58,6 +133,8 @@
         };
 
         var $busyRoot = mf('busy-root');
+
+        var galleryBatchClickTimers = {};
 
         function getAntiForgeryToken() {
             var t = mf('busy-root').find('input[name="__RequestVerificationToken"]').val();
@@ -188,6 +265,54 @@
 
         }
 
+        function isGalleryBatchPicker() {
+            return $root.attr('data-khhub-gallery-batch') === 'true';
+        }
+
+        function cancelGalleryBatchClickTimer(recKey) {
+            if (!recKey || !galleryBatchClickTimers[recKey]) {
+                return;
+            }
+            clearTimeout(galleryBatchClickTimers[recKey]);
+            delete galleryBatchClickTimers[recKey];
+        }
+
+        function toggleGalleryBatchSelection(record, $card) {
+            var key = explorerRecordKey(record);
+            if (!key) {
+                return;
+            }
+            var st = getGalleryBatchStore();
+            if (!st) {
+                return;
+            }
+            if (st.map[key]) {
+                delete st.map[key];
+                st.order = st.order.filter(function (id) {
+                    return id !== key;
+                });
+                $card.removeClass('mf-item-selected');
+            } else {
+                st.map[key] = record;
+                st.order.push(key);
+                $card.addClass('mf-item-selected');
+            }
+            syncGalleryBatchFooterAfterChange();
+        }
+
+        function restoreGalleryBatchSelectionUi(host) {
+            if (!isGalleryBatchPicker() || !host || !host.length) {
+                return;
+            }
+            var st = getGalleryBatchStore();
+            if (!st) {
+                return;
+            }
+            st.order.forEach(function (key) {
+                host.find('.mf-item-card[data-id="' + key + '"]').addClass('mf-item-selected');
+            });
+        }
+
         function buildExplorerItemThumb(record, isFolder) {
             var rawUrl =
                 record &&
@@ -261,6 +386,7 @@
 
         var explorerImageZoomScale = 1;
         var explorerPreviewPickUrl = '';
+        var explorerPreviewPickRecord = null;
 
 
         function getExplorerImageBootstrapModal() {
@@ -331,7 +457,7 @@
 
 
 
-        function openExplorerImagePreview(url, displayTitle, pickUrlForForm) {
+        function openExplorerImagePreview(url, displayTitle, pickUrlForForm, pickRecord) {
 
 
             var modalInst = getExplorerImageBootstrapModal();
@@ -385,6 +511,7 @@
                     ? String(pickUrlForForm).trim()
                     : String(url || '').trim();
             explorerPreviewPickUrl = pickVal;
+            explorerPreviewPickRecord = pickRecord || null;
 
             if (pickerMode) {
                 mf('img-pick-btn').removeClass('d-none');
@@ -502,21 +629,6 @@
 
         function buildItemMarkup(record) {
 
-            function explorerDisplayImageUrl(rec) {
-                return rec && rec.url ? String(rec.url).trim() : '';
-            }
-
-            function explorerPickUrlForForm(rec) {
-                if (!rec) {
-                    return '';
-                }
-                var pp = rec.publicPath ? String(rec.publicPath).trim() : '';
-                if (pp) {
-                    return pp;
-                }
-                return rec.url ? String(rec.url).trim() : '';
-            }
-
             var isFolder = record.fileType === 6;
 
             var name = record.originalFileName || record.fileName || '';
@@ -538,11 +650,13 @@
 
             var menuParts = '';
 
-            if (pickerMode && !isFolder && isExplorerImageRecord(record)) {
+            var hidePickMenuForGalleryBatch = isGalleryBatchPicker();
+
+            if (pickerMode && !hidePickMenuForGalleryBatch && !isFolder && isExplorerImageRecord(record)) {
                 menuParts +=
-                    '<li><a href="#" class="dropdown-item mf-pick-image text-primary">' +
+                    '<li><button type="button" class="dropdown-item mf-pick-image text-primary">' +
                     l('MediaExplorer:SelectImage') +
-                    '</a></li>';
+                    '</button></li>';
             }
 
             menuParts +=
@@ -579,13 +693,13 @@
 
             var $card = $('<div class="mf-item-card" tabindex="0"></div>');
 
-            $card.attr('data-id', record.id);
+            $card.attr('data-id', explorerRecordKey(record) || '');
 
             var $dots = $('<div class="dropdown mf-item-menu-btn"></div>');
 
             $dots.html(
 
-                '<button class="btn btn-sm btn-link text-muted rounded-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">' +
+                '<button class="btn btn-sm btn-link text-muted rounded-2" type="button" data-bs-toggle="dropdown" data-bs-strategy="fixed" aria-expanded="false">' +
 
                     '<i class="fa fa-ellipsis-v"></i>' +
 
@@ -634,11 +748,36 @@
 
                 if (isFolder) {
                     navigateTo(record.path);
-
-
+                    return;
                 }
 
+                if (!pickerMode || !isExplorerImageRecord(record)) {
+                    return;
+                }
 
+                var pickUrlQuick = explorerPickUrlForForm(record) || explorerDisplayImageUrl(record);
+
+                if (isGalleryBatchPicker()) {
+                    e.preventDefault();
+                    var recKey = explorerRecordKey(record);
+                    if (!recKey) {
+                        abp.notify.warn(l('MediaExplorer:NoImageUrlHint'));
+                        return;
+                    }
+                    cancelGalleryBatchClickTimer(recKey);
+                    galleryBatchClickTimers[recKey] = setTimeout(function () {
+                        delete galleryBatchClickTimers[recKey];
+                        toggleGalleryBatchSelection(record, $card);
+                    }, 280);
+                    return;
+                }
+
+                e.preventDefault();
+                if (!pickUrlQuick) {
+                    abp.notify.warn(l('MediaExplorer:NoImageUrlHint'));
+                    return;
+                }
+                notifyPickerSelection(pickUrlQuick, record);
             });
 
 
@@ -651,6 +790,18 @@
                     return;
 
 
+                }
+
+                if (isGalleryBatchPicker() && !isFolder && isExplorerImageRecord(record)) {
+                    cancelGalleryBatchClickTimer(explorerRecordKey(record));
+                    var displayUrlGb = explorerDisplayImageUrl(record);
+                    if (!displayUrlGb) {
+                        abp.notify.warn(l('MediaExplorer:NoImageUrlHint'));
+                        return;
+                    }
+                    var pickUrlGb = explorerPickUrlForForm(record) || displayUrlGb;
+                    openExplorerImagePreview(displayUrlGb, record.originalFileName || record.fileName || '', pickUrlGb, record);
+                    return;
                 }
 
 
@@ -682,7 +833,7 @@
 
 
 
-                if (notifyPickerSelection(pickUrl)) {
+                if (notifyPickerSelection(pickUrl, record)) {
 
                     return;
 
@@ -690,7 +841,7 @@
 
 
 
-                openExplorerImagePreview(displayUrl, record.originalFileName || record.fileName || '', pickUrl);
+                openExplorerImagePreview(displayUrl, record.originalFileName || record.fileName || '', pickUrl, record);
 
             });
 
@@ -707,13 +858,13 @@
                 e.preventDefault();
                 e.stopPropagation();
 
-                var pickUrl = explorerPickUrlForForm(record);
+                var pickUrl = explorerPickUrlForForm(record) || explorerDisplayImageUrl(record);
                 if (!pickUrl) {
                     abp.notify.warn(l('MediaExplorer:NoImageUrlHint'));
                     return;
                 }
 
-                notifyPickerSelection(pickUrl);
+                notifyPickerSelection(pickUrl, record);
             });
 
 
@@ -852,6 +1003,8 @@
                 host.append(buildItemMarkup(r));
 
             });
+
+            restoreGalleryBatchSelectionUi(host);
 
         }
 
@@ -1136,7 +1289,20 @@
 
 
         mf('img-pick-btn').on('click', function () {
-            if (notifyPickerSelection(explorerPreviewPickUrl)) {
+            if (isGalleryBatchPicker() && explorerPreviewPickRecord) {
+                var keyPb = explorerRecordKey(explorerPreviewPickRecord);
+                var $matchCard = keyPb ? mf('items-host').find('.mf-item-card[data-id="' + keyPb + '"]').first() : $();
+                toggleGalleryBatchSelection(
+                    explorerPreviewPickRecord,
+                    $matchCard.length ? $matchCard : $('<span/>')
+                );
+                var miPick = getExplorerImageBootstrapModal();
+                if (miPick) {
+                    miPick.hide();
+                }
+                return;
+            }
+            if (notifyPickerSelection(explorerPreviewPickUrl, explorerPreviewPickRecord)) {
                 var mi = getExplorerImageBootstrapModal();
                 if (mi) {
                     mi.hide();
@@ -1166,6 +1332,7 @@
 
 
             explorerPreviewPickUrl = '';
+            explorerPreviewPickRecord = null;
 
 
             mf('img-pick-btn').addClass('d-none');
@@ -1381,6 +1548,28 @@
     });
 
     window.kHHub = window.kHHub || {};
+    window.kHHub.clearMlpGalleryBatchSelection = function () {
+        var st = getGalleryBatchStore();
+        if (st) {
+            st.order.length = 0;
+            Object.keys(st.map).forEach(function (k) {
+                delete st.map[k];
+            });
+        }
+        clearGalleryBatchItemsUi();
+        syncGalleryBatchFooterAfterChange();
+    };
+    window.kHHub.getMlpGalleryBatchRecords = function () {
+        var st = getGalleryBatchStore();
+        if (!st) {
+            return [];
+        }
+        return st.order
+            .map(function (idKey) {
+                return st.map[idKey];
+            })
+            .filter(Boolean);
+    };
     window.kHHub.initMediaExplorerRoot = function (el) {
         mountMediaExplorer($(el));
     };

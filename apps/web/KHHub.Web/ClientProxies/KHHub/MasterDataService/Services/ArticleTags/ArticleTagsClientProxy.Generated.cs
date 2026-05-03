@@ -20,6 +20,23 @@ namespace KHHub.MasterDataService.Services.ArticleTags;
 [ExposeServices(typeof(IArticleTagsAppService), typeof(ArticleTagsClientProxy))]
 public partial class ArticleTagsClientProxy : ClientProxyBase<IArticleTagsAppService>, IArticleTagsAppService
 {
+    public virtual async Task<ArticleTagDto> CreateAsync(ArticleTagCreateDto input)
+    {
+        return await RequestAsync<ArticleTagDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(ArticleTagCreateDto), input }
+        });
+    }
+
+    public virtual async Task<ArticleTagDto> UpdateAsync(Guid id, ArticleTagUpdateDto input)
+    {
+        return await RequestAsync<ArticleTagDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id },
+            { typeof(ArticleTagUpdateDto), input }
+        });
+    }
+
     public virtual async Task<PagedResultDto<ArticleTagDto>> GetListAsync(GetArticleTagsInput input)
     {
         return await RequestAsync<PagedResultDto<ArticleTagDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
@@ -41,23 +58,6 @@ public partial class ArticleTagsClientProxy : ClientProxyBase<IArticleTagsAppSer
         await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
         {
             { typeof(Guid), id }
-        });
-    }
-
-    public virtual async Task<ArticleTagDto> CreateAsync(ArticleTagCreateDto input)
-    {
-        return await RequestAsync<ArticleTagDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
-        {
-            { typeof(ArticleTagCreateDto), input }
-        });
-    }
-
-    public virtual async Task<ArticleTagDto> UpdateAsync(Guid id, ArticleTagUpdateDto input)
-    {
-        return await RequestAsync<ArticleTagDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
-        {
-            { typeof(Guid), id },
-            { typeof(ArticleTagUpdateDto), input }
         });
     }
 

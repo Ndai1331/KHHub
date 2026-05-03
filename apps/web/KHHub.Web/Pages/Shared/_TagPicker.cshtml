@@ -1,0 +1,25 @@
+@model KHHub.Web.Pages.Shared.TagPickerViewModel
+@using KHHub.MasterDataService.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@{
+    var entityIdAttr = Model.EntityId.HasValue && Model.EntityId.Value != Guid.Empty
+        ? Model.EntityId.Value.ToString("D")
+        : "";
+}
+<div class="khhub-tag-picker mb-3"
+     data-kind="@Model.Kind"
+     data-entity-id="@entityIdAttr"
+     style="--khhub-tag-primary:#3B82F6;--khhub-tag-border:#E5E7EB;--khhub-tag-radius:8px;">
+    <label class="form-label mb-2">@L["Tags"].Value</label>
+    <p class="text-muted small mb-2">@L["TagPickerHint"].Value</p>
+    <div class="khhub-tag-picker-input-wrap position-relative">
+        <input type="text"
+               class="form-control khhub-tag-picker-search rounded-2"
+               autocomplete="off"
+               placeholder="@L["TagPickerSearchPlaceholder"].Value" />
+        <div class="khhub-tag-picker-menu shadow-sm border rounded-2 bg-white d-none"></div>
+    </div>
+    <div class="khhub-tag-picker-chips d-flex flex-wrap gap-2 mt-2"></div>
+    <input type="hidden" class="khhub-tag-picker-state" value="[]" />
+</div>

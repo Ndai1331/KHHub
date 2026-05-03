@@ -56,10 +56,21 @@ $(function () {
         if (!hasCustomSeoDescription) {
             $seoDescription.val(toSeoDescription($summary.val()));
         }
+        renderSlugPreview();
+    }
+
+    function renderSlugPreview() {
+        var $pv = $('#ArticleSlugPreview');
+        if (!$pv.length) {
+            return;
+        }
+        var s = ($slug.val() || '').trim();
+        $pv.text(s);
     }
 
     function detectCustomState() {
-        hasCustomSlug = !!$slug.val();
+        var generatedSlug = slugifyVietnamese($title.val());
+        hasCustomSlug = !!$slug.val() && $slug.val() !== generatedSlug;
         hasCustomSeoTitle = !!$seoTitle.val();
         hasCustomSeoDescription = !!$seoDescription.val();
     }
@@ -135,17 +146,15 @@ $(function () {
     syncSeoFields();
     initTinyMce();
 
-    $title.on('input', function () {
-        syncSeoFields();
-    });
+    if ($title.length) {
+        $title.on('input', function () {
+            syncSeoFields();
+        });
 
-    $summary.on('input', function () {
-        syncSeoFields();
-    });
-
-    $slug.on('input', function () {
-        hasCustomSlug = !!$(this).val();
-    });
+        $summary.on('input', function () {
+            syncSeoFields();
+        });
+    }
 
     $seoTitle.on('input', function () {
         hasCustomSeoTitle = !!$(this).val();

@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "KHHub",
+			"path": "."
+		},
+		{
+			"name": ".abpstudio",
+			"path": "../Projects/KHHub/.abpstudio"
+		},
+		{
+			"name": ".cursor",
+			"path": "../Projects/KHHub/.cursor"
+		}
+	],
+	"settings": {}
+}

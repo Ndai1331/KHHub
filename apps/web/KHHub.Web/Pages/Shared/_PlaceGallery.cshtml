@@ -1,0 +1,55 @@
+@model KHHub.Web.Pages.Shared.PlaceGalleryViewModel
+@using KHHub.MasterDataService.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+<input type="hidden" id="khhub-place-gallery-url-dummy" class="d-none" />
+@if (Model.PlaceId.HasValue && Model.PlaceId.Value != Guid.Empty)
+{
+    <div class="khhub-place-gallery mb-4"
+         data-place-id="@Model.PlaceId.Value.ToString("D")"
+         style="--khhub-gallery-primary:#3B82F6;--khhub-gallery-border:#E5E7EB;">
+        <h6 class="text-muted text-uppercase small mb-3">@L["PlaceMediasSection"].Value</h6>
+        <p class="text-muted small mb-3">@L["PlaceGalleryHint"].Value</p>
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <button type="button" class="btn btn-outline-primary btn-sm rounded-2 khhub-place-gallery-pick">
+                <i class="fa fa-picture-o me-1" aria-hidden="true"></i>@L["MediaLibrary:ChooseFromLibrary"].Value
+            </button>
+            <span class="khhub-place-gallery-busy small text-muted align-self-center d-none">@L["PlaceGalleryLoading"].Value</span>
+        </div>
+        <div class="khhub-place-gallery-thumbs d-flex flex-wrap gap-2 mb-2"></div>
+        <div class="khhub-place-gallery-more-wrap d-none mt-2">
+            <button type="button" class="btn btn-link p-0 khhub-place-gallery-view-more">@L["PlaceGalleryViewMore"].Value</button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="PlaceGalleryCarouselModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-3 overflow-hidden">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">@L["PlaceGalleryCarouselTitle"].Value</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div id="PlaceGalleryCarousel" class="carousel slide" data-bs-ride="false">
+                        <div class="carousel-inner khhub-place-gallery-carousel-inner bg-dark"></div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#PlaceGalleryCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#PlaceGalleryCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="mb-4">
+        <h6 class="text-muted text-uppercase small mb-2">@L["PlaceMediasSection"].Value</h6>
+        <abp-alert alert-type="Info" class="mb-0">@L["PlaceGallerySaveFirstHint"].Value</abp-alert>
+    </div>
+}

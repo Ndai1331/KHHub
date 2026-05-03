@@ -177,9 +177,27 @@
                     runWithBusy($createForm, function () {
                         return placeService.create(dto);
                     })
-                        .done(function () {
-                            abp.notify.success(l('PlaceSavedSuccessfully'));
-                            window.location.href = abp.appPath + 'Places';
+                        .done(function (created) {
+                            function finishSave() {
+                                abp.notify.success(l('PlaceSavedSuccessfully'));
+                                window.location.href = abp.appPath + 'Places';
+                            }
+                            var placeId = created && created.id;
+                            if (
+                                !placeId ||
+                                !window.kHHubTagPicker ||
+                                typeof window.kHHubTagPicker.syncPlaceTags !== 'function'
+                            ) {
+                                finishSave();
+                                return;
+                            }
+                            window.kHHubTagPicker
+                                .syncPlaceTags(placeId, $createForm)
+                                .done(finishSave)
+                                .fail(function () {
+                                    abp.notify.warn(l('TagPickerSyncFailed'));
+                                    finishSave();
+                                });
                         })
                         .fail(function (xhr) {
                             abp.notify.error(getErrorMessage(xhr));
@@ -219,8 +237,24 @@
                         return placeService.update(id, dto);
                     })
                         .done(function () {
-                            abp.notify.success(l('PlaceSavedSuccessfully'));
-                            window.location.href = abp.appPath + 'Places';
+                            function finishSave() {
+                                abp.notify.success(l('PlaceSavedSuccessfully'));
+                                window.location.href = abp.appPath + 'Places';
+                            }
+                            if (
+                                !window.kHHubTagPicker ||
+                                typeof window.kHHubTagPicker.syncPlaceTags !== 'function'
+                            ) {
+                                finishSave();
+                                return;
+                            }
+                            window.kHHubTagPicker
+                                .syncPlaceTags(id, $editForm)
+                                .done(finishSave)
+                                .fail(function () {
+                                    abp.notify.warn(l('TagPickerSyncFailed'));
+                                    finishSave();
+                                });
                         })
                         .fail(function (xhr) {
                             abp.notify.error(getErrorMessage(xhr));

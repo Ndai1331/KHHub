@@ -1,0 +1,93 @@
+﻿{
+  "selectedKubernetesProfile": "local",
+  "solutionRunner": {
+    "selectedProfile": "Default",
+    "targetFrameworks": [],
+    "applicationsStartingWithoutBuild": [],
+    "applicationsWithoutAutoRefreshBrowserOnRestart": [],
+    "applicationBatchStartStates": [
+      {
+        "profile": "Default",
+        "applicationOrFolder": "KHHub.AdministrationService",
+        "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "KHHub.AIManagementService",
+        "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "KHHub.AuditLoggingService",
+        "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "KHHub.AuthServer",
+        "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "KHHub.GdprService",
+        "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "KHHub.IdentityService",
+        "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "KHHub.LanguageService",
+        "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "KHHub.MobileGateway",
+        "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "KHHub.Web",
+        "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "KHHub.WebGateway",
+        "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "KHHub.MasterDataService",
+        "value": 0
+      }
+    ],
+    "folderBatchStartStates": [
+      {
+        "profile": "Aspire",
+        "applicationOrFolder": "AppHost",
+        "value": 0
+      },
+      {
+        "profile": "Aspire",
+        "applicationOrFolder": "Applications",
+        "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "apps",
+        "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "gateways",
+        "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "services",
+        "value": 0
+      }
+    ]
+  }
+}

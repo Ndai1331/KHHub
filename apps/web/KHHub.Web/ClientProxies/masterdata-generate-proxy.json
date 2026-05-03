@@ -3265,6 +3265,73 @@
             }
           ],
           "actions": {
+            "GetArticleTagLookupAsyncByInput": {
+              "uniqueName": "GetArticleTagLookupAsyncByInput",
+              "name": "GetArticleTagLookupAsync",
+              "httpMethod": "GET",
+              "url": "api/masterdata/article-tag-mappings/article-tag-lookup",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.Shared.LookupRequestDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.Shared.LookupRequestDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Shared.LookupRequestDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Shared.LookupDto<System.Guid>>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Shared.LookupDto<string>>"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.ArticleTagMappings",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.ArticleTagMappings.IArticleTagMappingsAppService"
+            },
             "GetListAsyncByInput": {
               "uniqueName": "GetListAsyncByInput",
               "name": "GetListAsync",
@@ -3480,73 +3547,6 @@
               "returnValue": {
                 "type": "KHHub.MasterDataService.Services.Dtos.ArticleTagMappings.ArticleTagMappingDto",
                 "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleTagMappings.ArticleTagMappingDto"
-              },
-              "allowAnonymous": false,
-              "authorizeDatas": [
-                {
-                  "policy": "MasterDataService.ArticleTagMappings",
-                  "roles": null
-                }
-              ],
-              "implementFrom": "KHHub.MasterDataService.Services.ArticleTagMappings.IArticleTagMappingsAppService"
-            },
-            "GetArticleTagLookupAsyncByInput": {
-              "uniqueName": "GetArticleTagLookupAsyncByInput",
-              "name": "GetArticleTagLookupAsync",
-              "httpMethod": "GET",
-              "url": "api/masterdata/article-tag-mappings/article-tag-lookup",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "input",
-                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.Shared.LookupRequestDto, KHHub.MasterDataService.Contracts",
-                  "type": "KHHub.MasterDataService.Services.Dtos.Shared.LookupRequestDto",
-                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.Shared.LookupRequestDto",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "input",
-                  "name": "Filter",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "SkipCount",
-                  "jsonName": null,
-                  "type": "System.Int32",
-                  "typeSimple": "number",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "MaxResultCount",
-                  "jsonName": null,
-                  "type": "System.Int32",
-                  "typeSimple": "number",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                }
-              ],
-              "returnValue": {
-                "type": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Shared.LookupDto<System.Guid>>",
-                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<KHHub.MasterDataService.Services.Dtos.Shared.LookupDto<string>>"
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -4276,6 +4276,120 @@
             }
           ],
           "actions": {
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/masterdata/article-tags",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagCreateDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagCreateDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagCreateDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.ArticleTags",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.ArticleTags.Create",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.ArticleTags.IArticleTagsAppService"
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/masterdata/article-tags/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagUpdateDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagUpdateDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagUpdateDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagDto"
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": "MasterDataService.ArticleTags",
+                  "roles": null
+                },
+                {
+                  "policy": "MasterDataService.ArticleTags.Edit",
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.MasterDataService.Services.ArticleTags.IArticleTagsAppService"
+            },
             "GetListAsyncByInput": {
               "uniqueName": "GetListAsyncByInput",
               "name": "GetListAsync",
@@ -4500,120 +4614,6 @@
                 },
                 {
                   "policy": "MasterDataService.ArticleTags.Delete",
-                  "roles": null
-                }
-              ],
-              "implementFrom": "KHHub.MasterDataService.Services.ArticleTags.IArticleTagsAppService"
-            },
-            "CreateAsyncByInput": {
-              "uniqueName": "CreateAsyncByInput",
-              "name": "CreateAsync",
-              "httpMethod": "POST",
-              "url": "api/masterdata/article-tags",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "input",
-                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagCreateDto, KHHub.MasterDataService.Contracts",
-                  "type": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagCreateDto",
-                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagCreateDto",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "input",
-                  "name": "input",
-                  "jsonName": null,
-                  "type": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagCreateDto",
-                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagCreateDto",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "Body",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagDto",
-                "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagDto"
-              },
-              "allowAnonymous": false,
-              "authorizeDatas": [
-                {
-                  "policy": "MasterDataService.ArticleTags",
-                  "roles": null
-                },
-                {
-                  "policy": "MasterDataService.ArticleTags.Create",
-                  "roles": null
-                }
-              ],
-              "implementFrom": "KHHub.MasterDataService.Services.ArticleTags.IArticleTagsAppService"
-            },
-            "UpdateAsyncByIdAndInput": {
-              "uniqueName": "UpdateAsyncByIdAndInput",
-              "name": "UpdateAsync",
-              "httpMethod": "PUT",
-              "url": "api/masterdata/article-tags/{id}",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "id",
-                  "typeAsString": "System.Guid, System.Private.CoreLib",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                },
-                {
-                  "name": "input",
-                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagUpdateDto, KHHub.MasterDataService.Contracts",
-                  "type": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagUpdateDto",
-                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagUpdateDto",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "id",
-                  "name": "id",
-                  "jsonName": null,
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
-                  "descriptorName": ""
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "input",
-                  "jsonName": null,
-                  "type": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagUpdateDto",
-                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagUpdateDto",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "Body",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagDto",
-                "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleTags.ArticleTagDto"
-              },
-              "allowAnonymous": false,
-              "authorizeDatas": [
-                {
-                  "policy": "MasterDataService.ArticleTags",
-                  "roles": null
-                },
-                {
-                  "policy": "MasterDataService.ArticleTags.Edit",
                   "roles": null
                 }
               ],

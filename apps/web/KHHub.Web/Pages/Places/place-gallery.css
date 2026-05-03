@@ -1,0 +1,38 @@
+.khhub-place-gallery-thumbs .khhub-place-gallery-thumb {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--khhub-gallery-border, #e5e7eb);
+    cursor: pointer;
+}
+
+.khhub-place-gallery-thumb-wrap {
+    position: relative;
+}
+
+.khhub-place-gallery-thumb-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    line-height: 1;
+    font-size: 12px;
+}
+
+.khhub-place-gallery-thumb-remove:hover {
+    background: rgba(239, 68, 68, 0.95);
+}
+
+.khhub-place-gallery-carousel-inner .carousel-item img {
+    max-height: 70vh;
+    width: 100%;
+    object-fit: contain;
+    background: #111827;
+}

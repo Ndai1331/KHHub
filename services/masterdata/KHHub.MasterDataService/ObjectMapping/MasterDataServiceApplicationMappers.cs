@@ -187,7 +187,7 @@ public partial class ArticleTagToLookupDtoGuidMapper : MapperBase<ArticleTag, Lo
 
     public override void AfterMap(ArticleTag source, LookupDto<Guid> destination)
     {
-        destination.DisplayName = source.Slug;
+        destination.DisplayName = source.Name;
     }
 }
 

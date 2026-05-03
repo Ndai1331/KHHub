@@ -17,18 +17,26 @@
         <abp-modal-body>
             <abp-row class="g-3 align-items-start">
                 <abp-column size-md="_6">
-                    <label class="form-label" asp-for="PlaceReview.PlaceId">@L["Place"].Value</label>
-                    <select asp-for="PlaceReview.PlaceId"
-                            class="auto-complete-select"
-                            data-autocomplete-api-url="@Url.Content("~/api/masterdata/place-reviews/place-lookup")"
-                            data-autocomplete-display-property="displayName"
-                            data-autocomplete-value-property="id"
-                            data-autocomplete-items-property="items"
-                            data-autocomplete-filter-param-name="filter"
-                            data-autocomplete-allow-clear="false"
-                            data-autocomplete-placeholder="@L["Search"].Value">
-                    </select>
-                    <span asp-validation-for="PlaceReview.PlaceId" class="text-danger d-block"></span>
+                    @if (Model.PlaceReview.PlaceId == Guid.Empty)
+                    {
+                        <label class="form-label" asp-for="PlaceReview.PlaceId">@L["Place"].Value</label>
+                        <select asp-for="PlaceReview.PlaceId"
+                                class="auto-complete-select"
+                                data-autocomplete-api-url="@Url.Content("~/api/masterdata/place-reviews/place-lookup")"
+                                data-autocomplete-display-property="displayName"
+                                data-autocomplete-value-property="id"
+                                data-autocomplete-items-property="items"
+                                data-autocomplete-filter-param-name="filter"
+                                data-autocomplete-allow-clear="false"
+                                data-autocomplete-placeholder="@L["Search"].Value">
+                        </select>
+                        <span asp-validation-for="PlaceReview.PlaceId" class="text-danger d-block"></span>
+                    }
+                    else
+                    {
+                        <input type="hidden" asp-for="PlaceReview.PlaceId" />
+                        <p class="text-muted small mb-3">@L["PlaceReviewLinkedPlaceHint"].Value</p>
+                    }
                     <div class="mt-3">
                         <abp-input asp-for="PlaceReview.Rating" label="@L["Rating"].Value" />
                     </div>

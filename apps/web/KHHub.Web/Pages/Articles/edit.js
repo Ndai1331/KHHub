@@ -7,6 +7,7 @@ $(function () {
     var hasCustomSlug = true;
     var hasCustomSeoTitle = true;
     var hasCustomSeoDescription = true;
+    var l = abp.localization.getResource('MasterDataService');
 
     function normalizeVietnamese(text) {
         return (text || '')
@@ -55,6 +56,16 @@ $(function () {
         if (!hasCustomSeoDescription) {
             $seoDescription.val(toSeoDescription($summary.val()));
         }
+        renderSlugPreview();
+    }
+
+    function renderSlugPreview() {
+        var $pv = $('#ArticleSlugPreview');
+        if (!$pv.length) {
+            return;
+        }
+        var s = ($slug.val() || '').trim();
+        $pv.text(s);
     }
 
     function detectCustomState() {
@@ -143,10 +154,6 @@ $(function () {
         syncSeoFields();
     });
 
-    $slug.on('input', function () {
-        hasCustomSlug = !!$(this).val();
-    });
-
     $seoTitle.on('input', function () {
         hasCustomSeoTitle = !!$(this).val();
     });
@@ -162,7 +169,6 @@ $(function () {
     });
 
     var articleService = window.kHHub.masterDataService.services.articles.articles;
-    var l = abp.localization.getResource('MasterDataService');
 
     var $deleteBtn = $('#DeleteArticleButton');
     if ($deleteBtn.length) {

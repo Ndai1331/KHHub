@@ -13,7 +13,19 @@ namespace KHHub.Web.Pages.PlaceReviews;
 
 public class CreateModalModel : CreateModalModelBase
 {
+    [BindProperty(SupportsGet = true)]
+    public Guid? PlaceId { get; set; }
+
     public CreateModalModel(IPlaceReviewsAppService placeReviewsAppService) : base(placeReviewsAppService)
     {
+    }
+
+    public override async Task OnGetAsync()
+    {
+        await base.OnGetAsync();
+        if (PlaceId.HasValue && PlaceId.Value != Guid.Empty)
+        {
+            PlaceReview.PlaceId = PlaceId.Value;
+        }
     }
 }

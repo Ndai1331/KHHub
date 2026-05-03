@@ -148,9 +148,27 @@
                     runWithBusy($createForm, function () {
                         return articleService.create(dto);
                     })
-                        .done(function () {
-                            abp.notify.success(l('ArticleSavedSuccessfully'));
-                            window.location.href = abp.appPath + 'Articles';
+                        .done(function (created) {
+                            function finishSave() {
+                                abp.notify.success(l('ArticleSavedSuccessfully'));
+                                window.location.href = abp.appPath + 'Articles';
+                            }
+                            var articleId = created && created.id;
+                            if (
+                                !articleId ||
+                                !window.kHHubTagPicker ||
+                                typeof window.kHHubTagPicker.syncArticleTags !== 'function'
+                            ) {
+                                finishSave();
+                                return;
+                            }
+                            window.kHHubTagPicker
+                                .syncArticleTags(articleId, $createForm)
+                                .done(finishSave)
+                                .fail(function () {
+                                    abp.notify.warn(l('TagPickerSyncFailed'));
+                                    finishSave();
+                                });
                         })
                         .fail(function (xhr) {
                             abp.notify.error(getErrorMessage(xhr));
@@ -191,8 +209,24 @@
                         return articleService.update(id, dto);
                     })
                         .done(function () {
-                            abp.notify.success(l('ArticleSavedSuccessfully'));
-                            window.location.href = abp.appPath + 'Articles';
+                            function finishSave() {
+                                abp.notify.success(l('ArticleSavedSuccessfully'));
+                                window.location.href = abp.appPath + 'Articles';
+                            }
+                            if (
+                                !window.kHHubTagPicker ||
+                                typeof window.kHHubTagPicker.syncArticleTags !== 'function'
+                            ) {
+                                finishSave();
+                                return;
+                            }
+                            window.kHHubTagPicker
+                                .syncArticleTags(id, $editForm)
+                                .done(finishSave)
+                                .fail(function () {
+                                    abp.notify.warn(l('TagPickerSyncFailed'));
+                                    finishSave();
+                                });
                         })
                         .fail(function (xhr) {
                             abp.notify.error(getErrorMessage(xhr));

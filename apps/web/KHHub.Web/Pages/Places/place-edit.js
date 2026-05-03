@@ -55,6 +55,16 @@ $(function () {
         if (!hasCustomSeoDescription) {
             $seoDescription.val(toSeoDescription($short.val()));
         }
+        renderSlugPreview();
+    }
+
+    function renderSlugPreview() {
+        var $pv = $('#PlaceSlugPreview');
+        if (!$pv.length) {
+            return;
+        }
+        var s = ($slug.val() || '').trim();
+        $pv.text(s);
     }
 
     function detectCustomState() {
@@ -78,10 +88,6 @@ $(function () {
 
     $short.on('input', function () {
         syncSeoFields();
-    });
-
-    $slug.on('input', function () {
-        hasCustomSlug = !!$(this).val();
     });
 
     $seoTitle.on('input', function () {

@@ -40,7 +40,12 @@
         bootstrap.Modal.getOrCreateInstance($modal[0]).show();
     });
 
-    $modal.on('shown.bs.modal', function () {
+    // Modal events bubble in Bootstrap 5. Ignore nested modal (#khhub-mlp-image-preview-modal)
+    // inside the explorer or hook gets cleared / explorer reload runs when only the inner modal closes.
+    $modal.on('shown.bs.modal', function (e) {
+        if (e.target !== $modal[0]) {
+            return;
+        }
         var wasMounted = !!$root.data('mf-mounted');
         if (window.kHHub && typeof window.kHHub.initMediaExplorerRoot === 'function') {
             window.kHHub.initMediaExplorerRoot($root[0]);
@@ -53,7 +58,10 @@
         }
     });
 
-    $modal.on('hidden.bs.modal', function () {
+    $modal.on('hidden.bs.modal', function (e) {
+        if (e.target !== $modal[0]) {
+            return;
+        }
         window.__KHHubMediaExplorerOnPick = undefined;
     });
 })();

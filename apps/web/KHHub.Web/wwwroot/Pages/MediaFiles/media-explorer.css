@@ -263,6 +263,42 @@
     box-shadow: 0 8px 16px rgba(15, 23, 42, 0.06);
 }
 
+/* Place gallery batch picker: WordPress-style selection */
+.mf-explorer-root[data-khhub-gallery-batch='true'] .mf-item-card.mf-item-selected {
+    border-color: var(--mf-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
+    background: rgba(59, 130, 246, 0.06);
+}
+
+.mf-explorer-root[data-khhub-gallery-batch='true'] .mf-item-card.mf-item-selected .mf-thumb-frame {
+    border-color: var(--mf-primary);
+}
+
+.mf-explorer-root[data-khhub-gallery-batch='true'] .mf-item-card.mf-item-selected::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    background: var(--mf-primary);
+    z-index: 3;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.18);
+}
+
+.mf-explorer-root[data-khhub-gallery-batch='true'] .mf-item-card.mf-item-selected::after {
+    content: '\2713';
+    position: absolute;
+    top: 14px;
+    left: 17px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    z-index: 4;
+    line-height: 1;
+}
+
 /* Opacity must NOT apply to wrapper: it composites the entire subtree (menu included). */
 .mf-item-menu-btn {
     position: absolute;

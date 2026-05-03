@@ -20,6 +20,14 @@ namespace KHHub.MasterDataService.Services.ArticleTagMappings;
 [ExposeServices(typeof(IArticleTagMappingsAppService), typeof(ArticleTagMappingsClientProxy))]
 public partial class ArticleTagMappingsClientProxy : ClientProxyBase<IArticleTagMappingsAppService>, IArticleTagMappingsAppService
 {
+    public virtual async Task<PagedResultDto<LookupDto<Guid>>> GetArticleTagLookupAsync(LookupRequestDto input)
+    {
+        return await RequestAsync<PagedResultDto<LookupDto<Guid>>>(nameof(GetArticleTagLookupAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(LookupRequestDto), input }
+        });
+    }
+
     public virtual async Task<PagedResultDto<ArticleTagMappingWithNavigationPropertiesDto>> GetListAsync(GetArticleTagMappingsInput input)
     {
         return await RequestAsync<PagedResultDto<ArticleTagMappingWithNavigationPropertiesDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
@@ -41,14 +49,6 @@ public partial class ArticleTagMappingsClientProxy : ClientProxyBase<IArticleTag
         return await RequestAsync<ArticleTagMappingDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
             { typeof(Guid), id }
-        });
-    }
-
-    public virtual async Task<PagedResultDto<LookupDto<Guid>>> GetArticleTagLookupAsync(LookupRequestDto input)
-    {
-        return await RequestAsync<PagedResultDto<LookupDto<Guid>>>(nameof(GetArticleTagLookupAsync), new ClientProxyRequestTypeValue
-        {
-            { typeof(LookupRequestDto), input }
         });
     }
 
