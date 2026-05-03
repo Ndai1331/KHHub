@@ -93,12 +93,16 @@ public sealed class MinioBlobReadUrlSigner : IMinioBlobReadUrlSigner
         var accessKey = sec["AccessKey"];
         var secretKey = sec["SecretKey"];
 
-        var raw =
-            string.IsNullOrWhiteSpace(mediaOptions.PresignPublicEndpoint)
-                ? sec["EndPoint"]
-                : mediaOptions.PresignPublicEndpoint;
+        var usePresignEndpoint = !string.IsNullOrWhiteSpace(mediaOptions.PresignPublicEndpoint);
+        var rawSource = usePresignEndpoint
+            ? mediaOptions.PresignPublicEndpoint!.Trim()
+            : (sec["EndPoint"] ?? "").Trim();
 
-        raw = StripScheme(raw);
+        // Public nginx TLS (e.g. https://minio.khub.id.vn:443) vs internal HTTP minio:9000 for blob IO.
+        var presignHttps = usePresignEndpoint
+            && rawSource.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+
+        var raw = StripScheme(rawSource);
 
         if (string.IsNullOrWhiteSpace(raw)
             || string.IsNullOrWhiteSpace(accessKey)
@@ -116,7 +120,7 @@ public sealed class MinioBlobReadUrlSigner : IMinioBlobReadUrlSigner
             return null;
         }
 
-        var withSsl = sec.GetValue("WithSSL", false);
+        var withSsl = presignHttps || (!usePresignEndpoint && sec.GetValue("WithSSL", false));
 
         try
         {

@@ -26,8 +26,9 @@ public class MediaFilesStorageOptions
     public int PresignedReadExpirySeconds { get; set; } = 3600;
 
     /// <summary>
-    /// Optional Host:Port (or bracketed IPv6 <c>[::1]:9000</c>) used when building presigned URLs.
+    /// Optional host (with optional scheme/port) used when building presigned URLs.
     /// Overrides <c>BlobStoring:Minio:EndPoint</c> when backend must advertise a browser-reachable address.
+    /// Use <c>https://minio.example.com:443</c> when TLS terminates at nginx so SDK generates HTTPS presigned links.
     /// </summary>
     public string? PresignPublicEndpoint { get; set; }
 }
