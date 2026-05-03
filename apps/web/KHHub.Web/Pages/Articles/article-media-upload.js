@@ -28,6 +28,15 @@ $(function () {
         MP.applyPreviewToImg($img, url);
     }
 
+    function resolveUploadEndpoint($fileInput) {
+        var custom = $fileInput.data('upload-url');
+        if (custom) {
+            var s = String(custom);
+            return s.indexOf('/') === 0 ? s : abp.appPath + s;
+        }
+        return abp.appPath + 'Articles/MediaUpload';
+    }
+
     function hydrateRelativeMediaPreviewsOnLoad() {
         if (window.__khhubMediaUsePresignedReadUrls !== true) {
             return;
@@ -37,6 +46,8 @@ $(function () {
             ['#ArticleCoverImageUrl', '#ArticleCoverPreview'],
             ['#PlaceThumbnailUrl', '#PlaceThumbnailPreview'],
             ['#PlaceCoverImageUrl', '#PlaceCoverPreview'],
+            ['#HomeBannerImageUrl', '#HomeBannerImagePreview'],
+            ['#HomeBannerMobileImageUrl', '#HomeBannerMobileImagePreview'],
         ];
         pairs.forEach(function (pair) {
             var $inp = $(pair[0]);
@@ -104,7 +115,7 @@ $(function () {
         abp.ui.setBusy($form);
 
         abp.ajax({
-            url: abp.appPath + 'Articles/MediaUpload',
+            url: resolveUploadEndpoint($fileInput),
             type: 'POST',
             data: formData,
             processData: false,
@@ -149,6 +160,16 @@ $(function () {
             setPreview('#PlaceThumbnailPreview', url);
         } else if (id === 'PlaceCoverImageUrl') {
             setPreview('#PlaceCoverPreview', url);
+        }
+    });
+
+    $(document).on('change input', '#HomeBannerImageUrl, #HomeBannerMobileImageUrl', function () {
+        var id = $(this).attr('id');
+        var url = $(this).val();
+        if (id === 'HomeBannerImageUrl') {
+            setPreview('#HomeBannerImagePreview', url);
+        } else if (id === 'HomeBannerMobileImageUrl') {
+            setPreview('#HomeBannerMobileImagePreview', url);
         }
     });
 

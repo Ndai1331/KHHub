@@ -1,3 +1,5 @@
+using KHHub.MasterDataService.Services.Dtos.HomeBanners;
+using KHHub.MasterDataService.Entities.HomeBanners;
 using KHHub.MasterDataService.Services.Dtos.PlaceViews;
 using KHHub.MasterDataService.Entities.PlaceViews;
 using KHHub.MasterDataService.Services.Dtos.PlaceFavorites;
@@ -450,4 +452,18 @@ public partial class PlaceViewWithNavigationPropertiesToPlaceViewWithNavigationP
 {
     public override partial PlaceViewWithNavigationPropertiesDto Map(PlaceViewWithNavigationProperties source);
     public override partial void Map(PlaceViewWithNavigationProperties source, PlaceViewWithNavigationPropertiesDto destination);
+}
+
+[Mapper]
+public partial class HomeBannerToHomeBannerDtoMappers : MapperBase<HomeBanner, HomeBannerDto>
+{
+    public override partial HomeBannerDto Map(HomeBanner source);
+    public override partial void Map(HomeBanner source, HomeBannerDto destination);
+}
+
+[Mapper]
+public partial class HomeBannerToHomeBannerExcelDtoMappers : MapperBase<HomeBanner, HomeBannerExcelDto>
+{
+    public override partial HomeBannerExcelDto Map(HomeBanner source);
+    public override partial void Map(HomeBanner source, HomeBannerExcelDto destination);
 }

@@ -117,14 +117,12 @@ public class KHHubWebModule : AbpModule
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
-
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
         }
 
         app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
-
         if (!env.IsDevelopment())
         {
             app.Use((ctx, next) => {
@@ -132,14 +130,12 @@ public class KHHubWebModule : AbpModule
                 {
                     ctx.Request.Scheme = "https";
                 }
+
                 return next();
             });
         }
 
-        app.UseWhen(
-            ctx => !IsHealthOrMetricsProbePath(ctx.Request.Path),
-            branch => branch.UseAbpRequestLocalization());
-
+        app.UseWhen(ctx => !IsHealthOrMetricsProbePath(ctx.Request.Path), branch => branch.UseAbpRequestLocalization());
         if (!env.IsDevelopment())
         {
             app.UseErrorPage();
@@ -212,6 +208,7 @@ public class KHHubWebModule : AbpModule
             options.Conventions.AuthorizePage("/PlaceReviews/Index", MasterDataServicePermissions.PlaceReviews.Default);
             options.Conventions.AuthorizePage("/PlaceFavorites/Index", MasterDataServicePermissions.PlaceFavorites.Default);
             options.Conventions.AuthorizePage("/PlaceViews/Index", MasterDataServicePermissions.PlaceViews.Default);
+            options.Conventions.AuthorizePage("/HomeBanners/Index", MasterDataServicePermissions.HomeBanners.Default);
         });
     }
 
@@ -379,9 +376,6 @@ public class KHHubWebModule : AbpModule
 
     private static bool IsHealthOrMetricsProbePath(PathString path)
     {
-        return path.StartsWithSegments("/health-status")
-            || path.StartsWithSegments("/health-ui")
-            || path.StartsWithSegments("/health-api")
-            || path.StartsWithSegments("/metrics");
+        return path.StartsWithSegments("/health-status") || path.StartsWithSegments("/health-ui") || path.StartsWithSegments("/health-api") || path.StartsWithSegments("/metrics");
     }
 }

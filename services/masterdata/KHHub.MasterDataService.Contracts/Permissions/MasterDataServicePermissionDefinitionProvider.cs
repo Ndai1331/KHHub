@@ -73,6 +73,10 @@ public class MasterDataServicePermissionDefinitionProvider : PermissionDefinitio
         placeViewPermission.AddChild(MasterDataServicePermissions.PlaceViews.Create, L("Permission:Create"));
         placeViewPermission.AddChild(MasterDataServicePermissions.PlaceViews.Edit, L("Permission:Edit"));
         placeViewPermission.AddChild(MasterDataServicePermissions.PlaceViews.Delete, L("Permission:Delete"));
+        var homeBannerPermission = myGroup.AddPermission(MasterDataServicePermissions.HomeBanners.Default, L("Permission:HomeBanners"));
+        homeBannerPermission.AddChild(MasterDataServicePermissions.HomeBanners.Create, L("Permission:Create"));
+        homeBannerPermission.AddChild(MasterDataServicePermissions.HomeBanners.Edit, L("Permission:Edit"));
+        homeBannerPermission.AddChild(MasterDataServicePermissions.HomeBanners.Delete, L("Permission:Delete"));
     }
 
     private static LocalizableString L(string name)

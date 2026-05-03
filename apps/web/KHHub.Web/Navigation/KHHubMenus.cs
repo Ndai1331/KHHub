@@ -25,4 +25,5 @@ public class KHHubMenus
     public const string PlaceReviews = Prefix + ".PlaceReviews";
     public const string PlaceFavorites = Prefix + ".PlaceFavorites";
     public const string PlaceViews = Prefix + ".PlaceViews";
+    public const string HomeBanners = Prefix + ".HomeBanners";
 }

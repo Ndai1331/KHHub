@@ -1,3 +1,4 @@
+using KHHub.MasterDataService.Entities.HomeBanners;
 using KHHub.MasterDataService.Entities.PlaceViews;
 using KHHub.MasterDataService.Entities.PlaceFavorites;
 using KHHub.MasterDataService.Entities.PlaceReviews;
@@ -68,6 +69,7 @@ using KHHub.MasterDataService.Services.MediaFiles;
 using Microsoft.AspNetCore.Http.Features;
 
 namespace KHHub.MasterDataService;
+
 [DependsOn(typeof(AbpBlobStoringMinioModule), typeof(AbpSettingManagementEntityFrameworkCoreModule), typeof(AbpEntityFrameworkCorePostgreSqlModule), typeof(LanguageManagementEntityFrameworkCoreModule), typeof(AbpPermissionManagementEntityFrameworkCoreModule), typeof(AbpFeatureManagementEntityFrameworkCoreModule), typeof(AbpAuditLoggingEntityFrameworkCoreModule), typeof(KHHubMasterDataServiceContractsModule), typeof(AbpAutofacModule), typeof(AbpAspNetCoreSerilogModule), typeof(AbpSwashbuckleModule), typeof(AbpAspNetCoreMvcModule), typeof(AbpEventBusRabbitMqModule), typeof(AbpBackgroundJobsRabbitMqModule), typeof(AbpCachingStackExchangeRedisModule), typeof(AbpDistributedLockingModule), typeof(AbpStudioClientAspNetCoreModule), typeof(AbpHttpClientModule))]
 public class KHHubMasterDataServiceModule : AbpModule
 {
@@ -126,15 +128,9 @@ public class KHHubMasterDataServiceModule : AbpModule
 
     private static void ConfigureMediaExplorerUploadLimits(ServiceConfigurationContext context, IConfiguration configuration)
     {
-        context.Services.Configure<MediaFilesStorageOptions>(
-            configuration.GetSection(MediaFilesStorageOptions.SectionName));
-
-        var maxUpload = configuration.GetValue<long?>(
-            $"{MediaFilesStorageOptions.SectionName}:{nameof(MediaFilesStorageOptions.MaxUploadBytes)}")
-                        ?? 104_857_600;
-
-        context.Services.Configure<FormOptions>(o =>
-        {
+        context.Services.Configure<MediaFilesStorageOptions>(configuration.GetSection(MediaFilesStorageOptions.SectionName));
+        var maxUpload = configuration.GetValue<long?>($"{MediaFilesStorageOptions.SectionName}:{nameof(MediaFilesStorageOptions.MaxUploadBytes)}") ?? 104_857_600;
+        context.Services.Configure<FormOptions>(o => {
             if (maxUpload > 0)
             {
                 o.MultipartBodyLengthLimit = Math.Max(maxUpload, 1_048_576);
@@ -278,6 +274,7 @@ public class KHHubMasterDataServiceModule : AbpModule
             options.AddRepository<KHHub.MasterDataService.Entities.PlaceReviews.PlaceReview, Data.PlaceReviews.EfCorePlaceReviewRepository>();
             options.AddRepository<KHHub.MasterDataService.Entities.PlaceFavorites.PlaceFavorite, Data.PlaceFavorites.EfCorePlaceFavoriteRepository>();
             options.AddRepository<KHHub.MasterDataService.Entities.PlaceViews.PlaceView, Data.PlaceViews.EfCorePlaceViewRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.HomeBanners.HomeBanner, Data.HomeBanners.EfCoreHomeBannerRepository>();
         });
         Configure<AbpDbContextOptions>(options => {
             options.Configure(opts => {

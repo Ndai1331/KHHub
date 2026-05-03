@@ -1,0 +1,143 @@
+@page
+@using KHHub.MasterDataService.Localization
+@using KHHub.Web.Navigation
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@inject IPageLayout PageLayout
+@model KHHub.Web.Pages.HomeBanners.CreateModel
+@{
+    PageLayout.Content.Title = L["NewHomeBanner"].Value;
+    PageLayout.Content.MenuItemName = KHHubMenus.HomeBanners;
+}
+
+@section styles
+{
+    <link rel="stylesheet" href="~/Pages/MediaFiles/media-explorer.css" asp-append-version="true" />
+}
+
+@section scripts
+{
+    <partial name="~/Pages/Shared/_MediaPreviewSettings.cshtml" />
+    <script src="~/Pages/Shared/khhub-media-preview.js" asp-append-version="true"></script>
+    <abp-script src="/Pages/Articles/article-media-upload.js" />
+    <abp-script src="/Pages/HomeBanners/home-banner-form-save.js" />
+    <abp-script src="/Pages/MediaFiles/index.js" />
+    <abp-script src="/Pages/Shared/media-library-picker.js" />
+}
+
+@section content_toolbar
+{
+    <a asp-page="./Index" class="btn btn-secondary"><i class="fa fa-arrow-left me-1"></i>@L["BackToList"].Value</a>
+    <abp-button id="SaveHomeBannerButton" button-type="Primary" text="@L["Save"].Value" icon="save" form="HomeBannerCreateForm" type="submit" />
+}
+
+<p class="text-muted mb-4">@L["HomeBannerFormLayoutHint"].Value</p>
+
+<form id="HomeBannerCreateForm" method="post" autocomplete="off" data-home-banner-mode="create">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="All" class="text-danger mb-2"></div>
+    <abp-row>
+        <abp-column size-md="_8">
+            <abp-card class="mb-4">
+                <abp-card-header>
+                    <h5 class="mb-0">@L["BasicInfo"].Value</h5>
+                </abp-card-header>
+                <abp-card-body>
+                    <abp-input asp-for="HomeBanner.Title" label="@L["Title"].Value" autofocus="true" />
+                    <abp-input asp-for="HomeBanner.Subtitle" label="@L["Subtitle"].Value" />
+                    <abp-input asp-for="HomeBanner.Description" text-area="true" label="@L["Description"].Value" />
+
+                    <abp-row class="g-3 mt-2 mb-2">
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="HomeBanner.ButtonText" label="@L["ButtonText"].Value" />
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="HomeBanner.ButtonUrl" label="@L["ButtonUrl"].Value" />
+                        </abp-column>
+                    </abp-row>
+
+                    <abp-row class="g-3 mb-2">
+                        <abp-column size-md="_6">
+                            <abp-select asp-for="HomeBanner.TargetType" asp-items="@Model.TargetTypeList" label="@L["TargetType"].Value" />
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="HomeBanner.TargetId" label="@L["TargetId"].Value" />
+                        </abp-column>
+                    </abp-row>
+
+                    <abp-row class="g-3 mb-2">
+                        <abp-column size-md="_4">
+                            <abp-input asp-for="HomeBanner.SortOrder" label="@L["SortOrder"].Value" />
+                        </abp-column>
+                        <abp-column size-md="_4">
+                            <abp-input asp-for="HomeBanner.IsActive" label="@L["IsActive"].Value" />
+                        </abp-column>
+                    </abp-row>
+
+                    <abp-row class="g-3 mb-0">
+                        <abp-column size-md="_6">
+                            <abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="HomeBanner.StartDate" label="@L["StartDate"].Value" />
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="HomeBanner.EndDate" label="@L["EndDate"].Value" />
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
+
+        <abp-column size-md="_4">
+            <abp-card class="mb-4">
+                <abp-card-header>
+                    <h5 class="mb-0">@L["HomeBannerInformation"].Value</h5>
+                </abp-card-header>
+                <abp-card-body>
+                    <h6 class="text-muted text-uppercase small mb-2">@L["Media"].Value</h6>
+                    <p class="text-muted small mb-3">@L["HomeBannerMediaHint"].Value</p>
+
+                    <div class="mb-3">
+                        <label class="form-label">@L["ImageUrl"].Value</label>
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            <button type="button" class="btn btn-outline-primary btn-sm rounded-2 khhub-media-library-open"
+                                    data-url-target="#HomeBannerImageUrl" data-preview-target="#HomeBannerImagePreview">
+                                <i class="fa fa-picture-o me-1" aria-hidden="true"></i>@L["MediaLibrary:ChooseFromLibrary"].Value
+                            </button>
+                        </div>
+                        <label class="form-label small text-muted mb-1">@L["UploadFromDevice"].Value</label>
+                        <input type="file"
+                               class="form-control article-media-upload mb-2"
+                               accept="image/*"
+                               data-upload-url="HomeBanners/MediaUpload"
+                               data-url-target="#HomeBannerImageUrl"
+                               data-preview-target="#HomeBannerImagePreview" />
+                        <img id="HomeBannerImagePreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 d-none" style="max-height: 200px;" />
+                        <abp-input asp-for="HomeBanner.ImageUrl" suppress-label="true" id="HomeBannerImageUrl" />
+                        <span asp-validation-for="HomeBanner.ImageUrl" class="text-danger d-block"></span>
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="form-label">@L["MobileImageUrl"].Value</label>
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            <button type="button" class="btn btn-outline-primary btn-sm rounded-2 khhub-media-library-open"
+                                    data-url-target="#HomeBannerMobileImageUrl" data-preview-target="#HomeBannerMobileImagePreview">
+                                <i class="fa fa-picture-o me-1" aria-hidden="true"></i>@L["MediaLibrary:ChooseFromLibrary"].Value
+                            </button>
+                        </div>
+                        <label class="form-label small text-muted mb-1">@L["UploadFromDevice"].Value</label>
+                        <input type="file"
+                               class="form-control article-media-upload mb-2"
+                               accept="image/*"
+                               data-upload-url="HomeBanners/MediaUpload"
+                               data-url-target="#HomeBannerMobileImageUrl"
+                               data-preview-target="#HomeBannerMobileImagePreview" />
+                        <img id="HomeBannerMobileImagePreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 d-none" style="max-height: 200px;" />
+                        <abp-input asp-for="HomeBanner.MobileImageUrl" suppress-label="true" id="HomeBannerMobileImageUrl" />
+                    </div>
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
+    </abp-row>
+</form>
+
+<partial name="~/Pages/Shared/MediaLibraryPickerModal.cshtml" />

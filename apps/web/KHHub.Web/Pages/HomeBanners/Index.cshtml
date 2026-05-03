@@ -1,0 +1,161 @@
+@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using KHHub.MasterDataService.Permissions
+@using KHHub.Web.Pages.HomeBanners
+@using KHHub.Web.Navigation
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@inject IAuthorizationService Authorization
+@model IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["HomeBanners"].Value;
+    PageLayout.Content.MenuItemName = KHHubMenus.HomeBanners;
+}
+@section styles
+{
+<style>
+    .home-banner-thumb {
+        height: 40px;
+        width: 72px;
+        max-width: 72px !important;
+        max-height: 40px !important;
+        min-width: 72px !important;
+        min-height: 40px !important;
+        border-radius: 8px !important;
+        object-fit: cover;
+    }
+</style>
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+}
+@section scripts
+{
+    <partial name="~/Pages/Shared/_MediaPreviewSettings.cshtml" />
+    <script src="~/Pages/Shared/khhub-media-preview.js" asp-append-version="true"></script>
+    <abp-script src="/Pages/HomeBanners/index.js" />
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+}
+@section content_toolbar {
+    <abp-button id="ExportToExcelButton" text="@L["ExportToExcel"].Value" icon="download" size="Small" button-type="Primary" />
+    @if (await Authorization.IsGrantedAsync(MasterDataServicePermissions.HomeBanners.Create))
+    {
+        <abp-button id="NewHomeBannerButton" text="@L["NewHomeBanner"].Value" icon="plus" size="Small" button-type="Primary" />
+    }
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+}
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+<abp-card>
+    <abp-card-body>
+		<abp-row class="mb-3">
+            <abp-column size-md="_8" size-lg="_10">
+                <div class="mb-3">
+                    <form id="SearchForm" autocomplete="off">
+                        <div class="input-group">
+                            <input class="form-control page-search-filter-text" id="FilterText" placeholder="@L["Search"]"/>
+                            <abp-button button-type="Primary" type="submit" icon="search"/>
+                        </div>
+                    </form>
+                </div>
+            </abp-column>
+            <abp-column size-md="_4" size-lg="_2">
+                <div class="mb-3">
+                    <abp-button style="width:100%" id="AdvancedFilterSectionToggler" button-type="Outline_Primary">
+                        @L["Filters"]<i aria-hidden="true" class="fa ms-1 fa-angle-down"></i>
+                    </abp-button>
+                </div>
+            </abp-column>
+        </abp-row>
+        <abp-row id="AdvancedFilterSection" class="mt-3" style="display: none;">
+            <abp-column size="_3">
+                <abp-input asp-for="TitleFilter" label="@L["Title"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SubtitleFilter" label="@L["Subtitle"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="DescriptionFilter" label="@L["Description"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ImageUrlFilter" label="@L["ImageUrl"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="MobileImageUrlFilter" label="@L["MobileImageUrl"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ButtonTextFilter" label="@L["ButtonText"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ButtonUrlFilter" label="@L["ButtonUrl"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="TargetTypeFilter" label="@L["TargetType"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="TargetIdFilter" label="@L["TargetId"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SortOrderFilterMin" label="@L["MinSortOrder"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SortOrderFilterMax" label="@L["MaxSortOrder"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="IsActiveFilter" label="@L["IsActive"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-date-picker auto-update-input="false" today-button-classes="btn-primary" asp-for="StartDateFilterMin" label="@L["MinStartDate"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-date-picker auto-update-input="false" today-button-classes="btn-primary" asp-for="StartDateFilterMax" label="@L["MaxStartDate"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-date-picker auto-update-input="false" today-button-classes="btn-primary" asp-for="EndDateFilterMin" label="@L["MinEndDate"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-date-picker auto-update-input="false" today-button-classes="btn-primary" asp-for="EndDateFilterMax" label="@L["MaxEndDate"].Value" />
+            </abp-column>
+@*//<suite-custom-code-block-5>*@
+@*//</suite-custom-code-block-5>*@
+        </abp-row>
+        <div id="bulk-delete-context-menu" class="d-none">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <p class="lead mb-0 d-none" id="items-selected-info-message"></p>
+                <div>
+                    <button class="btn btn-outline-secondary d-none mx-1" id="select-all-items-btn"></button>
+                    <button class="btn btn-outline-secondary d-none mx-1" id="clear-selection-btn">
+                        @L["ClearSelection"]
+                    </button>
+                    <button class="btn btn-danger mx-1" id="delete-selected-items">
+                        <i class="fa fa-trash"></i> @L["Delete"]
+                    </button>
+                </div>
+            </div>
+            <hr class="my-1 mx-0"/>
+        </div>
+        <abp-table striped-rows="true" hoverable-rows="true" id="HomeBannersTable">
+            <thead>
+				<tr>
+				    <th id="BulkDeleteCheckboxTheader"><input type="checkbox" id="select_all" class="form-check-input" /></th>
+					<th>@L["Actions"]</th>
+					<th style="width: 88px;">@L["BannerListImageColumn"]</th>
+					<th>@L["Title"]</th>
+					<th>@L["SortOrder"]</th>
+					<th>@L["IsActive"]</th>
+					<th>@L["StartDate"]</th>
+					<th>@L["EndDate"]</th>
+					<th>@L["TargetType"]</th>
+@*//<suite-custom-code-block-6>*@
+@*//</suite-custom-code-block-6>*@
+				</tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>
+@*//<suite-custom-code-block-7>*@
+@*//</suite-custom-code-block-7>*@

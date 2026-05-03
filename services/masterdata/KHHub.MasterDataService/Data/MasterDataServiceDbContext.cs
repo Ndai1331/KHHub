@@ -1,3 +1,4 @@
+using KHHub.MasterDataService.Entities.HomeBanners;
 using KHHub.MasterDataService.Entities.PlaceViews;
 using KHHub.MasterDataService.Entities.PlaceFavorites;
 using KHHub.MasterDataService.Entities.PlaceReviews;
@@ -25,6 +26,7 @@ namespace KHHub.MasterDataService.Data;
 [ConnectionStringName(DatabaseName)]
 public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContext>, IHasEventInbox, IHasEventOutbox
 {
+    public DbSet<HomeBanner> HomeBanners { get; set; } = null!;
     public DbSet<PlaceView> PlaceViews { get; set; } = null!;
     public DbSet<PlaceFavorite> PlaceFavorites { get; set; } = null!;
     public DbSet<PlaceReview> PlaceReviews { get; set; } = null!;
@@ -324,6 +326,27 @@ public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContex
                 b.Property(x => x.ParentId).HasColumnName(nameof(PlaceCategory.ParentId));
                 b.Property(x => x.DisplayOrder).HasColumnName(nameof(PlaceCategory.DisplayOrder));
                 b.Property(x => x.IsActive).HasColumnName(nameof(PlaceCategory.IsActive));
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<HomeBanner>(b => {
+                b.ToTable(DbTablePrefix + "HomeBanners", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.Title).HasColumnName(nameof(HomeBanner.Title)).IsRequired().HasMaxLength(HomeBannerConsts.TitleMaxLength);
+                b.Property(x => x.Subtitle).HasColumnName(nameof(HomeBanner.Subtitle)).HasMaxLength(HomeBannerConsts.SubtitleMaxLength);
+                b.Property(x => x.Description).HasColumnName(nameof(HomeBanner.Description));
+                b.Property(x => x.ImageUrl).HasColumnName(nameof(HomeBanner.ImageUrl)).IsRequired().HasMaxLength(HomeBannerConsts.ImageUrlMaxLength);
+                b.Property(x => x.MobileImageUrl).HasColumnName(nameof(HomeBanner.MobileImageUrl)).HasMaxLength(HomeBannerConsts.MobileImageUrlMaxLength);
+                b.Property(x => x.ButtonText).HasColumnName(nameof(HomeBanner.ButtonText)).HasMaxLength(HomeBannerConsts.ButtonTextMaxLength);
+                b.Property(x => x.ButtonUrl).HasColumnName(nameof(HomeBanner.ButtonUrl)).HasMaxLength(HomeBannerConsts.ButtonUrlMaxLength);
+                b.Property(x => x.TargetType).HasColumnName(nameof(HomeBanner.TargetType));
+                b.Property(x => x.TargetId).HasColumnName(nameof(HomeBanner.TargetId));
+                b.Property(x => x.SortOrder).HasColumnName(nameof(HomeBanner.SortOrder));
+                b.Property(x => x.IsActive).HasColumnName(nameof(HomeBanner.IsActive));
+                b.Property(x => x.StartDate).HasColumnName(nameof(HomeBanner.StartDate));
+                b.Property(x => x.EndDate).HasColumnName(nameof(HomeBanner.EndDate));
             });
         }
     }

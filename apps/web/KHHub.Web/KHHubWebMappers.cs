@@ -1,3 +1,5 @@
+using KHHub.MasterDataService.Services.Dtos.HomeBanners;
+using KHHub.Web.Pages.HomeBanners;
 using KHHub.MasterDataService.Services.Dtos.PlaceCategories;
 using KHHub.Web.Pages.PlaceCategories;
 using KHHub.MasterDataService.Services.Dtos.PlaceViews;
@@ -403,4 +405,25 @@ public partial class PlaceViewCreateViewModelToPlaceViewCreateDto : MapperBase<P
 {
     public override partial PlaceViewCreateDto Map(PlaceViewCreateViewModel source);
     public override partial void Map(PlaceViewCreateViewModel source, PlaceViewCreateDto destination);
+}
+
+[Mapper]
+public partial class HomeBannerDtoToHomeBannerUpdateViewModelMapper : MapperBase<HomeBannerDto, HomeBannerUpdateViewModel>
+{
+    public override partial HomeBannerUpdateViewModel Map(HomeBannerDto source);
+    public override partial void Map(HomeBannerDto source, HomeBannerUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class HomeBannerUpdateViewModelToHomeBannerUpdateDto : MapperBase<HomeBannerUpdateViewModel, HomeBannerUpdateDto>
+{
+    public override partial HomeBannerUpdateDto Map(HomeBannerUpdateViewModel source);
+    public override partial void Map(HomeBannerUpdateViewModel source, HomeBannerUpdateDto destination);
+}
+
+[Mapper]
+public partial class HomeBannerCreateViewModelToHomeBannerCreateDto : MapperBase<HomeBannerCreateViewModel, HomeBannerCreateDto>
+{
+    public override partial HomeBannerCreateDto Map(HomeBannerCreateViewModel source);
+    public override partial void Map(HomeBannerCreateViewModel source, HomeBannerCreateDto destination);
 }

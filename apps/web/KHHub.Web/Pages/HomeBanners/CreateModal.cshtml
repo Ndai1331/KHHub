@@ -1,0 +1,41 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using KHHub.Web.Pages.HomeBanners
+@using System.Globalization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@model CreateModalModel
+@{
+    Layout = null;
+}
+<form data-ajaxForm="true" asp-page="/HomeBanners/CreateModal" autocomplete="off">
+    <abp-modal id="HomeBannerCreateModal">
+        <abp-modal-header title="@L["NewHomeBanner"].Value"></abp-modal-header>
+        <abp-modal-body>
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+            <abp-input asp-for="HomeBanner.Title"    />
+            <abp-input asp-for="HomeBanner.Subtitle"    />
+            <abp-input asp-for="HomeBanner.Description" text-area   />
+            <abp-input asp-for="HomeBanner.ImageUrl"    />
+            <abp-input asp-for="HomeBanner.MobileImageUrl"    />
+            <abp-input asp-for="HomeBanner.ButtonText"    />
+            <abp-input asp-for="HomeBanner.ButtonUrl"    />
+            <abp-select asp-for="HomeBanner.TargetType"    />
+            <abp-input asp-for="HomeBanner.TargetId"    />
+            <abp-input asp-for="HomeBanner.SortOrder"    />
+            <abp-input asp-for="HomeBanner.IsActive"    />
+            <abp-date-picker auto-update-input="false" today-button-classes="btn-primary" asp-for="HomeBanner.StartDate" data-date="" />
+            <abp-date-picker auto-update-input="false" today-button-classes="btn-primary" asp-for="HomeBanner.EndDate" data-date="" />
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+        </abp-modal-footer>
+    </abp-modal>
+</form>
