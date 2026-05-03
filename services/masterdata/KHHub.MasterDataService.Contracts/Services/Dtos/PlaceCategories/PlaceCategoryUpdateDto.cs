@@ -23,7 +23,7 @@ public abstract class PlaceCategoryUpdateDtoBase : IHasConcurrencyStamp
     [StringLength(PlaceCategoryConsts.ColorMaxLength)]
     public string? Color { get; set; }
 
-    public Guid ParentId { get; set; }
+    public Guid? ParentId { get; set; }
 
     public int DisplayOrder { get; set; }
 

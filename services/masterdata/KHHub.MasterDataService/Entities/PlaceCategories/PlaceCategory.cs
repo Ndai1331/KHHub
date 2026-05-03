@@ -27,7 +27,7 @@ public abstract class PlaceCategoryBase : FullAuditedAggregateRoot<Guid>
     [CanBeNull]
     public virtual string? Color { get; set; }
 
-    public virtual Guid ParentId { get; set; }
+    public virtual Guid? ParentId { get; set; }
 
     public virtual int DisplayOrder { get; set; }
 
@@ -37,7 +37,7 @@ public abstract class PlaceCategoryBase : FullAuditedAggregateRoot<Guid>
     {
     }
 
-    public PlaceCategoryBase(Guid id, string name, string slug, Guid parentId, int displayOrder, bool isActive, string? description = null, string? icon = null, string? color = null)
+    public PlaceCategoryBase(Guid id, string name, string slug, int displayOrder, bool isActive, string? description = null, string? icon = null, string? color = null, Guid? parentId = null)
     {
         Id = id;
         Check.NotNull(name, nameof(name));
@@ -49,11 +49,11 @@ public abstract class PlaceCategoryBase : FullAuditedAggregateRoot<Guid>
         Check.Length(color, nameof(color), PlaceCategoryConsts.ColorMaxLength, 0);
         Name = name;
         Slug = slug;
-        ParentId = parentId;
         DisplayOrder = displayOrder;
         IsActive = isActive;
         Description = description;
         Icon = icon;
         Color = color;
+        ParentId = parentId;
     }
 }

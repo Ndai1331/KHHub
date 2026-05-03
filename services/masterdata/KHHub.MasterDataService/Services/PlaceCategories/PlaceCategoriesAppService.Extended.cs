@@ -1,3 +1,7 @@
+using KHHub.MasterDataService.Services.Dtos.Shared;
+using KHHub.MasterDataService.Data.PlaceCategories;
+using KHHub.MasterDataService.Services.Dtos.PlaceCategories;
+using KHHub.MasterDataService.Entities.PlaceCategories;
 using System;
 using System.IO;
 using System.Linq;

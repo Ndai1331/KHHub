@@ -24,6 +24,7 @@
     <abp-script src="/Pages/Articles/article-media-upload.js" />
     <abp-script src="/Pages/Places/place-description-tinymce.js" />
     <abp-script src="/Pages/Places/place-create.js" />
+    <abp-script src="/Pages/Articles/seo-keywords-editor.js" />
     <abp-script src="/Pages/Places/place-form-save.js" />
     <abp-script src="/Pages/MediaFiles/index.js" />
     <abp-script src="/Pages/Shared/media-library-picker.js" />
@@ -73,7 +74,22 @@
                 <abp-card-body>
                     <abp-input asp-for="Place.SeoTitle" id="PlaceSeoTitle" label="@L["SeoTitle"].Value" />
                     <abp-input asp-for="Place.SeoDescription" id="PlaceSeoDescription" text-area="true" label="@L["SeoDescription"].Value" />
-                    <abp-input asp-for="Place.SeoKeywords" label="@L["SeoKeywords"].Value" />
+                    <div id="SeoKeywordsEditor" class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                            <label class="form-label mb-0">@L["SeoKeywords"].Value</label>
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="SeoKeywordsAddBtn">
+                                @L["AddNewSeoKeyword"].Value
+                            </button>
+                        </div>
+                        <p class="text-muted small mb-2">@L["SeoKeywordsEditorHint"].Value</p>
+                        <div class="row g-2 mb-1 text-muted small text-uppercase">
+                            <div class="col">@L["SeoKeywordName"].Value</div>
+                            <div class="col-auto" style="width: 42px;"></div>
+                        </div>
+                        <div id="SeoKeywordsRows"></div>
+                        <input type="hidden" asp-for="Place.SeoKeywords" id="PlaceSeoKeywords" />
+                        <span asp-validation-for="Place.SeoKeywords" class="text-danger d-block"></span>
+                    </div>
                 </abp-card-body>
             </abp-card>
         </abp-column>

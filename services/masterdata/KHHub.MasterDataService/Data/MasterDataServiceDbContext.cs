@@ -193,18 +193,6 @@ public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContex
 
         if (builder.IsHostDatabase())
         {
-            builder.Entity<PlaceCategory>(b => {
-                b.ToTable(DbTablePrefix + "PlaceCategories", DbSchema);
-                b.ConfigureByConvention();
-                b.Property(x => x.Name).HasColumnName(nameof(PlaceCategory.Name)).IsRequired().HasMaxLength(PlaceCategoryConsts.NameMaxLength);
-                b.Property(x => x.Slug).HasColumnName(nameof(PlaceCategory.Slug)).IsRequired().HasMaxLength(PlaceCategoryConsts.SlugMaxLength);
-                b.Property(x => x.Description).HasColumnName(nameof(PlaceCategory.Description)).HasMaxLength(PlaceCategoryConsts.DescriptionMaxLength);
-                b.Property(x => x.Icon).HasColumnName(nameof(PlaceCategory.Icon)).HasMaxLength(PlaceCategoryConsts.IconMaxLength);
-                b.Property(x => x.Color).HasColumnName(nameof(PlaceCategory.Color)).HasMaxLength(PlaceCategoryConsts.ColorMaxLength);
-                b.Property(x => x.ParentId).HasColumnName(nameof(PlaceCategory.ParentId));
-                b.Property(x => x.DisplayOrder).HasColumnName(nameof(PlaceCategory.DisplayOrder));
-                b.Property(x => x.IsActive).HasColumnName(nameof(PlaceCategory.IsActive));
-            });
         }
 
         if (builder.IsHostDatabase())
@@ -320,6 +308,22 @@ public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContex
                 b.Property(x => x.Duration).HasColumnName(nameof(PlaceView.Duration));
                 b.Property(x => x.Source).HasColumnName(nameof(PlaceView.Source)).HasMaxLength(PlaceViewConsts.SourceMaxLength);
                 b.HasOne<Place>().WithMany().IsRequired().HasForeignKey(x => x.PlaceId).OnDelete(DeleteBehavior.NoAction);
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<PlaceCategory>(b => {
+                b.ToTable(DbTablePrefix + "PlaceCategories", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.Name).HasColumnName(nameof(PlaceCategory.Name)).IsRequired().HasMaxLength(PlaceCategoryConsts.NameMaxLength);
+                b.Property(x => x.Slug).HasColumnName(nameof(PlaceCategory.Slug)).IsRequired().HasMaxLength(PlaceCategoryConsts.SlugMaxLength);
+                b.Property(x => x.Description).HasColumnName(nameof(PlaceCategory.Description)).HasMaxLength(PlaceCategoryConsts.DescriptionMaxLength);
+                b.Property(x => x.Icon).HasColumnName(nameof(PlaceCategory.Icon)).HasMaxLength(PlaceCategoryConsts.IconMaxLength);
+                b.Property(x => x.Color).HasColumnName(nameof(PlaceCategory.Color)).HasMaxLength(PlaceCategoryConsts.ColorMaxLength);
+                b.Property(x => x.ParentId).HasColumnName(nameof(PlaceCategory.ParentId));
+                b.Property(x => x.DisplayOrder).HasColumnName(nameof(PlaceCategory.DisplayOrder));
+                b.Property(x => x.IsActive).HasColumnName(nameof(PlaceCategory.IsActive));
             });
         }
     }

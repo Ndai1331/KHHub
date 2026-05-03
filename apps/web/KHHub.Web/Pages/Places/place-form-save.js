@@ -61,6 +61,14 @@
         }
     }
 
+    function syncSeoKeywordsField() {
+        if (typeof window.kHHubSeoKeywordsSync === 'function') {
+            window.kHHubSeoKeywordsSync();
+        } else if (typeof window.kHHubArticleSeoKeywordsSync === 'function') {
+            window.kHHubArticleSeoKeywordsSync();
+        }
+    }
+
     function readCreateDto($f) {
         return {
             name: val($f, 'Name'),
@@ -158,6 +166,7 @@
                     e.preventDefault();
                     var action = $(this).val() || 'save';
                     syncTinyMceToTextareas();
+                    syncSeoKeywordsField();
                     var dto = readCreateDto($createForm);
                     applySaveAction(dto, action);
 
@@ -192,6 +201,7 @@
                     e.preventDefault();
                     var action = $(this).val() || 'save';
                     syncTinyMceToTextareas();
+                    syncSeoKeywordsField();
                     var id = $editForm.find('input[name="Id"]').val();
                     if (!id || isEmptyGuid(id)) {
                         abp.notify.error(l('AnErrorOccurred'));

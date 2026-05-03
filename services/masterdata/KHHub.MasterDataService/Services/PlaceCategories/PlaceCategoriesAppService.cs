@@ -62,14 +62,14 @@ public abstract class PlaceCategoriesAppServiceBase : ApplicationService
     [Authorize(MasterDataServicePermissions.PlaceCategories.Create)]
     public virtual async Task<PlaceCategoryDto> CreateAsync(PlaceCategoryCreateDto input)
     {
-        var placeCategory = await _placeCategoryManager.CreateAsync(input.Name, input.Slug, input.ParentId, input.DisplayOrder, input.IsActive, input.Description, input.Icon, input.Color);
+        var placeCategory = await _placeCategoryManager.CreateAsync(input.Name, input.Slug, input.DisplayOrder, input.IsActive, input.Description, input.Icon, input.Color, input.ParentId);
         return ObjectMapper.Map<PlaceCategory, PlaceCategoryDto>(placeCategory);
     }
 
     [Authorize(MasterDataServicePermissions.PlaceCategories.Edit)]
     public virtual async Task<PlaceCategoryDto> UpdateAsync(Guid id, PlaceCategoryUpdateDto input)
     {
-        var placeCategory = await _placeCategoryManager.UpdateAsync(id, input.Name, input.Slug, input.ParentId, input.DisplayOrder, input.IsActive, input.Description, input.Icon, input.Color, input.ConcurrencyStamp);
+        var placeCategory = await _placeCategoryManager.UpdateAsync(id, input.Name, input.Slug, input.DisplayOrder, input.IsActive, input.Description, input.Icon, input.Color, input.ParentId, input.ConcurrencyStamp);
         return ObjectMapper.Map<PlaceCategory, PlaceCategoryDto>(placeCategory);
     }
 

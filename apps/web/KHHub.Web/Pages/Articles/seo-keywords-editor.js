@@ -13,9 +13,23 @@
             });
     }
 
+    function getEditorRoot() {
+        return $('#SeoKeywordsEditor');
+    }
+
+    function getHiddenInput($root) {
+        return $root.find('input[type="hidden"]').filter(function () {
+            return (this.name || '').toString().indexOf('SeoKeywords') !== -1;
+        });
+    }
+
     function syncToHidden() {
-        var $root = $('#SeoKeywordsEditor');
+        var $root = getEditorRoot();
         if (!$root.length) {
+            return;
+        }
+        var $hidden = getHiddenInput($root);
+        if (!$hidden.length) {
             return;
         }
         var parts = [];
@@ -25,11 +39,11 @@
                 parts.push(v);
             }
         });
-        $('#ArticleSeoKeywords').val(parts.join('|'));
+        $hidden.val(parts.join('|'));
     }
 
-    function addRow(value) {
-        var $rows = $('#SeoKeywordsRows');
+    function addRow($root, value) {
+        var $rows = $root.find('#SeoKeywordsRows');
         var $row = $(
             '<div class="seo-keyword-row input-group mb-2">' +
                 '<input type="text" class="form-control seo-keyword-input" autocomplete="off" />' +
@@ -43,39 +57,45 @@
     }
 
     $(function () {
-        if (!$('#SeoKeywordsEditor').length) {
+        var $root = getEditorRoot();
+        if (!$root.length) {
+            return;
+        }
+        var $hidden = getHiddenInput($root);
+        if (!$hidden.length) {
             return;
         }
 
-        var initial = ($('#ArticleSeoKeywords').val() || '').toString();
+        var initial = ($hidden.val() || '').toString();
         var list = parseKeywords(initial);
         if (list.length === 0) {
-            addRow('');
+            addRow($root, '');
         } else {
             list.forEach(function (k) {
-                addRow(k);
+                addRow($root, k);
             });
         }
         syncToHidden();
 
-        $('#SeoKeywordsAddBtn').on('click', function () {
-            addRow('');
+        $root.find('#SeoKeywordsAddBtn').on('click', function () {
+            addRow($root, '');
             syncToHidden();
-            $('#SeoKeywordsRows .seo-keyword-input').last().trigger('focus');
+            $root.find('#SeoKeywordsRows .seo-keyword-input').last().trigger('focus');
         });
 
-        $('#SeoKeywordsRows').on('click', '.seo-keyword-remove', function () {
+        $root.find('#SeoKeywordsRows').on('click', '.seo-keyword-remove', function () {
             $(this).closest('.seo-keyword-row').remove();
-            if ($('#SeoKeywordsRows .seo-keyword-row').length === 0) {
-                addRow('');
+            if ($root.find('#SeoKeywordsRows .seo-keyword-row').length === 0) {
+                addRow($root, '');
             }
             syncToHidden();
         });
 
-        $('#SeoKeywordsRows').on('input', '.seo-keyword-input', function () {
+        $root.find('#SeoKeywordsRows').on('input', '.seo-keyword-input', function () {
             syncToHidden();
         });
 
+        window.kHHubSeoKeywordsSync = syncToHidden;
         window.kHHubArticleSeoKeywordsSync = syncToHidden;
     });
 })();

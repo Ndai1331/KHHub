@@ -88,7 +88,9 @@
     }
 
     function syncSeoKeywordsField() {
-        if (typeof window.kHHubArticleSeoKeywordsSync === 'function') {
+        if (typeof window.kHHubSeoKeywordsSync === 'function') {
+            window.kHHubSeoKeywordsSync();
+        } else if (typeof window.kHHubArticleSeoKeywordsSync === 'function') {
             window.kHHubArticleSeoKeywordsSync();
         }
     }
