@@ -55,7 +55,10 @@ public abstract class EfCoreWardRepositoryBase : EfCoreRepository<MasterDataServ
 
     protected virtual IQueryable<WardWithNavigationProperties> ApplyFilter(IQueryable<WardWithNavigationProperties> query, string? filterText, string? code = null, string? name = null, Guid? provinceId = null)
     {
-        return query.WhereIf(!string.IsNullOrWhiteSpace(filterText), e => e.Ward.Code!.Contains(filterText!) || e.Ward.Name!.Contains(filterText!)).WhereIf(!string.IsNullOrWhiteSpace(code), e => e.Ward.Code.Contains(code)).WhereIf(!string.IsNullOrWhiteSpace(name), e => e.Ward.Name.Contains(name)).WhereIf(provinceId != null && provinceId != Guid.Empty, e => e.Province != null && e.Province.Id == provinceId);
+        var nf = MasterDataStringSearch.NormalizeForContains(filterText);
+        var nCode = MasterDataStringSearch.NormalizeForContains(code);
+        var nName = MasterDataStringSearch.NormalizeForContains(name);
+        return query.WhereIf(nf != null, e => (e.Ward.Code != null && e.Ward.Code.ToLower().Contains(nf!)) || (e.Ward.Name != null && e.Ward.Name.ToLower().Contains(nf!))).WhereIf(nCode != null, e => e.Ward.Code != null && e.Ward.Code.ToLower().Contains(nCode!)).WhereIf(nName != null, e => e.Ward.Name != null && e.Ward.Name.ToLower().Contains(nName!)).WhereIf(provinceId != null && provinceId != Guid.Empty, e => e.Province != null && e.Province.Id == provinceId);
     }
 
     public virtual async Task<List<Ward>> GetListAsync(string? filterText = null, string? code = null, string? name = null, string? sorting = null, int maxResultCount = int.MaxValue, int skipCount = 0, CancellationToken cancellationToken = default)
@@ -74,6 +77,9 @@ public abstract class EfCoreWardRepositoryBase : EfCoreRepository<MasterDataServ
 
     protected virtual IQueryable<Ward> ApplyFilter(IQueryable<Ward> query, string? filterText = null, string? code = null, string? name = null)
     {
-        return query.WhereIf(!string.IsNullOrWhiteSpace(filterText), e => e.Code!.Contains(filterText!) || e.Name!.Contains(filterText!)).WhereIf(!string.IsNullOrWhiteSpace(code), e => e.Code.Contains(code)).WhereIf(!string.IsNullOrWhiteSpace(name), e => e.Name.Contains(name));
+        var nf = MasterDataStringSearch.NormalizeForContains(filterText);
+        var nCode = MasterDataStringSearch.NormalizeForContains(code);
+        var nName = MasterDataStringSearch.NormalizeForContains(name);
+        return query.WhereIf(nf != null, e => (e.Code != null && e.Code.ToLower().Contains(nf!)) || (e.Name != null && e.Name.ToLower().Contains(nf!))).WhereIf(nCode != null, e => e.Code != null && e.Code.ToLower().Contains(nCode!)).WhereIf(nName != null, e => e.Name != null && e.Name.ToLower().Contains(nName!));
     }
 }

@@ -1,0 +1,13 @@
+/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/bin/Release/net10.0/KHHub.ServiceDefaults.deps.json
+/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/bin/Release/net10.0/KHHub.ServiceDefaults.dll
+/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/bin/Release/net10.0/KHHub.ServiceDefaults.pdb
+/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/obj/Release/net10.0/KHHub.ServiceDefaults.csproj.AssemblyReference.cache
+/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/obj/Release/net10.0/KHHub.ServiceDefaults.GeneratedMSBuildEditorConfig.editorconfig
+/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/obj/Release/net10.0/KHHub.ServiceDefaults.AssemblyInfoInputs.cache
+/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/obj/Release/net10.0/KHHub.ServiceDefaults.AssemblyInfo.cs
+/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/obj/Release/net10.0/KHHub.ServiceDefaults.csproj.CoreCompileInputs.cache
+/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/obj/Release/net10.0/KHHub.ServiceDefaults.sourcelink.json
+/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/obj/Release/net10.0/KHHub.ServiceDefaults.dll
+/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/obj/Release/net10.0/refint/KHHub.ServiceDefaults.dll
+/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/obj/Release/net10.0/KHHub.ServiceDefaults.pdb
+/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/obj/Release/net10.0/ref/KHHub.ServiceDefaults.dll

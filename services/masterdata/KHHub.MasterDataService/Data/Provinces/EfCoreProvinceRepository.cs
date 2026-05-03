@@ -41,6 +41,9 @@ public abstract class EfCoreProvinceRepositoryBase : EfCoreRepository<MasterData
 
     protected virtual IQueryable<Province> ApplyFilter(IQueryable<Province> query, string? filterText = null, string? code = null, string? name = null)
     {
-        return query.WhereIf(!string.IsNullOrWhiteSpace(filterText), e => e.Code!.Contains(filterText!) || e.Name!.Contains(filterText!)).WhereIf(!string.IsNullOrWhiteSpace(code), e => e.Code.Contains(code)).WhereIf(!string.IsNullOrWhiteSpace(name), e => e.Name.Contains(name));
+        var nf = MasterDataStringSearch.NormalizeForContains(filterText);
+        var nCode = MasterDataStringSearch.NormalizeForContains(code);
+        var nName = MasterDataStringSearch.NormalizeForContains(name);
+        return query.WhereIf(nf != null, e => (e.Code != null && e.Code.ToLower().Contains(nf!)) || (e.Name != null && e.Name.ToLower().Contains(nf!))).WhereIf(nCode != null, e => e.Code != null && e.Code.ToLower().Contains(nCode!)).WhereIf(nName != null, e => e.Name != null && e.Name.ToLower().Contains(nName!));
     }
 }

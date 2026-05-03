@@ -41,6 +41,10 @@ public abstract class EfCorePlaceTagRepositoryBase : EfCoreRepository<MasterData
 
     protected virtual IQueryable<PlaceTag> ApplyFilter(IQueryable<PlaceTag> query, string? filterText = null, string? name = null, string? slug = null, string? description = null, int? usageCountMin = null, int? usageCountMax = null)
     {
-        return query.WhereIf(!string.IsNullOrWhiteSpace(filterText), e => e.Name!.Contains(filterText!) || e.Slug!.Contains(filterText!) || e.Description!.Contains(filterText!)).WhereIf(!string.IsNullOrWhiteSpace(name), e => e.Name.Contains(name)).WhereIf(!string.IsNullOrWhiteSpace(slug), e => e.Slug.Contains(slug)).WhereIf(!string.IsNullOrWhiteSpace(description), e => e.Description.Contains(description)).WhereIf(usageCountMin.HasValue, e => e.UsageCount >= usageCountMin!.Value).WhereIf(usageCountMax.HasValue, e => e.UsageCount <= usageCountMax!.Value);
+        var nf = MasterDataStringSearch.NormalizeForContains(filterText);
+        var nName = MasterDataStringSearch.NormalizeForContains(name);
+        var nSlug = MasterDataStringSearch.NormalizeForContains(slug);
+        var nDescription = MasterDataStringSearch.NormalizeForContains(description);
+        return query.WhereIf(nf != null, e => (e.Name != null && e.Name.ToLower().Contains(nf!)) || (e.Slug != null && e.Slug.ToLower().Contains(nf!)) || (e.Description != null && e.Description.ToLower().Contains(nf!))).WhereIf(nName != null, e => e.Name != null && e.Name.ToLower().Contains(nName!)).WhereIf(nSlug != null, e => e.Slug != null && e.Slug.ToLower().Contains(nSlug!)).WhereIf(nDescription != null, e => e.Description != null && e.Description.ToLower().Contains(nDescription!)).WhereIf(usageCountMin.HasValue, e => e.UsageCount >= usageCountMin!.Value).WhereIf(usageCountMax.HasValue, e => e.UsageCount <= usageCountMax!.Value);
     }
 }
