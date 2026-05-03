@@ -402,5 +402,3 @@ FodyWeavers.xsd
 **/.abpstudio/
 
 # Client-Side Libraries
-
-**/wwwroot/libs/
