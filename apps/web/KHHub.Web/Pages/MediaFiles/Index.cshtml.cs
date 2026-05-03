@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.Application.Dtos;
@@ -46,6 +47,10 @@ public abstract class IndexModelBase : AbpPageModel
     public FileType? FileTypeFilter { get; set; }
 
     public FileStatus? StatusFilter { get; set; }
+
+    /// <summary>Embedded media library picker (e.g. iframe from Article/Place forms).</summary>
+    [BindProperty(SupportsGet = true)]
+    public bool Picker { get; set; }
 
     protected IMediaFilesAppService _mediaFilesAppService;
 

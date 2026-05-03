@@ -8,5 +8,6 @@ public enum FileType
     Document = 2,
     Avatar = 3,
     Thumbnail = 4,
-    Gallery = 5
+    Gallery = 5,
+    Folder = 6,
 }

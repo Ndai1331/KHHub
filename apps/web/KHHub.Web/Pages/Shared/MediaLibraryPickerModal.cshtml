@@ -1,0 +1,17 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+
+<div class="modal fade khhub-media-library-modal" id="khhub-media-library-modal" tabindex="-1" aria-labelledby="khhub-media-library-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-lg-down modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom py-3">
+                <h5 class="modal-title" id="khhub-media-library-modal-title">@L["MediaLibrary:ChooseFromLibrary"].Value</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0 bg-white">
+                <partial name="~/Pages/Shared/_MediaLibraryExplorerBody.cshtml" />
+            </div>
+        </div>
+    </div>
+</div>

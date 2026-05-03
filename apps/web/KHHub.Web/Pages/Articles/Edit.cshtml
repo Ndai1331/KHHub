@@ -13,6 +13,11 @@
     var coverPreviewClass = string.IsNullOrEmpty(Model.Article.CoverImageUrl) ? "d-none" : "";
 }
 
+@section styles
+{
+    <link rel="stylesheet" href="~/Pages/MediaFiles/media-explorer.css" asp-append-version="true" />
+}
+
 @section scripts
 {
     <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
@@ -20,6 +25,8 @@
     <abp-script src="/Pages/Articles/edit.js" />
     <abp-script src="/Pages/Articles/seo-keywords-editor.js" />
     <abp-script src="/Pages/Articles/article-form-save.js" />
+    <abp-script src="/Pages/MediaFiles/index.js" />
+    <abp-script src="/Pages/Shared/media-library-picker.js" />
 }
 
 @section content_toolbar
@@ -97,13 +104,23 @@
                     <h6 class="text-muted text-uppercase small mb-3">@L["Media"]</h6>
                     <div class="mb-3">
                         <label class="form-label">@L["ThumbnailUrl"]</label>
-                        <input type="file" class="form-control article-media-upload mb-2" accept="image/*" data-url-target="#ArticleThumbnailUrl" data-preview-target="#ArticleThumbnailPreview" />
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            <button type="button" class="btn btn-outline-primary btn-sm rounded-2 khhub-media-library-open"
+                                    data-url-target="#ArticleThumbnailUrl" data-preview-target="#ArticleThumbnailPreview">
+                                <i class="fa fa-picture-o me-1" aria-hidden="true"></i>@L["MediaLibrary:ChooseFromLibrary"].Value
+                            </button>
+                        </div>
                         <img id="ArticleThumbnailPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 @thumbPreviewClass" src="@Model.Article.ThumbnailUrl" />
                         <abp-input asp-for="Article.ThumbnailUrl" suppress-label="true" id="ArticleThumbnailUrl" />
                     </div>
                     <div class="mb-4">
                         <label class="form-label">@L["CoverImageUrl"]</label>
-                        <input type="file" class="form-control article-media-upload mb-2" accept="image/*" data-url-target="#ArticleCoverImageUrl" data-preview-target="#ArticleCoverPreview" />
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            <button type="button" class="btn btn-outline-primary btn-sm rounded-2 khhub-media-library-open"
+                                    data-url-target="#ArticleCoverImageUrl" data-preview-target="#ArticleCoverPreview">
+                                <i class="fa fa-picture-o me-1" aria-hidden="true"></i>@L["MediaLibrary:ChooseFromLibrary"].Value
+                            </button>
+                        </div>
                         <img id="ArticleCoverPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 @coverPreviewClass" src="@Model.Article.CoverImageUrl" />
                         <abp-input asp-for="Article.CoverImageUrl" suppress-label="true" id="ArticleCoverImageUrl" />
                     </div>
@@ -146,3 +163,5 @@
         </abp-column>
     </abp-row>
 </form>
+
+<partial name="~/Pages/Shared/MediaLibraryPickerModal.cshtml" />

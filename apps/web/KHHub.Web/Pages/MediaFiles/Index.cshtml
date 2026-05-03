@@ -1,141 +1,169 @@
-@page
-@using Microsoft.AspNetCore.Authorization
-@using Volo.Abp.AspNetCore.Mvc.UI.Layout
-@using KHHub.MasterDataService.Permissions
-@using KHHub.Web.Pages.MediaFiles
-@using KHHub.Web.Navigation
-@using Microsoft.AspNetCore.Mvc.Localization
-@using KHHub.MasterDataService.Localization
-@inject IHtmlLocalizer<MasterDataServiceResource> L
-@inject IAuthorizationService Authorization
-@model IndexModel
-@inject IPageLayout PageLayout
-@{
-    PageLayout.Content.Title = L["MediaExplorer:FileManager"].Value;
-    PageLayout.Content.MenuItemName = KHHubMenus.MediaFiles;
-}
-@section styles
-{
-    <link rel="stylesheet" href="~/Pages/MediaFiles/media-explorer.css" asp-append-version="true" />
-}
-@section scripts
-{
-    <abp-script src="/Pages/MediaFiles/index.js" />
-}
-@section content_toolbar {
-}
-
-
-<div class="mf-explorer-layout">
-
-    <!-- Sidebar mirroring DashLite file manager chrome -->
-    <aside class="mf-sidebar">
-        <div class="mf-brand">
-            <i class="fa fa-folder-open text-primary"></i>
-            <span>@L["MediaExplorer:Apps"] / @L["MediaExplorer:FileManager"]</span>
-        </div>
-        <nav class="mf-nav d-flex flex-column">
-            <a class="mf-nav-link" href="#"><i class="fa fa-home"></i>@L["MediaExplorer:Home"]</a>
-            <span class="mf-nav-link active"><i class="fa fa-folder"></i>@L["MediaExplorer:SidebarFiles"]</span>
-            <a class="mf-nav-link" href="#"><i class="fa fa-star-o"></i>@L["MediaExplorer:Starred"]</a>
-            <a class="mf-nav-link" href="#"><i class="fa fa-share-alt"></i>@L["MediaExplorer:Shared"]</a>
-            <a class="mf-nav-link" href="#"><i class="fa fa-trash-o"></i>@L["MediaExplorer:Recovery"]</a>
-            <a class="mf-nav-link" href="#"><i class="fa fa-cog"></i>@L["MediaExplorer:Settings"]</a>
-        </nav>
-        <div class="mf-sidebar-foot">
-            <div class="mf-sidebar-foot-title"><i class="fa fa-database"></i> @L["MediaExplorer:StorageTitle"]</div>
-            <div class="mf-meter"><div class="mf-meter-fill"></div></div>
-            <small class="text-muted d-block mt-2">12.47 GB / 50 GB</small>
-            <a href="#" class="mf-upgrade">@L["MediaExplorer:UpgradeStorage"]</a>
-        </div>
-    </aside>
-
-    <div id="mf-main-card" class="mf-main-inner">
-        @Html.AntiForgeryToken()
-        <div class="mf-topbar">
-            <div class="mf-search">
-                <i class="fa fa-search"></i>
-                <input type="text" id="mf-search-input" maxlength="256"
-                       placeholder="@L["MediaExplorer:SearchPlaceholder"]" autocomplete="off" />
-            </div>
-            @if (await Authorization.IsGrantedAsync(MasterDataServicePermissions.MediaFiles.Create))
-            {
-                <div class="mf-actions">
-                    <div class="dropdown">
-                        <button type="button" class="btn btn-outline-secondary dropdown-toggle rounded-2" data-bs-toggle="dropdown" aria-expanded="false">
-                            @L["MediaExplorer:Create"]
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a href="#" id="mf-new-folder-action" class="dropdown-item"><i class="fa fa-folder-o me-2"></i>@L["MediaExplorer:NewFolderAction"]</a></li>
-                        </ul>
-                    </div>
-                    <abp-button button-type="Primary"
-                                id="mf-open-file-picker-btn"
-                                text="@L["MediaExplorer:Upload"].Value"
-                                icon="upload" />
-                </div>
-            }
-        </div>
-
-        <div id="mf-upload-zone"
-             class="mf-upload-zone @((await Authorization.IsGrantedAsync(MasterDataServicePermissions.MediaFiles.Create)) ? "" : "d-none")">
-            <p class="mb-16 fw-semibold text-secondary">@L["MediaExplorer:DragDropHint"]</p>
-            <button type="button" class="btn btn-outline-primary btn-sm rounded-2" id="mf-browse-btn">
-                @L["MediaExplorer:BrowseFiles"]
-            </button>
-            <input type="file" id="mf-file-input" class="d-none" multiple />
-        </div>
-
-        <div class="mf-breadcrumb-row">
-            <div class="mf-breadcrumbs" id="mf-breadcrumbs" aria-live="polite"></div>
-            <div class="mf-controls">
-                <select id="mf-sort-select" class="form-select form-select-sm rounded-2" style="width: auto; min-width: 170px;">
-                    <option value="lastMod">@L["MediaExplorer:SortModified"]</option>
-                    <option value="name">@L["MediaExplorer:SortName"]</option>
-                </select>
-                <div class="btn-group rounded-2" role="group" aria-label="view">
-                    <button type="button" class="btn btn-outline-secondary px-24 active mf-view-btn" id="mf-view-grid" title="@L["MediaExplorer:ToggleGrid"].Value"><i class="fa fa-th-large"></i></button>
-                    <button type="button" class="btn btn-outline-secondary px-24 mf-view-btn" id="mf-view-list" title="@L["MediaExplorer:ToggleList"].Value"><i class="fa fa-list"></i></button>
-                </div>
-            </div>
-        </div>
-
-        <div class="mf-title">@L["MediaExplorer:SidebarFiles"]</div>
-        <p class="mf-sub text-muted mb-24" id="mf-folder-caption"></p>
-
-        <div id="mf-items-host" class="mf-grid mb-24"></div>
-        <nav id="mf-pager" class="mf-pagination" aria-label="pagination"></nav>
-    </div>
-</div>
-
-<div class="modal fade" id="mf-image-preview-modal" tabindex="-1" aria-labelledby="mf-image-preview-title" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-lg-down mf-img-preview-dialog">
-        <div class="modal-content mf-img-preview-modal-content shadow-lg">
-            <div class="modal-header border-bottom align-items-center flex-wrap gap-2 py-3 px-3">
-                <h5 class="modal-title text-truncate flex-grow-1 me-2 mb-0" id="mf-image-preview-title"></h5>
-                <div class="d-flex flex-wrap align-items-center gap-2">
-                    <div class="btn-group" role="group" aria-label="zoom">
-                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-2" id="mf-img-zoom-out" title="@L["MediaExplorer:ZoomOut"].Value">
-                            <i class="fa fa-search-minus" aria-hidden="true"></i><span class="visually-hidden">@L["MediaExplorer:ZoomOut"].Value</span>
-                        </button>
-                        <span id="mf-img-zoom-indicator" class="small fw-semibold text-muted user-select-none" style="min-width: 3.25rem; text-align: center;">100%</span>
-                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-2" id="mf-img-zoom-in" title="@L["MediaExplorer:ZoomIn"].Value">
-                            <i class="fa fa-search-plus" aria-hidden="true"></i><span class="visually-hidden">@L["MediaExplorer:ZoomIn"].Value</span>
-                        </button>
-                    </div>
-                    <button type="button" class="btn btn-outline-primary btn-sm rounded-2" id="mf-img-zoom-reset">
-                        @L["MediaExplorer:ResetZoom"].Value
-                    </button>
-                </div>
-                <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-0 mf-img-preview-body">
-                <div class="mf-img-preview-stage" id="mf-img-preview-stage">
-                    <div class="mf-img-preview-inner">
-                        <img src="" alt="" id="mf-img-preview-img" draggable="false" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using KHHub.MasterDataService.Permissions
+@using KHHub.Web.Pages.MediaFiles
+@using KHHub.Web.Navigation
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@inject IAuthorizationService Authorization
+@model IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = Model.Picker ? L["MediaLibrary:ChooseFromLibrary"].Value : L["MediaExplorer:FileManager"].Value;
+    PageLayout.Content.MenuItemName = KHHubMenus.MediaFiles;
+}
+@section styles
+{
+    <link rel="stylesheet" href="~/Pages/MediaFiles/media-explorer.css" asp-append-version="true" />
+}
+@section scripts
+{
+    <abp-script src="/Pages/MediaFiles/index.js" />
+}
+@section content_toolbar {
+}
+
+
+<div class="mf-explorer-root"
+     id="mf-explorer-page"
+     data-picker-mode="@Model.Picker.ToString().ToLowerInvariant()">
+    <div class="mf-explorer-layout @(Model.Picker ? "mf-picker-embed" : "")">
+
+        @if (Model.Picker)
+        {
+            <div class="alert alert-info py-2 px-3 mb-0 rounded-0 border-0 border-bottom small mf-picker-banner" role="status">
+                <i class="fa fa-info-circle me-2" aria-hidden="true"></i>@L["MediaExplorer:PickerHint"]
+            </div>
+        }
+
+        <!-- Sidebar mirroring DashLite file manager chrome -->
+        <aside class="mf-sidebar">
+            <div class="mf-brand">
+                <i class="fa fa-folder-open text-primary"></i>
+                <span>@L["MediaExplorer:Apps"] / @L["MediaExplorer:FileManager"]</span>
+            </div>
+            <nav class="mf-nav d-flex flex-column">
+                <a class="mf-nav-link" href="#"><i class="fa fa-home"></i>@L["MediaExplorer:Home"]</a>
+                <span class="mf-nav-link active"><i class="fa fa-folder"></i>@L["MediaExplorer:SidebarFiles"]</span>
+                <a class="mf-nav-link" href="#"><i class="fa fa-star-o"></i>@L["MediaExplorer:Starred"]</a>
+                <a class="mf-nav-link" href="#"><i class="fa fa-share-alt"></i>@L["MediaExplorer:Shared"]</a>
+                <a class="mf-nav-link" href="#"><i class="fa fa-trash-o"></i>@L["MediaExplorer:Recovery"]</a>
+                <a class="mf-nav-link" href="#"><i class="fa fa-cog"></i>@L["MediaExplorer:Settings"]</a>
+            </nav>
+            <div class="mf-sidebar-foot">
+                <div class="mf-sidebar-foot-title"><i class="fa fa-database"></i> @L["MediaExplorer:StorageTitle"]</div>
+                <div class="mf-meter"><div class="mf-meter-fill"></div></div>
+                <small class="text-muted d-block mt-2">12.47 GB / 50 GB</small>
+                <a href="#" class="mf-upgrade">@L["MediaExplorer:UpgradeStorage"]</a>
+            </div>
+        </aside>
+
+        <div id="mf-main-card" class="mf-main-inner" data-mf="busy-root">
+            @Html.AntiForgeryToken()
+            <div class="mf-topbar">
+                <div class="mf-search">
+                    <i class="fa fa-search"></i>
+                    <input type="text"
+                           id="mf-search-input"
+                           data-mf="search-input"
+                           maxlength="256"
+                           placeholder="@L["MediaExplorer:SearchPlaceholder"]"
+                           autocomplete="off" />
+                </div>
+                @if (await Authorization.IsGrantedAsync(MasterDataServicePermissions.MediaFiles.Create))
+                {
+                    <div class="mf-actions">
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-outline-secondary dropdown-toggle rounded-2" data-bs-toggle="dropdown" aria-expanded="false">
+                                @L["MediaExplorer:Create"]
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a href="#"
+                                       id="mf-new-folder-action"
+                                       data-mf="new-folder-action"
+                                       class="dropdown-item">
+                                        <i class="fa fa-folder-o me-2"></i>@L["MediaExplorer:NewFolderAction"]
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <button type="button"
+                                class="btn btn-primary"
+                                id="mf-open-file-picker-btn"
+                                data-mf="open-file-picker-btn">
+                            <i class="fa fa-upload me-1" aria-hidden="true"></i>@L["MediaExplorer:Upload"].Value
+                        </button>
+                    </div>
+                }
+            </div>
+
+            <div id="mf-upload-zone"
+                 data-mf="upload-zone"
+                 class="mf-upload-zone @((await Authorization.IsGrantedAsync(MasterDataServicePermissions.MediaFiles.Create)) ? "" : "d-none")">
+                <p class="mb-16 fw-semibold text-secondary">@L["MediaExplorer:DragDropHint"]</p>
+                <button type="button" class="btn btn-outline-primary btn-sm rounded-2" id="mf-browse-btn" data-mf="browse-btn">
+                    @L["MediaExplorer:BrowseFiles"]
+                </button>
+                <input type="file" id="mf-file-input" data-mf="file-input" class="d-none" multiple />
+            </div>
+
+            <div class="mf-breadcrumb-row">
+                <div class="mf-breadcrumbs" id="mf-breadcrumbs" data-mf="breadcrumbs" aria-live="polite"></div>
+                <div class="mf-controls">
+                    <select id="mf-sort-select" data-mf="sort-select" class="form-select form-select-sm rounded-2" style="width: auto; min-width: 170px;">
+                        <option value="lastMod">@L["MediaExplorer:SortModified"]</option>
+                        <option value="name">@L["MediaExplorer:SortName"]</option>
+                    </select>
+                    <div class="btn-group rounded-2" role="group" aria-label="view">
+                        <button type="button" class="btn btn-outline-secondary px-24 active mf-view-btn" id="mf-view-grid" data-mf="view-grid" title="@L["MediaExplorer:ToggleGrid"].Value"><i class="fa fa-th-large"></i></button>
+                        <button type="button" class="btn btn-outline-secondary px-24 mf-view-btn" id="mf-view-list" data-mf="view-list" title="@L["MediaExplorer:ToggleList"].Value"><i class="fa fa-list"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mf-title">@L["MediaExplorer:SidebarFiles"]</div>
+            <p class="mf-sub text-muted mb-24" id="mf-folder-caption" data-mf="folder-caption"></p>
+
+            <div id="mf-items-host" class="mf-grid mb-24" data-mf="items-host"></div>
+            <nav id="mf-pager" class="mf-pagination" data-mf="pager" aria-label="pagination"></nav>
+        </div>
+    </div>
+
+    <div class="modal fade" id="mf-image-preview-modal" data-mf="image-preview-modal" tabindex="-1" aria-labelledby="mf-image-preview-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-lg-down mf-img-preview-dialog">
+            <div class="modal-content mf-img-preview-modal-content shadow-lg">
+                <div class="modal-header border-bottom align-items-center flex-wrap gap-2 py-3 px-3">
+                    <h5 class="modal-title text-truncate flex-grow-1 me-2 mb-0" id="mf-image-preview-title" data-mf="image-preview-title"></h5>
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <div class="btn-group" role="group" aria-label="zoom">
+                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-2" id="mf-img-zoom-out" data-mf="img-zoom-out" title="@L["MediaExplorer:ZoomOut"].Value">
+                                <i class="fa fa-search-minus" aria-hidden="true"></i><span class="visually-hidden">@L["MediaExplorer:ZoomOut"].Value</span>
+                            </button>
+                            <span id="mf-img-zoom-indicator" data-mf="img-zoom-indicator" class="small fw-semibold text-muted user-select-none" style="min-width: 3.25rem; text-align: center;">100%</span>
+                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-2" id="mf-img-zoom-in" data-mf="img-zoom-in" title="@L["MediaExplorer:ZoomIn"].Value">
+                                <i class="fa fa-search-plus" aria-hidden="true"></i><span class="visually-hidden">@L["MediaExplorer:ZoomIn"].Value</span>
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-sm rounded-2 d-none" id="mf-img-pick-btn" data-mf="img-pick-btn">
+                            @L["MediaExplorer:UseThisImage"].Value
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm rounded-2" id="mf-img-zoom-reset" data-mf="img-zoom-reset">
+                            @L["MediaExplorer:ResetZoom"].Value
+                        </button>
+                    </div>
+                    <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0 mf-img-preview-body">
+                    <div class="mf-img-preview-stage" id="mf-img-preview-stage" data-mf="img-preview-stage">
+                        <div class="mf-img-preview-inner">
+                            <img src="" alt="" id="mf-img-preview-img" data-mf="img-preview-img" draggable="false" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

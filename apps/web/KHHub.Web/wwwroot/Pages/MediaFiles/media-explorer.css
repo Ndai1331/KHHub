@@ -15,6 +15,24 @@
     align-items: start;
 }
 
+/* Embedded picker (iframe): full-width content, no sidebar column */
+.mf-explorer-layout.mf-picker-embed {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.mf-explorer-layout.mf-picker-embed .mf-sidebar {
+    display: none;
+}
+
+.mf-explorer-layout.mf-picker-embed .mf-picker-banner {
+    grid-column: 1 / -1;
+}
+
+/* Inline explorer inside library modal (Articles / Places) */
+.khhub-media-library-modal .mf-mlp-explorer-root .mf-main-inner {
+    min-height: min(72vh, 820px);
+}
+
 @media (max-width: 991px) {
     .mf-explorer-layout {
         grid-template-columns: 1fr;

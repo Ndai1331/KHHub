@@ -81,7 +81,7 @@ Docs: [Notify](https://abp.io/docs/latest/framework/ui/mvc-razor-pages/javascrip
 
 
   ## UX Priority
-
+- Important: Must resonpsive all devices 
 - Always prefer usability over consistency
 - Avoid forcing modal or page blindly
 - Choose the simplest UI that fits the data complexity

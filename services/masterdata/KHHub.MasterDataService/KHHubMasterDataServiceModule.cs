@@ -13,6 +13,7 @@ using KHHub.MasterDataService.Entities.Articles;
 using KHHub.MasterDataService.Entities.ArticleTags;
 using KHHub.MasterDataService.Entities.ArticleCategories;
 using KHHub.MasterDataService.Entities.Wards;
+using System;
 using KHHub.MasterDataService.Entities.Provinces;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -63,9 +64,10 @@ using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Minio;
 using KHHub.MasterDataService.BlobContainers;
 using KHHub.MasterDataService.HealthChecks;
+using KHHub.MasterDataService.Services.MediaFiles;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace KHHub.MasterDataService;
-
 [DependsOn(typeof(AbpBlobStoringMinioModule), typeof(AbpSettingManagementEntityFrameworkCoreModule), typeof(AbpEntityFrameworkCorePostgreSqlModule), typeof(LanguageManagementEntityFrameworkCoreModule), typeof(AbpPermissionManagementEntityFrameworkCoreModule), typeof(AbpFeatureManagementEntityFrameworkCoreModule), typeof(AbpAuditLoggingEntityFrameworkCoreModule), typeof(KHHubMasterDataServiceContractsModule), typeof(AbpAutofacModule), typeof(AbpAspNetCoreSerilogModule), typeof(AbpSwashbuckleModule), typeof(AbpAspNetCoreMvcModule), typeof(AbpEventBusRabbitMqModule), typeof(AbpBackgroundJobsRabbitMqModule), typeof(AbpCachingStackExchangeRedisModule), typeof(AbpDistributedLockingModule), typeof(AbpStudioClientAspNetCoreModule), typeof(AbpHttpClientModule))]
 public class KHHubMasterDataServiceModule : AbpModule
 {
@@ -91,6 +93,7 @@ public class KHHubMasterDataServiceModule : AbpModule
         ConfigureDynamicClaims(context);
         ConfigureHealthChecks(context);
         ConfigureBlobStoring(configuration);
+        ConfigureMediaExplorerUploadLimits(context, configuration);
         context.Services.TransformAbpClaims();
     }
 
@@ -108,6 +111,34 @@ public class KHHubMasterDataServiceModule : AbpModule
                     cfg.CreateBucketIfNotExists = minio.GetValue("CreateBucketIfNotExists", true);
                 });
             });
+            options.Containers.Configure<MediaFilesBlobContainer>(container => {
+                container.UseMinio(cfg => {
+                    cfg.EndPoint = minio["EndPoint"]!;
+                    cfg.AccessKey = minio["AccessKey"]!;
+                    cfg.SecretKey = minio["SecretKey"]!;
+                    cfg.BucketName = minio["BucketName"]!;
+                    cfg.WithSSL = minio.GetValue("WithSSL", false);
+                    cfg.CreateBucketIfNotExists = minio.GetValue("CreateBucketIfNotExists", true);
+                });
+            });
+        });
+    }
+
+    private static void ConfigureMediaExplorerUploadLimits(ServiceConfigurationContext context, IConfiguration configuration)
+    {
+        context.Services.Configure<MediaFilesStorageOptions>(
+            configuration.GetSection(MediaFilesStorageOptions.SectionName));
+
+        var maxUpload = configuration.GetValue<long?>(
+            $"{MediaFilesStorageOptions.SectionName}:{nameof(MediaFilesStorageOptions.MaxUploadBytes)}")
+                        ?? 104_857_600;
+
+        context.Services.Configure<FormOptions>(o =>
+        {
+            if (maxUpload > 0)
+            {
+                o.MultipartBodyLengthLimit = Math.Max(maxUpload, 1_048_576);
+            }
         });
     }
 

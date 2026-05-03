@@ -11,6 +11,11 @@
     PageLayout.Content.MenuItemName = KHHubMenus.Places;
 }
 
+@section styles
+{
+    <link rel="stylesheet" href="~/Pages/MediaFiles/media-explorer.css" asp-append-version="true" />
+}
+
 @section scripts
 {
     <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
@@ -18,6 +23,8 @@
     <abp-script src="/Pages/Places/place-description-tinymce.js" />
     <abp-script src="/Pages/Places/place-create.js" />
     <abp-script src="/Pages/Places/place-form-save.js" />
+    <abp-script src="/Pages/MediaFiles/index.js" />
+    <abp-script src="/Pages/Shared/media-library-picker.js" />
 }
 
 @section content_toolbar
@@ -78,13 +85,23 @@
                     <h6 class="text-muted text-uppercase small mb-3">@L["Media"].Value</h6>
                     <div class="mb-3">
                         <label class="form-label">@L["ThumbnailUrl"].Value</label>
-                        <input type="file" class="form-control article-media-upload mb-2" accept="image/*" data-url-target="#PlaceThumbnailUrl" data-preview-target="#PlaceThumbnailPreview" />
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            <button type="button" class="btn btn-outline-primary btn-sm rounded-2 khhub-media-library-open"
+                                    data-url-target="#PlaceThumbnailUrl" data-preview-target="#PlaceThumbnailPreview">
+                                <i class="fa fa-picture-o me-1" aria-hidden="true"></i>@L["MediaLibrary:ChooseFromLibrary"].Value
+                            </button>
+                        </div>
                         <img id="PlaceThumbnailPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 d-none" />
                         <abp-input asp-for="Place.ThumbnailUrl" suppress-label="true" id="PlaceThumbnailUrl" />
                     </div>
                     <div class="mb-4">
                         <label class="form-label">@L["CoverImageUrl"].Value</label>
-                        <input type="file" class="form-control article-media-upload mb-2" accept="image/*" data-url-target="#PlaceCoverImageUrl" data-preview-target="#PlaceCoverPreview" />
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            <button type="button" class="btn btn-outline-primary btn-sm rounded-2 khhub-media-library-open"
+                                    data-url-target="#PlaceCoverImageUrl" data-preview-target="#PlaceCoverPreview">
+                                <i class="fa fa-picture-o me-1" aria-hidden="true"></i>@L["MediaLibrary:ChooseFromLibrary"].Value
+                            </button>
+                        </div>
                         <img id="PlaceCoverPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 d-none" />
                         <abp-input asp-for="Place.CoverImageUrl" suppress-label="true" id="PlaceCoverImageUrl" />
                     </div>
@@ -149,3 +166,5 @@
         </abp-column>
     </abp-row>
 </form>
+
+<partial name="~/Pages/Shared/MediaLibraryPickerModal.cshtml" />

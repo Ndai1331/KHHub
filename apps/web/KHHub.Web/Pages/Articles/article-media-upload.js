@@ -129,6 +129,16 @@ $(function () {
         }
     });
 
+    $(document).on('change input', '#PlaceThumbnailUrl, #PlaceCoverImageUrl', function () {
+        var id = $(this).attr('id');
+        var url = $(this).val();
+        if (id === 'PlaceThumbnailUrl') {
+            setPreview('#PlaceThumbnailPreview', url);
+        } else if (id === 'PlaceCoverImageUrl') {
+            setPreview('#PlaceCoverPreview', url);
+        }
+    });
+
     $(document).on('change input', 'input.article-category-thumbnail-url', function () {
         var $m = $(this).closest('.modal');
         setPreview('#ArticleCategoryThumbnailPreview', $(this).val(), $m.length ? $m : undefined);
