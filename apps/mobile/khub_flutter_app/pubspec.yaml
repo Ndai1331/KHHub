@@ -62,7 +62,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/locales/en.json
-    - assets/locales/tr.json
+    - assets/locales/vi.json
     - assets/images/home_mock_reference.png
 
   # To add assets to your application, add an assets section, like this:

@@ -170,7 +170,7 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<void> _loadTranslations() async {
-    final locale = _languageCode == 'tr' ? 'tr' : 'en';
+    final locale = _languageCode == 'vi' ? 'vi' : 'en';
     final jsonString = await rootBundle.loadString('assets/locales/$locale.json');
     _translations = jsonDecode(jsonString) as Map<String, dynamic>;
   }

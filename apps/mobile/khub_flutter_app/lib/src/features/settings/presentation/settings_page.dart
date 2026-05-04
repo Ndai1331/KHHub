@@ -30,8 +30,8 @@ class SettingsPage extends StatelessWidget {
                         onTap: () => Navigator.pop(context, 'en'),
                       ),
                       ListTile(
-                        title: const Text('Turkish'),
-                        onTap: () => Navigator.pop(context, 'tr'),
+                        title: const Text('Tieng Viet'),
+                        onTap: () => Navigator.pop(context, 'vi'),
                       ),
                     ],
                   ),
