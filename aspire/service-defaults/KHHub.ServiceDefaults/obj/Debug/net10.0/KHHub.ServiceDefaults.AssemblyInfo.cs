@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KHHub.ServiceDefaults")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5c8c9607b0f7987a23817ff9d8cd0d44e53ec42d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b353d2196e44daf2120436c2a3f00ef1403051d3")]
 [assembly: System.Reflection.AssemblyProductAttribute("KHHub.ServiceDefaults")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KHHub.ServiceDefaults")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

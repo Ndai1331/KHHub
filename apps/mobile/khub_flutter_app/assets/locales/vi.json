@@ -1,0 +1,71 @@
+{
+  "KHHub": {
+    "Welcome": "Chào mừng",
+    "LongWelcomeMessage": "Chào mừng bạn đến với KHHub",
+    "Menu": {
+      "Home": "Trang chủ",
+      "Dashboard": "Bảng điều khiển"
+    },
+    "PasswordConfirm": "Xác nhận mật khẩu",
+    "DontHaveAnAccount": "Không có tài khoản?",
+    "ForgotPasswordLink": "Quên mật khẩu?",
+    "ForgotPasswordTitle": "Quên mật khẩu",
+    "ForgotPasswordSubtitle": "Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn liên kết đặt lại mật khẩu.",
+    "CheckYourEmailSubtitle": "Nếu tài khoản tồn tại cho email này, bạn sẽ nhận được liên kết đặt lại ngay lập tức.",
+    "BackToLogin": "Quay lại đăng nhập",
+    "SendResetLink": "Gửi liên kết đặt lại mật khẩu",
+    "ResetPasswordTitle": "Đặt lại mật khẩu",
+    "ResetPasswordSubtitle": "Đặt mật khẩu mới cho tài khoản của bạn.",
+    "ResetPasswordAction": "Đặt lại mật khẩu",
+    "Feature": {
+      "Secure": "Bảo mật",
+      "SecureDesc": "Bảo mật doanh nghiệp với kiểm soát truy cập dựa trên vai trò.",
+      "Fast": "Nhanh",
+      "FastDesc": "Hiệu suất tối ưu với kiến trúc hiện đại.",
+      "Modern": "Hiện đại",
+      "ModernDesc": "Xây dựng với công nghệ mới nhất để có trải nghiệm trơn tru."
+    }
+  },
+  "AbpUi": {
+    "Cancel": "Hủy",
+    "ChangePassword": "Đổi mật khẩu",
+    "Language": "Ngôn ngữ",
+    "Login": "Đăng nhập",
+    "Register": "Đăng ký",
+    "Logout": "Đăng xuất",
+    "ProfilePicture": "Ảnh đại diện",
+    "Theme": "Giao diện",
+    "System": "Hệ thống",
+    "Light": "Sáng",
+    "Dark": "Tối"
+  },
+  "AbpAccount": {
+    "ChoosePhoto": "Chọn ảnh",
+    "DefaultErrorMessage": "Đã xảy ra lỗi",
+    "Password": "Mật khẩu",
+    "Save": "Lưu",
+    "SelectNewImage": "Chọn ảnh mới",
+    "TakePhoto": "Chụp ảnh",
+    "UseDefault": "Sử dụng mặc định",
+    "UserNameOrEmailAddress": "Tên người dùng hoặc email",
+    "InvalidUserNameOrPassword": "Tên người dùng hoặc mật khẩu không hợp lệ",
+    "ThisFieldIsRequired": "Trường này là bắt buộc",
+    "ThisFieldIsNotAValidEmailAddress": "Địa chỉ email không hợp lệ",
+    "DisplayName": {
+      "UseGravatar": "Sử dụng Gravatar"
+    }
+  },
+  "AbpIdentity": {
+    "DisplayName": {
+      "CurrentPassword": "Mật khẩu hiện tại",
+      "NewPassword": "Mật khẩu mới",
+      "NewPasswordConfirm": "Xác nhận mật khẩu mới"
+    },
+    "UserName": "Tên người dùng",
+    "EmailAddress": "Email",
+    "PasswordConfirmationFailed": "Xác nhận mật khẩu không thành công"
+  },
+  "AbpSettingManagement": {
+    "Settings": "Cài đặt"
+  }
+}

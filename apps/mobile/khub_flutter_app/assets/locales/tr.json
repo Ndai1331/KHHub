@@ -1,0 +1,71 @@
+{
+  "KHHub": {
+    "Welcome": "Hos Geldiniz",
+    "LongWelcomeMessage": "KHHub'e Hos Geldiniz",
+    "Menu": {
+      "Home": "Ana Sayfa",
+      "Dashboard": "Kontrol Paneli"
+    },
+    "PasswordConfirm": "Sifreyi dogrula",
+    "DontHaveAnAccount": "Hesabin yok mu?",
+    "ForgotPasswordLink": "Sifremi unuttum",
+    "ForgotPasswordTitle": "Sifremi unuttum",
+    "ForgotPasswordSubtitle": "E-posta adresini gir, sifre sifirlama baglantisi gonderecegiz.",
+    "CheckYourEmailSubtitle": "Bu e-posta icin bir hesap varsa, kisa sure icinde sifirlama baglantisi gonderilecektir.",
+    "BackToLogin": "Girise don",
+    "SendResetLink": "Sifirlama baglantisi gonder",
+    "ResetPasswordTitle": "Sifre sifirla",
+    "ResetPasswordSubtitle": "Hesabin icin yeni bir sifre belirle.",
+    "ResetPasswordAction": "Sifreyi sifirla",
+    "Feature": {
+      "Secure": "Guvenli",
+      "SecureDesc": "Rol tabanli erisim kontrolu ile kurumsal duzeyde guvenlik.",
+      "Fast": "Hizli",
+      "FastDesc": "Modern mimari ile optimize edilmis performans.",
+      "Modern": "Modern",
+      "ModernDesc": "Sorunsuz bir deneyim icin en son teknolojilerle gelistirildi."
+    }
+  },
+  "AbpUi": {
+    "Cancel": "Iptal",
+    "ChangePassword": "Sifre Degistir",
+    "Language": "Dil",
+    "Login": "Giris Yap",
+    "Register": "Kayit Ol",
+    "Logout": "Cikis Yap",
+    "ProfilePicture": "Profil Resmi",
+    "Theme": "Tema",
+    "System": "Sistem",
+    "Light": "Acik",
+    "Dark": "Koyu"
+  },
+  "AbpAccount": {
+    "ChoosePhoto": "Fotograf Sec",
+    "DefaultErrorMessage": "Bir hata olustu",
+    "Password": "Sifre",
+    "Save": "Kaydet",
+    "SelectNewImage": "Yeni Resim Sec",
+    "TakePhoto": "Fotograf Cek",
+    "UseDefault": "Varsayilani Kullan",
+    "UserNameOrEmailAddress": "Kullanici Adi veya E-posta Adresi",
+    "InvalidUserNameOrPassword": "Kullanici adi veya sifre hatali",
+    "ThisFieldIsRequired": "Bu alan zorunludur",
+    "ThisFieldIsNotAValidEmailAddress": "Bu gecerli bir e-posta adresi degil.",
+    "DisplayName": {
+      "UseGravatar": "Gravatar Kullan"
+    }
+  },
+  "AbpIdentity": {
+    "DisplayName": {
+      "CurrentPassword": "Mevcut Sifre",
+      "NewPassword": "Yeni Sifre",
+      "NewPasswordConfirm": "Yeni Sifre Onayi"
+    },
+    "UserName": "Kullanici Adi",
+    "EmailAddress": "E-posta Adresi",
+    "PasswordConfirmationFailed": "Sifre onayi basarisiz oldu"
+  },
+  "AbpSettingManagement": {
+    "Settings": "Ayarlar"
+  }
+}
