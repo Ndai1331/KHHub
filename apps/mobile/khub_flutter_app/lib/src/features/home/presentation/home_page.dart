@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,37 +42,49 @@ class _HomePageState extends State<HomePage> {
         key: 'news',
         title: 'Tin tức',
         icon: Icons.newspaper_rounded,
-        color: Color(0xFF1E88E5),
+        color: Color(0xFF0077FF),
+        gradientStart: Color(0xFF38B6FF),
+        gradientEnd: Color(0xFF0077FF),
       ),
       const _CategoryItem(
         key: 'places',
         title: 'Địa điểm',
         icon: Icons.location_on_rounded,
-        color: Color(0xFF00ACC1),
+        color: Color(0xFF00B4D8),
+        gradientStart: Color(0xFF4DD0E1),
+        gradientEnd: Color(0xFF0097A7),
       ),
       const _CategoryItem(
         key: 'jobs',
         title: 'Việc làm',
         icon: Icons.work_rounded,
-        color: Color(0xFF5E92F3),
+        color: Color(0xFF3F51B5),
+        gradientStart: Color(0xFF7986CB),
+        gradientEnd: Color(0xFF3F51B5),
       ),
       const _CategoryItem(
         key: 'food',
         title: 'Ẩm thực',
         icon: Icons.restaurant_rounded,
-        color: Color(0xFF42A5F5),
+        color: Color(0xFFFF8F00),
+        gradientStart: Color(0xFFFFB74D),
+        gradientEnd: Color(0xFFFF8F00),
       ),
       const _CategoryItem(
         key: 'gold',
         title: 'Giá vàng',
         icon: Icons.currency_exchange_rounded,
         color: Color(0xFFFFB300),
+        gradientStart: Color(0xFFFFD54F),
+        gradientEnd: Color(0xFFFFA000),
       ),
       const _CategoryItem(
         key: 'gas',
         title: 'Giá xăng',
         icon: Icons.local_gas_station_rounded,
         color: Color(0xFF7E57C2),
+        gradientStart: Color(0xFF9575CD),
+        gradientEnd: Color(0xFF673AB7),
       ),
     ];
     final categoryFeeds = <String, List<CategoryFeedItem>>{
@@ -335,15 +349,60 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+      body: Stack(
+        children: <Widget>[
+          Positioned.fill(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 220,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: <Color>[Color(0xFF0077FF), Color(0xFF00B4D8)],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[Color(0xFFF0F8FF), Color(0xFFE6F7FF)],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 120,
+            left: -20,
+            child: _WaveBubble(
+              color: const Color(0xFF90E0EF).withValues(alpha: 0.26),
+              size: 140,
+            ),
+          ),
+          Positioned(
+            top: 180,
+            right: -30,
+            child: _WaveBubble(
+              color: const Color(0xFF00B4D8).withValues(alpha: 0.18),
+              size: 170,
+            ),
+          ),
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
             Text(
               userName.isEmpty ? '${vm.t('::Welcome')}, Khach!' : '${vm.t('::Welcome')}, $userName!',
               style: const TextStyle(
-                color: Color(0xFF0D47A1),
+                color: Colors.white,
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
               ),
@@ -351,7 +410,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 4),
             Text(
               vm.t('::LongWelcomeMessage'),
-              style: const TextStyle(color: Color(0xFF5C6B7A), fontSize: 14),
+              style: const TextStyle(color: Color(0xFFE3F2FD), fontSize: 14),
             ),
             const SizedBox(height: 14),
             SizedBox(
@@ -362,7 +421,9 @@ class _HomePageState extends State<HomePage> {
                 onPageChanged: (int value) => setState(() => _bannerIndex = value),
                 itemBuilder: (BuildContext context, int index) {
                   final item = bannerItems[index];
-                  return Container(
+                  return Stack(
+                    children: <Widget>[
+                    Container(
                     margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18),
@@ -383,11 +444,11 @@ class _HomePageState extends State<HomePage> {
                           Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                                 colors: <Color>[
-                                  Colors.black.withValues(alpha: 0.54),
-                                  Colors.transparent,
+                                  Colors.black.withValues(alpha: 0.2),
+                                  const Color(0xFF0077FF).withValues(alpha: 0.65),
                                 ],
                               ),
                             ),
@@ -422,6 +483,36 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      right: 20,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            color: Colors.white.withValues(alpha: 0.22),
+                            child: const Row(
+                              children: <Widget>[
+                                Icon(Icons.wb_sunny_rounded, size: 14, color: Colors.white),
+                                SizedBox(width: 4),
+                                Text(
+                                  'Beach vibe',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                   );
                 },
               ),
@@ -475,12 +566,16 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    gradient: LinearGradient(
+                      colors: <Color>[item.gradientStart, item.gradientEnd],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                     borderRadius: BorderRadius.circular(14),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 10,
+                        color: item.color.withValues(alpha: 0.35),
+                        blurRadius: 14,
                         offset: const Offset(0, 4),
                       ),
                     ],
@@ -492,15 +587,19 @@ class _HomePageState extends State<HomePage> {
                         width: 44,
                         height: 44,
                         decoration: BoxDecoration(
-                          color: item.color.withValues(alpha: 0.14),
+                          color: Colors.white.withValues(alpha: 0.18),
                           borderRadius: BorderRadius.circular(22),
                         ),
-                        child: Icon(item.icon, color: item.color, size: 24),
+                        child: Icon(item.icon, color: Colors.white, size: 24),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         item.title,
-                        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),
@@ -527,16 +626,27 @@ class _HomePageState extends State<HomePage> {
                     initialComments: item.comments,
                   ),
                 ),
-                child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                    child: Container(
                 margin: const EdgeInsets.only(bottom: 10),
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  gradient: LinearGradient(
+                    colors: <Color>[
+                      Colors.white.withValues(alpha: 0.88),
+                      const Color(0xFFEAF6FF).withValues(alpha: 0.76),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
+                      color: const Color(0xFF0077FF).withValues(alpha: 0.12),
+                      blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
                   ],
@@ -576,6 +686,8 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -598,16 +710,27 @@ class _HomePageState extends State<HomePage> {
                     initialComments: item.comments,
                   ),
                 ),
-                child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                    child: Container(
                   margin: const EdgeInsets.only(bottom: 10),
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    gradient: LinearGradient(
+                      colors: <Color>[
+                        Colors.white.withValues(alpha: 0.88),
+                        const Color(0xFFEAF6FF).withValues(alpha: 0.76),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                     borderRadius: BorderRadius.circular(14),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 10,
+                        color: const Color(0xFF0077FF).withValues(alpha: 0.12),
+                        blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),
                     ],
@@ -647,10 +770,14 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
+                  ),
+                ),
               ),
             ),
           ],
         ),
+          ),
+        ],
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -680,31 +807,37 @@ class _HomePageState extends State<HomePage> {
               final selected = index == _bottomTabIndex;
               return GestureDetector(
                 onTap: () => setState(() => _bottomTabIndex = index),
-                child: AnimatedContainer(
+                child: AnimatedScale(
+                  scale: selected ? 1.05 : 1,
                   duration: const Duration(milliseconds: 220),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: selected ? const Color(0xFF1E88E5).withValues(alpha: 0.12) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        item.icon,
-                        size: 22,
-                        color: selected ? const Color(0xFF1E88E5) : const Color(0xFF8A9AB0),
-                      ),
-                      if (selected) ...<Widget>[
-                        const SizedBox(width: 6),
-                        Text(
-                          item.label,
-                          style: const TextStyle(
-                            color: Color(0xFF1E88E5),
-                            fontWeight: FontWeight.w700,
-                          ),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 220),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: selected
+                          ? const Color(0xFF90E0EF).withValues(alpha: 0.42)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          item.icon,
+                          size: 22,
+                          color: selected ? const Color(0xFF0077FF) : const Color(0xFF8A9AB0),
                         ),
+                        if (selected) ...<Widget>[
+                          const SizedBox(width: 6),
+                          Text(
+                            item.label,
+                            style: const TextStyle(
+                              color: Color(0xFF0077FF),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
               );
@@ -757,12 +890,16 @@ class _CategoryItem {
     required this.title,
     required this.icon,
     required this.color,
+    required this.gradientStart,
+    required this.gradientEnd,
   });
 
   final String key;
   final String title;
   final IconData icon;
   final Color color;
+  final Color gradientStart;
+  final Color gradientEnd;
 }
 
 class _NewsItem {
@@ -828,4 +965,26 @@ class _BottomTabItem {
 
   final IconData icon;
   final String label;
+}
+
+class _WaveBubble extends StatelessWidget {
+  const _WaveBubble({
+    required this.color,
+    required this.size,
+  });
+
+  final Color color;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+      ),
+    );
+  }
 }
