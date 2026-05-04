@@ -19,8 +19,12 @@ using KHHub.MasterDataService.Entities.Provinces;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
@@ -92,6 +96,7 @@ public class KHHubMasterDataServiceModule : AbpModule
         ConfigureVirtualFileSystem();
         ConfigureObjectMapper(context);
         ConfigureAutoControllers();
+        ConfigurePublicReadApis();
         ConfigureDynamicClaims(context);
         ConfigureHealthChecks(context);
         ConfigureBlobStoring(configuration);
@@ -356,6 +361,13 @@ public class KHHubMasterDataServiceModule : AbpModule
         });
     }
 
+    private void ConfigurePublicReadApis()
+    {
+        Configure<MvcOptions>(options => {
+            options.Conventions.Add(new AllowAnonymousMasterDataGetConvention());
+        });
+    }
+
     private static void ConfigureSwaggerUI(SwaggerUIOptions options, IConfiguration configuration)
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "MasterDataService API");
@@ -373,5 +385,49 @@ public class KHHubMasterDataServiceModule : AbpModule
         context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options => {
             options.IsDynamicClaimsEnabled = true;
         });
+    }
+
+    private sealed class AllowAnonymousMasterDataGetConvention : IActionModelConvention
+    {
+        public void Apply(ActionModel action)
+        {
+            if (!IsHttpGetAction(action) || !IsMasterDataApiAction(action))
+            {
+                return;
+            }
+
+            if (action.Filters.Any(filter => filter is IAllowAnonymousFilter))
+            {
+                return;
+            }
+
+            action.Filters.Add(new AllowAnonymousFilter());
+        }
+
+        private static bool IsHttpGetAction(ActionModel action)
+        {
+            return action.Selectors.Any(selector =>
+                selector.ActionConstraints?
+                    .OfType<HttpMethodActionConstraint>()
+                    .Any(constraint => constraint.HttpMethods.Any(method =>
+                        string.Equals(method, "GET", StringComparison.OrdinalIgnoreCase))) == true);
+        }
+
+        private static bool IsMasterDataApiAction(ActionModel action)
+        {
+            return action.Selectors.Any(selector =>
+            {
+                var template = selector.AttributeRouteModel?.Template;
+                if (string.IsNullOrWhiteSpace(template))
+                {
+                    return false;
+                }
+
+                return template.StartsWith("api/masterdata/", StringComparison.OrdinalIgnoreCase)
+                    || template.StartsWith("api/master-data/", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(template, "api/masterdata", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(template, "api/master-data", StringComparison.OrdinalIgnoreCase);
+            });
+        }
     }
 }

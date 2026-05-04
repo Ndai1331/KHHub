@@ -134,79 +134,90 @@
                 </abp-card-body>
             </abp-card>
 
-            <abp-card class="mb-4">
-                <abp-card-header>
-                    <h5 class="mb-0">@L["SeoInformation"].Value</h5>
-                </abp-card-header>
-                <abp-card-body>
-                    <abp-input asp-for="Article.SeoTitle" id="ArticleSeoTitle" label="@L["SeoTitle"].Value" />
-                    <abp-input asp-for="Article.SeoDescription" id="ArticleSeoDescription" text-area="true" label="@L["SeoDescription"].Value" />
-                    <div id="SeoKeywordsEditor" class="mb-2">
-                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
-                            <label class="form-label mb-0">@L["SeoKeywords"].Value</label>
-                            <button type="button" class="btn btn-outline-primary btn-sm" id="SeoKeywordsAddBtn">
-                                @L["AddNewSeoKeyword"].Value
-                            </button>
-                        </div>
-                        <p class="text-muted small mb-2">@L["SeoKeywordsEditorHint"].Value</p>
-                        <div class="row g-2 mb-1 text-muted small text-uppercase">
-                            <div class="col">@L["SeoKeywordName"].Value</div>
-                            <div class="col-auto" style="width: 42px;"></div>
-                        </div>
-                        <div id="SeoKeywordsRows"></div>
-                        <input type="hidden" asp-for="Article.SeoKeywords" id="ArticleSeoKeywords" />
-                        <span asp-validation-for="Article.SeoKeywords" class="text-danger d-block"></span>
-                    </div>
-                    <abp-input asp-for="Article.Source" label="@L["Source"].Value" />
-                    <abp-input asp-for="Article.SourceUrl" label="@L["SourceUrl"].Value" />
-                </abp-card-body>
-            </abp-card>
         </abp-column>
 
         <abp-column size-md="_4">
-            <abp-card class="mb-4">
-                <abp-card-header class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <h5 class="mb-0">@L["ArticleInformation"].Value</h5>
-                    @if (Model.LastUpdatedAt.HasValue)
-                    {
-                        <span class="text-muted small">@L["LastModificationTime"]: @Model.LastUpdatedAt.Value.ToString("g")</span>
-                    }
-                </abp-card-header>
-                <abp-card-body>
-                    <h6 class="text-muted text-uppercase small mb-2">@L["Media"].Value</h6>
-                    <div class="mb-3">
-                        <label class="form-label">@L["ThumbnailUrl"].Value</label>
-                        <div class="d-flex flex-wrap gap-2 mb-2">
-                            <button type="button" class="btn btn-outline-primary btn-sm rounded-2 khhub-media-library-open"
-                                    data-url-target="#ArticleThumbnailUrl" data-preview-target="#ArticleThumbnailPreview">
-                                <i class="fa fa-picture-o me-1" aria-hidden="true"></i>@L["MediaLibrary:ChooseFromLibrary"].Value
-                            </button>
-                        </div>
-                        <img id="ArticleThumbnailPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 @thumbPreviewClass" src="@MediaPreviewUrl.ResolveReadUrl(Model.Article.ThumbnailUrl, Configuration["MediaFilesStorage:PublicBaseUrl"])" />
-                        <abp-input asp-for="Article.ThumbnailUrl" suppress-label="true" id="ArticleThumbnailUrl" />
-                    </div>
-                    <div class="mb-4">
-                        <label class="form-label">@L["CoverImageUrl"].Value</label>
-                        <div class="d-flex flex-wrap gap-2 mb-2">
-                            <button type="button" class="btn btn-outline-primary btn-sm rounded-2 khhub-media-library-open"
-                                    data-url-target="#ArticleCoverImageUrl" data-preview-target="#ArticleCoverPreview">
-                                <i class="fa fa-picture-o me-1" aria-hidden="true"></i>@L["MediaLibrary:ChooseFromLibrary"].Value
-                            </button>
-                        </div>
-                        <img id="ArticleCoverPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 @coverPreviewClass" src="@MediaPreviewUrl.ResolveReadUrl(Model.Article.CoverImageUrl, Configuration["MediaFilesStorage:PublicBaseUrl"])" />
-                        <abp-input asp-for="Article.CoverImageUrl" suppress-label="true" id="ArticleCoverImageUrl" />
-                    </div>
+            <ul class="nav nav-tabs flex-wrap gap-1 mb-0 border-bottom-0" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active px-3 py-2 rounded-top-2" data-bs-toggle="tab" data-bs-target="#article-sidebar-info-edit" type="button" role="tab">@L["ArticleInformation"].Value</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link px-3 py-2 rounded-top-2" data-bs-toggle="tab" data-bs-target="#article-sidebar-seo-edit" type="button" role="tab">@L["SeoInformation"].Value</button>
+                </li>
+            </ul>
+            <div class="tab-content border rounded-bottom rounded-end rounded-start mb-4 px-2 pb-2 pt-2 bg-white" style="border-color:#E5E7EB!important;margin-top:-1px;">
+                <div class="tab-pane fade show active" id="article-sidebar-info-edit" role="tabpanel">
+                    <abp-card class="mb-0 border-0 shadow-none">
+                        <abp-card-header class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <h5 class="mb-0">@L["ArticleInformation"].Value</h5>
+                            @if (Model.LastUpdatedAt.HasValue)
+                            {
+                                <span class="text-muted small">@L["LastModificationTime"]: @Model.LastUpdatedAt.Value.ToString("g")</span>
+                            }
+                        </abp-card-header>
+                        <abp-card-body>
+                            <h6 class="text-muted text-uppercase small mb-2">@L["Media"].Value</h6>
+                            <div class="mb-3">
+                                <label class="form-label">@L["ThumbnailUrl"].Value</label>
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    <button type="button" class="btn btn-outline-primary btn-sm rounded-2 khhub-media-library-open"
+                                            data-url-target="#ArticleThumbnailUrl" data-preview-target="#ArticleThumbnailPreview">
+                                        <i class="fa fa-picture-o me-1" aria-hidden="true"></i>@L["MediaLibrary:ChooseFromLibrary"].Value
+                                    </button>
+                                </div>
+                                <img id="ArticleThumbnailPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 @thumbPreviewClass" src="@MediaPreviewUrl.ResolveReadUrl(Model.Article.ThumbnailUrl, Configuration["MediaFilesStorage:PublicBaseUrl"])" />
+                                <abp-input asp-for="Article.ThumbnailUrl" suppress-label="true" id="ArticleThumbnailUrl" />
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">@L["CoverImageUrl"].Value</label>
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    <button type="button" class="btn btn-outline-primary btn-sm rounded-2 khhub-media-library-open"
+                                            data-url-target="#ArticleCoverImageUrl" data-preview-target="#ArticleCoverPreview">
+                                        <i class="fa fa-picture-o me-1" aria-hidden="true"></i>@L["MediaLibrary:ChooseFromLibrary"].Value
+                                    </button>
+                                </div>
+                                <img id="ArticleCoverPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 @coverPreviewClass" src="@MediaPreviewUrl.ResolveReadUrl(Model.Article.CoverImageUrl, Configuration["MediaFilesStorage:PublicBaseUrl"])" />
+                                <abp-input asp-for="Article.CoverImageUrl" suppress-label="true" id="ArticleCoverImageUrl" />
+                            </div>
 
-                    <abp-select asp-for="Article.Status" asp-items="@Model.ArticleStatusList" label="@L["Status"].Value" />
+                            <abp-select asp-for="Article.Status" asp-items="@Model.ArticleStatusList" label="@L["Status"].Value" />
 
-                    <hr class="my-3" />
-                    <h6 class="text-muted text-uppercase small mb-2">@L["Settings"].Value</h6>
-                    <abp-input asp-for="Article.ViewCount" label="@L["ViewCount"].Value" />
-                    <abp-input asp-for="Article.LikeCount" label="@L["LikeCount"].Value" />
-                    <abp-input asp-for="Article.ShareCount" label="@L["ShareCount"].Value" />
-                    <abp-input asp-for="Article.CommentCount" label="@L["CommentCount"].Value" />
-                </abp-card-body>
-            </abp-card>
+                            <hr class="my-3" />
+                            <h6 class="text-muted text-uppercase small mb-2">@L["Settings"].Value</h6>
+                            <abp-input asp-for="Article.ViewCount" label="@L["ViewCount"].Value" />
+                            <abp-input asp-for="Article.LikeCount" label="@L["LikeCount"].Value" />
+                            <abp-input asp-for="Article.ShareCount" label="@L["ShareCount"].Value" />
+                            <abp-input asp-for="Article.CommentCount" label="@L["CommentCount"].Value" />
+                        </abp-card-body>
+                    </abp-card>
+                </div>
+                <div class="tab-pane fade" id="article-sidebar-seo-edit" role="tabpanel">
+                    <abp-card class="mb-0 border-0 shadow-none">
+                        <abp-card-body>
+                            <abp-input asp-for="Article.SeoTitle" id="ArticleSeoTitle" label="@L["SeoTitle"].Value" />
+                            <abp-input asp-for="Article.SeoDescription" id="ArticleSeoDescription" text-area="true" label="@L["SeoDescription"].Value" />
+                            <div id="SeoKeywordsEditor" class="mb-2">
+                                <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                                    <label class="form-label mb-0">@L["SeoKeywords"].Value</label>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" id="SeoKeywordsAddBtn">
+                                        @L["AddNewSeoKeyword"].Value
+                                    </button>
+                                </div>
+                                <p class="text-muted small mb-2">@L["SeoKeywordsEditorHint"].Value</p>
+                                <div class="row g-2 mb-1 text-muted small text-uppercase">
+                                    <div class="col">@L["SeoKeywordName"].Value</div>
+                                    <div class="col-auto" style="width: 42px;"></div>
+                                </div>
+                                <div id="SeoKeywordsRows"></div>
+                                <input type="hidden" asp-for="Article.SeoKeywords" id="ArticleSeoKeywords" />
+                                <span asp-validation-for="Article.SeoKeywords" class="text-danger d-block"></span>
+                            </div>
+                            <abp-input asp-for="Article.Source" label="@L["Source"].Value" />
+                            <abp-input asp-for="Article.SourceUrl" label="@L["SourceUrl"].Value" />
+                        </abp-card-body>
+                    </abp-card>
+                </div>
+            </div>
         </abp-column>
     </abp-row>
         </div>
