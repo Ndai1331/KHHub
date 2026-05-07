@@ -53,6 +53,8 @@ public class Program
 
             builder.Services.AddLocalization();
             builder.Services.AddSingleton<AppLocalizer>();
+            builder.Services.AddMemoryCache();
+            builder.Services.AddSingleton(TimeProvider.System);
             builder.Services.AddHealthChecks();
             builder.Services
                 .AddRazorPages()

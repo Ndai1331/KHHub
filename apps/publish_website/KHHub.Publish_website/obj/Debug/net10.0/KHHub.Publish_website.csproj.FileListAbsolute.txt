@@ -544,7 +544,6 @@
 /Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/bin/Debug/net10.0/appsettings.Production.json
 /Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/bin/Debug/net10.0/Localization/Publish_website/en.json
 /Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/bin/Debug/net10.0/Localization/Publish_website/ko.json
-/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/bin/Debug/net10.0/Localization/Publish_website/ru.json
 /Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/bin/Debug/net10.0/Localization/Publish_website/vi.json
 /Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/bin/Debug/net10.0/Localization/Publish_website/zh-Hans.json
 /Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/obj/Debug/net10.0/compressed/cnofwtalmn-{0}-cjtnw55p1b-cjtnw55p1b.gz
@@ -692,3 +691,4 @@
 /Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/obj/Debug/net10.0/compressed/neayxec7ma-{0}-5kos6actez-5kos6actez.gz
 /Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/obj/Debug/net10.0/compressed/t9cxra1dba-{0}-mp6qpdssmw-mp6qpdssmw.gz
 /Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/obj/Debug/net10.0/compressed/dpv17xvsfz-{0}-v9mf2l7yjj-v9mf2l7yjj.gz
+/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/obj/Debug/net10.0/compressed/frw6thtkyv-{0}-accuzpwau8-accuzpwau8.gz

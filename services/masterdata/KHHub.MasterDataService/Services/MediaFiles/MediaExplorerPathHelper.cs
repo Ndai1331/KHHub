@@ -117,6 +117,11 @@ public static class MediaExplorerPathHelper
     {
         objectKey = null;
         var path = (stablePublicPath ?? string.Empty).Trim();
+        if (Uri.TryCreate(path, UriKind.Absolute, out var absolutePath))
+        {
+            path = absolutePath.AbsolutePath;
+        }
+
         if (path.Length == 0 || path[0] != '/')
         {
             return false;

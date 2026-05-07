@@ -1,0 +1,110 @@
+@model KHHub.Publish_website.Pages.IndexModel
+@{
+    var templateRoot = Url.Content("~/template");
+}
+
+<div class="content full-height fs-slider-wrap">
+    <section class="hero-section no-dadding full-height" id="sec1">
+        <div class="slider-container-wrap full-height fs-slider fl-wrap">
+            <div class="slider-container">
+                @if (Model.HomeBanners.Count > 0)
+                {
+                    @for (var i = 0; i < Model.HomeBanners.Count; i++)
+                    {
+                        var banner = Model.HomeBanners[i];
+                        var bannerImage = Model.ResolveMediaUrl(banner.ImageUrl);
+                        var slideImage = string.IsNullOrWhiteSpace(bannerImage)
+                            ? $"{templateRoot}/images/bg/1.jpg"
+                            : bannerImage;
+                        var buttonUrl = string.IsNullOrWhiteSpace(banner.ButtonUrl) ? "listing.html" : banner.ButtonUrl;
+                        var buttonText = string.IsNullOrWhiteSpace(banner.ButtonText) ? "Khám phá ngay" : banner.ButtonText;
+                        <div class="slider-item fl-wrap">
+                            <div class="bg @(i > 0 ? "bg-ser" : null)" data-bg="@slideImage"></div>
+                            <div class="overlay"></div>
+                            <div class="hero-section-wrap fl-wrap">
+                                <div class="container">
+                                    <div class="intro-item fl-wrap">
+                                        <h2>@banner.Title</h2>
+                                        @if (!string.IsNullOrWhiteSpace(banner.Subtitle))
+                                        {
+                                            <h3>@banner.Subtitle</h3>
+                                        }
+                                        else if (!string.IsNullOrWhiteSpace(banner.Description))
+                                        {
+                                            <h3>@banner.Description</h3>
+                                        }
+                                        else
+                                        {
+                                            <h3>Tìm địa điểm nổi bật, khách sạn, nhà hàng, cửa hàng và sự kiện.</h3>
+                                        }
+                                    </div>
+                                    <div class="main-search-input-wrap">
+                                        <div class="main-search-input fl-wrap">
+                                            <div class="main-search-input-item">
+                                                <input type="text" placeholder="Bạn đang tìm gì?" value="" />
+                                            </div>
+                                            <div class="main-search-input-item location" id="autocomplete-container">
+                                                <input type="text" placeholder="Khu vực" id="autocomplete-input" value="" />
+                                                <a href="#"><i class="fa fa-dot-circle-o"></i></a>
+                                            </div>
+                                            <div class="main-search-input-item">
+                                                <select data-placeholder="Tất cả danh mục" class="chosen-select">
+                                                    <option>Tất cả danh mục</option>
+                                                    <option>Cửa hàng</option>
+                                                    <option>Khách sạn</option>
+                                                    <option>Nhà hàng</option>
+                                                    <option>Thể thao</option>
+                                                    <option>Sự kiện</option>
+                                                </select>
+                                            </div>
+                                            <button class="main-search-button" onclick="window.location.href='@buttonUrl'">@buttonText</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="slider-item fl-wrap">
+                        <div class="bg" data-bg="@(templateRoot)/images/bg/1.jpg"></div>
+                        <div class="overlay"></div>
+                        <div class="hero-section-wrap fl-wrap">
+                            <div class="container">
+                                <div class="intro-item fl-wrap">
+                                    <h2>KH HUB giúp bạn khám phá Khánh Hòa</h2>
+                                    <h3>Tìm địa điểm nổi bật, khách sạn, nhà hàng, cửa hàng và sự kiện.</h3>
+                                </div>
+                                <div class="main-search-input-wrap">
+                                    <div class="main-search-input fl-wrap">
+                                        <div class="main-search-input-item">
+                                            <input type="text" placeholder="Bạn đang tìm gì?" value="" />
+                                        </div>
+                                        <div class="main-search-input-item location" id="autocomplete-container">
+                                            <input type="text" placeholder="Khu vực" id="autocomplete-input" value="" />
+                                            <a href="#"><i class="fa fa-dot-circle-o"></i></a>
+                                        </div>
+                                        <div class="main-search-input-item">
+                                            <select data-placeholder="Tất cả danh mục" class="chosen-select">
+                                                <option>Tất cả danh mục</option>
+                                                <option>Cửa hàng</option>
+                                                <option>Khách sạn</option>
+                                                <option>Nhà hàng</option>
+                                                <option>Thể thao</option>
+                                                <option>Sự kiện</option>
+                                            </select>
+                                        </div>
+                                        <button class="main-search-button" onclick="window.location.href='listing.html'">Tìm kiếm</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="swiper-button-prev sw-btn"><i class="fa fa-long-arrow-left"></i></div>
+            <div class="swiper-button-next sw-btn"><i class="fa fa-long-arrow-right"></i></div>
+        </div>
+    </section>
+</div>

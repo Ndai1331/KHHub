@@ -30,6 +30,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL0xhbmRpbmcvX0FkdmVudHVyZVNlY3Rpb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/Pages/Shared/Landing/_AuthModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL0xhbmRpbmcvX0F1dGhNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/Pages/Shared/Landing/_CategoriesSection.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL0xhbmRpbmcvX0NhdGVnb3JpZXNTZWN0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/Pages/Shared/Landing/_CityBookFooter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL0xhbmRpbmcvX0NpdHlCb29rRm9vdGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/Pages/Shared/Landing/_CommunitySection.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL0xhbmRpbmcvX0NvbW11bml0eVNlY3Rpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/Pages/Shared/Landing/_DestinationGrid.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL0xhbmRpbmcvX0Rlc3RpbmF0aW9uR3JpZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -38,8 +54,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL0xhbmRpbmcvX0Zvb3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/Pages/Shared/Landing/_Header.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL0xhbmRpbmcvX0hlYWRlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/Pages/Shared/Landing/_Hero.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL0xhbmRpbmcvX0hlcm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/Pages/Shared/Landing/_HeroSlider.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL0xhbmRpbmcvX0hlcm9TbGlkZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/Pages/Shared/Landing/_JobsSection.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL0xhbmRpbmcvX0pvYnNTZWN0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/Pages/Shared/Landing/_PopularPlacesSection.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL0xhbmRpbmcvX1BvcHVsYXJQbGFjZXNTZWN0aW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/Pages/Shared/Landing/_ServicesSection.cshtml]

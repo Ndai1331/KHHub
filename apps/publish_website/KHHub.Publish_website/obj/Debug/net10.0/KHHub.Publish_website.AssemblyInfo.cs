@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KHHub.Publish_website")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+61e4cbb6f39379e3348b18425a791100567e5652")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9a6aa2976edb8f3ba24a283c70bfb3deea4afd35")]
 [assembly: System.Reflection.AssemblyProductAttribute("KHHub.Publish_website")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KHHub.Publish_website")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
