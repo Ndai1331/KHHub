@@ -258,8 +258,9 @@ blockquote p {
 	left:0;
 	width:100%;
 	height:100%;
-	background:#000;
-	opacity:0.5;
+	/* background:#000;
+	opacity:0.5; */
+	background:linear-gradient(95.36deg, rgba(0, 0, 0, 0.5) 13.15%, rgba(0, 0, 0, 0.2) 78.27%);
 	z-index:2
 }
 .box-item {
@@ -798,7 +799,7 @@ section.parallax-section .bg {
 	float:left;
 	width:100%;
 	position:relative;
-	padding-bottom:50px;
+	padding-bottom:20px;
 }
 .section-title .breadcrumbs {
 	margin-top:20px;
@@ -1051,7 +1052,7 @@ section.gray-section .section-separator {
 	padding-top:150px;
 }
 .slider-container-wrap.fs-slider .hero-section-wrap {
-	top:35%;
+	top:25%;
 	padding-top:0;
 }
 .bubble-bg {
@@ -4806,7 +4807,7 @@ footer.main-footer.fixed-footer {
 	font-weight:500;
 }
 .footer-social {
-	float:right;
+	float:left;
 }
 .footer-social li {
 	float:left;
@@ -6238,7 +6239,7 @@ section.list-single-section {
 }
 .slider-container-wrap.fs-slider .sw-btn {
     margin-top: 0;
-    top: 90%;
+    top: 45%;
 }
 .main-search-input-item .nice-select {
 	background:#fff;

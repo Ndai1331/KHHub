@@ -63,21 +63,5 @@
         <script type="text/javascript" src="@(templateRoot)/js/jquery.min.js"></script>
         <script type="text/javascript" src="@(templateRoot)/js/plugins.js"></script>
         <script type="text/javascript" src="@(templateRoot)/js/scripts.js"></script>
-        <script type="text/javascript">
-            (function () {
-                var selector = document.getElementById('khhub-language-select');
-                if (!selector) {
-                    return;
-                }
-
-                selector.addEventListener('change', function () {
-                    var culture = selector.value || 'vi';
-                    var url = new URL(window.location.href);
-                    url.searchParams.set('culture', culture);
-                    url.searchParams.set('ui-culture', culture);
-                    window.location.href = url.toString();
-                });
-            })();
-        </script>
     </body>
 </html>

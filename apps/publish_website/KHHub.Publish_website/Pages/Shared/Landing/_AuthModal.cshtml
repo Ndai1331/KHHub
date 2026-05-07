@@ -3,35 +3,35 @@
     <div class="main-register-holder">
         <div class="main-register fl-wrap">
             <div class="close-reg"><i class="fa fa-times"></i></div>
-            <h3>Đăng nhập <span>KH<strong>HUB</strong></span></h3>
+            <h3>@L["Landing:SignIn"] <span>KH<strong>HUB</strong></span></h3>
             <div class="soc-log fl-wrap">
-                <p>Sử dụng tài khoản mạng xã hội để đăng nhập nhanh hơn.</p>
-                <a href="#" class="facebook-log"><i class="fa fa-facebook-official"></i>Đăng nhập bằng Facebook</a>
-                <a href="#" class="twitter-log"><i class="fa fa-twitter"></i> Đăng nhập bằng Twitter</a>
+                <p>@L["Auth:SocialLoginLead"]</p>
+                <a href="#" class="facebook-log"><i class="fa fa-facebook-official"></i>@L["Auth:LoginWithFacebook"]</a>
+                <a href="#" class="twitter-log"><i class="fa fa-twitter"></i> @L["Auth:LoginWithTwitter"]</a>
             </div>
-            <div class="log-separator fl-wrap"><span>hoặc</span></div>
+            <div class="log-separator fl-wrap"><span>@L["Auth:Or"]</span></div>
             <div id="tabs-container">
                 <ul class="tabs-menu">
-                    <li class="current"><a href="#tab-1">Đăng nhập</a></li>
-                    <li><a href="#tab-2">Đăng ký</a></li>
+                    <li class="current"><a href="#tab-1">@L["Landing:SignIn"]</a></li>
+                    <li><a href="#tab-2">@L["Landing:Register"]</a></li>
                 </ul>
                 <div class="tab">
                     <div id="tab-1" class="tab-content">
                         <div class="custom-form">
                             <form method="post" name="registerform">
-                                <label>Tên đăng nhập hoặc email *</label>
+                                <label>@L["Auth:UserNameOrEmail"] *</label>
                                 <input name="email" type="text" onclick="this.select()" value="">
-                                <label>Mật khẩu *</label>
+                                <label>@L["Auth:Password"] *</label>
                                 <input name="password" type="password" onclick="this.select()" value="">
-                                <button type="submit" class="log-submit-btn"><span>Đăng nhập</span></button>
+                                <button type="submit" class="log-submit-btn"><span>@L["Landing:SignIn"]</span></button>
                                 <div class="clearfix"></div>
                                 <div class="filter-tags">
                                     <input id="check-a" type="checkbox" name="check">
-                                    <label for="check-a">Ghi nhớ đăng nhập</label>
+                                    <label for="check-a">@L["Auth:RememberMe"]</label>
                                 </div>
                             </form>
                             <div class="lost_password">
-                                <a href="#">Quên mật khẩu?</a>
+                                <a href="#">@L["Auth:ForgotPassword"]</a>
                             </div>
                         </div>
                     </div>
@@ -39,15 +39,15 @@
                         <div id="tab-2" class="tab-content">
                             <div class="custom-form">
                                 <form method="post" name="registerform" class="main-register-form" id="main-register-form2">
-                                    <label>Họ *</label>
+                                    <label>@L["Auth:LastName"] *</label>
                                     <input name="name" type="text" onclick="this.select()" value="">
-                                    <label>Tên *</label>
+                                    <label>@L["Auth:FirstName"] *</label>
                                     <input name="name2" type="text" onclick="this.select()" value="">
                                     <label>Email *</label>
                                     <input name="email" type="text" onclick="this.select()" value="">
-                                    <label>Mật khẩu *</label>
+                                    <label>@L["Auth:Password"] *</label>
                                     <input name="password" type="password" onclick="this.select()" value="">
-                                    <button type="submit" class="log-submit-btn"><span>Đăng ký</span></button>
+                                    <button type="submit" class="log-submit-btn"><span>@L["Landing:Register"]</span></button>
                                 </form>
                             </div>
                         </div>

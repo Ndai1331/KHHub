@@ -2,22 +2,22 @@
     var templateRoot = Url.Content("~/template");
     var places = new[]
     {
-        new { Category = "Mua sắm", Title = "Sự kiện tại trung tâm thành phố", Description = "Không gian vui chơi, mua sắm và trải nghiệm địa phương.", Location = "Nha Trang, Khánh Hòa", Rating = 5, Reviews = 7, Likes = 4 },
-        new { Category = "Sự kiện", Title = "Cafe ven biển", Description = "Điểm dừng chân lý tưởng để tận hưởng nhịp sống biển.", Location = "Nha Trang, Khánh Hòa", Rating = 4, Reviews = 17, Likes = 15 },
-        new { Category = "Thể thao", Title = "Phòng tập tại trung tâm", Description = "Dịch vụ sức khỏe và luyện tập dành cho người năng động.", Location = "Nha Trang, Khánh Hòa", Rating = 3, Reviews = 16, Likes = 13 },
-        new { Category = "Cửa hàng", Title = "Boutique địa phương", Description = "Sản phẩm thủ công, quà tặng và phong cách sống Khánh Hòa.", Location = "Nha Trang, Khánh Hòa", Rating = 4, Reviews = 6, Likes = 3 },
-        new { Category = "Di chuyển", Title = "Dịch vụ xe du lịch", Description = "Kết nối thuận tiện đến các điểm đến nổi bật trong tỉnh.", Location = "Khánh Hòa", Rating = 5, Reviews = 11, Likes = 35 },
-        new { Category = "Nhà hàng", Title = "Nhà hàng hải sản", Description = "Ẩm thực biển và hương vị địa phương cho du khách.", Location = "Nha Trang, Khánh Hòa", Rating = 5, Reviews = 7, Likes = 553 }
+        new { CategoryKey = "Category:Shopping", TitleKey = "Landing:PopularPlace1Title", DescriptionKey = "Landing:PopularPlace1Description", LocationKey = "Location:NhaTrangKhanhHoa", Rating = 5, Reviews = 7, Likes = 4 },
+        new { CategoryKey = "Category:Event", TitleKey = "Landing:PopularPlace2Title", DescriptionKey = "Landing:PopularPlace2Description", LocationKey = "Location:NhaTrangKhanhHoa", Rating = 4, Reviews = 17, Likes = 15 },
+        new { CategoryKey = "Category:Sports", TitleKey = "Landing:PopularPlace3Title", DescriptionKey = "Landing:PopularPlace3Description", LocationKey = "Location:NhaTrangKhanhHoa", Rating = 3, Reviews = 16, Likes = 13 },
+        new { CategoryKey = "Category:Shop", TitleKey = "Landing:PopularPlace4Title", DescriptionKey = "Landing:PopularPlace4Description", LocationKey = "Location:NhaTrangKhanhHoa", Rating = 4, Reviews = 6, Likes = 3 },
+        new { CategoryKey = "Category:Transport", TitleKey = "Landing:PopularPlace5Title", DescriptionKey = "Landing:PopularPlace5Description", LocationKey = "Location:KhanhHoa", Rating = 5, Reviews = 11, Likes = 35 },
+        new { CategoryKey = "Category:Restaurant", TitleKey = "Landing:PopularPlace6Title", DescriptionKey = "Landing:PopularPlace6Description", LocationKey = "Location:NhaTrangKhanhHoa", Rating = 5, Reviews = 7, Likes = 553 }
     };
 }
 
 <section class="gray-section">
     <div class="container">
         <div class="section-title">
-            <h2>Địa điểm phổ biến</h2>
+            <h2>@L["Landing:PopularPlacesTitle"]</h2>
             <div class="section-subtitle">Best Listings</div>
             <span class="section-separator"></span>
-            <p>Những gợi ý được quan tâm để bắt đầu hành trình khám phá.</p>
+            <p>@L["Landing:PopularPlacesLead"]</p>
         </div>
     </div>
     <div class="list-carousel fl-wrap card-listing">
@@ -33,19 +33,19 @@
                                 <div class="list-post-counter"><span>@place.Likes</span><i class="fa fa-heart"></i></div>
                             </div>
                             <div class="geodir-category-content fl-wrap">
-                                <a class="listing-geodir-category" href="listing.html">@place.Category</a>
+                                <a class="listing-geodir-category" href="listing.html">@L[place.CategoryKey]</a>
                                 <div class="listing-avatar">
                                     <a href="author-single.html"><img src="@(templateRoot)/images/avatar/1.jpg" alt=""></a>
-                                    <span class="avatar-tooltip">Đăng bởi <strong>KH HUB</strong></span>
+                                    <span class="avatar-tooltip">@L["Landing:PostedBy"] <strong>KH HUB</strong></span>
                                 </div>
-                                <h3><a href="listing-single.html">@place.Title</a></h3>
-                                <p>@place.Description</p>
+                                <h3><a href="listing-single.html">@L[place.TitleKey]</a></h3>
+                                <p>@L[place.DescriptionKey]</p>
                                 <div class="geodir-category-options fl-wrap">
                                     <div class="listing-rating card-popup-rainingvis" data-starrating2="@place.Rating">
-                                        <span>(@place.Reviews đánh giá)</span>
+                                        <span>@L["Landing:ReviewsFormat", place.Reviews]</span>
                                     </div>
                                     <div class="geodir-category-location">
-                                        <a href="#"><i class="fa fa-map-marker" aria-hidden="true"></i> @place.Location</a>
+                                        <a href="#"><i class="fa fa-map-marker" aria-hidden="true"></i> @L[place.LocationKey]</a>
                                     </div>
                                 </div>
                             </div>

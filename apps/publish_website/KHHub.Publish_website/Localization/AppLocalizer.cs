@@ -33,6 +33,9 @@ public class AppLocalizer
         }
     }
 
+    public string this[string key, params object[] arguments] =>
+        string.Format(CultureInfo.CurrentUICulture, this[key], arguments);
+
     private static Dictionary<string, Dictionary<string, string>> LoadTexts(string contentRootPath)
     {
         var result = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);

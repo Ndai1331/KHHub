@@ -7,40 +7,41 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="footer-widget fl-wrap">
-                    <h3>Về chúng tôi</h3>
+                    <h3>@L["Landing:FooterAboutTitle"]</h3>
                     <div class="footer-contacts-widget fl-wrap">
-                        <p>KH HUB là nền tảng gợi ý và kết nối trải nghiệm du lịch, dịch vụ, địa điểm tại Khánh Hòa.</p>
+                        <p>@L["Landing:FooterAboutText"]</p>
                         <ul class="footer-contacts fl-wrap">
-                            <li><span><i class="fa fa-envelope-o"></i> Email :</span><a href="mailto:contact@khhub.vn" target="_blank">contact@khhub.vn</a></li>
-                            <li><span><i class="fa fa-map-marker"></i> Địa chỉ :</span><a href="#" target="_blank">Khánh Hòa, Việt Nam</a></li>
-                            <li><span><i class="fa fa-phone"></i> Điện thoại :</span><a href="tel:+84000000000">+84 000 000 000</a></li>
+                            <li><span><i class="fa fa-envelope-o"></i> Email :</span><a href="mailto:contact@khhub.id.vn" target="_blank">contact@khhub.id.vn</a></li>
+                            <li><span><i class="fa fa-map-marker"></i> @L["Landing:AddressLabel"] :</span><a href="#" target="_blank">@L["Location:KhanhHoaVietnam"]</a></li>
+                            <li><span><i class="fa fa-phone"></i> @L["Landing:PhoneLabel"] :</span><a href="tel:+84000000000">+84 000 000 000</a></li>
+                            <li><span><i class="fa fa-globe"></i> © KH HUB 2026. All rights reserved</span><a href="https://khhub.id.vn" target="_blank">https://khhub.id.vn</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="footer-widget fl-wrap">
-                    <h3>Tin mới</h3>
+                    <h3>@L["Landing:LatestNewsTitle"]</h3>
                     <div class="widget-posts fl-wrap">
                         <ul>
                             <li class="clearfix">
                                 <a href="#" class="widget-posts-img"><img src="@(templateRoot)/images/all/1.jpg" class="respimg" alt=""></a>
                                 <div class="widget-posts-descr">
-                                    <a href="#" title="">Gợi ý lịch trình cuối tuần</a>
+                                    <a href="#" title="">@L["Landing:FooterNews1"]</a>
                                     <span class="widget-posts-date"> 21 Mar 09.05 </span>
                                 </div>
                             </li>
                             <li class="clearfix">
                                 <a href="#" class="widget-posts-img"><img src="@(templateRoot)/images/all/1.jpg" class="respimg" alt=""></a>
                                 <div class="widget-posts-descr">
-                                    <a href="#" title="">Địa điểm mới tại Khánh Hòa</a>
+                                    <a href="#" title="">@L["Landing:FooterNews2"]</a>
                                     <span class="widget-posts-date"> 7 Mar 18.21 </span>
                                 </div>
                             </li>
                             <li class="clearfix">
                                 <a href="#" class="widget-posts-img"><img src="@(templateRoot)/images/all/1.jpg" class="respimg" alt=""></a>
                                 <div class="widget-posts-descr">
-                                    <a href="#" title="">Trải nghiệm ẩm thực biển</a>
+                                    <a href="#" title="">@L["Landing:FooterNews3"]</a>
                                     <span class="widget-posts-date"> 7 Mar 16.42 </span>
                                 </div>
                             </li>
@@ -50,19 +51,29 @@
             </div>
             <div class="col-md-3">
                 <div class="footer-widget fl-wrap">
-                    <h3>Kênh xã hội</h3>
+                    <h3>@L["Landing:SocialChannelsTitle"]</h3>
                     <div id="footer-twiit"></div>
+
+                    <div class="footer-social">
+                        <ul>
+                            <li><a href="#" target="_blank"><i class="fa fa-facebook-official"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fa fa-chrome"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fa fa-vk"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fa fa-whatsapp"></i></a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="footer-widget fl-wrap">
-                    <h3>Đăng ký nhận tin</h3>
+                    <h3>@L["Landing:NewsletterTitle"]</h3>
                     <div class="subscribe-widget fl-wrap">
-                        <p>Nhận cập nhật mới nhất về điểm đến, sự kiện và trải nghiệm tại Khánh Hòa.</p>
+                        <p>@L["Landing:NewsletterLead"]</p>
                         <div class="subcribe-form">
                             <form id="subscribe">
                                 <input class="enteremail" name="email" id="subscribe-email" placeholder="Email" spellcheck="false" type="text">
-                                <button type="submit" id="subscribe-button" class="subscribe-button"><i class="fa fa-rss"></i> Đăng ký</button>
+                                <button type="submit" id="subscribe-button" class="subscribe-button"><i class="fa fa-rss"></i> @L["Landing:Subscribe"]</button>
                                 <label for="subscribe-email" class="subscribe-message"></label>
                             </form>
                         </div>
@@ -70,10 +81,10 @@
                     <div class="footer-widget fl-wrap">
                         <div class="footer-menu fl-wrap">
                             <ul>
-                                <li><a href="/">Trang chủ</a></li>
-                                <li><a href="blog.html">Tin tức</a></li>
-                                <li><a href="listing.html">Địa điểm</a></li>
-                                <li><a href="contacts.html">Liên hệ</a></li>
+                                <li><a href="/">@L["Menu:Home"]</a></li>
+                                <li><a href="blog.html">@L["Menu:News"]</a></li>
+                                <li><a href="listing.html">@L["Menu:Places"]</a></li>
+                                <li><a href="contacts.html">@L["Menu:Contact"]</a></li>
                             </ul>
                         </div>
                     </div>
@@ -81,7 +92,7 @@
             </div>
         </div>
     </div>
-    <div class="sub-footer fl-wrap">
+    <!-- <div class="sub-footer fl-wrap">
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
@@ -105,5 +116,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </footer>
