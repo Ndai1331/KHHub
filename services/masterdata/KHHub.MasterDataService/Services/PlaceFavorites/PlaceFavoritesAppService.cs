@@ -41,6 +41,7 @@ public abstract class PlaceFavoritesAppServiceBase : ApplicationService
         _placeRepository = placeRepository;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<PlaceFavoriteWithNavigationPropertiesDto>> GetListAsync(GetPlaceFavoritesInput input)
     {
         var totalCount = await _placeFavoriteRepository.GetCountAsync(input.FilterText, input.UserId, input.PlaceId);

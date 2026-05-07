@@ -37,6 +37,7 @@ public abstract class MediaFilesAppServiceBase : ApplicationService
         _mediaFileManager = mediaFileManager;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<MediaFileDto>> GetListAsync(GetMediaFilesInput input)
     {
         var totalCount = await _mediaFileRepository.GetCountAsync(input.FilterText, input.FileName, input.OriginalFileName, input.Extension, input.ContentType, input.StorageProvider, input.Bucket, input.Folder, input.Path, input.Url, input.Checksum, input.WidthMin, input.WidthMax, input.HeightMin, input.HeightMax, input.FileType, input.Status);

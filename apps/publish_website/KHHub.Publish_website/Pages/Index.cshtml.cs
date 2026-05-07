@@ -4,6 +4,7 @@ using KHHub.Publish_website.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging; 
 
 namespace KHHub.Publish_website.Pages;
 
@@ -11,13 +12,15 @@ public class IndexModel : PageModel
 {
     private readonly PublicMasterDataCatalogClient _catalogClient;
     private readonly IConfiguration _configuration;
-
+    private readonly ILogger<IndexModel> _logger;   
     public IndexModel(
         PublicMasterDataCatalogClient catalogClient,
-        IConfiguration configuration)
-    {
+        IConfiguration configuration,
+        ILogger<IndexModel> logger)
+    {   
         _catalogClient = catalogClient;
         _configuration = configuration;
+        _logger = logger;
     }
 
     public IReadOnlyList<HomeBannerDto> HomeBanners { get; private set; } = Array.Empty<HomeBannerDto>();
@@ -29,32 +32,48 @@ public class IndexModel : PageModel
     {
         var now = DateTime.UtcNow;
         HomeBanners = await _catalogClient.GetActiveHomeBannersAsync(8, now, cancellationToken);
+        _logger.LogInformation("HomeBanners: {HomeBanners}", HomeBanners.Count);
+        _logger.LogInformation("HomeBanners: {HomeBanners}", HomeBanners.Select(b => b.ImageUrl).ToList());
         Places = await _catalogClient.GetPublishedPlacesAsync(12, cancellationToken);
     }
 
     /// <summary>
-    /// Builds absolute media URLs when API returns paths relative to blob/CDN base.
+    /// Resolves stored media paths to browser-loadable URL (same behavior as apps/web).
     /// </summary>
     public string ResolveMediaUrl(string? url)
     {
-        if (string.IsNullOrWhiteSpace(url))
+        var value = (url ?? string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(value))
         {
             return string.Empty;
         }
 
-        if (url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-            url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        if (value.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+            value.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
         {
-            return url;
+            return value;
         }
 
-        var baseUrl = _configuration["MediaFiles:PublicBaseUrl"]?.TrimEnd('/');
-        if (string.IsNullOrEmpty(baseUrl))
+        if (value.StartsWith("//", StringComparison.Ordinal))
         {
-            return url;
+            return value;
         }
 
-        return url.StartsWith('/') ? $"{baseUrl}{url}" : $"{baseUrl}/{url}";
+        var baseUrl = (_configuration["MediaFiles:PublicBaseUrl"] ?? string.Empty).Trim().TrimEnd('/');
+        if (string.IsNullOrEmpty(baseUrl) || !value.StartsWith('/'))
+        {
+            return value;
+        }
+
+        try
+        {
+            var uri = new Uri(baseUrl);
+            return uri.GetLeftPart(UriPartial.Authority) + value;
+        }
+        catch (UriFormatException)
+        {
+            return value;
+        }
     }
 
     public async Task OnPostLoginAsync()

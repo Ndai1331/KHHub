@@ -37,6 +37,7 @@ public abstract class ArticleCategoriesAppServiceBase : ApplicationService
         _articleCategoryManager = articleCategoryManager;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<ArticleCategoryDto>> GetListAsync(GetArticleCategoriesInput input)
     {
         var totalCount = await _articleCategoryRepository.GetCountAsync(input.FilterText, input.Name, input.Slug, input.Description, input.Icon, input.ParentId, input.DisplayOrderMin, input.DisplayOrderMax, input.IsActive, input.ThumbnailUrl);

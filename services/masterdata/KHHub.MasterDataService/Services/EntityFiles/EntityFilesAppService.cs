@@ -41,6 +41,7 @@ public abstract class EntityFilesAppServiceBase : ApplicationService
         _mediaFileRepository = mediaFileRepository;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<EntityFileWithNavigationPropertiesDto>> GetListAsync(GetEntityFilesInput input)
     {
         var totalCount = await _entityFileRepository.GetCountAsync(input.FilterText, input.EntityType, input.EntityId, input.Collection, input.SortOrderMin, input.SortOrderMax, input.IsPrimary, input.MediaFileId);

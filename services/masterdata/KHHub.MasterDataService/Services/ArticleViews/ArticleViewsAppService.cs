@@ -41,6 +41,7 @@ public abstract class ArticleViewsAppServiceBase : ApplicationService
         _articleRepository = articleRepository;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<ArticleViewWithNavigationPropertiesDto>> GetListAsync(GetArticleViewsInput input)
     {
         var totalCount = await _articleViewRepository.GetCountAsync(input.FilterText, input.IpAddress, input.Device, input.Source, input.ViewedAtMin, input.ViewedAtMax, input.DurationMin, input.DurationMax, input.UserId, input.ArticleId);

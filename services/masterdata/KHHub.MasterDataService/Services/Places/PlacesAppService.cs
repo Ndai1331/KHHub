@@ -47,6 +47,7 @@ public abstract class PlacesAppServiceBase : ApplicationService
         _wardRepository = wardRepository;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<PlaceWithNavigationPropertiesDto>> GetListAsync(GetPlacesInput input)
     {
         var totalCount = await _placeRepository.GetCountAsync(input.FilterText, input.Name, input.Slug, input.ShortDescription, input.Description, input.ThumbnailUrl, input.CoverImageUrl, input.Address, input.LatitudeMin, input.LatitudeMax, input.LongitudedMin, input.LongitudedMax, input.PhoneNumber, input.Email, input.Website, input.OpeningHours, input.PriceRange, input.GoogleMapUrl, input.Status, input.ViewCountMin, input.ViewCountMax, input.FavoriteCountMin, input.FavoriteCountMax, input.ReviewCountMin, input.ReviewCountMax, input.RatingAveragedMin, input.RatingAveragedMax, input.RatingTotalMin, input.RatingTotalMax, input.IsFeatured, input.IsHot, input.IsVerified, input.SeoTitle, input.SeoDescription, input.SeoKeywords, input.PlaceCategoryId, input.ProvinceId, input.WardId);

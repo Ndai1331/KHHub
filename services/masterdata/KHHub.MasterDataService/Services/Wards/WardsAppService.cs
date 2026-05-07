@@ -41,6 +41,7 @@ public abstract class WardsAppServiceBase : ApplicationService
         _provinceRepository = provinceRepository;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<WardWithNavigationPropertiesDto>> GetListAsync(GetWardsInput input)
     {
         var totalCount = await _wardRepository.GetCountAsync(input.FilterText, input.Code, input.Name, input.ProvinceId);

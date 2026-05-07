@@ -37,6 +37,7 @@ public abstract class ArticleTagsAppServiceBase : ApplicationService
         _articleTagManager = articleTagManager;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<ArticleTagDto>> GetListAsync(GetArticleTagsInput input)
     {
         var totalCount = await _articleTagRepository.GetCountAsync(input.FilterText, input.Name, input.Slug, input.Description, input.UsageCountMin, input.UsageCountMax);

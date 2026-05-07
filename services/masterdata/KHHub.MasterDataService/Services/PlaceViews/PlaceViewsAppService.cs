@@ -41,6 +41,7 @@ public abstract class PlaceViewsAppServiceBase : ApplicationService
         _placeRepository = placeRepository;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<PlaceViewWithNavigationPropertiesDto>> GetListAsync(GetPlaceViewsInput input)
     {
         var totalCount = await _placeViewRepository.GetCountAsync(input.FilterText, input.UserId, input.IpAddress, input.Device, input.ViewedAtMin, input.ViewedAtMax, input.DurationMin, input.DurationMax, input.Source, input.PlaceId);

@@ -44,6 +44,7 @@ public abstract class ArticleTagMappingsAppServiceBase : ApplicationService
         _articleRepository = articleRepository;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<ArticleTagMappingWithNavigationPropertiesDto>> GetListAsync(GetArticleTagMappingsInput input)
     {
         var totalCount = await _articleTagMappingRepository.GetCountAsync(input.FilterText, input.IsPrimary, input.OrderMin, input.OrderMax, input.ArticleTagId, input.ArticleId);

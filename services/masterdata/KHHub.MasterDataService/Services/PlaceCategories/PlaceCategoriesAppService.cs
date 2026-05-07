@@ -37,6 +37,7 @@ public abstract class PlaceCategoriesAppServiceBase : ApplicationService
         _placeCategoryManager = placeCategoryManager;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<PlaceCategoryDto>> GetListAsync(GetPlaceCategoriesInput input)
     {
         var totalCount = await _placeCategoryRepository.GetCountAsync(input.FilterText, input.Name, input.Slug, input.Description, input.Icon, input.Color, input.ParentId, input.DisplayOrderMin, input.DisplayOrderMax, input.IsActive);

@@ -37,6 +37,7 @@ public abstract class PlaceTagsAppServiceBase : ApplicationService
         _placeTagManager = placeTagManager;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<PlaceTagDto>> GetListAsync(GetPlaceTagsInput input)
     {
         var totalCount = await _placeTagRepository.GetCountAsync(input.FilterText, input.Name, input.Slug, input.Description, input.UsageCountMin, input.UsageCountMax);

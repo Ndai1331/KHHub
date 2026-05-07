@@ -44,6 +44,7 @@ public abstract class PlaceTagMappingsAppServiceBase : ApplicationService
         _placeRepository = placeRepository;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<PlaceTagMappingWithNavigationPropertiesDto>> GetListAsync(GetPlaceTagMappingsInput input)
     {
         var totalCount = await _placeTagMappingRepository.GetCountAsync(input.FilterText, input.IsPrimary, input.SortOrderMin, input.SortOrderMax, input.PlaceTagId, input.PlaceId);

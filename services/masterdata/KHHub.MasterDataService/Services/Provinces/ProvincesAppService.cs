@@ -37,6 +37,7 @@ public abstract class ProvincesAppServiceBase : ApplicationService
         _provinceManager = provinceManager;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<ProvinceDto>> GetListAsync(GetProvincesInput input)
     {
         var totalCount = await _provinceRepository.GetCountAsync(input.FilterText, input.Code, input.Name);

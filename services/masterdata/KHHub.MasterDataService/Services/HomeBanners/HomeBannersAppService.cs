@@ -36,7 +36,7 @@ public abstract class HomeBannersAppServiceBase : ApplicationService
         _homeBannerRepository = homeBannerRepository;
         _homeBannerManager = homeBannerManager;
     }
-
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<HomeBannerDto>> GetListAsync(GetHomeBannersInput input)
     {
         var totalCount = await _homeBannerRepository.GetCountAsync(input.FilterText, input.Title, input.Subtitle, input.Description, input.ImageUrl, input.MobileImageUrl, input.ButtonText, input.ButtonUrl, input.TargetType, input.TargetId, input.SortOrderMin, input.SortOrderMax, input.IsActive, input.StartDateMin, input.StartDateMax, input.EndDateMin, input.EndDateMax);
@@ -47,6 +47,7 @@ public abstract class HomeBannersAppServiceBase : ApplicationService
             Items = ObjectMapper.Map<List<HomeBanner>, List<HomeBannerDto>>(items)
         };
     }
+
 
     public virtual async Task<HomeBannerDto> GetAsync(Guid id)
     {
