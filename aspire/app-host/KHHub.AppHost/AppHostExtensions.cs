@@ -452,6 +452,14 @@ public static class AppHostExtensions
                     .WithEnvironment("ReverseProxy__Clusters__MasterData__Destinations__MasterData__Address", "http://masterdata");
             }
         }
+        
+        var publish_website = builder
+            .AddProject<Projects.KHHub_Publish_website>("publish_website", "KHHub.Publish_website")
+            .WaitFor(redis)
+            .WaitFor(rabbitMq)
+            .WithReference(redis)
+            .WithReference(rabbitMq);
+        applicationResources["Publish_website"] = publish_website;
         }
 }
 
@@ -515,7 +523,7 @@ public class EnvironmentConfiguration
 
     public void ConfigureAuthServer(IResourceBuilder<ProjectResource> authServer, Dictionary<string, IResourceBuilder<ProjectResource>> applicationResources)
     {
-        var allowedUrls = ReferenceExpression.Create($"{applicationResources["MasterData"].GetEndpoint("http")},{_endpoints.WebEndpoint},{_endpoints.WebGatewayEndpoint},{applicationResources["Administration"].GetEndpoint("http")},{applicationResources["Identity"].GetEndpoint("http")},{_endpoints.MobileGatewayEndpoint},{applicationResources["AuditLogging"].GetEndpoint("http")},{applicationResources["Gdpr"].GetEndpoint("http")},{applicationResources["AIManagement"].GetEndpoint("http")},{applicationResources["LanguageManagement"].GetEndpoint("http")}");
+        var allowedUrls = ReferenceExpression.Create($"{applicationResources["Publish_website"].GetEndpoint("http")},{applicationResources["MasterData"].GetEndpoint("http")},{_endpoints.WebEndpoint},{_endpoints.WebGatewayEndpoint},{applicationResources["Administration"].GetEndpoint("http")},{applicationResources["Identity"].GetEndpoint("http")},{_endpoints.MobileGatewayEndpoint},{applicationResources["AuditLogging"].GetEndpoint("http")},{applicationResources["Gdpr"].GetEndpoint("http")},{applicationResources["AIManagement"].GetEndpoint("http")},{applicationResources["LanguageManagement"].GetEndpoint("http")}");
 
         authServer.WithEnvironment("AuthServer__Authority", _endpoints.AuthServerEndpoint)
             .WithEnvironment("App__RedirectAllowedUrls", allowedUrls)

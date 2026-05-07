@@ -148,6 +148,16 @@
       "healthUiEndpoint": "/health-ui",
       "folder": "services",
       "runnable": true
+    },
+    "KHHub.Publish_website": {
+      "type": "dotnet-project",
+      "path": "../../../apps/publish_website/KHHub.Publish_website/KHHub.Publish_website.csproj",
+      "launchUrl": "http://localhost:44335",
+      "kubernetesService": ".*-publish_website$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "folder": "apps",
+      "runnable": true
     }
   },
   "containers": {

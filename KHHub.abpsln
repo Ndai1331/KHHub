@@ -77,6 +77,10 @@
     "KHHub.MasterDataService": {
       "path": "services/masterdata/KHHub.MasterDataService.abpmdl",
       "folder": "services"
+    },
+    "KHHub.Publish_website": {
+      "path": "apps/publish_website/KHHub.Publish_website.abpmdl",
+      "folder": "apps"
     }
   },
   "k8sProfiles": {

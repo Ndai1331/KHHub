@@ -60,6 +60,11 @@
         "profile": "Default",
         "applicationOrFolder": "KHHub.MasterDataService",
         "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "KHHub.Publish_website",
+        "value": 0
       }
     ],
     "folderBatchStartStates": [
@@ -88,6 +93,11 @@
         "applicationOrFolder": "services",
         "value": 0
       }
-    ]
-  }
+    ],
+    "selectedWorkflowIds": []
+  },
+  "lastSelectedAgentSessionId": null,
+  "disabledAiRules": [],
+  "aiScopes": [],
+  "activeAiScopeId": null
 }

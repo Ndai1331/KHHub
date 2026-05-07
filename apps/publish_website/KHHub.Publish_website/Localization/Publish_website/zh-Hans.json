@@ -1,0 +1,32 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Menu:Home": "Home",
+    "Landing:PageTitle": "KH HUB — Discover Khanh Hoa",
+    "Landing:MetaDescription": "Explore destinations, curated places, and travel inspiration for Khanh Hoa — powered by KH HUB.",
+    "Landing:HeroEyebrow": "Khanh Hoa tourism",
+    "Landing:HeroFallbackTitle": "Discover Khanh Hoa your way",
+    "Landing:HeroFallbackSubtitle": "Stays, experiences, and local highlights — curated on one platform.",
+    "Landing:CtaExplore": "Explore places",
+    "Landing:CtaPromo": "Hot deals",
+    "Landing:DestinationsTitle": "Top places to explore",
+    "Landing:DestinationsLead": "Hand-picked listings from MasterData — ratings, categories, and local context.",
+    "Landing:NoPlacesYet": "Places will appear here once they are published in MasterData.",
+    "Landing:BadgeFeatured": "Featured",
+    "Landing:Rating": "Rating",
+    "Landing:WhyTitle": "Why KH HUB",
+    "Landing:WhyLead": "Built for travelers and operators — clear information, trustworthy data, and a modern public experience.",
+    "Landing:WhyPoint1Title": "Local-first discovery",
+    "Landing:WhyPoint1Text": "Provinces, wards, and place categories structured for real itineraries.",
+    "Landing:WhyPoint2Title": "Verified content",
+    "Landing:WhyPoint2Text": "Editorial workflow and status on listings help keep public data reliable.",
+    "Landing:WhyPoint3Title": "Rich place profiles",
+    "Landing:WhyPoint3Text": "Media, maps, and ratings come together for confident trip planning.",
+    "Landing:WhyPoint4Title": "Always-on platform",
+    "Landing:WhyPoint4Text": "Microservice APIs behind a gateway — ready to scale with your traffic.",
+    "Landing:StatExperiences": "Curated experiences",
+    "Landing:StatSupport": "Support mindset",
+    "Landing:StatLocal": "Local focus",
+    "Landing:StatRegion": "Khanh Hoa region"
+  }
+}

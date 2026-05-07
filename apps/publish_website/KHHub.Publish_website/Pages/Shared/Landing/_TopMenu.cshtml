@@ -1,0 +1,77 @@
+@model KHHub.Publish_website.Pages.IndexModel
+@{
+    var currentPath = Context.Request.Path.Value ?? "/";
+    var enUrl = $"{currentPath}?culture=en&ui-culture=en";
+    var viUrl = $"{currentPath}?culture=vi&ui-culture=vi";
+}
+<header class="main-header main-header-nine landing-header">
+    <div class="header-topbar topbar-four topbar-nine landing-header__topbar">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between flex-wrap py-2 gap-2">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="dropdown flag-dropdown">
+                        <a href="#" class="dropdown-toggle d-inline-flex align-items-center landing-header__top-link" data-bs-toggle="dropdown" aria-expanded="false" aria-label="@L["Landing:SwitchLanguage"]">
+                            <img src="/assets/img/flags/us-flag.svg" class="me-1" alt="flag" width="16" height="16"> ENG
+                        </a>
+                        <ul class="dropdown-menu p-2 mt-2">
+                            <li>
+                                <a class="dropdown-item rounded d-flex align-items-center" href="@enUrl">
+                                    <img src="/assets/img/flags/us-flag.svg" class="me-2" alt="flag" width="16" height="16"> English
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item rounded d-flex align-items-center" href="@viUrl">
+                                    <img src="/assets/img/flags/france-flag.svg" class="me-2" alt="flag" width="16" height="16"> Tiếng Việt
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle landing-header__top-link" data-bs-toggle="dropdown" aria-expanded="false">USD</a>
+                        <ul class="dropdown-menu p-2 mt-2">
+                            <li><a class="dropdown-item rounded" href="#">USD</a></li>
+                            <li><a class="dropdown-item rounded" href="#">VND</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-3 landing-header__contact">
+                    <span><i class="isax isax-call5 me-1"></i> +1 56565 56594</span>
+                    <span><i class="isax isax-message-text-15 me-1"></i> info@example.com</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-four header-nine landing-header__nav">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between py-3 gap-3">
+                <a class="navbar-brand text-decoration-none landing-header__brand" href="/">
+                    <img src="/assets/img/logo-dark.svg" alt="KH HUB logo" height="34">
+                </a>
+                <nav aria-label="@L["Landing:MainNavigationAria"]">
+                    <ul class="nav align-items-center gap-1 landing-header__menu">
+                        <li>
+                            <a class="nav-link active" href="/">@L["Menu:Home"]</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="#">@L["Menu:News"]</a>
+                        </li>
+                        <li><a class="nav-link" href="#">@L["Menu:Jobs"]</a></li>
+                        <li><a class="nav-link" href="#explore">@L["Menu:Places"]</a></li>
+                        <li><a class="nav-link" href="#">@L["Menu:Food"]</a></li>
+                        <li><a class="nav-link" href="#">@L["Menu:Entertainment"]</a></li>
+                        <li><a class="nav-link" href="#">@L["Menu:GoldPrice"]</a></li>
+                    </ul>
+                </nav>
+                <div class="d-flex align-items-center gap-2 landing-header__actions">
+                    <a href="#" class="landing-header__icon"><i class="isax isax-moon"></i></a>
+                    <a href="#" class="landing-header__icon position-relative"><i class="isax isax-heart"></i></a>
+                    <button type="submit" form="loginForm" class="btn btn-danger btn-sm px-3">@L["Landing:SignIn"]</button>
+                    <a href="#" class="btn btn-dark btn-sm px-3">@L["Landing:Register"]</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<form id="loginForm" method="post" asp-page-handler="Login"></form>

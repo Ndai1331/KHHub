@@ -1,0 +1,89 @@
+@model KHHub.Publish_website.Pages.IndexModel
+@{
+    var banners = Model.HomeBanners.ToList();
+    var carouselId = "landingHeroCarousel";
+}
+<section class="landing-hero hero-sec-nine" aria-labelledby="landing-hero-title">
+    @if (banners.Count > 0)
+    {
+        <div id="@carouselId" class="carousel slide landing-hero__carousel" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                @for (var i = 0; i < banners.Count; i++)
+                {
+                    <button type="button" data-bs-target="#@carouselId" data-bs-slide-to="@i" class="@(i == 0 ? "active" : null)"
+                            aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i + 1)"></button>
+                }
+            </div>
+            <div class="carousel-inner">
+                @for (var i = 0; i < banners.Count; i++)
+                {
+                    var b = banners[i];
+                    var img = Model.ResolveMediaUrl(b.ImageUrl);
+                    <div class="carousel-item @(i == 0 ? "active" : null)">
+                        <div class="landing-hero__slide position-relative">
+                            @if (!string.IsNullOrEmpty(img))
+                            {
+                                <img class="landing-hero__bg" src="@img" alt="@b.Title" width="1920" height="900" decoding="async" />
+                            }
+                            <div class="landing-hero__overlay" aria-hidden="true"></div>
+                            <div class="container landing-hero__content py-5 position-relative">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-9 text-center text-white">
+                                        <p class="landing-hero__eyebrow mb-2">@L["Landing:HeroEyebrow"]</p>
+                                        <h1 id="landing-hero-title" class="landing-hero__title">@b.Title</h1>
+                                        @if (!string.IsNullOrEmpty(b.Subtitle))
+                                        {
+                                            <p class="landing-hero__subtitle lead">@b.Subtitle</p>
+                                        }
+                                        @if (!string.IsNullOrEmpty(b.Description))
+                                        {
+                                            <p class="landing-hero__desc">@b.Description</p>
+                                        }
+                                        <div class="landing-hero__actions d-flex flex-wrap gap-3 justify-content-center mt-4">
+                                            @if (!string.IsNullOrEmpty(b.ButtonText))
+                                            {
+                                                var href = string.IsNullOrEmpty(b.ButtonUrl) ? "#explore" : b.ButtonUrl;
+                                                <a class="btn btn-primary btn-lg px-4" href="@href">@b.ButtonText</a>
+                                            }
+                                            <a class="btn btn-landing-accent btn-lg px-4" href="#explore">@L["Landing:CtaExplore"]</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            @if (banners.Count > 1)
+            {
+                <button class="carousel-control-prev" type="button" data-bs-target="#@carouselId" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#@carouselId" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="landing-hero__slide landing-hero__slide--fallback position-relative">
+            <div class="landing-hero__overlay" aria-hidden="true"></div>
+            <div class="container landing-hero__content py-5 position-relative">
+                <div class="row justify-content-center">
+                    <div class="col-lg-9 text-center text-white">
+                        <p class="landing-hero__eyebrow mb-2">@L["Landing:HeroEyebrow"]</p>
+                        <h1 id="landing-hero-title" class="landing-hero__title">@L["Landing:HeroFallbackTitle"]</h1>
+                        <p class="landing-hero__subtitle lead">@L["Landing:HeroFallbackSubtitle"]</p>
+                        <div class="landing-hero__actions d-flex flex-wrap gap-3 justify-content-center mt-4">
+                            <a class="btn btn-primary btn-lg px-4" href="#explore">@L["Landing:CtaExplore"]</a>
+                            <a class="btn btn-landing-accent btn-lg px-4" href="#explore">@L["Landing:CtaPromo"]</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>

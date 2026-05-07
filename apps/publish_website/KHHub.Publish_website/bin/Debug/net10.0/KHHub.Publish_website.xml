@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>KHHub.Publish_website</name>
+    </assembly>
+    <members>
+        <member name="M:KHHub.Publish_website.Pages.IndexModel.ResolveMediaUrl(System.String)">
+            <summary>
+            Builds absolute media URLs when API returns paths relative to blob/CDN base.
+            </summary>
+        </member>
+        <member name="T:KHHub.Publish_website.Services.PublicMasterDataCatalogClient">
+            <summary>
+            Loads public catalog data from MasterData via the Web Gateway (YARP).
+            </summary>
+        </member>
+    </members>
+</doc>

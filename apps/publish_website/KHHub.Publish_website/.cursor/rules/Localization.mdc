@@ -1,0 +1,4 @@
+
+- Localization conventions
+- Use L["Key"] for localization
+- Do NOT break theme layout

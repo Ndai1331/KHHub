@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+  </Configurations>
+
+  <Project Path="KHHub.Publish_website/KHHub.Publish_website.csproj" />
+</Solution>

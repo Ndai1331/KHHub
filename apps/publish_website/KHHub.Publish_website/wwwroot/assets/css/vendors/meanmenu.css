@@ -1,0 +1,49 @@
+/*============================
+  1.variables
+============================*/
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;400;500;600;700&display=swap");
+/*============================
+  60.meanmenu
+============================*/
+.mean-container a.meanmenu-reveal {
+  display: none !important;
+}
+.mean-container .mean-bar {
+  background: #FFF;
+}
+.mean-container .mean-bar, .mean-container .mean-bar * {
+  box-sizing: border-box;
+}
+.mean-container .mean-nav {
+  background: #FFF;
+  margin-top: 0;
+}
+.mean-container .mean-nav ul li.active > a {
+  color: #CF3425;
+}
+.mean-container .mean-nav ul li .submenu li:last-child {
+  margin-bottom: 12px;
+}
+.mean-container .mean-nav ul li .submenu li a {
+  font-size: 14px;
+  font-weight: 400;
+  padding: 4px 4px 4px 16px;
+  width: 100%;
+}
+.mean-container .mean-nav > ul {
+  display: block !important;
+}
+.mean-container .mean-nav > ul > li {
+  border-bottom: 1px solid #E4EBF1;
+}
+.mean-container .mean-nav > ul li a {
+  color: #4E5561;
+  font-weight: 500;
+  padding: 16px 0;
+  border: 0;
+  width: 100%;
+  z-index: 6;
+  position: relative;
+}
+
+/*# sourceMappingURL=meanmenu.css.map */

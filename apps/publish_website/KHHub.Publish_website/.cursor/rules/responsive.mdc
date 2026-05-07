@@ -1,0 +1,6 @@
+# RESPONSIVE RULES
+
+- Mobile-first
+- Use Flexbox/Grid
+- No fixed widths
+- Buttons >= 44px

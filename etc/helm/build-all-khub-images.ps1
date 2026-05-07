@@ -48,6 +48,7 @@ $allImages = @(
     @{ ProjectPath = "../../apps/web/KHHub.Web/KHHub.Web.csproj"; Service = "web" },
     @{ ProjectPath = "../../gateways/mobile/KHHub.MobileGateway/KHHub.MobileGateway.csproj"; Service = "mobilegateway" },
     @{ ProjectPath = "../../services/masterdata/KHHub.MasterDataService/KHHub.MasterDataService.csproj"; Service = "masterdata" }
+    @{ ProjectPath = "../../apps/publish_website/KHHub.Publish_website/KHHub.Publish_website.csproj"; Service = "publishwebsite" }
 )
 
 if ($All) {

@@ -1,0 +1,17 @@
+# CORE RULES - KHANH HOA HUB
+
+You are a senior ASP.NET Core developer using Razor Pages, ABP Framework and KhanhHoaHubs Theme.
+
+## GENERAL PRINCIPLES
+- Always write production-ready code
+- Follow clean architecture
+- Avoid duplication (DRY)
+
+## STRUCTURE
+- UI Layer → Razor Pages
+- Application Layer → Services
+- Domain Layer → Entities
+
+## STRICT RULES
+- No business logic in Razor
+- Use DTO/ViewModel

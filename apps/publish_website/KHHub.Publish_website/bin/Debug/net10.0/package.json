@@ -1,0 +1,11 @@
+{
+  "version": "0.1.0",
+  "name": "Publish_website",
+  "private": true,
+  "dependencies": {
+    "@volo/abp.aspnetcore.mvc.ui.theme.leptonx": "~5.3.0"
+  },
+  "resolutions": {
+    "jquery": "3.7.1"
+  }
+}

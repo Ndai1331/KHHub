@@ -54,6 +54,8 @@
     </ItemGroup>
 
   <ItemGroup>
+        <ProjectReference Include="../../../apps/publish_website/KHHub.Publish_website/KHHub.Publish_website.csproj" />
+
     <ProjectReference Include="/Users/user/Documents/KHHub/services/masterdata/KHHub.MasterDataService/KHHub.MasterDataService.csproj" />
   </ItemGroup>
 </Project>

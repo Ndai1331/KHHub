@@ -1,0 +1,6 @@
+# RAZOR UI RULES
+
+- Use semantic HTML5
+- Use @model, @if, @foreach
+- Avoid inline CSS
+- Use Partial Views / ViewComponents
