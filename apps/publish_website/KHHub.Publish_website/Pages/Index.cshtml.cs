@@ -7,6 +7,8 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging; 
+using System.Security.Cryptography;
+using System.Text;
 
 namespace KHHub.Publish_website.Pages;
 
@@ -157,8 +159,9 @@ public class IndexModel : PageModel
             return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
 
+        var cacheKey = $"{LandingMediaCacheKey}:{BuildMediaCacheFingerprint(rawPaths)}";
         var cached = await _cache.GetOrCreateAsync(
-            LandingMediaCacheKey,
+            cacheKey,
             async entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = GetCacheDuration("LandingCache:MediaMinutes", TimeSpan.FromMinutes(30));
@@ -188,7 +191,20 @@ public class IndexModel : PageModel
 
         if (value.StartsWith('/'))
         {
-            return value;
+            return value.Split('?', '#')[0];
+        }
+
+        if (value.StartsWith("host/", StringComparison.OrdinalIgnoreCase) ||
+            value.StartsWith("tenants/", StringComparison.OrdinalIgnoreCase))
+        {
+            return "/" + value.Split('?', '#')[0].TrimStart('/');
+        }
+
+        var configuredBasePath = GetConfiguredMediaBasePath();
+        if (!string.IsNullOrWhiteSpace(configuredBasePath) &&
+            value.StartsWith(configuredBasePath.TrimStart('/') + "/", StringComparison.OrdinalIgnoreCase))
+        {
+            return "/" + value.Split('?', '#')[0].TrimStart('/');
         }
 
         if (!Uri.TryCreate(value, UriKind.Absolute, out var absolute))
@@ -196,8 +212,7 @@ public class IndexModel : PageModel
             return null;
         }
 
-        var publicBaseUrl = (_configuration["MediaFiles:PublicBaseUrl"] ?? string.Empty).Trim();
-        if (Uri.TryCreate(publicBaseUrl, UriKind.Absolute, out var baseUri))
+        if (Uri.TryCreate((_configuration["MediaFiles:PublicBaseUrl"] ?? string.Empty).Trim(), UriKind.Absolute, out var baseUri))
         {
             var basePath = baseUri.AbsolutePath.TrimEnd('/');
             if (basePath.Length == 0)
@@ -212,6 +227,23 @@ public class IndexModel : PageModel
         }
 
         return absolute.AbsolutePath;
+    }
+
+    private string GetConfiguredMediaBasePath()
+    {
+        var publicBaseUrl = (_configuration["MediaFiles:PublicBaseUrl"] ?? string.Empty).Trim();
+        if (Uri.TryCreate(publicBaseUrl, UriKind.Absolute, out var baseUri))
+        {
+            return baseUri.AbsolutePath.Trim('/');
+        }
+
+        return publicBaseUrl.Trim('/');
+    }
+
+    private static string BuildMediaCacheFingerprint(IEnumerable<string> paths)
+    {
+        var joined = string.Join('\n', paths.Order(StringComparer.OrdinalIgnoreCase));
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(joined)));
     }
 
     private TimeSpan GetCacheDuration(string configurationKey, TimeSpan fallback)

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Content;
 using KHHub.MasterDataService.Services.Dtos.MediaFiles;
@@ -21,5 +22,6 @@ public partial interface IMediaFilesAppService
     /// <summary>
     /// Returns a short-lived presigned GET URL for a stored public path (e.g. /khhub-articles/host/file.png), or a public URL when presign is disabled.
     /// </summary>
+    [AllowAnonymous]
     Task<string?> GetPresignedReadUrlByPublicPathAsync(string publicPath);
 }

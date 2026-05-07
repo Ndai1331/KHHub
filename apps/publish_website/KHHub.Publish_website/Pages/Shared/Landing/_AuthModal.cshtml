@@ -1,3 +1,10 @@
+@{
+    var request = ViewContext.HttpContext.Request;
+    var currentPath = request.Path.Value ?? "/";
+    var currentQuery = request.QueryString.Value ?? string.Empty;
+    var returnUrl = currentPath + currentQuery;
+    var loginUrl = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/Account/Login", "returnUrl", returnUrl);
+}
 <div class="main-register-wrap modal">
     <div class="main-overlay"></div>
     <div class="main-register-holder">
@@ -6,8 +13,8 @@
             <h3>@L["Landing:SignIn"] <span>KH<strong>HUB</strong></span></h3>
             <div class="soc-log fl-wrap">
                 <p>@L["Auth:SocialLoginLead"]</p>
-                <a href="#" class="facebook-log"><i class="fa fa-facebook-official"></i>@L["Auth:LoginWithFacebook"]</a>
-                <a href="#" class="twitter-log"><i class="fa fa-twitter"></i> @L["Auth:LoginWithTwitter"]</a>
+                <a href="@loginUrl" class="facebook-log"><i class="fa fa-facebook-official"></i>@L["Auth:LoginWithFacebook"]</a>
+                <a href="@loginUrl" class="twitter-log kh-google-log"><i class="fa fa-google"></i> @L["Auth:LoginWithGoogle"]</a>
             </div>
             <div class="log-separator fl-wrap"><span>@L["Auth:Or"]</span></div>
             <div id="tabs-container">
@@ -18,7 +25,8 @@
                 <div class="tab">
                     <div id="tab-1" class="tab-content">
                         <div class="custom-form">
-                            <form method="post" name="registerform">
+                            <form method="get" action="/Account/Login" name="registerform">
+                                <input type="hidden" name="returnUrl" value="@returnUrl">
                                 <label>@L["Auth:UserNameOrEmail"] *</label>
                                 <input name="email" type="text" onclick="this.select()" value="">
                                 <label>@L["Auth:Password"] *</label>

@@ -61,6 +61,14 @@
     color: #1d4ed8;
 }
 
+.kh-header-auth-link {
+    color: inherit;
+}
+
+.soc-log a.kh-google-log {
+    background: #db4437;
+}
+
 @media (max-width: 1024px) {
 
     .khhub-language-select summary {

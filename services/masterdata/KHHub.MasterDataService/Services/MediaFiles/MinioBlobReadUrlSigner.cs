@@ -98,11 +98,15 @@ public sealed class MinioBlobReadUrlSigner : IMinioBlobReadUrlSigner
             ? mediaOptions.PresignPublicEndpoint!.Trim()
             : (sec["EndPoint"] ?? "").Trim();
 
-        // Public nginx TLS (e.g. https://minio.khub.id.vn:443) vs internal HTTP minio:9000 for blob IO.
-        var presignHttps = usePresignEndpoint
-            && rawSource.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+        var hasAbsoluteEndpoint = Uri.TryCreate(rawSource, UriKind.Absolute, out var endpointUri)
+                                  && !string.IsNullOrWhiteSpace(endpointUri.Host);
+        // Public nginx TLS (e.g. https://minio.khub.id.vn) vs internal HTTP minio:9000 for blob IO.
+        var presignHttps = usePresignEndpoint &&
+                           (hasAbsoluteEndpoint
+                               ? string.Equals(endpointUri!.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)
+                               : rawSource.StartsWith("https://", StringComparison.OrdinalIgnoreCase));
 
-        var raw = StripScheme(rawSource);
+        var raw = hasAbsoluteEndpoint ? endpointUri!.Authority : StripScheme(rawSource);
 
         if (string.IsNullOrWhiteSpace(raw)
             || string.IsNullOrWhiteSpace(accessKey)
@@ -118,6 +122,13 @@ public sealed class MinioBlobReadUrlSigner : IMinioBlobReadUrlSigner
                 "MinIO endpoint '{Endpoint}' could not be parsed; presigned reads disabled.",
                 raw);
             return null;
+        }
+
+        if (hasAbsoluteEndpoint && endpointUri!.IsDefaultPort)
+        {
+            port = string.Equals(endpointUri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)
+                ? 443
+                : 80;
         }
 
         var withSsl = presignHttps || (!usePresignEndpoint && sec.GetValue("WithSSL", false));

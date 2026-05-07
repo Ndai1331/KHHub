@@ -1,10 +1,44 @@
 (function () {
     var favoriteKey = 'khhub-public-favorites';
-    var favorites = new Set(JSON.parse(localStorage.getItem(favoriteKey) || '[]'));
+    var isAuthenticated = document.body.getAttribute('data-authenticated') === 'true';
+    var loginUrl = document.body.getAttribute('data-login-url') || '/Account/Login';
+    var favorites = new Set(isAuthenticated ? JSON.parse(localStorage.getItem(favoriteKey) || '[]') : []);
 
     // Client-side view toggle (grid/list) without reloading or hitting the controller.
     var viewKey = 'khhub-public-view';
     var validViews = { grid: 'kh-grid', list: 'kh-list' };
+    var authNoticeTimer = null;
+
+    var showAuthNotice = function (message) {
+        var notice = document.querySelector('[data-auth-required-notice]');
+        if (!notice) {
+            notice = document.createElement('div');
+            notice.className = 'kh-auth-toast';
+            notice.setAttribute('data-auth-required-notice', 'true');
+            notice.innerHTML = ''
+                + '<span></span>'
+                + '<a href="' + loginUrl + '">Đăng nhập</a>';
+            document.body.appendChild(notice);
+        }
+
+        notice.querySelector('span').textContent = message || 'Vui lòng đăng nhập để tiếp tục.';
+        notice.querySelector('a').setAttribute('href', loginUrl);
+        notice.classList.add('is-visible');
+
+        window.clearTimeout(authNoticeTimer);
+        authNoticeTimer = window.setTimeout(function () {
+            notice.classList.remove('is-visible');
+        }, 3600);
+    };
+
+    var requireAuth = function (message) {
+        if (isAuthenticated) {
+            return true;
+        }
+
+        showAuthNotice(message);
+        return false;
+    };
 
     var applyView = function (view) {
         if (!validViews[view]) {
@@ -71,6 +105,10 @@
         };
 
         button.addEventListener('click', function () {
+            if (!requireAuth('Vui lòng đăng nhập để lưu địa điểm yêu thích.')) {
+                return;
+            }
+
             if (favorites.has(id)) {
                 favorites.delete(id);
             } else {
@@ -86,6 +124,10 @@
 
     document.querySelectorAll('.kh-comment-form button').forEach(function (button) {
         button.addEventListener('click', function () {
+            if (!requireAuth('Vui lòng đăng nhập để bình luận và đánh giá.')) {
+                return;
+            }
+
             var form = button.closest('.kh-comment-form');
             var textarea = form?.querySelector('textarea');
             if (textarea) {

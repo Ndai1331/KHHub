@@ -312,6 +312,51 @@ body.khhub-theme {
     color: #fff;
 }
 
+.kh-auth-required {
+    align-items: center;
+    background: #FFF7ED;
+    border: 1px solid rgba(249, 115, 22, 0.24);
+    border-radius: 12px;
+    color: var(--kh-public-text);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: space-between;
+    margin: 16px 0;
+    padding: 16px;
+}
+
+.kh-auth-required i,
+.kh-auth-toast a {
+    color: var(--kh-public-accent);
+}
+
+.kh-auth-toast {
+    align-items: center;
+    background: #111827;
+    border-radius: 12px;
+    bottom: 24px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.24);
+    color: #fff;
+    display: flex;
+    gap: 16px;
+    left: 50%;
+    max-width: calc(100vw - 32px);
+    opacity: 0;
+    padding: 16px 24px;
+    pointer-events: none;
+    position: fixed;
+    transform: translate(-50%, 16px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 9999;
+}
+
+.kh-auth-toast.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
+}
+
 .kh-grid,
 .kh-list {
     display: grid;

@@ -32,7 +32,7 @@
             <div class="kh-detail__meta">
                 <span>@Model.Detail.Ward, @Model.Detail.Province</span>
                 <partial name="~/Pages/Shared/PublicContent/_RatingStars.cshtml" model="Model.Detail.Rating" />
-                <button class="kh-favorite" type="button" data-favorite="@Model.Detail.Title" aria-pressed="false">
+                <button class="kh-favorite" type="button" data-favorite="@Model.Detail.Title" data-requires-auth="true" aria-pressed="false">
                     <i class="fa fa-heart-o" aria-hidden="true"></i> Lưu
                 </button>
             </div>

@@ -1,6 +1,10 @@
 @{
     Layout = null;
     var templateRoot = Url.Content("~/template");
+    var request = ViewContext.HttpContext.Request;
+    var isAuthenticated = ViewContext.HttpContext.User?.Identity?.IsAuthenticated == true ? "true" : "false";
+    var returnUrl = (request.Path.Value ?? "/") + request.QueryString.Value;
+    var loginUrl = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/Account/Login", "returnUrl", returnUrl);
 }
 <!DOCTYPE HTML>
 <html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
@@ -18,7 +22,7 @@
         <link rel="shortcut icon" href="@(templateRoot)/images/favicon.ico">
         @await RenderSectionAsync("Styles", required: false)
     </head>
-    <body class="khhub-theme">
+    <body class="khhub-theme" data-authenticated="@isAuthenticated" data-login-url="@loginUrl">
         <div class="loader-wrap">
             <div class="pin"></div>
             <div class="pulse"></div>

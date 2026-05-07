@@ -7,6 +7,9 @@
     ViewData["Title"] = L["Landing:PageTitle"];
     var templateRoot = Url.Content("~/template");
     var siteUrl = $"{Request.Scheme}://{Request.Host}/";
+    var isAuthenticated = HttpContext.User?.Identity?.IsAuthenticated == true ? "true" : "false";
+    var returnUrl = (Request.Path.Value ?? "/") + Request.QueryString.Value;
+    var loginUrl = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/Account/Login", "returnUrl", returnUrl);
     var jsonLd = JsonSerializer.Serialize(
         new Dictionary<string, object?>
         {
@@ -40,7 +43,7 @@
         <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/khhub.css">
         <link rel="shortcut icon" href="@(templateRoot)/images/favicon.ico">
     </head>
-    <body class="khhub-theme">
+    <body class="khhub-theme" data-authenticated="@isAuthenticated" data-login-url="@loginUrl">
         <div class="loader-wrap">
             <div class="pin"></div>
             <div class="pulse"></div>

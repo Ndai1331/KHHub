@@ -2,9 +2,14 @@
 @{
     var templateRoot = Url.Content("~/template");
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-    var currentPath = Context.Request.Path.Value ?? "/";
-    var currentQuery = Context.Request.QueryString.Value ?? string.Empty;
+    var request = ViewContext.HttpContext.Request;
+    var currentPath = request.Path.Value ?? "/";
+    var currentQuery = request.QueryString.Value ?? string.Empty;
     var returnUrl = currentPath + currentQuery;
+    var isAuthenticated = ViewContext.HttpContext.User?.Identity?.IsAuthenticated == true;
+    var displayName = ViewContext.HttpContext.User?.Identity?.Name;
+    var loginUrl = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/Account/Login", "returnUrl", returnUrl);
+    var logoutUrl = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/Account/Logout", "returnUrl", "/");
 
     // Build language switch URLs that hit the SetLanguage handler so the choice is persisted via cookie.
     var viUrl = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/set-language", new Dictionary<string, string?>
@@ -63,7 +68,19 @@
                 <a href="@enUrl" class="@(currentCulture == "en" ? "is-active" : null)">🇺🇸 @L["Language:English"]</a>
             </div>
         </details>
-        <div class="show-reg-form modal-open"><i class="fa fa-sign-in"></i>@L["Landing:SignIn"]</div>
+        @if (isAuthenticated)
+        {
+            <div class="show-reg-form">
+                <i class="fa fa-user"></i>@(string.IsNullOrWhiteSpace(displayName) ? L["Landing:Account"].ToString() : displayName)
+                <a href="@logoutUrl" class="kh-header-auth-link">@L["Landing:Logout"]</a>
+            </div>
+        }
+        else
+        {
+            <a class="show-reg-form kh-header-auth-link modal-open" href="@loginUrl">
+                <i class="fa fa-sign-in"></i>@L["Landing:SignIn"]
+            </a>
+        }
         <div class="nav-button-wrap color-bg">
             <div class="nav-button">
                 <span></span><span></span><span></span>

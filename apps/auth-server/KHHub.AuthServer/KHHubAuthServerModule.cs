@@ -5,6 +5,7 @@ using Volo.Abp.FeatureManagement;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.Twitter;
@@ -380,6 +381,19 @@ public class KHHubAuthServerModule : AbpModule
                 {
                     options.WithProperty(x => x.ClientId);
                     options.WithProperty(x => x.ClientSecret, isSecret: true);
+                }
+            )
+            .AddFacebook(FacebookDefaults.AuthenticationScheme, options =>
+            {
+                options.Fields.Add("picture");
+                options.ClaimActions.MapJsonKey(AbpClaimTypes.Picture, "picture.data.url");
+            })
+            .WithDynamicOptions<FacebookOptions, FacebookHandler>(
+                FacebookDefaults.AuthenticationScheme,
+                options =>
+                {
+                    options.WithProperty(x => x.AppId);
+                    options.WithProperty(x => x.AppSecret, isSecret: true);
                 }
             )
             .AddMicrosoftAccount(MicrosoftAccountDefaults.AuthenticationScheme, options =>
