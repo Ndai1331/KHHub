@@ -370,9 +370,6 @@
     "ButtonUrl": "URL nút",
     "TargetType": "Loại đích",
     "TargetId": "Mã đích",
-    "SortOrder": "Thứ tự",
-    "MinSortOrder": "Thứ tự tối thiểu",
-    "MaxSortOrder": "Thứ tự tối đa",
     "StartDate": "Ngày bắt đầu",
     "EndDate": "Ngày kết thúc",
     "MinStartDate": "Từ ngày bắt đầu",
@@ -383,6 +380,10 @@
     "Enum:TargetType.0": "Bài viết",
     "Enum:TargetType.1": "Địa điểm",
     "Enum:TargetType.2": "Sự kiện",
-    "Enum:TargetType.3": "URL ngoài"
+    "Enum:TargetType.3": "URL ngoài",
+    "RecommendedSizeDesktopImage": "Hình ảnh desktop 1920×1024px, tối đa 3MB",
+    "RecommendedSizeMobileImage": "Hình ảnh mobile 640×480px, tối đa 2MB",
+    "ClickToChooseImage": "Click để chọn ảnh",
+    "SortTitle": "Tiêu đề phụ / tagline"
   }
 }
