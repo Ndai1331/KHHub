@@ -3,6 +3,7 @@ using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
 using KHHub.Publish_website.Localization;
 using KHHub.Publish_website.Services;
+using KHHub.Publish_website.Services.GoldPrices;
 using KHHub.Publish_website.Services.PublicContent;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -57,6 +58,11 @@ public class Program
             builder.Services.AddMemoryCache();
             builder.Services.AddSingleton(TimeProvider.System);
             builder.Services.AddSingleton<IPublicContentCatalog, MockPublicContentCatalog>();
+            builder.Services.AddHttpClient<IGoldPriceClient, GoldPriceClient>(client =>
+            {
+                client.BaseAddress = new Uri("https://www.khanhhoatrend.com/");
+                client.Timeout = TimeSpan.FromSeconds(8);
+            });
             builder.Services.AddHealthChecks();
             builder.Services
                 .AddRazorPages()

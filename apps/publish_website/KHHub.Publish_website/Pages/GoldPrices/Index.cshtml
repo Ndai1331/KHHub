@@ -1,0 +1,177 @@
+@page "/gold-price"
+@model KHHub.Publish_website.Pages.GoldPrices.IndexModel
+@{
+    Layout = "/Pages/Shared/PublicContent/_CityBookPublicLayout.cshtml";
+    ViewData["Title"] = "Giá vàng hôm nay | KH HUB";
+    var updatedAtText = Model.Snapshot.UpdatedAt?.ToLocalTime().ToString("HH:mm dd/MM/yyyy") ?? "Đang cập nhật";
+    var featuredPrice = Model.Snapshot.Data.FirstOrDefault(x => x.Type.Contains("SJC 1L", StringComparison.OrdinalIgnoreCase))
+        ?? Model.Snapshot.Data.FirstOrDefault();
+}
+
+@section Meta {
+    <meta name="description" content="Cập nhật giá vàng SJC, vàng nhẫn, nữ trang và biểu đồ XAUUSD thời gian thực tại KH HUB.">
+    <link rel="canonical" href="@Model.CanonicalUrl">
+    <meta property="og:title" content="Giá vàng hôm nay | KH HUB">
+    <meta property="og:description" content="Bảng giá vàng trong nước, biểu đồ XAUUSD và công cụ quy đổi vàng nhanh.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="@Model.CanonicalUrl">
+    <script type="application/ld+json">@Html.Raw(Model.JsonLd)</script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="/template/css/gold-price.css" asp-append-version="true">
+}
+
+<main class="kh-gold-page">
+    <section class="kh-gold-hero">
+        <div>
+            <p><i class="fa fa-line-chart" aria-hidden="true"></i> Tự động cập nhật mỗi phút</p>
+            <h1>Giá vàng hôm nay</h1>
+            <h2>Tổng hợp giá vàng trong nước, biểu đồ vàng thế giới và công cụ quy đổi nhanh cho người dùng Khánh Hòa.</h2>
+        </div>
+        @if (featuredPrice is not null)
+        {
+            <div class="kh-gold-hero__price">
+                <span>@featuredPrice.Type</span>
+                <strong>@Model.FormatPrice(featuredPrice.SellPrice)</strong>
+                <small>nghìn đồng/lượng · @featuredPrice.Region</small>
+            </div>
+        }
+    </section>
+
+    <section class="kh-gold-grid" aria-label="Tổng quan giá vàng">
+        <article class="kh-gold-card kh-gold-card--chart">
+            <div class="kh-gold-card__head">
+                <div>
+                    <p>XAUUSD</p>
+                    <h2>Biểu đồ thời gian thực</h2>
+                </div>
+                <span class="kh-gold-badge kh-gold-badge--live"><i class="fa fa-circle" aria-hidden="true"></i> Live</span>
+            </div>
+            <iframe
+                title="Biểu đồ vàng thế giới XAUUSD"
+                src="https://www.tradingview-widget.com/embed-widget/mini-symbol-overview/?locale=vi_VN#%7B%22symbol%22%3A%22TVC%3AGOLD%22%2C%22width%22%3A%22100%25%22%2C%22height%22%3A160%2C%22dateRange%22%3A%221M%22%2C%22colorTheme%22%3A%22light%22%2C%22isTransparent%22%3Atrue%2C%22autosize%22%3Afalse%2C%22largeChartUrl%22%3A%22%22%2C%22noTimeScale%22%3Afalse%2C%22utm_source%22%3A%22www.khanhhoatrend.com%22%2C%22utm_medium%22%3A%22widget%22%2C%22utm_campaign%22%3A%22mini-symbol-overview%22%2C%22page-uri%22%3A%22www.khanhhoatrend.com%2Fgia-vang%22%7D"
+                loading="lazy"
+                referrerpolicy="origin"
+                allowtransparency="true"></iframe>
+        </article>
+
+        <article class="kh-gold-card kh-gold-card--meta">
+            <div class="kh-gold-card__head">
+                <div>
+                    <p>Nguồn dữ liệu</p>
+                    <h2>@Model.Snapshot.Source</h2>
+                </div>
+                <span class="kh-gold-badge @(Model.Snapshot.Stale ? "kh-gold-badge--warning" : "kh-gold-badge--success")">
+                    <i class="fa @(Model.Snapshot.Stale ? "fa-exclamation-triangle" : "fa-check-circle")" aria-hidden="true"></i>
+                    @(Model.Snapshot.Stale ? "Có thể chậm" : "Mới nhất")
+                </span>
+            </div>
+            <dl class="kh-gold-stats">
+                <div>
+                    <dt>Cập nhật</dt>
+                    <dd>@updatedAtText</dd>
+                </div>
+                <div>
+                    <dt>Số dòng giá</dt>
+                    <dd>@Model.Snapshot.Data.Count</dd>
+                </div>
+            </dl>
+            @if (!string.IsNullOrWhiteSpace(Model.Snapshot.ErrorMessage))
+            {
+                <p class="kh-gold-note">@Model.Snapshot.ErrorMessage</p>
+            }
+            <p class="kh-gold-note">Giá chỉ mang tính tham khảo, không phải lời khuyên đầu tư.</p>
+        </article>
+    </section>
+
+    <section class="kh-gold-content">
+        <article class="kh-gold-card kh-gold-card--table">
+            <div class="kh-gold-card__head">
+                <div>
+                    <p>ĐVT: nghìn đồng/lượng</p>
+                    <h2>Bảng giá vàng trong nước</h2>
+                </div>
+                <span class="kh-gold-badge kh-gold-badge--primary"><i class="fa fa-database" aria-hidden="true"></i> API</span>
+            </div>
+
+            <div class="kh-gold-table-wrap">
+                <table class="kh-gold-table">
+                    <thead>
+                        <tr>
+                            <th>Loại vàng</th>
+                            <th>Khu vực</th>
+                            <th>Mua vào</th>
+                            <th>Bán ra</th>
+                            <th>Biến động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Snapshot.Data)
+                        {
+                            <tr>
+                                <td data-label="Loại vàng">
+                                    <strong>@item.Type</strong>
+                                </td>
+                                <td data-label="Khu vực">@item.Region</td>
+                                <td data-label="Mua vào">@Model.FormatPrice(item.BuyPrice)</td>
+                                <td data-label="Bán ra">@Model.FormatPrice(item.SellPrice)</td>
+                                <td data-label="Biến động">
+                                    <span class="kh-gold-change kh-gold-change--@item.Change">
+                                        <i class="fa fa-minus" aria-hidden="true"></i>
+                                        @item.ChangeAmount
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </article>
+
+        <aside class="kh-gold-card kh-gold-calculator" aria-label="Máy tính quy đổi vàng">
+            <div class="kh-gold-card__head">
+                <div>
+                    <p>Công cụ nhanh</p>
+                    <h2>Máy tính quy đổi vàng</h2>
+                </div>
+                <span class="kh-gold-badge kh-gold-badge--accent"><i class="fa fa-calculator" aria-hidden="true"></i> Quy đổi</span>
+            </div>
+
+            <label>
+                <span>Số lượng</span>
+                <input type="number" min="0" step="0.1" value="1" data-gold-amount>
+            </label>
+
+            <label>
+                <span>Đơn vị</span>
+                <select data-gold-unit>
+                    <option value="luong">Lượng (37.5g)</option>
+                    <option value="chi">Chỉ (3.75g)</option>
+                    <option value="gram">Gram</option>
+                </select>
+            </label>
+
+            <label>
+                <span>Giá tham chiếu</span>
+                <select data-gold-price-source>
+                    @foreach (var item in Model.Snapshot.Data.Take(8))
+                    {
+                        <option value="@item.SellPrice">@item.Type - @item.Region</option>
+                    }
+                </select>
+            </label>
+
+            <div class="kh-gold-result">
+                <span>Giá trị ước tính</span>
+                <strong data-gold-result>—</strong>
+                <small>VNĐ · theo giá bán ra</small>
+            </div>
+        </aside>
+    </section>
+</main>
+
+@section Scripts {
+    <script src="/template/js/gold-price.js" asp-append-version="true" defer></script>
+}
+

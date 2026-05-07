@@ -22,6 +22,7 @@ $script:RepoPathToService = @{
     "gateways/mobile"          = "mobilegateway"
     "apps/auth-server"         = "authserver"
     "apps/web"                 = "web"
+    "apps/publish_website"     = "publishwebsite"
 }
 
 function Normalize-RepoPath([string]$raw) {
@@ -47,7 +48,7 @@ $allImages = @(
     # @{ ProjectPath = "../../apps/auth-server/KHHub.AuthServer/KHHub.AuthServer.csproj"; Service = "authserver" },
     @{ ProjectPath = "../../apps/web/KHHub.Web/KHHub.Web.csproj"; Service = "web" },
     # @{ ProjectPath = "../../gateways/mobile/KHHub.MobileGateway/KHHub.MobileGateway.csproj"; Service = "mobilegateway" },
-    @{ ProjectPath = "../../services/masterdata/KHHub.MasterDataService/KHHub.MasterDataService.csproj"; Service = "masterdata" }
+    @{ ProjectPath = "../../services/masterdata/KHHub.MasterDataService/KHHub.MasterDataService.csproj"; Service = "masterdata" },
     @{ ProjectPath = "../../apps/publish_website/KHHub.Publish_website/KHHub.Publish_website.csproj"; Service = "publishwebsite" }
 )
 
