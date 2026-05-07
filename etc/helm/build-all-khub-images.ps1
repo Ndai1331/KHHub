@@ -38,15 +38,15 @@ $currentFolder = $PSScriptRoot
 
 $allImages = @(
     @{ ProjectPath = "../../services/administration/KHHub.AdministrationService/KHHub.AdministrationService.csproj"; Service = "administration" },
-    @{ ProjectPath = "../../services/identity/KHHub.IdentityService/KHHub.IdentityService.csproj"; Service = "identity" },
-    @{ ProjectPath = "../../services/audit-logging/KHHub.AuditLoggingService/KHHub.AuditLoggingService.csproj"; Service = "auditlogging" },
-    @{ ProjectPath = "../../services/gdpr/KHHub.GdprService/KHHub.GdprService.csproj"; Service = "gdpr" },
-    @{ ProjectPath = "../../services/ai-management/KHHub.AIManagementService/KHHub.AIManagementService.csproj"; Service = "aimanagement" },
-    @{ ProjectPath = "../../services/language/KHHub.LanguageService/KHHub.LanguageService.csproj"; Service = "language" },
+    # @{ ProjectPath = "../../services/identity/KHHub.IdentityService/KHHub.IdentityService.csproj"; Service = "identity" },
+    # @{ ProjectPath = "../../services/audit-logging/KHHub.AuditLoggingService/KHHub.AuditLoggingService.csproj"; Service = "auditlogging" },
+    # @{ ProjectPath = "../../services/gdpr/KHHub.GdprService/KHHub.GdprService.csproj"; Service = "gdpr" },
+    # @{ ProjectPath = "../../services/ai-management/KHHub.AIManagementService/KHHub.AIManagementService.csproj"; Service = "aimanagement" },
+    # @{ ProjectPath = "../../services/language/KHHub.LanguageService/KHHub.LanguageService.csproj"; Service = "language" },
     @{ ProjectPath = "../../gateways/web/KHHub.WebGateway/KHHub.WebGateway.csproj"; Service = "webgateway" },
-    @{ ProjectPath = "../../apps/auth-server/KHHub.AuthServer/KHHub.AuthServer.csproj"; Service = "authserver" },
+    # @{ ProjectPath = "../../apps/auth-server/KHHub.AuthServer/KHHub.AuthServer.csproj"; Service = "authserver" },
     @{ ProjectPath = "../../apps/web/KHHub.Web/KHHub.Web.csproj"; Service = "web" },
-    @{ ProjectPath = "../../gateways/mobile/KHHub.MobileGateway/KHHub.MobileGateway.csproj"; Service = "mobilegateway" },
+    # @{ ProjectPath = "../../gateways/mobile/KHHub.MobileGateway/KHHub.MobileGateway.csproj"; Service = "mobilegateway" },
     @{ ProjectPath = "../../services/masterdata/KHHub.MasterDataService/KHHub.MasterDataService.csproj"; Service = "masterdata" }
     @{ ProjectPath = "../../apps/publish_website/KHHub.Publish_website/KHHub.Publish_website.csproj"; Service = "publishwebsite" }
 )

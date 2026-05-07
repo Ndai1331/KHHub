@@ -85,6 +85,36 @@ public class PublicMasterDataCatalogClient
             return Array.Empty<PlaceWithNavigationPropertiesDto>();
         }
     }
+
+    public async Task<string?> GetPresignedReadUrlByPublicPathAsync(
+        string? publicPath,
+        CancellationToken cancellationToken = default)
+    {
+        var path = (publicPath ?? string.Empty).Trim();
+        if (path.Length == 0)
+        {
+            return null;
+        }
+
+        try
+        {
+            var encoded = Uri.EscapeDataString(path);
+            var endpoint = $"api/masterdata/media-files/presigned-read-url-by-public-path?publicPath={encoded}";
+            using var response = await _httpClient.GetAsync(endpoint, cancellationToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var value = await response.Content.ReadFromJsonAsync<string>(JsonOptions, cancellationToken);
+            return string.IsNullOrWhiteSpace(value) ? null : value;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Failed to load presigned read URL for path: {PublicPath}", path);
+            return null;
+        }
+    }
 }
 
 public class PagedResult<T>

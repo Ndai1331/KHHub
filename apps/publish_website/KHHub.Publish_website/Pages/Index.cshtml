@@ -5,7 +5,7 @@
 @{
     Layout = null;
     ViewData["Title"] = L["Landing:PageTitle"];
-    var templateRoot = Url.Content("~/citybook-template");
+    var templateRoot = Url.Content("~/template");
     var siteUrl = $"{Request.Scheme}://{Request.Host}/";
     var jsonLd = JsonSerializer.Serialize(
         new Dictionary<string, object?>
@@ -37,10 +37,10 @@
         <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/plugins.css">
         <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/style.css">
         <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/color.css">
-        <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/citybook-khhub.css">
+        <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/khhub.css">
         <link rel="shortcut icon" href="@(templateRoot)/images/favicon.ico">
     </head>
-    <body class="khhub-citybook-theme">
+    <body class="khhub-theme">
         <div class="loader-wrap">
             <div class="pin"></div>
             <div class="pulse"></div>

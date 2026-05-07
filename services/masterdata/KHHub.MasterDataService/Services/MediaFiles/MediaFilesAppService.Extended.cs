@@ -69,6 +69,7 @@ public class MediaFilesAppService : MediaFilesAppServiceBase, IMediaFilesAppServ
         return new PagedResultDto<MediaFileDto>(total, dtos);
     }
 
+    [AllowAnonymous]
     public virtual async Task<string?> GetPresignedReadUrlByPublicPathAsync(string publicPath)
     {
         var trimmed = publicPath?.Trim() ?? string.Empty;

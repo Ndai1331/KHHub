@@ -27,6 +27,7 @@ public class IndexModel : PageModel
 
     public IReadOnlyList<PlaceWithNavigationPropertiesDto> Places { get; private set; } =
         Array.Empty<PlaceWithNavigationPropertiesDto>();
+    private Dictionary<string, string> MediaReadUrlMap { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
     public async Task OnGetAsync(CancellationToken cancellationToken)
     {
@@ -35,6 +36,7 @@ public class IndexModel : PageModel
         _logger.LogInformation("HomeBanners: {HomeBanners}", HomeBanners.Count);
         _logger.LogInformation("HomeBanners: {HomeBanners}", HomeBanners.Select(b => b.ImageUrl).ToList());
         Places = await _catalogClient.GetPublishedPlacesAsync(12, cancellationToken);
+        await LoadPresignedMediaUrlsAsync(cancellationToken);
     }
 
     /// <summary>
@@ -46,6 +48,11 @@ public class IndexModel : PageModel
         if (string.IsNullOrWhiteSpace(value))
         {
             return string.Empty;
+        }
+
+        if (MediaReadUrlMap.TryGetValue(value, out var signed) && !string.IsNullOrWhiteSpace(signed))
+        {
+            return signed;
         }
 
         if (value.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
@@ -73,6 +80,33 @@ public class IndexModel : PageModel
         catch (UriFormatException)
         {
             return value;
+        }
+    }
+
+    private async Task LoadPresignedMediaUrlsAsync(CancellationToken cancellationToken)
+    {
+        var rawPaths = HomeBanners
+            .Select(b => b.ImageUrl)
+            .Concat(Places.Select(p => p.Place?.ThumbnailUrl))
+            .Concat(Places.Select(p => p.Place?.CoverImageUrl))
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(x => x!.Trim())
+            .Where(x => x.StartsWith('/'))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        if (rawPaths.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var path in rawPaths)
+        {
+            var signed = await _catalogClient.GetPresignedReadUrlByPublicPathAsync(path, cancellationToken);
+            if (!string.IsNullOrWhiteSpace(signed))
+            {
+                MediaReadUrlMap[path] = signed!;
+            }
         }
     }
 
