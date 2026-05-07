@@ -275,7 +275,7 @@ public sealed class MockPublicContentCatalog : IPublicContentCatalog
             Title = item.Name,
             Slug = item.Slug,
             EnglishSlug = item.EnglishSlug,
-            Url = $"/locations/{item.Slug}",
+            Url = $"/places/{item.Slug}",
             Description = item.Description,
             ThumbnailUrl = item.Images.FirstOrDefault() ?? Image("travel", item.Slug),
             Category = item.Categories.FirstOrDefault() ?? "Dia diem",

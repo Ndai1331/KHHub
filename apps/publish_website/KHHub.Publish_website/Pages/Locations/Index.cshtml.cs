@@ -14,7 +14,7 @@ public sealed class IndexModel : PublicListingPageModel
     {
         LoadListing(
             PublicContentKind.Location,
-            "/locations",
+            "/places",
             "Địa điểm Khánh Hòa | KH HUB",
             "Địa điểm đáng khám phá",
             "Khám phá địa điểm du lịch, ẩm thực, văn hóa và trải nghiệm địa phương tại Khánh Hòa.");

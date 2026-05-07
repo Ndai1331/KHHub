@@ -896,7 +896,6 @@ body.kh-lightbox-open {
     .kh-filter {
         align-self: start;
         position: sticky;
-        top: 96px;
     }
 
     .kh-sortbar {

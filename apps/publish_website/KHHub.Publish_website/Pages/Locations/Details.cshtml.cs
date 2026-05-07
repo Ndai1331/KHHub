@@ -13,6 +13,6 @@ public sealed class DetailsModel : PublicDetailPageModel
 
     public IActionResult OnGet(string slug)
     {
-        return LoadDetail(PublicContentKind.Location, slug, "/locations", "Địa điểm");
+        return LoadDetail(PublicContentKind.Location, slug, "/places", "Địa điểm");
     }
 }
