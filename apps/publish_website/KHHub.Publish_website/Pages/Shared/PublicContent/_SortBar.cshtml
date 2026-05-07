@@ -1,0 +1,39 @@
+@model SortBarViewModel
+@{
+    string IsView(string view) => string.Equals(Model.Query.View, view, StringComparison.OrdinalIgnoreCase) ? "is-active" : string.Empty;
+    var initialView = string.Equals(Model.Query.View, PublicContentView.Grid, StringComparison.OrdinalIgnoreCase)
+        ? PublicContentView.Grid
+        : PublicContentView.List;
+}
+
+<div class="kh-sortbar" data-view-toolbar data-initial-view="@initialView">
+    <div>
+        <p>@Model.TotalCount kết quả</p>
+        <h2>@Model.Heading</h2>
+    </div>
+    <form method="get" action="@Model.ActionPath" class="kh-sortbar__controls">
+        <input type="hidden" name="Province" value="@Model.Query.Province">
+        <input type="hidden" name="Ward" value="@Model.Query.Ward">
+        <input type="hidden" name="Category" value="@Model.Query.Category">
+        @foreach (var tag in Model.Query.Tags)
+        {
+            <input type="hidden" name="Tags" value="@tag">
+        }
+        <label>
+            <span>Sắp xếp</span>
+            <select name="Sort" onchange="this.form.submit()">
+                <option value="@PublicContentSort.Newest" selected="@(Model.Query.Sort == PublicContentSort.Newest)">Mới nhất</option>
+                <option value="@PublicContentSort.Popular" selected="@(Model.Query.Sort == PublicContentSort.Popular)">Phổ biến</option>
+                <option value="@PublicContentSort.Relevant" selected="@(Model.Query.Sort == PublicContentSort.Relevant)">Liên quan</option>
+            </select>
+        </label>
+        <div class="kh-view-toggle" role="group" aria-label="Chọn kiểu hiển thị">
+            <button type="button" class="@IsView(PublicContentView.Grid)" data-view-toggle="@PublicContentView.Grid" aria-label="Grid view" aria-pressed="@(string.Equals(Model.Query.View, PublicContentView.Grid, StringComparison.OrdinalIgnoreCase) ? "true" : "false")">
+                <i class="fa fa-th-large" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="@IsView(PublicContentView.List)" data-view-toggle="@PublicContentView.List" aria-label="List view" aria-pressed="@(string.Equals(Model.Query.View, PublicContentView.List, StringComparison.OrdinalIgnoreCase) ? "true" : "false")">
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,8 @@
+@model IReadOnlyList<PublicContentCardViewModel>
+
+<div class="kh-grid" data-view-panel="grid">
+    @foreach (var item in Model)
+    {
+        <partial name="~/Pages/Shared/PublicContent/_CardItem.cshtml" model="item" />
+    }
+</div>

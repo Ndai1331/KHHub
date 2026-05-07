@@ -1,0 +1,56 @@
+@model DetailPageViewModel
+
+@if (Model.Images.Count > 0)
+{
+    var galleryId = $"gallery-{Model.Title.GetHashCode():X}";
+    var coverImage = Model.Images[0];
+    var thumbnails = Model.Images.ToList();
+
+    <section class="kh-gallery" aria-label="Thư viện ảnh" data-gallery="@galleryId">
+        <div class="kh-gallery__main">
+            <button type="button"
+                    class="kh-gallery__cover"
+                    data-gallery-cover
+                    aria-label="Phóng to @Model.Title">
+                <img class="kh-gallery__cover-img"
+                     src="@coverImage"
+                     alt="Ảnh bìa @Model.Title"
+                     loading="eager"
+                     decoding="async"
+                     width="1200"
+                     height="675">
+            </button>
+            <button type="button" class="kh-gallery__see-all" data-gallery-see-all>
+                <i class="fa fa-clone" aria-hidden="true"></i>
+                <span>Xem tất cả (@thumbnails.Count)</span>
+            </button>
+        </div>
+
+        <div class="kh-gallery__thumbs">
+            <button type="button" class="kh-gallery__nav kh-gallery__nav--up" data-gallery-prev aria-label="Ảnh trước">
+                <i class="fa fa-angle-up" aria-hidden="true"></i>
+            </button>
+            <div class="kh-gallery__track" data-gallery-track>
+                @for (var i = 0; i < thumbnails.Count; i++)
+                {
+                    var image = thumbnails[i];
+                    <button type="button"
+                            class="kh-gallery__thumb @(i == 0 ? "is-active" : null)"
+                            data-gallery-thumb="@image"
+                            data-gallery-index="@i"
+                            aria-label="Xem ảnh @(i + 1)">
+                        <img src="@image"
+                             alt="Ảnh @(i + 1) - @Model.Title"
+                             loading="lazy"
+                             decoding="async"
+                             width="240"
+                             height="160">
+                    </button>
+                }
+            </div>
+            <button type="button" class="kh-gallery__nav kh-gallery__nav--down" data-gallery-next aria-label="Ảnh kế tiếp">
+                <i class="fa fa-angle-down" aria-hidden="true"></i>
+            </button>
+        </div>
+    </section>
+}

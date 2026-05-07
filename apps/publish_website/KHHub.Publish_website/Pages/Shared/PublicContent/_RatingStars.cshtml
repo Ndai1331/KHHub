@@ -1,0 +1,12 @@
+@model decimal
+@{
+    var rounded = (int)Math.Round(Model, MidpointRounding.AwayFromZero);
+}
+
+<span class="kh-rating" aria-label="Rating @Model.ToString("0.0") out of 5">
+    @for (var i = 1; i <= 5; i++)
+    {
+        <i class="fa @(i <= rounded ? "fa-star" : "fa-star-o")" aria-hidden="true"></i>
+    }
+    <strong>@Model.ToString("0.0")</strong>
+</span>

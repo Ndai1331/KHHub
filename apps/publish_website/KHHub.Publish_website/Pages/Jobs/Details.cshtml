@@ -1,0 +1,77 @@
+@page "/jobs/{slug}"
+@model KHHub.Publish_website.Pages.Jobs.DetailsModel
+@{
+    Layout = "/Pages/Shared/PublicContent/_CityBookPublicLayout.cshtml";
+    ViewData["Title"] = Model.Seo.Title;
+}
+
+@section Meta {
+    <meta name="description" content="@Model.Seo.Description">
+    <link rel="canonical" href="@Model.Seo.CanonicalUrl">
+    <meta property="og:title" content="@Model.Seo.Title">
+    <meta property="og:description" content="@Model.Seo.Description">
+    <meta property="og:type" content="@Model.Seo.OgType">
+    <meta property="og:url" content="@Model.Seo.CanonicalUrl">
+    <meta property="og:image" content="@Model.Seo.ImageUrl">
+    <script type="application/ld+json">@Html.Raw(Model.JsonLd)</script>
+    <script type="application/ld+json">@Html.Raw(Model.BreadcrumbJsonLd)</script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="/template/css/public-content.css" asp-append-version="true">
+}
+
+<main class="kh-public-page">
+    <article class="kh-detail">
+        <nav class="kh-breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Trang chủ</a><span>/</span><a href="/jobs">Việc làm</a><span>/</span><span>@Model.Detail.Title</span>
+        </nav>
+        <header class="kh-detail__header">
+            <p>@Model.Detail.Category</p>
+            <h1>@Model.Detail.Title</h1>
+            <div class="kh-detail__meta">
+                <span>@Model.Detail.AuthorOrCompany</span>
+                <span>@Model.Detail.Province, @Model.Detail.Ward</span>
+                <time datetime="@Model.Detail.CreatedAt.ToString("O")">@Model.Detail.CreatedAt.ToString("dd/MM/yyyy")</time>
+                <button class="kh-favorite" type="button" data-favorite="@Model.Detail.Title" aria-pressed="false">
+                    <i class="fa fa-heart-o" aria-hidden="true"></i> Lưu
+                </button>
+            </div>
+        </header>
+        <div class="kh-job-summary">
+            <div>
+                <span>Mức lương</span>
+                <strong>@Model.Detail.Salary</strong>
+            </div>
+            <div>
+                <span>Công ty</span>
+                <strong>@Model.Detail.AuthorOrCompany</strong>
+            </div>
+            <div>
+                <span>Khu vực</span>
+                <strong>@Model.Detail.Ward, @Model.Detail.Province</strong>
+            </div>
+        </div>
+        <div class="kh-detail__content">
+            <h2>Mô tả công việc</h2>
+            @Html.Raw(Model.Detail.ContentHtml)
+            <h2>Yêu cầu</h2>
+            <p>@Model.Detail.Requirements</p>
+        </div>
+        <partial name="~/Pages/Shared/PublicContent/_TagList.cshtml" model="Model.Detail.Tags" />
+    </article>
+
+    <partial name="~/Pages/Shared/PublicContent/_CommentSection.cshtml" model="Model.Detail" />
+
+    <section class="kh-detail-section" aria-labelledby="related-title">
+        <div class="kh-section-title">
+            <h2 id="related-title">Việc làm liên quan</h2>
+            <a href="/jobs">Xem tất cả</a>
+        </div>
+        <partial name="~/Pages/Shared/PublicContent/_GridView.cshtml" model="Model.Detail.RelatedItems" />
+    </section>
+</main>
+
+@section Scripts {
+    <script src="/template/js/public-content.js" asp-append-version="true" defer></script>
+}

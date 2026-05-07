@@ -1,0 +1,70 @@
+@page "/locations/{slug}"
+@model KHHub.Publish_website.Pages.Locations.DetailsModel
+@{
+    Layout = "/Pages/Shared/PublicContent/_CityBookPublicLayout.cshtml";
+    ViewData["Title"] = Model.Seo.Title;
+}
+
+@section Meta {
+    <meta name="description" content="@Model.Seo.Description">
+    <link rel="canonical" href="@Model.Seo.CanonicalUrl">
+    <meta property="og:title" content="@Model.Seo.Title">
+    <meta property="og:description" content="@Model.Seo.Description">
+    <meta property="og:type" content="@Model.Seo.OgType">
+    <meta property="og:url" content="@Model.Seo.CanonicalUrl">
+    <meta property="og:image" content="@Model.Seo.ImageUrl">
+    <script type="application/ld+json">@Html.Raw(Model.JsonLd)</script>
+    <script type="application/ld+json">@Html.Raw(Model.BreadcrumbJsonLd)</script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="/template/css/public-content.css" asp-append-version="true">
+}
+
+<main class="kh-public-page">
+    <article class="kh-detail">
+        <nav class="kh-breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Trang chủ</a><span>/</span><a href="/locations">Địa điểm</a><span>/</span><span>@Model.Detail.Title</span>
+        </nav>
+        <header class="kh-detail__header">
+            <p>@Model.Detail.Category</p>
+            <h1>@Model.Detail.Title</h1>
+            <div class="kh-detail__meta">
+                <span>@Model.Detail.Ward, @Model.Detail.Province</span>
+                <partial name="~/Pages/Shared/PublicContent/_RatingStars.cshtml" model="Model.Detail.Rating" />
+                <button class="kh-favorite" type="button" data-favorite="@Model.Detail.Title" aria-pressed="false">
+                    <i class="fa fa-heart-o" aria-hidden="true"></i> Lưu
+                </button>
+            </div>
+        </header>
+        <partial name="~/Pages/Shared/PublicContent/_ImageGallery.cshtml" model="Model.Detail" />
+        <div class="kh-location-info">
+            <div>
+                <span>Địa chỉ</span>
+                <strong>@Model.Detail.Address</strong>
+            </div>
+            <div class="kh-map-placeholder" role="img" aria-label="Map placeholder for @Model.Detail.Address">
+                <i class="fa fa-map-o" aria-hidden="true"></i>
+                <span>Bản đồ sẽ được kết nối khi có tọa độ từ MasterData Service.</span>
+            </div>
+        </div>
+        <div class="kh-detail__content">
+            @Html.Raw(Model.Detail.ContentHtml)
+        </div>
+        <partial name="~/Pages/Shared/PublicContent/_TagList.cshtml" model="Model.Detail.Tags" />
+    </article>
+
+    <partial name="~/Pages/Shared/PublicContent/_CommentSection.cshtml" model="Model.Detail" />
+
+    <section class="kh-detail-section" aria-labelledby="related-title">
+        <div class="kh-section-title">
+            <h2 id="related-title">Địa điểm liên quan</h2>
+            <a href="/locations">Xem tất cả</a>
+        </div>
+        <partial name="~/Pages/Shared/PublicContent/_GridView.cshtml" model="Model.Detail.RelatedItems" />
+    </section>
+</main>
+
+@section Scripts {
+    <script src="/template/js/public-content.js" asp-append-version="true" defer></script>
+}

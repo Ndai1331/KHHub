@@ -1,4 +1,4 @@
-@model KHHub.Publish_website.Pages.IndexModel
+@model object
 @{
     var templateRoot = Url.Content("~/template");
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
@@ -72,37 +72,15 @@
                 <ul>
                     <li>
                         <a href="/" class="act-link">@L["Menu:Home"] <i class="fa fa-caret-down"></i></a>
-                        <ul>
-                            <li><a href="/">@L["Menu:ParallaxImage"]</a></li>
-                            <li><a href="index2.html">Video</a></li>
-                            <li><a href="index3.html">@L["Menu:Map"]</a></li>
-                            <li><a href="index4.html">@L["Menu:Slideshow"]</a></li>
-                            <li><a href="index5.html">Slider</a></li>
-                            <li><a href="index6.html">Fullscreen Slider</a></li>
-                        </ul>
                     </li>
                     <li>
-                        <a href="#">@L["Menu:Places"] <i class="fa fa-caret-down"></i></a>
-                        <ul>
-                            <li><a href="listing.html">Column map</a></li>
-                            <li><a href="listing2.html">Column map 2</a></li>
-                            <li><a href="listing3.html">Fullwidth Map</a></li>
-                            <li><a href="listing4.html">Fullwidth Map 2</a></li>
-                            <li><a href="listing5.html">Without Map</a></li>
-                            <li><a href="listing6.html">Without Map 2</a></li>
-                            <li>
-                                <a href="#">@L["Menu:Details"] <i class="fa fa-caret-down"></i></a>
-                                <ul>
-                                    <li><a href="listing-single.html">Style 1</a></li>
-                                    <li><a href="listing-single2.html">Style 2</a></li>
-                                    <li><a href="listing-single3.html">Style 3</a></li>
-                                    <li><a href="listing-single4.html">Style 4</a></li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <a href="/locations">@L["Menu:Places"] <i class="fa fa-caret-down"></i></a>
                     </li>
                     <li>
-                        <a href="blog.html">@L["Menu:News"]</a>
+                        <a href="/news">@L["Menu:News"]</a>
+                    </li>
+                    <li>
+                        <a href="/jobs">@L["Menu:Jobs"]</a>
                     </li>
                     <li>
                         <a href="#">@L["Menu:Pages"] <i class="fa fa-caret-down"></i></a>

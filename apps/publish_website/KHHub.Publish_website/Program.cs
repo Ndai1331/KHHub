@@ -3,6 +3,7 @@ using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
 using KHHub.Publish_website.Localization;
 using KHHub.Publish_website.Services;
+using KHHub.Publish_website.Services.PublicContent;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -55,6 +56,7 @@ public class Program
             builder.Services.AddSingleton<AppLocalizer>();
             builder.Services.AddMemoryCache();
             builder.Services.AddSingleton(TimeProvider.System);
+            builder.Services.AddSingleton<IPublicContentCatalog, MockPublicContentCatalog>();
             builder.Services.AddHealthChecks();
             builder.Services
                 .AddRazorPages()

@@ -1,0 +1,16 @@
+@{
+    var path = Context.Request.Path.Value ?? "/";
+    string Active(string prefix) => path.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) ? "is-active" : string.Empty;
+}
+
+<header class="kh-public-header">
+    <a class="kh-public-header__brand" href="/" aria-label="KH HUB home">
+        <span>KH</span> HUB
+    </a>
+    <nav aria-label="Public content">
+        <a class="@Active("/news")" href="/news">Tin tức</a>
+        <a class="@Active("/jobs")" href="/jobs">Việc làm</a>
+        <a class="@Active("/locations")" href="/locations">Địa điểm</a>
+    </nav>
+    <a class="kh-public-header__cta" href="/locations">Khám phá</a>
+</header>

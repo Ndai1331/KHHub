@@ -1,0 +1,38 @@
+@model DetailPageViewModel
+
+<section class="kh-detail-section" aria-labelledby="comments-title">
+    <div class="kh-section-title">
+        <h2 id="comments-title">Bình luận</h2>
+        <span>Mock community feedback</span>
+    </div>
+
+    <form class="kh-comment-form">
+        <label>
+            <span>Đánh giá của bạn</span>
+            <select aria-label="Chọn số sao">
+                <option>5 sao</option>
+                <option>4 sao</option>
+                <option>3 sao</option>
+            </select>
+        </label>
+        <label>
+            <span>Nội dung</span>
+            <textarea rows="4" placeholder="Chia sẻ trải nghiệm hoặc câu hỏi của bạn"></textarea>
+        </label>
+        <button class="kh-button kh-button--primary" type="button">Gửi bình luận</button>
+    </form>
+
+    <div class="kh-comments">
+        @foreach (var comment in Model.Comments)
+        {
+            <article class="kh-comment">
+                <div>
+                    <strong>@comment.Author</strong>
+                    <time datetime="@comment.CreatedAt.ToString("O")">@comment.CreatedAt.ToString("dd/MM/yyyy")</time>
+                </div>
+                <partial name="~/Pages/Shared/PublicContent/_RatingStars.cshtml" model="comment.Rating" />
+                <p>@comment.Body</p>
+            </article>
+        }
+    </div>
+</section>

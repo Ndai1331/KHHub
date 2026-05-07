@@ -1,0 +1,42 @@
+@{
+    Layout = null;
+    var templateRoot = Url.Content("~/template");
+}
+<!DOCTYPE HTML>
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+    <head>
+        <meta charset="UTF-8">
+        <title>@ViewData["Title"]</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+        <meta name="robots" content="index, follow">
+        @await RenderSectionAsync("Meta", required: false)
+        <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/reset.css">
+        <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/plugins.css">
+        <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/style.css">
+        <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/color.css">
+        <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/khhub.css">
+        <link rel="shortcut icon" href="@(templateRoot)/images/favicon.ico">
+        @await RenderSectionAsync("Styles", required: false)
+    </head>
+    <body class="khhub-theme">
+        <div class="loader-wrap">
+            <div class="pin"></div>
+            <div class="pulse"></div>
+        </div>
+        <div id="main">
+            <partial name="~/Pages/Shared/Landing/_Header.cshtml" model="Model" />
+            <div id="wrapper" class="kh-public-wrapper">
+                <div class="content">
+                    @RenderBody()
+                </div>
+            </div>
+            <partial name="~/Pages/Shared/Landing/_CityBookFooter.cshtml" />
+            <partial name="~/Pages/Shared/Landing/_AuthModal.cshtml" />
+            <a class="to-top"><i class="fa fa-angle-up"></i></a>
+        </div>
+        <script type="text/javascript" src="@(templateRoot)/js/jquery.min.js"></script>
+        <script type="text/javascript" src="@(templateRoot)/js/plugins.js"></script>
+        <script type="text/javascript" src="@(templateRoot)/js/scripts.js"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
+</html>

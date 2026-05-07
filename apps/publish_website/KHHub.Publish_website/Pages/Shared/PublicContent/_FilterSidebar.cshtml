@@ -1,0 +1,61 @@
+@model FilterSidebarViewModel
+@{
+    var selectedTags = Model.Query.Tags.ToHashSet(StringComparer.OrdinalIgnoreCase);
+}
+
+<aside class="kh-filter" aria-label="@Model.Title">
+    <form method="get" action="@Model.ActionPath" class="kh-filter__form">
+        <input type="hidden" name="Sort" value="@Model.Query.Sort">
+        <input type="hidden" name="View" value="@Model.Query.View">
+        <div class="kh-filter__header">
+            <h2>@Model.Title</h2>
+            <a href="@Model.ActionPath">Đặt lại</a>
+        </div>
+
+        <label class="kh-field">
+            <span>Tỉnh thành</span>
+            <select name="Province">
+                <option value="">Tất cả tỉnh thành</option>
+                @foreach (var item in Model.Provinces)
+                {
+                    <option value="@item.Value" selected="@(item.Value == Model.Query.Province)">@item.Label (@item.Count)</option>
+                }
+            </select>
+        </label>
+
+        <label class="kh-field">
+            <span>Xã phường</span>
+            <select name="Ward">
+                <option value="">Tất cả xã phường</option>
+                @foreach (var item in Model.Wards)
+                {
+                    <option value="@item.Value" selected="@(item.Value == Model.Query.Ward)">@item.Label (@item.Count)</option>
+                }
+            </select>
+        </label>
+
+        <label class="kh-field">
+            <span>Danh mục</span>
+            <select name="Category">
+                <option value="">Tất cả danh mục</option>
+                @foreach (var item in Model.Categories)
+                {
+                    <option value="@item.Value" selected="@(item.Value == Model.Query.Category)">@item.Label (@item.Count)</option>
+                }
+            </select>
+        </label>
+
+        <fieldset class="kh-filter__tags">
+            <legend>Tags</legend>
+            @foreach (var tag in Model.Tags)
+            {
+                <label>
+                    <input type="checkbox" name="Tags" value="@tag.Value" checked="@selectedTags.Contains(tag.Value)">
+                    <span>#@tag.Label</span>
+                </label>
+            }
+        </fieldset>
+
+        <button class="kh-button kh-button--primary" type="submit">Áp dụng bộ lọc</button>
+    </form>
+</aside>

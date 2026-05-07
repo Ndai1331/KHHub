@@ -1,0 +1,70 @@
+@page "/locations"
+@model KHHub.Publish_website.Pages.Locations.IndexModel
+@{
+    Layout = "/Pages/Shared/PublicContent/_CityBookPublicLayout.cshtml";
+    ViewData["Title"] = Model.Seo.Title;
+}
+
+@section Meta {
+    <meta name="description" content="@Model.Seo.Description">
+    <link rel="canonical" href="@Model.Seo.CanonicalUrl">
+    <meta property="og:title" content="@Model.Seo.Title">
+    <meta property="og:description" content="@Model.Seo.Description">
+    <meta property="og:type" content="@Model.Seo.OgType">
+    <meta property="og:url" content="@Model.Seo.CanonicalUrl">
+    <script type="application/ld+json">@Html.Raw(Model.JsonLd)</script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="/template/css/public-content.css" asp-append-version="true">
+}
+
+<main class="kh-public-page">
+    <section class="kh-hero">
+        <p style="text-align: center;">Địa điểm</p>
+        <h1>Khám phá địa điểm nổi bật tại Khánh Hòa</h1>
+        <span>Tìm bãi biển, di sản, quán ăn và trải nghiệm địa phương theo khu vực.</span>
+    </section>
+
+    <section class="kh-content-layout">
+        <partial name="~/Pages/Shared/PublicContent/_FilterSidebar.cshtml" model="Model.Filters" />
+        <div class="kh-results">
+            <partial name="~/Pages/Shared/PublicContent/_SortBar.cshtml" model="Model.SortBar" />
+            @if (Model.Cards.Items.Count == 0)
+            {
+                <div class="kh-empty">
+                    <h2>Chưa có địa điểm phù hợp</h2>
+                    <p>Thử chọn khu vực hoặc tag trải nghiệm khác.</p>
+                </div>
+            }
+            else
+            {
+                var cardsClass = string.Equals(Model.Query.View, PublicContentView.Grid, StringComparison.OrdinalIgnoreCase) ? "kh-grid" : "kh-list";
+                <div class="@cardsClass" data-cards-container data-initial-view="@Model.Query.View">
+                    @foreach (var item in Model.Cards.Items)
+                    {
+                        <partial name="~/Pages/Shared/PublicContent/_CardItem.cshtml" model="item" />
+                    }
+                </div>
+            }
+
+            <form method="get" class="kh-pagination" aria-label="Pagination">
+                <input type="hidden" name="Province" value="@Model.Query.Province">
+                <input type="hidden" name="Ward" value="@Model.Query.Ward">
+                <input type="hidden" name="Category" value="@Model.Query.Category">
+                <input type="hidden" name="Sort" value="@Model.Query.Sort">
+                @foreach (var tag in Model.Query.Tags)
+                {
+                    <input type="hidden" name="Tags" value="@tag">
+                }
+                <button type="submit" name="Page" value="@(Model.Cards.CurrentPage - 1)" disabled="@(Model.Cards.CurrentPage <= 1)">Trước</button>
+                <span>Trang @Model.Cards.CurrentPage / @Model.Cards.TotalPages</span>
+                <button type="submit" name="Page" value="@(Model.Cards.CurrentPage + 1)" disabled="@(Model.Cards.CurrentPage >= Model.Cards.TotalPages)">Sau</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+@section Scripts {
+    <script src="/template/js/public-content.js" asp-append-version="true" defer></script>
+}

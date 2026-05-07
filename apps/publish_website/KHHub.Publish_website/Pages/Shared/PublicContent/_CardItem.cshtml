@@ -1,0 +1,46 @@
+@model PublicContentCardViewModel
+@{
+    var icon = Model.Kind switch
+    {
+        PublicContentKind.Job => "fa-briefcase",
+        PublicContentKind.Location => "fa-map-marker",
+        _ => "fa-newspaper-o"
+    };
+}
+
+<article class="kh-card" data-kind="@Model.Kind">
+    <a class="kh-card__media" href="@Model.Url" aria-label="@Model.Title">
+        <span class="kh-skeleton" aria-hidden="true"></span>
+        <img src="@Model.ThumbnailUrl" alt="@Model.Title" loading="lazy" decoding="async" width="640" height="360">
+        <span class="kh-card__badge"><i class="fa @icon" aria-hidden="true"></i> @Model.Category</span>
+    </a>
+    <div class="kh-card__body">
+        <div class="kh-card__meta">
+            @if (!string.IsNullOrWhiteSpace(Model.Province))
+            {
+                <span><i class="fa fa-map-marker" aria-hidden="true"></i> @Model.Province, @Model.Ward</span>
+            }
+            <time datetime="@Model.CreatedAt.ToString("O")">@Model.CreatedAt.ToString("dd/MM/yyyy")</time>
+        </div>
+        <h2 class="kh-card__title"><a href="@Model.Url">@Model.Title</a></h2>
+        <p>@Model.Description</p>
+        @if (!string.IsNullOrWhiteSpace(Model.MetaLabel))
+        {
+            <p class="kh-card__label">@Model.MetaLabel</p>
+        }
+        <partial name="~/Pages/Shared/PublicContent/_TagList.cshtml" model="Model.Tags" />
+        <div class="kh-card__footer">
+            @if (Model.Rating.HasValue)
+            {
+                <partial name="~/Pages/Shared/PublicContent/_RatingStars.cshtml" model="Model.Rating.Value" />
+            }
+            else
+            {
+                <span class="kh-popularity"><i class="fa fa-eye" aria-hidden="true"></i> @Model.Popularity lượt xem</span>
+            }
+            <button class="kh-favorite" type="button" data-favorite="@Model.Slug" aria-pressed="false">
+                <i class="fa fa-heart-o" aria-hidden="true"></i> Lưu
+            </button>
+        </div>
+    </div>
+</article>
