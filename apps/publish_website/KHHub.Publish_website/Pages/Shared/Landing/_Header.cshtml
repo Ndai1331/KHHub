@@ -3,31 +3,33 @@
     var templateRoot = Url.Content("~/template");
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var currentPath = Context.Request.Path.Value ?? "/";
-    var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(Context.Request.QueryString.Value ?? string.Empty);
-    var routeValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-    foreach (var item in query)
-    {
-        if (string.Equals(item.Key, "culture", StringComparison.OrdinalIgnoreCase) ||
-            string.Equals(item.Key, "ui-culture", StringComparison.OrdinalIgnoreCase))
-        {
-            continue;
-        }
+    var currentQuery = Context.Request.QueryString.Value ?? string.Empty;
+    var returnUrl = currentPath + currentQuery;
 
-        routeValues[item.Key] = item.Value.ToString();
-    }
-
-    var viRouteValues = new Dictionary<string, string>(routeValues, StringComparer.OrdinalIgnoreCase)
+    // Build language switch URLs that hit the SetLanguage handler so the choice is persisted via cookie.
+    var viUrl = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/set-language", new Dictionary<string, string?>
     {
         ["culture"] = "vi",
-        ["ui-culture"] = "vi"
-    };
-    var enRouteValues = new Dictionary<string, string>(routeValues, StringComparer.OrdinalIgnoreCase)
+        ["returnUrl"] = returnUrl
+    });
+    var enUrl = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/set-language", new Dictionary<string, string?>
     {
         ["culture"] = "en",
-        ["ui-culture"] = "en"
-    };
-    var viUrl = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString(currentPath, viRouteValues);
-    var enUrl = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString(currentPath, enRouteValues);
+        ["returnUrl"] = returnUrl
+    });
+
+    // Resolve the active state for each top-level menu item based on the current request path.
+    bool IsActive(string path, bool exact = false)
+    {
+        if (string.IsNullOrEmpty(path)) return false;
+        if (exact)
+        {
+            return string.Equals(currentPath.TrimEnd('/'), path.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
+        }
+        return currentPath.StartsWith(path, StringComparison.OrdinalIgnoreCase);
+    }
+
+    string ActiveClass(bool isActive) => isActive ? "act-link" : string.Empty;
 }
 
 <header class="main-header dark-header fs-header sticky">
@@ -71,19 +73,19 @@
             <nav>
                 <ul>
                     <li>
-                        <a href="/" class="act-link">@L["Menu:Home"] </a>
+                        <a href="/" class="@ActiveClass(IsActive("/", exact: true))">@L["Menu:Home"] </a>
                     </li>
                     <li>
-                        <a href="/places">@L["Menu:Places"]</a>
+                        <a href="/places" class="@ActiveClass(IsActive("/places"))">@L["Menu:Places"]</a>
                     </li>
                     <li>
-                        <a href="/news">@L["Menu:News"]</a>
+                        <a href="/news" class="@ActiveClass(IsActive("/news"))">@L["Menu:News"]</a>
                     </li>
                     <li>
-                        <a href="/jobs">@L["Menu:Jobs"]</a>
+                        <a href="/jobs" class="@ActiveClass(IsActive("/jobs"))">@L["Menu:Jobs"]</a>
                     </li>
                     <li>
-                        <a href="/gold-price">@L["Menu:GoldPrice"]</a>
+                        <a href="/gold-price" class="@ActiveClass(IsActive("/gold-price"))">@L["Menu:GoldPrice"]</a>
                     </li>
                     <li>
                         <a href="#">@L["Menu:Pages"] <i class="fa fa-caret-down"></i></a>

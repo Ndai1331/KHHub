@@ -97,13 +97,22 @@ public class Program
 
             var app = builder.Build();
 
-            var supportedCultures = new[] { new CultureInfo("en"), new CultureInfo("vi") };
-            app.UseRequestLocalization(new RequestLocalizationOptions
+            var supportedCultures = new[] { new CultureInfo("vi"), new CultureInfo("en") };
+            var localizationOptions = new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("vi"),
                 SupportedCultures = supportedCultures,
                 SupportedUICultures = supportedCultures
-            });
+            };
+
+            // Drop the Accept-Language header provider so a browser configured for English
+            // does not override the site default. The active language is decided by:
+            //   1. ?culture=xx query string (one-shot, used by the SetLanguage handler)
+            //   2. The .AspNetCore.Culture cookie set when the user picks a language
+            //   3. The default culture (vi)
+            localizationOptions.RequestCultureProviders.RemoveAll(p => p is AcceptLanguageHeaderRequestCultureProvider);
+
+            app.UseRequestLocalization(localizationOptions);
 
             if (!app.Environment.IsDevelopment())
             {

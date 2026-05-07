@@ -54,6 +54,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTmV3cy9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/Pages/SetLanguage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2V0TGFuZ3VhZ2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/user/Documents/KHHub/apps/publish_website/KHHub.Publish_website/Pages/Shared/Landing/_AdventureSection.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL0xhbmRpbmcvX0FkdmVudHVyZVNlY3Rpb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

@@ -9,6 +9,14 @@
             Resolves stored media paths to browser-loadable URL (same behavior as apps/web).
             </summary>
         </member>
+        <member name="T:KHHub.Publish_website.Pages.SetLanguageModel">
+            <summary>
+            Persists the user's language selection in a cookie so that the choice
+            survives subsequent navigation. Without this handler the query string
+            would only affect the current request and the site would fall back to
+            the configured default culture (vi) on the next page.
+            </summary>
+        </member>
         <member name="T:KHHub.Publish_website.Services.PublicMasterDataCatalogClient">
             <summary>
             Loads public catalog data from MasterData via the Web Gateway (YARP).
