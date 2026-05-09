@@ -24,6 +24,11 @@ public static class HealthChecksBuilderExtensions
         var healthChecksUiBuilder = services.AddHealthChecksUI(settings =>
         {
             settings.AddHealthCheckEndpoint("AuthServer Health Status", HealthChecksUiEndpointUri.Resolve(configuration, healthCheckUrl));
+            var evaluationTimeInSeconds = configuration.GetValue<int?>("App:HealthChecksUi:EvaluationTimeInSeconds");
+            if (evaluationTimeInSeconds.HasValue && evaluationTimeInSeconds.Value > 0)
+            {
+                settings.SetEvaluationTimeInSeconds(evaluationTimeInSeconds.Value);
+            }
         });
 
         // Set your HealthCheck UI Storage here
