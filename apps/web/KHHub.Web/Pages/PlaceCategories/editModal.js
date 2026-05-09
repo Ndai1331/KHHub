@@ -39,6 +39,8 @@ function initPlaceCategoryEditIconPicker($modal, inputSelector, pickerSelector) 
         iconset: 'fontawesome5',
         placement: 'bottom',
         search: true,
+        container: 'body',
+        animation: false,
     });
 
     var current = ($input.val() || '').trim();
@@ -51,6 +53,41 @@ function initPlaceCategoryEditIconPicker($modal, inputSelector, pickerSelector) 
     $picker.off('.khPlaceEditIconPicker');
     $input.off('.khPlaceEditIconPicker');
 
+    function positionIconPickerPopover() {
+        var $pop = $('.iconpicker-popover').last();
+        if (!$pop.length) {
+            return;
+        }
+
+        var pickerEl = $picker.get(0);
+        if (!pickerEl || !pickerEl.getBoundingClientRect) {
+            return;
+        }
+
+        var rect = pickerEl.getBoundingClientRect();
+
+        $pop
+            .addClass('show in')
+            .removeClass('fade')
+            .css({
+                position: 'fixed',
+                display: 'block',
+                opacity: 1,
+                visibility: 'visible',
+                zIndex: 20000,
+                pointerEvents: 'auto',
+                transform: 'none',
+            });
+
+        var popWidth = $pop.outerWidth() || 260;
+        var left = Math.min(rect.left, window.innerWidth - popWidth - 8);
+
+        $pop.css({
+            top: rect.bottom + 8,
+            left: Math.max(8, left),
+        });
+    }
+
     $picker.on('mousedown.khPlaceEditIconPicker', function (e) {
         e.preventDefault();
     });
@@ -60,7 +97,14 @@ function initPlaceCategoryEditIconPicker($modal, inputSelector, pickerSelector) 
         e.stopPropagation();
         try {
             $picker.iconpicker('show');
+            setTimeout(positionIconPickerPopover, 0);
+            setTimeout(positionIconPickerPopover, 50);
+            setTimeout(positionIconPickerPopover, 150);
         } catch (err) {}
+    });
+
+    $picker.on('iconpickerShow.khPlaceEditIconPicker iconpickerShown.khPlaceEditIconPicker', function () {
+        setTimeout(positionIconPickerPopover, 0);
     });
 
     $picker.on('iconpickerSelected.khPlaceEditIconPicker', function (event) {

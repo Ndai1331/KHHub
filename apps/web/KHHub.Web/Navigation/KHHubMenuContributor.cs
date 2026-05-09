@@ -88,20 +88,23 @@ public class KHHubMenuContributor : IMenuContributor
         placesMenu.AddItem(new ApplicationMenuItem(KHHubMenus.PlaceFavorites, md["Menu:PlaceFavorites"], url: "/PlaceFavorites", icon: "fa fa-heart", requiredPermissionName: MasterDataServicePermissions.PlaceFavorites.Default));
         placesMenu.AddItem(new ApplicationMenuItem(KHHubMenus.PlaceViews, md["Menu:PlaceViews"], url: "/PlaceViews", icon: "fa fa-eye", requiredPermissionName: MasterDataServicePermissions.PlaceViews.Default));
         context.Menu.AddItem(placesMenu);
-        var mediaFilesMenu = new ApplicationMenuItem(KHHubMenus.MediaFilesGroup, md["Menu:MediaFilesGroup"], url: "#", icon: "fa fa-folder-open", order: 9);
-        mediaFilesMenu.AddItem(new ApplicationMenuItem(KHHubMenus.MediaFiles, md["Menu:MediaFilesFiles"], url: "/MediaFiles", icon: "fa fa-file", requiredPermissionName: MasterDataServicePermissions.MediaFiles.Default));
-        mediaFilesMenu.AddItem(new ApplicationMenuItem(KHHubMenus.EntityFiles, md["Menu:EntityFiles"], url: "/EntityFiles", icon: "fa fa-paperclip", requiredPermissionName: MasterDataServicePermissions.EntityFiles.Default));
-        context.Menu.AddItem(mediaFilesMenu);
-        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.HomeBanners, md["Menu:HomeBanners"], url: "/HomeBanners", icon: "fa fa-picture-o", requiredPermissionName: MasterDataServicePermissions.HomeBanners.Default));
-        var jobsMenu = new ApplicationMenuItem(KHHubMenus.JobsGroup, md["Menu:JobsGroup"], url: "#", icon: "fa fa-briefcase", order: 10);
+
+         var jobsMenu = new ApplicationMenuItem(KHHubMenus.JobsGroup, md["Menu:JobsGroup"], url: "#", icon: "fa fa-briefcase", order: 10);
         jobsMenu.AddItem(new ApplicationMenuItem(KHHubMenus.JobCategories, md["Menu:JobCategories"], url: "/JobCategories", icon: "fa fa-sitemap", requiredPermissionName: MasterDataServicePermissions.JobCategories.Default));
-        jobsMenu.AddItem(new ApplicationMenuItem(KHHubMenus.Jobs, md["Menu:Jobs"], url: "/Jobs", icon: "fa fa-briefcase", requiredPermissionName: MasterDataServicePermissions.Jobs.Default));
         jobsMenu.AddItem(new ApplicationMenuItem(KHHubMenus.JobTags, md["Menu:JobTags"], url: "/JobTags", icon: "fa fa-tags", requiredPermissionName: MasterDataServicePermissions.JobTags.Default));
+        jobsMenu.AddItem(new ApplicationMenuItem(KHHubMenus.Jobs, md["Menu:Jobs"], url: "/Jobs", icon: "fa fa-briefcase", requiredPermissionName: MasterDataServicePermissions.Jobs.Default));
         jobsMenu.AddItem(new ApplicationMenuItem(KHHubMenus.JobTagMappings, md["Menu:JobTagMappings"], url: "/JobTagMappings", icon: "fa fa-link", requiredPermissionName: MasterDataServicePermissions.JobTagMappings.Default));
         jobsMenu.AddItem(new ApplicationMenuItem(KHHubMenus.JobApplications, md["Menu:JobApplications"], url: "/JobApplications", icon: "fa fa-file-text-o", requiredPermissionName: MasterDataServicePermissions.JobApplications.Default));
         jobsMenu.AddItem(new ApplicationMenuItem(KHHubMenus.JobFavorites, md["Menu:JobFavorites"], url: "/JobFavorites", icon: "fa fa-heart", requiredPermissionName: MasterDataServicePermissions.JobFavorites.Default));
         jobsMenu.AddItem(new ApplicationMenuItem(KHHubMenus.JobViews, md["Menu:JobViews"], url: "/JobViews", icon: "fa fa-eye", requiredPermissionName: MasterDataServicePermissions.JobViews.Default));
         context.Menu.AddItem(jobsMenu);
+
+        var mediaFilesMenu = new ApplicationMenuItem(KHHubMenus.MediaFilesGroup, md["Menu:MediaFilesGroup"], url: "#", icon: "fa fa-folder-open", order: 9);
+        mediaFilesMenu.AddItem(new ApplicationMenuItem(KHHubMenus.MediaFiles, md["Menu:MediaFilesFiles"], url: "/MediaFiles", icon: "fa fa-file", requiredPermissionName: MasterDataServicePermissions.MediaFiles.Default));
+        mediaFilesMenu.AddItem(new ApplicationMenuItem(KHHubMenus.EntityFiles, md["Menu:EntityFiles"], url: "/EntityFiles", icon: "fa fa-paperclip", requiredPermissionName: MasterDataServicePermissions.EntityFiles.Default));
+        context.Menu.AddItem(mediaFilesMenu);
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.HomeBanners, md["Menu:HomeBanners"], url: "/HomeBanners", icon: "fa fa-picture-o", requiredPermissionName: MasterDataServicePermissions.HomeBanners.Default));
+       
     }
 
     private Task ConfigureUserMenuAsync(MenuConfigurationContext context)

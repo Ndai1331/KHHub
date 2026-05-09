@@ -48,7 +48,7 @@ function initPlaceCategoryIconPicker($scope, inputSelector, pickerSelector) {
     } catch (e) {}
 
     $picker.iconpicker({
-        iconset: 'fontawesome',
+        iconset: 'fontawesome5',
         placement: 'bottom',
         search: true,
         container: 'body',
@@ -65,26 +65,65 @@ function initPlaceCategoryIconPicker($scope, inputSelector, pickerSelector) {
     $picker.off('.khPlaceIconPicker');
     $input.off('.khPlaceIconPicker');
 
+    function positionIconPickerPopover() {
+        var $pop = $('.iconpicker-popover').last();
+        if (!$pop.length) {
+            return;
+        }
+
+        var pickerEl = $picker.get(0);
+        if (!pickerEl || !pickerEl.getBoundingClientRect) {
+            return;
+        }
+
+        var rect = pickerEl.getBoundingClientRect();
+
+        $pop
+            .addClass('show in')
+            .removeClass('fade')
+            .css({
+                position: 'fixed',
+                display: 'block',
+                opacity: 1,
+                visibility: 'visible',
+                zIndex: 20000,
+                pointerEvents: 'auto',
+                transform: 'none',
+            });
+
+        var popWidth = $pop.outerWidth() || 260;
+        var left = Math.min(rect.left, window.innerWidth - popWidth - 8);
+
+        $pop.css({
+            top: rect.bottom + 8,
+            left: Math.max(8, left),
+        });
+    }
+
     $picker.on('mousedown.khPlaceIconPicker', function (e) {
-        // Keep modal/focus handlers from swallowing first click.
         e.preventDefault();
     });
 
     $picker.on('click.khPlaceIconPicker', function (e) {
         e.preventDefault();
         e.stopPropagation();
+
         try {
             $picker.iconpicker('show');
+            setTimeout(positionIconPickerPopover, 0);
+            setTimeout(positionIconPickerPopover, 50);
+            setTimeout(positionIconPickerPopover, 150);
         } catch (err) {}
     });
 
-    $picker.on('iconpickerShown.khPlaceIconPicker', function () {
-        $('.iconpicker-popover').last().addClass('show').css('display', 'block');
+    $picker.on('iconpickerShow.khPlaceIconPicker iconpickerShown.khPlaceIconPicker', function () {
+        setTimeout(positionIconPickerPopover, 0);
     });
 
     $picker.on('iconpickerSelected.khPlaceIconPicker', function (event) {
         var icon = event.iconpickerValue || '';
         $input.val(icon).trigger('input');
+
         try {
             $picker.iconpicker('hide');
         } catch (err) {}
