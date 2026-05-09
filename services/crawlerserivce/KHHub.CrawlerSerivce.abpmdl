@@ -1,0 +1,37 @@
+{
+  "packages": {
+    "KHHub.CrawlerSerivce": {
+      "path": "KHHub.CrawlerSerivce/KHHub.CrawlerSerivce.abppkg"
+    },
+    "KHHub.CrawlerSerivce.Contracts": {
+      "path": "KHHub.CrawlerSerivce.Contracts/KHHub.CrawlerSerivce.Contracts.abppkg"
+    }
+  },
+  "imports": {
+    "Volo.Abp.PermissionManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "05/09/2026 06:53:54 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "05/09/2026 06:53:54 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "05/09/2026 06:53:54 +00:00"
+    },
+    "Volo.Abp.BlobStoring.Database": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "05/09/2026 06:53:54 +00:00"
+    },
+    "Volo.Abp.LanguageManagement": {
+      "version": "10.3.0",
+      "isInstalled": true,
+      "creationTime": "05/09/2026 06:53:54 +00:00"
+    }
+  }
+}

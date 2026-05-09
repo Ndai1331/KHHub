@@ -1,0 +1,102 @@
+{
+  "modules": {
+    "masterdata": {
+      "rootPath": "masterdata",
+      "remoteServiceName": "MasterDataService",
+      "controllers": {
+        "KHHub.MasterDataService.IntegrationServices.JobCrawlerIntegrationService": {
+          "controllerName": "JobCrawlerIntegration",
+          "controllerGroupName": "JobCrawlerIntegration",
+          "isRemoteService": true,
+          "isIntegrationService": true,
+          "apiVersion": null,
+          "type": "KHHub.MasterDataService.IntegrationServices.JobCrawlerIntegrationService",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
+          "interfaces": [
+            {
+              "type": "KHHub.MasterDataService.IntegrationServices.IJobCrawlerIntegrationService",
+              "name": "IJobCrawlerIntegrationService",
+              "methods": [
+                {
+                  "name": "UpsertFromCrawlerAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.JobCrawler.JobCrawlerUpsertInputDto, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.JobCrawler.JobCrawlerUpsertInputDto",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.JobCrawler.JobCrawlerUpsertInputDto",
+                      "isOptional": false,
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.JobCrawler.JobCrawlerUpsertResultDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.JobCrawler.JobCrawlerUpsertResultDto",
+                    "summary": null
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "UpsertFromCrawlerAsyncByInput": {
+              "uniqueName": "UpsertFromCrawlerAsyncByInput",
+              "name": "UpsertFromCrawlerAsync",
+              "httpMethod": "POST",
+              "url": "integration-api/masterdata/job-crawler/upsert-from-crawler",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.JobCrawler.JobCrawlerUpsertInputDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.JobCrawler.JobCrawlerUpsertInputDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.JobCrawler.JobCrawlerUpsertInputDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.MasterDataService.Services.Dtos.JobCrawler.JobCrawlerUpsertInputDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.JobCrawler.JobCrawlerUpsertInputDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.JobCrawler.JobCrawlerUpsertResultDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.JobCrawler.JobCrawlerUpsertResultDto",
+                "summary": null
+              },
+              "allowAnonymous": true,
+              "authorizeDatas": [],
+              "implementFrom": "KHHub.MasterDataService.IntegrationServices.IJobCrawlerIntegrationService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            }
+          }
+        }
+      }
+    }
+  }
+}

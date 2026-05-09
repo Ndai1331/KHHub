@@ -25,7 +25,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KHHub.AppHost")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c0807161c47637f60f65238ee2a96a588d6d77e7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f8c6120d8b696ee3271ff58b4363d5804f1675c")]
 [assembly: System.Reflection.AssemblyProductAttribute("KHHub.AppHost")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KHHub.AppHost")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

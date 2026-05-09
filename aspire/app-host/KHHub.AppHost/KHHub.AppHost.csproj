@@ -58,4 +58,8 @@
 
     <ProjectReference Include="/Users/user/Documents/KHHub/services/masterdata/KHHub.MasterDataService/KHHub.MasterDataService.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="/Users/user/Documents/KHHub/services/crawlerserivce/KHHub.CrawlerSerivce/KHHub.CrawlerSerivce.csproj" />
+  </ItemGroup>
 </Project>

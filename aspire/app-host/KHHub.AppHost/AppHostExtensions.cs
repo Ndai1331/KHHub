@@ -122,6 +122,7 @@ public static class AppHostExtensions
 
         var aiManagementDb = databaseServers.Postgres.AddDatabase("AIManagementService", "KHHub_AIManagement");
         var languageManagementDb = databaseServers.Postgres.AddDatabase("LanguageService", "KHHub_Language");
+        var crawlerserivcedb = databaseServers.Postgres.AddDatabase("CrawlerSerivce", "KHHub_CrawlerSerivce");
         var masterdatadb = databaseServers.Postgres.AddDatabase("MasterDataService", "KHHub_MasterData");
 
         return new DatabaseReferences(
@@ -133,7 +134,8 @@ public static class AppHostExtensions
             AIManagementDb: aiManagementDb,
             LanguageManagementDb: languageManagementDb,
         
-            MasterDataDb: masterdatadb);
+            MasterDataDb: masterdatadb,
+            CrawlerSerivceDb: crawlerserivcedb);
     }
 
     public static void AddMicroservices(
@@ -460,6 +462,26 @@ public static class AppHostExtensions
             .WithReference(redis)
             .WithReference(rabbitMq);
         applicationResources["Publish_website"] = publish_website;
+        
+        var crawlerserivce = builder
+            .AddProject<Projects.KHHub_CrawlerSerivce>("crawlerserivce", "KHHub.CrawlerSerivce")
+            .WaitFor(databases.AdministrationDb)
+            .WaitFor(databases.IdentityDb)
+            .WaitFor(databases.CrawlerSerivceDb)
+            .WaitFor(databases.AuditLoggingDb)
+            .WaitFor(databases.LanguageManagementDb)
+            .WaitFor(redis)
+            .WaitFor(rabbitMq)
+            .WithReference(databases.AdministrationDb)
+            .WithReference(databases.IdentityDb)
+            .WithReference(databases.BlobStoringDb)
+            .WithReference(databases.CrawlerSerivceDb)
+            .WithReference(databases.AuditLoggingDb)
+            .WithReference(databases.LanguageManagementDb)
+            .ConfigureRabbitMq(rabbitMq, infrastructureDefaultUser, infrastructureDefaultUserPassword)
+            .ConfigureRedis(redis)
+            .ConfigureElasticSearch(elasticsearch);
+        applicationResources["CrawlerSerivce"] = crawlerserivce;
         }
 }
 
@@ -523,7 +545,7 @@ public class EnvironmentConfiguration
 
     public void ConfigureAuthServer(IResourceBuilder<ProjectResource> authServer, Dictionary<string, IResourceBuilder<ProjectResource>> applicationResources)
     {
-        var allowedUrls = ReferenceExpression.Create($"{applicationResources["Publish_website"].GetEndpoint("http")},{applicationResources["MasterData"].GetEndpoint("http")},{_endpoints.WebEndpoint},{_endpoints.WebGatewayEndpoint},{applicationResources["Administration"].GetEndpoint("http")},{applicationResources["Identity"].GetEndpoint("http")},{_endpoints.MobileGatewayEndpoint},{applicationResources["AuditLogging"].GetEndpoint("http")},{applicationResources["Gdpr"].GetEndpoint("http")},{applicationResources["AIManagement"].GetEndpoint("http")},{applicationResources["LanguageManagement"].GetEndpoint("http")}");
+        var allowedUrls = ReferenceExpression.Create($"{applicationResources["CrawlerSerivce"].GetEndpoint("http")},{applicationResources["Publish_website"].GetEndpoint("http")},{applicationResources["MasterData"].GetEndpoint("http")},{_endpoints.WebEndpoint},{_endpoints.WebGatewayEndpoint},{applicationResources["Administration"].GetEndpoint("http")},{applicationResources["Identity"].GetEndpoint("http")},{_endpoints.MobileGatewayEndpoint},{applicationResources["AuditLogging"].GetEndpoint("http")},{applicationResources["Gdpr"].GetEndpoint("http")},{applicationResources["AIManagement"].GetEndpoint("http")},{applicationResources["LanguageManagement"].GetEndpoint("http")}");
 
         authServer.WithEnvironment("AuthServer__Authority", _endpoints.AuthServerEndpoint)
             .WithEnvironment("App__RedirectAllowedUrls", allowedUrls)
@@ -591,5 +613,6 @@ public record DatabaseReferences(
     IResourceBuilder<PostgresDatabaseResource> IdentityDb,
     IResourceBuilder<PostgresDatabaseResource> BlobStoringDb,
     IResourceBuilder<PostgresDatabaseResource> AuditLoggingDb,    IResourceBuilder<PostgresDatabaseResource> GdprDb,    IResourceBuilder<PostgresDatabaseResource> AIManagementDb,
-    IResourceBuilder<PostgresDatabaseResource> MasterDataDb,    IResourceBuilder<PostgresDatabaseResource> LanguageManagementDb
+    IResourceBuilder<PostgresDatabaseResource> MasterDataDb,
+    IResourceBuilder<PostgresDatabaseResource> CrawlerSerivceDb,    IResourceBuilder<PostgresDatabaseResource> LanguageManagementDb
 );

@@ -158,6 +158,16 @@
       "healthUiEndpoint": "/health-ui",
       "folder": "apps",
       "runnable": true
+    },
+    "KHHub.CrawlerSerivce": {
+      "type": "dotnet-project",
+      "path": "../../../services/crawlerserivce/KHHub.CrawlerSerivce/KHHub.CrawlerSerivce.csproj",
+      "launchUrl": "http://localhost:44300",
+      "kubernetesService": ".*-crawlerserivce$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "folder": "services",
+      "runnable": true
     }
   },
   "containers": {

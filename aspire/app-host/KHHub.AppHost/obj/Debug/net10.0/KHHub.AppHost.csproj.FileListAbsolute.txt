@@ -171,3 +171,5 @@
 /Users/user/Documents/KHHub/aspire/app-host/KHHub.AppHost/obj/Debug/net10.0/KHHub.AppHost.pdb
 /Users/user/Documents/KHHub/aspire/app-host/KHHub.AppHost/obj/Debug/net10.0/KHHub.AppHost.genruntimeconfig.cache
 /Users/user/Documents/KHHub/aspire/app-host/KHHub.AppHost/obj/Debug/net10.0/ref/KHHub.AppHost.dll
+/Users/user/Documents/KHHub/aspire/app-host/KHHub.AppHost/obj/Debug/net10.0/Aspire/references/KHHub_Publish_website.ProjectMetadata.g.cs
+/Users/user/Documents/KHHub/aspire/app-host/KHHub.AppHost/obj/Debug/net10.0/Aspire/references/KHHub_CrawlerSerivce.ProjectMetadata.g.cs

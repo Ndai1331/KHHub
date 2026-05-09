@@ -81,6 +81,10 @@
     "KHHub.Publish_website": {
       "path": "apps/publish_website/KHHub.Publish_website.abpmdl",
       "folder": "apps"
+    },
+    "KHHub.CrawlerSerivce": {
+      "path": "services/crawlerserivce/KHHub.CrawlerSerivce.abpmdl",
+      "folder": "services"
     }
   },
   "k8sProfiles": {

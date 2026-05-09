@@ -65,6 +65,11 @@
         "profile": "Default",
         "applicationOrFolder": "KHHub.Publish_website",
         "value": 0
+      },
+      {
+        "profile": "Default",
+        "applicationOrFolder": "KHHub.CrawlerSerivce",
+        "value": 0
       }
     ],
     "folderBatchStartStates": [

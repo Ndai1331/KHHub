@@ -28,4 +28,9 @@
     <Content Remove="Localization\MasterDataService\*.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="ClientProxies\**\*.json" />
+    <Content Remove="ClientProxies\**\*.json" />
+  </ItemGroup>
+
 </Project>
