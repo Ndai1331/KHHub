@@ -82,10 +82,12 @@ public class EntityFilesAppService : EntityFilesAppServiceBase, IEntityFilesAppS
             _mediaStorageOptions.Value.PublicBaseUrl,
             mediaFile.Path);
 
-        if (_mediaStorageOptions.Value.UsePresignedReadUrls)
-        {
-            await TryAttachPresignedReadUrlAsync(mediaFile).ConfigureAwait(false);
-        }
+        // Signed URL enrichment is intentionally kept but disabled because MinIO now serves public reads.
+        // if (_mediaStorageOptions.Value.UsePresignedReadUrls)
+        // {
+        //     await TryAttachPresignedReadUrlAsync(mediaFile).ConfigureAwait(false);
+        // }
+        await Task.CompletedTask;
     }
 
     private async Task TryAttachPresignedReadUrlAsync(MediaFileDto dto)

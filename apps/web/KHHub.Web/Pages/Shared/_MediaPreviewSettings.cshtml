@@ -2,7 +2,8 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     var baseUrl = Configuration["MediaFilesStorage:PublicBaseUrl"] ?? string.Empty;
-    var usePresigned = Configuration.GetValue("MediaFilesStorage:UsePresignedReadUrls", true);
+    // Signed preview URLs are kept behind configuration for rollback; public MinIO reads are the default.
+    var usePresigned = Configuration.GetValue("MediaFilesStorage:UsePresignedReadUrls", false);
 }
 <script>
     window.__khhubMediaPublicBaseUrl = @Html.Raw(JsonSerializer.Serialize(baseUrl));

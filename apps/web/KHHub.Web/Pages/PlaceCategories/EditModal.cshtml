@@ -43,7 +43,17 @@
                     </abp-row>
                     <abp-row class="g-3 align-items-start">
                         <abp-column size-md="_6">
-                            <abp-input asp-for="PlaceCategory.Slug" label="@L["Slug"].Value" />
+                            <div class="mb-3">
+                                <label class="form-label" asp-for="PlaceCategory.Slug">@L["Slug"].Value</label>
+                                <input asp-for="PlaceCategory.Slug"
+                                       type="text"
+                                       class="form-control bg-body-secondary"
+                                       readonly="readonly"
+                                       tabindex="-1"
+                                       aria-readonly="true"
+                                       autocomplete="off" />
+                                <span asp-validation-for="PlaceCategory.Slug" class="text-danger d-block"></span>
+                            </div>
                         </abp-column>
                         <abp-column size-md="_6">
                             <abp-input asp-for="PlaceCategory.Icon" label="@L["Icon"].Value" />
@@ -75,14 +85,21 @@
                     </abp-row>
                 </abp-column>
                 <abp-column size-md="_4">
-                    <h6 class="text-muted text-uppercase small mb-3">@L["Color"].Value</h6>
                     <div class="mb-3">
                         <label class="form-label" asp-for="PlaceCategory.Color">@L["Color"].Value</label>
-                        <input asp-for="PlaceCategory.Color"
-                               type="text"
-                               class="form-control"
-                               placeholder="#3B82F6"
-                               autocomplete="off" />
+                        <div class="d-flex gap-2 align-items-stretch">
+                            <input asp-for="PlaceCategory.Color"
+                                   type="text"
+                                   class="form-control flex-grow-1"
+                                   placeholder="#3B82F6"
+                                   autocomplete="off" />
+                            <input type="color"
+                                   id="PlaceCategoryEditColorPicker"
+                                   class="form-control form-control-color border rounded-2 p-1"
+                                   title="@L["Color"].Value"
+                                   value="#3B82F6"
+                                   style="width: 3rem; min-width: 3rem; height: 38px; cursor: pointer;" />
+                        </div>
                         <span asp-validation-for="PlaceCategory.Color" class="text-danger d-block"></span>
                         <div id="PlaceCategoryColorPreview"
                              class="rounded border mt-3"

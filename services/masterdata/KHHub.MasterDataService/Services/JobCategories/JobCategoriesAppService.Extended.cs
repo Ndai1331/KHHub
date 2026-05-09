@@ -1,3 +1,7 @@
+using KHHub.MasterDataService.Services.Dtos.Shared;
+using KHHub.MasterDataService.Data.JobCategories;
+using KHHub.MasterDataService.Services.Dtos.JobCategories;
+using KHHub.MasterDataService.Entities.JobCategories;
 using System;
 using System.IO;
 using System.Linq;

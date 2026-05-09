@@ -62,14 +62,14 @@ public abstract class JobCategoriesAppServiceBase : ApplicationService
     [Authorize(MasterDataServicePermissions.JobCategories.Create)]
     public virtual async Task<JobCategoryDto> CreateAsync(JobCategoryCreateDto input)
     {
-        var jobCategory = await _jobCategoryManager.CreateAsync(input.Name, input.Slug, input.ParentId, input.DisplayOrder, input.IsActive, input.Description, input.Icon, input.Color);
+        var jobCategory = await _jobCategoryManager.CreateAsync(input.Name, input.Slug, input.DisplayOrder, input.IsActive, input.Description, input.Icon, input.Color, input.ParentId);
         return ObjectMapper.Map<JobCategory, JobCategoryDto>(jobCategory);
     }
 
     [Authorize(MasterDataServicePermissions.JobCategories.Edit)]
     public virtual async Task<JobCategoryDto> UpdateAsync(Guid id, JobCategoryUpdateDto input)
     {
-        var jobCategory = await _jobCategoryManager.UpdateAsync(id, input.Name, input.Slug, input.ParentId, input.DisplayOrder, input.IsActive, input.Description, input.Icon, input.Color, input.ConcurrencyStamp);
+        var jobCategory = await _jobCategoryManager.UpdateAsync(id, input.Name, input.Slug, input.DisplayOrder, input.IsActive, input.Description, input.Icon, input.Color, input.ParentId, input.ConcurrencyStamp);
         return ObjectMapper.Map<JobCategory, JobCategoryDto>(jobCategory);
     }
 

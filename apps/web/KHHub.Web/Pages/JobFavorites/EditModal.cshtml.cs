@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.Application.Dtos;
 using KHHub.MasterDataService.Services.JobFavorites;
 using KHHub.MasterDataService.Services.Dtos.JobFavorites;
+using KHHub.MasterDataService.Services.Dtos.Jobs;
 
 namespace KHHub.Web.Pages.JobFavorites;
 

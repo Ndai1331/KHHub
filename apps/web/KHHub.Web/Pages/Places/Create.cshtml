@@ -9,6 +9,11 @@
 @{
     PageLayout.Content.Title = L["NewPlace"].Value;
     PageLayout.Content.MenuItemName = KHHubMenus.Places;
+    var placeWardLookupUrl = Model.DefaultProvinceId != Guid.Empty
+        ? Url.Content($"~/api/masterdata/places/ward-lookup?provinceId={Model.DefaultProvinceId}")
+        : Model.Place.ProvinceId != Guid.Empty
+            ? Url.Content($"~/api/masterdata/places/ward-lookup?provinceId={Model.Place.ProvinceId}")
+            : Url.Content("~/api/masterdata/places/ward-lookup");
 }
 
 @section styles
@@ -101,15 +106,20 @@
                     <abp-row class="g-3 mt-4 mb-2">
                         <abp-column size-md="_6">
                             <label class="form-label" asp-for="Place.ProvinceId">@L["Province"].Value</label>
-                            <select asp-for="Place.ProvinceId"
-                                    class="auto-complete-select"
-                                    data-autocomplete-api-url="@Url.Content("~/api/masterdata/places/province-lookup")"
-                                    data-autocomplete-display-property="displayName"
-                                    data-autocomplete-value-property="id"
-                                    data-autocomplete-items-property="items"
-                                    data-autocomplete-filter-param-name="filter"
-                                    data-autocomplete-allow-clear="true"
-                                    data-autocomplete-placeholder="@L["Search"].Value">
+                            <input type="hidden" asp-for="Place.ProvinceId" />
+                            <select class="form-select" id="PlaceProvinceDisplay" disabled aria-disabled="true">
+                                @if (Model.DefaultProvinceId != Guid.Empty)
+                                {
+                                    <option value="@Model.DefaultProvinceId" selected>@Model.DefaultProvinceDisplayName</option>
+                                }
+                                else if (Model.Place.ProvinceId != Guid.Empty)
+                                {
+                                    <option value="@Model.Place.ProvinceId" selected>@Model.DefaultProvinceDisplayName</option>
+                                }
+                                else
+                                {
+                                    <option value="">—</option>
+                                }
                             </select>
                             <span asp-validation-for="Place.ProvinceId" class="text-danger d-block"></span>
                         </abp-column>
@@ -117,7 +127,7 @@
                             <label class="form-label" asp-for="Place.WardId">@L["Ward"].Value</label>
                             <select asp-for="Place.WardId"
                                     class="auto-complete-select"
-                                    data-autocomplete-api-url="@Url.Content("~/api/masterdata/places/ward-lookup")"
+                                    data-autocomplete-api-url="@placeWardLookupUrl"
                                     data-autocomplete-display-property="displayName"
                                     data-autocomplete-value-property="id"
                                     data-autocomplete-items-property="items"

@@ -42,7 +42,17 @@
                     </abp-row>
                     <abp-row class="g-3 align-items-start">
                         <abp-column size-md="_6">
-                            <abp-input asp-for="ArticleCategory.Slug" label="@L["ArticleCategorySlug"].Value" />
+                            <div class="mb-3">
+                                <label class="form-label" asp-for="ArticleCategory.Slug">@L["ArticleCategorySlug"].Value</label>
+                                <input asp-for="ArticleCategory.Slug"
+                                       type="text"
+                                       class="form-control bg-body-secondary"
+                                       readonly="readonly"
+                                       tabindex="-1"
+                                       aria-readonly="true"
+                                       autocomplete="off" />
+                                <span asp-validation-for="ArticleCategory.Slug" class="text-danger d-block"></span>
+                            </div>
                         </abp-column>
                         <abp-column size-md="_6">
                             <abp-input asp-for="ArticleCategory.Icon" label="@L["ArticleCategoryIcon"].Value" />

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.Application.Dtos;
 using KHHub.MasterDataService.Services.Jobs;
+using KHHub.MasterDataService.Services.Dtos.JobCategories;
 using KHHub.MasterDataService.Services.Dtos.Jobs;
 
 namespace KHHub.Web.Pages.Jobs;

@@ -1,0 +1,332 @@
+@page
+@using KHHub.MasterDataService.Localization
+@using KHHub.Web.Navigation
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@inject IPageLayout PageLayout
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@model KHHub.Web.Pages.Jobs.EditModel
+@{
+    PageLayout.Content.Title = L["EditJob"].Value;
+    PageLayout.Content.MenuItemName = KHHubMenus.Jobs;
+    var thumbPreviewClass = string.IsNullOrEmpty(Model.Job.ThumbnailUrl) ? "d-none" : "";
+    var coverPreviewClass = string.IsNullOrEmpty(Model.Job.CoverImageUrl) ? "d-none" : "";
+    var jobWardLookupUrl = Model.DefaultProvinceId != Guid.Empty
+        ? Url.Content($"~/api/masterdata/jobs/ward-lookup?provinceId={Model.DefaultProvinceId}")
+        : Model.Job.ProvinceId != Guid.Empty
+            ? Url.Content($"~/api/masterdata/jobs/ward-lookup?provinceId={Model.Job.ProvinceId}")
+            : Url.Content("~/api/masterdata/jobs/ward-lookup");
+}
+
+@section styles
+{
+    <link rel="stylesheet" href="~/Pages/MediaFiles/media-explorer.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Pages/Shared/tag-picker.css" asp-append-version="true" />
+}
+
+@section scripts
+{
+    <partial name="~/Pages/Shared/_MediaPreviewSettings.cshtml" />
+    <script src="~/Pages/Shared/khhub-media-preview.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
+    <abp-script src="/Pages/Articles/article-media-upload.js" />
+    <abp-script src="/Pages/Jobs/job-edit.js" />
+    <abp-script src="/Pages/Articles/seo-keywords-editor.js" />
+    <abp-script src="/Pages/Shared/tag-picker.js" />
+    <abp-script src="/Pages/Jobs/job-form-save.js" />
+    <abp-script src="/Pages/MediaFiles/index.js" />
+    <abp-script src="/Pages/Shared/media-library-picker.js" />
+}
+
+@section content_toolbar
+{
+    <a asp-page="./Index" class="btn btn-secondary"><i class="fa fa-arrow-left me-1"></i>@L["BackToList"].Value</a>
+    @if (Model.CanDelete)
+    {
+        <abp-button id="DeleteJobButton" button-type="Danger" text="@L["DeleteJob"].Value" icon="trash" />
+    }
+    <abp-button id="SaveAndPublishButton" button-type="Outline_Primary" text="@L["SaveAndPublish"].Value" icon="check-double" form="JobEditForm" type="submit" name="action" value="save-and-publish" />
+    <abp-button id="SaveButton" button-type="Primary" text="@L["Save"].Value" icon="save" form="JobEditForm" type="submit" name="action" value="save" />
+}
+
+<p class="text-muted mb-4">@L["JobFormLayoutHint"].Value</p>
+
+<form id="JobEditForm" method="post" autocomplete="off" data-job-mode="edit">
+    @Html.AntiForgeryToken()
+    <abp-input asp-for="Id" type="hidden" />
+    <abp-input asp-for="Job.ConcurrencyStamp" type="hidden" />
+    <div asp-validation-summary="All" class="text-danger mb-2"></div>
+    <ul class="nav nav-tabs flex-wrap gap-1 mb-0 border-bottom-0" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active px-4 py-2 rounded-top-2" data-bs-toggle="tab" data-bs-target="#job-tab-general-pane" type="button" role="tab">@L["GeneralInformation"].Value</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link px-4 py-2 rounded-top-2" data-bs-toggle="tab" data-bs-target="#job-tab-relations-pane" type="button" role="tab">@L["RelatedContent"].Value</button>
+        </li>
+    </ul>
+    <div class="tab-content border rounded-bottom rounded-end rounded-start mb-4 px-2 pb-2 pt-2 bg-white" style="border-color:#E5E7EB!important;margin-top:-1px;">
+        <div class="tab-pane fade show active" id="job-tab-general-pane" role="tabpanel">
+            <abp-row>
+                <abp-column size-md="_8">
+                    <abp-card class="mb-4">
+                        <abp-card-header>
+                            <h5 class="mb-0">@L["BasicInfo"].Value</h5>
+                        </abp-card-header>
+                        <abp-card-body>
+                            <abp-input asp-for="Job.Title" id="JobTitle" label="@L["Title"].Value" />
+                            <div id="JobSlugPreview" class="small text-muted mb-2"></div>
+                            <input type="hidden" asp-for="Job.Slug" id="JobSlug" autocomplete="off" />
+                            <span asp-validation-for="Job.Slug" class="text-danger d-block mb-2"></span>
+
+                            <abp-row class="g-3 mb-2">
+                                <abp-column size-md="_6">
+                                    <label class="form-label" asp-for="Job.JobCategoryId">@L["JobCategory"].Value</label>
+                                    <select asp-for="Job.JobCategoryId"
+                                            class="auto-complete-select"
+                                            data-autocomplete-api-url="@Url.Content("~/api/masterdata/jobs/job-category-lookup")"
+                                            data-autocomplete-display-property="displayName"
+                                            data-autocomplete-value-property="id"
+                                            data-autocomplete-items-property="items"
+                                            data-autocomplete-filter-param-name="filter"
+                                            data-autocomplete-allow-clear="true"
+                                            data-autocomplete-placeholder="@L["Search"].Value">
+                                        @if (Model.Job.JobCategoryId != Guid.Empty && !string.IsNullOrEmpty(Model.SelectedJobCategoryDisplayName))
+                                        {
+                                            <option selected value="@Model.Job.JobCategoryId">@Model.SelectedJobCategoryDisplayName</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Job.JobCategoryId" class="text-danger d-block"></span>
+                                </abp-column>
+                                <abp-column size-md="_6">
+                                    <abp-select asp-for="Job.EmploymentType" asp-items="@Model.EmploymentTypeList" label="@L["EmploymentType"].Value" />
+                                </abp-column>
+                            </abp-row>
+
+                            <abp-input asp-for="Job.Summary" id="JobSummary" text-area="true" label="@L["Summary"].Value" />
+                            <label class="form-label" asp-for="Job.Description">@L["Description"].Value</label>
+                            <textarea asp-for="Job.Description" id="JobDescription" class="form-control" rows="16"></textarea>
+                            <span asp-validation-for="Job.Description" class="text-danger d-block mt-1"></span>
+
+                            <abp-row class="g-3 mt-3 mb-2">
+                                <abp-column size-md="_6">
+                                    <label class="form-label" asp-for="Job.Requirements">@L["Requirements"].Value</label>
+                                    <textarea asp-for="Job.Requirements" id="JobRequirements" class="form-control" rows="10"></textarea>
+                                    <span asp-validation-for="Job.Requirements" class="text-danger d-block mt-1"></span>
+                                </abp-column>
+                                <abp-column size-md="_6">
+                                    <label class="form-label" asp-for="Job.Benefits">@L["Benefits"].Value</label>
+                                    <textarea asp-for="Job.Benefits" id="JobBenefits" class="form-control" rows="10"></textarea>
+                                    <span asp-validation-for="Job.Benefits" class="text-danger d-block mt-1"></span>
+                                </abp-column>
+                            </abp-row>
+
+                            <div class="mt-3">
+                                <partial name="~/Pages/Shared/_TagPicker.cshtml" model='new TagPickerViewModel { Kind = "job", EntityId = Model.Id }' />
+                            </div>
+
+                            <abp-row class="g-3 mt-4 mb-2">
+                                <abp-column size-md="_6">
+                                    <label class="form-label" asp-for="Job.ProvinceId">@L["Province"].Value</label>
+                                    <input type="hidden" asp-for="Job.ProvinceId" />
+                                    <select class="form-select" id="JobProvinceDisplay" disabled aria-disabled="true">
+                                        @if (Model.DefaultProvinceId != Guid.Empty)
+                                        {
+                                            <option value="@Model.DefaultProvinceId" selected>@Model.DefaultProvinceDisplayName</option>
+                                        }
+                                        else if (Model.Job.ProvinceId != Guid.Empty && !string.IsNullOrEmpty(Model.SelectedProvinceDisplayName))
+                                        {
+                                            <option value="@Model.Job.ProvinceId" selected>@Model.SelectedProvinceDisplayName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="">—</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Job.ProvinceId" class="text-danger d-block"></span>
+                                </abp-column>
+                                <abp-column size-md="_6">
+                                    <label class="form-label" asp-for="Job.WardId">@L["Ward"].Value</label>
+                                    <select asp-for="Job.WardId"
+                                            class="auto-complete-select"
+                                            data-autocomplete-api-url="@jobWardLookupUrl"
+                                            data-autocomplete-display-property="displayName"
+                                            data-autocomplete-value-property="id"
+                                            data-autocomplete-items-property="items"
+                                            data-autocomplete-filter-param-name="filter"
+                                            data-autocomplete-allow-clear="true"
+                                            data-autocomplete-placeholder="@L["Search"].Value">
+                                        @if (Model.Job.WardId != Guid.Empty && !string.IsNullOrEmpty(Model.SelectedWardDisplayName))
+                                        {
+                                            <option selected value="@Model.Job.WardId">@Model.SelectedWardDisplayName</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Job.WardId" class="text-danger d-block"></span>
+                                </abp-column>
+                            </abp-row>
+
+                            <abp-row class="g-3 mb-2">
+                                <abp-column size-md="_6">
+                                    <abp-input asp-for="Job.Location" label="@L["Location"].Value" />
+                                </abp-column>
+                                <abp-column size-md="_6">
+                                    <abp-input asp-for="Job.ApplicationUrl" label="@L["ApplicationUrl"].Value" />
+                                </abp-column>
+                            </abp-row>
+                            <abp-row class="g-3 mb-2">
+                                <abp-column size-md="_6">
+                                    <abp-input asp-for="Job.ContactEmail" label="@L["ContactEmail"].Value" />
+                                </abp-column>
+                                <abp-column size-md="_6">
+                                    <abp-input asp-for="Job.ContactPhone" label="@L["ContactPhone"].Value" />
+                                </abp-column>
+                            </abp-row>
+                        </abp-card-body>
+                    </abp-card>
+                </abp-column>
+
+                <abp-column size-md="_4">
+                    <ul class="nav nav-tabs flex-wrap gap-1 mb-0 border-bottom-0" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active px-3 py-2 rounded-top-2" data-bs-toggle="tab" data-bs-target="#job-sidebar-info-edit" type="button" role="tab">@L["JobInformation"].Value</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link px-3 py-2 rounded-top-2" data-bs-toggle="tab" data-bs-target="#job-sidebar-seo-edit" type="button" role="tab">@L["SeoInformation"].Value</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content border rounded-bottom rounded-end rounded-start mb-4 px-2 pb-2 pt-2 bg-white" style="border-color:#E5E7EB!important;margin-top:-1px;">
+                        <div class="tab-pane fade show active" id="job-sidebar-info-edit" role="tabpanel">
+                            <abp-card class="mb-0 border-0 shadow-none">
+                                <abp-card-header class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                    <h5 class="mb-0">@L["JobInformation"].Value</h5>
+                                    @if (Model.LastUpdatedAt.HasValue)
+                                    {
+                                        <span class="text-muted small">@L["LastModificationTime"]: @Model.LastUpdatedAt.Value.ToString("g")</span>
+                                    }
+                                </abp-card-header>
+                                <abp-card-body>
+                                    <h6 class="text-muted text-uppercase small mb-2">@L["Media"].Value</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label">@L["ThumbnailUrl"].Value</label>
+                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                            <button type="button" class="btn btn-outline-primary btn-sm rounded-2 khhub-media-library-open"
+                                                    data-url-target="#JobThumbnailUrl" data-preview-target="#JobThumbnailPreview">
+                                                <i class="fa fa-picture-o me-1" aria-hidden="true"></i>@L["MediaLibrary:ChooseFromLibrary"].Value
+                                            </button>
+                                        </div>
+                                        <img id="JobThumbnailPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 @thumbPreviewClass" src="@MediaPreviewUrl.ResolveReadUrl(Model.Job.ThumbnailUrl, Configuration["MediaFilesStorage:PublicBaseUrl"])" />
+                                        <abp-input asp-for="Job.ThumbnailUrl" suppress-label="true" id="JobThumbnailUrl" />
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">@L["CoverImageUrl"].Value</label>
+                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                            <button type="button" class="btn btn-outline-primary btn-sm rounded-2 khhub-media-library-open"
+                                                    data-url-target="#JobCoverImageUrl" data-preview-target="#JobCoverPreview">
+                                                <i class="fa fa-picture-o me-1" aria-hidden="true"></i>@L["MediaLibrary:ChooseFromLibrary"].Value
+                                            </button>
+                                        </div>
+                                        <img id="JobCoverPreview" alt="@L["ImagePreview"]" class="img-fluid rounded border mb-2 @coverPreviewClass" src="@MediaPreviewUrl.ResolveReadUrl(Model.Job.CoverImageUrl, Configuration["MediaFilesStorage:PublicBaseUrl"])" />
+                                        <abp-input asp-for="Job.CoverImageUrl" suppress-label="true" id="JobCoverImageUrl" />
+                                    </div>
+
+                                    <abp-select asp-for="Job.Status" asp-items="@Model.JobStatusList" label="@L["Status"].Value" />
+                                    <abp-select asp-for="Job.WorkMode" asp-items="@Model.WorkModeList" label="@L["WorkMode"].Value" />
+                                    <abp-select asp-for="Job.ExperienceLevel" asp-items="@Model.ExperienceLevelList" label="@L["ExperienceLevel"].Value" />
+                                    <abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="Job.PublishedAt" label="@L["PublishedAt"].Value" />
+
+                                    <hr class="my-3" />
+                                    <h6 class="text-muted text-uppercase small mb-2">@L["Salary"].Value</h6>
+                                    <abp-row class="g-2">
+                                        <abp-column size-md="_6">
+                                            <abp-input asp-for="Job.SalaryMin" data-val="false" label="@L["SalaryMin"].Value" />
+                                        </abp-column>
+                                        <abp-column size-md="_6">
+                                            <abp-input asp-for="Job.SalaryMax" data-val="false" label="@L["SalaryMax"].Value" />
+                                        </abp-column>
+                                    </abp-row>
+                                    <abp-input asp-for="Job.SalaryText" label="@L["SalaryText"].Value" />
+                                    <abp-input asp-for="Job.SalaryCurrency" label="@L["SalaryCurrency"].Value" />
+
+                                    <hr class="my-3" />
+                                    <h6 class="text-muted text-uppercase small mb-2">@L["Settings"].Value</h6>
+                                    <abp-input asp-for="Job.ViewCount" label="@L["ViewCount"].Value" />
+                                    <abp-input asp-for="Job.ApplicationCount" label="@L["ApplicationCount"].Value" />
+                                    <abp-input asp-for="Job.FavoriteCount" label="@L["FavoriteCount"].Value" />
+                                    <abp-input asp-for="Job.ShareCount" label="@L["ShareCount"].Value" />
+                                    <abp-row class="g-2">
+                                        <abp-column size-md="_4">
+                                            <abp-input asp-for="Job.IsFeatured" label="@L["IsFeatured"].Value" />
+                                        </abp-column>
+                                        <abp-column size-md="_4">
+                                            <abp-input asp-for="Job.IsUrgent" label="@L["IsUrgent"].Value" />
+                                        </abp-column>
+                                        <abp-column size-md="_4">
+                                            <abp-input asp-for="Job.IsHot" label="@L["IsHot"].Value" />
+                                        </abp-column>
+                                    </abp-row>
+                                </abp-card-body>
+                            </abp-card>
+                        </div>
+                        <div class="tab-pane fade" id="job-sidebar-seo-edit" role="tabpanel">
+                            <abp-card class="mb-0 border-0 shadow-none">
+                                <abp-card-body>
+                                    <abp-input asp-for="Job.SeoTitle" id="JobSeoTitle" label="@L["SeoTitle"].Value" />
+                                    <abp-input asp-for="Job.SeoDescription" id="JobSeoDescription" text-area="true" label="@L["SeoDescription"].Value" />
+                                    <div id="SeoKeywordsEditor" class="mb-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                                            <label class="form-label mb-0">@L["SeoKeywords"].Value</label>
+                                            <button type="button" class="btn btn-outline-primary btn-sm" id="SeoKeywordsAddBtn">
+                                                @L["AddNewSeoKeyword"].Value
+                                            </button>
+                                        </div>
+                                        <p class="text-muted small mb-2">@L["SeoKeywordsEditorHint"].Value</p>
+                                        <div class="row g-2 mb-1 text-muted small text-uppercase">
+                                            <div class="col">@L["SeoKeywordName"].Value</div>
+                                            <div class="col-auto" style="width: 42px;"></div>
+                                        </div>
+                                        <div id="SeoKeywordsRows"></div>
+                                        <input type="hidden" asp-for="Job.SeoKeywords" id="JobSeoKeywords" />
+                                        <span asp-validation-for="Job.SeoKeywords" class="text-danger d-block"></span>
+                                    </div>
+                                </abp-card-body>
+                            </abp-card>
+                        </div>
+                    </div>
+                </abp-column>
+            </abp-row>
+        </div>
+        <div class="tab-pane fade p-1" id="job-tab-relations-pane" role="tabpanel">
+            <abp-row>
+                <abp-column size-md="_4">
+                    <abp-card>
+                        <abp-card-body>
+                            <h5 class="mb-2">@L["JobApplications"].Value</h5>
+                            <p class="text-muted small mb-3">@L["ManageJobApplicationsHint"].Value</p>
+                            <a class="btn btn-outline-primary btn-sm rounded-2" asp-page="/JobApplications/Index">@L["Open"].Value</a>
+                        </abp-card-body>
+                    </abp-card>
+                </abp-column>
+                <abp-column size-md="_4">
+                    <abp-card>
+                        <abp-card-body>
+                            <h5 class="mb-2">@L["JobFavorites"].Value</h5>
+                            <p class="text-muted small mb-3">@L["ManageJobFavoritesHint"].Value</p>
+                            <a class="btn btn-outline-primary btn-sm rounded-2" asp-page="/JobFavorites/Index">@L["Open"].Value</a>
+                        </abp-card-body>
+                    </abp-card>
+                </abp-column>
+                <abp-column size-md="_4">
+                    <abp-card>
+                        <abp-card-body>
+                            <h5 class="mb-2">@L["JobViews"].Value</h5>
+                            <p class="text-muted small mb-3">@L["ManageJobViewsHint"].Value</p>
+                            <a class="btn btn-outline-primary btn-sm rounded-2" asp-page="/JobViews/Index">@L["Open"].Value</a>
+                        </abp-card-body>
+                    </abp-card>
+                </abp-column>
+            </abp-row>
+        </div>
+    </div>
+</form>
+
+<partial name="~/Pages/Shared/MediaLibraryPickerModal.cshtml" />

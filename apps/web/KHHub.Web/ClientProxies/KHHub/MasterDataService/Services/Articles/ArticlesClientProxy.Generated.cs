@@ -28,17 +28,17 @@ public partial class ArticlesClientProxy : ClientProxyBase<IArticlesAppService>,
         });
     }
 
-    public virtual async Task<ArticleWithNavigationPropertiesDto> GetWithNavigationPropertiesAsync(Guid id)
+    public virtual async Task<ArticleDto> GetAsync(Guid id)
     {
-        return await RequestAsync<ArticleWithNavigationPropertiesDto>(nameof(GetWithNavigationPropertiesAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<ArticleDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
             { typeof(Guid), id }
         });
     }
 
-    public virtual async Task<ArticleDto> GetAsync(Guid id)
+    public virtual async Task<ArticleWithNavigationPropertiesDto> GetWithNavigationPropertiesAsync(Guid id)
     {
-        return await RequestAsync<ArticleDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<ArticleWithNavigationPropertiesDto>(nameof(GetWithNavigationPropertiesAsync), new ClientProxyRequestTypeValue
         {
             { typeof(Guid), id }
         });

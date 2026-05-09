@@ -22,7 +22,7 @@ public abstract class JobCategoryCreateDtoBase
     [StringLength(JobCategoryConsts.ColorMaxLength)]
     public string? Color { get; set; }
 
-    public Guid ParentId { get; set; }
+    public Guid? ParentId { get; set; }
 
     public int DisplayOrder { get; set; } = 1;
     public bool IsActive { get; set; }

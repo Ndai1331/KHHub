@@ -22,18 +22,6 @@ $(function () {
         $('#' + lastNpDisplayNameId).val(modal.find('#CurrentLookupDisplayName').val());
     });
 
-    var createModal = new abp.ModalManager({
-        viewUrl: abp.appPath + 'Jobs/CreateModal',
-        scriptUrl: abp.appPath + 'Pages/Jobs/createModal.js',
-        modalClass: 'jobCreate',
-    });
-
-    var editModal = new abp.ModalManager({
-        viewUrl: abp.appPath + 'Jobs/EditModal',
-        scriptUrl: abp.appPath + 'Pages/Jobs/editModal.js',
-        modalClass: 'jobEdit',
-    });
-
     var getFilter = function () {
         return {
             filterText: $('#FilterText').val(),
@@ -107,9 +95,7 @@ $(function () {
                         text: l('Edit'),
                         visible: abp.auth.isGranted('MasterDataService.Jobs.Edit'),
                         action: function (data) {
-                            editModal.open({
-                                id: data.record.job.id,
-                            });
+                            window.location.href = abp.appPath + 'Jobs/Edit?id=' + data.record.job.id;
                         },
                     },
                     {
@@ -129,13 +115,16 @@ $(function () {
             },
         },
         { data: 'job.title' },
-        { data: 'job.slug' },
-        { data: 'job.summary' },
-        { data: 'job.description' },
-        { data: 'job.requirements' },
-        { data: 'job.benefits' },
-        { data: 'job.thumbnailUrl' },
-        { data: 'job.coverImageUrl' },
+        {
+            data: 'job.summary',
+            render: function (summary) {
+                if (!summary) {
+                    return '';
+                }
+                var s = String(summary);
+                return s.length > 120 ? s.substring(0, 117) + '...' : s;
+            },
+        },
         {
             data: 'job.employmentType',
 
@@ -193,14 +182,8 @@ $(function () {
                 return localized;
             },
         },
-        { data: 'job.salaryMin' },
-        { data: 'job.salaryMax' },
         { data: 'job.salaryText' },
-        { data: 'job.salaryCurrency' },
         { data: 'job.location' },
-        { data: 'job.contactEmail' },
-        { data: 'job.contactPhone' },
-        { data: 'job.applicationUrl' },
         {
             data: 'job.publishedAt',
 
@@ -232,10 +215,8 @@ $(function () {
                 return localized;
             },
         },
-        { data: 'job.viewCount' },
         { data: 'job.applicationCount' },
         { data: 'job.favoriteCount' },
-        { data: 'job.shareCount' },
         {
             data: 'job.isFeatured',
 
@@ -257,9 +238,6 @@ $(function () {
                 return isHot ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>';
             },
         },
-        { data: 'job.seoTitle' },
-        { data: 'job.seoDescription' },
-        { data: 'job.seoKeywords' },
         {
             data: 'province.name',
 
@@ -442,23 +420,6 @@ $(function () {
             $('#clear-selection-btn').addClass('d-none');
         }
     };
-
-    createModal.onResult(function () {
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-    });
-
-    editModal.onResult(function () {
-        dataTable.ajax.reloadEx();
-        selectOrUnselectAllCheckboxes(false);
-        showOrHideContextMenu();
-    });
-
-    $('#NewJobButton').click(function (e) {
-        e.preventDefault();
-        createModal.open();
-    });
 
     $('#SearchForm').submit(function (e) {
         e.preventDefault();

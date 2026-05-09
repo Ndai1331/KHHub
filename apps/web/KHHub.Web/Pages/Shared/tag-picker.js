@@ -51,6 +51,34 @@
                 rowTag: 'articleTag',
             };
         }
+        if (kind === 'job') {
+            return {
+                tagSvc: window.kHHub.masterDataService.services.jobTags.jobTags,
+                mappingSvc: window.kHHub.masterDataService.services.jobTagMappings.jobTagMappings,
+                lookup: function (input) {
+                    var fn =
+                        pick(window.kHHub.masterDataService.services.jobTagMappings.jobTagMappings, [
+                            'getJobTagLookupAsync',
+                            'getJobTagLookup',
+                        ]) || function () {};
+                    return fn(input);
+                },
+                listMappings: function (input) {
+                    return window.kHHub.masterDataService.services.jobTagMappings.jobTagMappings.getList(input);
+                },
+                deleteMapping: function (id) {
+                    return window.kHHub.masterDataService.services.jobTagMappings.jobTagMappings.delete(id);
+                },
+                createMapping: function (dto) {
+                    return window.kHHub.masterDataService.services.jobTagMappings.jobTagMappings.create(dto);
+                },
+                entityKey: 'jobId',
+                mappingTagIdKey: 'jobTagId',
+                mappingSortKey: 'sortOrder',
+                rowMapping: 'jobTagMapping',
+                rowTag: 'jobTag',
+            };
+        }
         return {
             tagSvc: window.kHHub.masterDataService.services.placeTags.placeTags,
             mappingSvc: window.kHHub.masterDataService.services.placeTagMappings.placeTagMappings,
@@ -237,7 +265,7 @@
 
     function bindPicker($root) {
         var kind = ($root.data('kind') || '').toString();
-        if (kind !== 'article' && kind !== 'place') {
+        if (kind !== 'article' && kind !== 'place' && kind !== 'job') {
             return;
         }
 
@@ -245,11 +273,15 @@
         var permLookup =
             kind === 'article'
                 ? abp.auth.isGranted('MasterDataService.ArticleTagMappings')
-                : abp.auth.isGranted('MasterDataService.PlaceTagMappings');
+                : kind === 'job'
+                  ? abp.auth.isGranted('MasterDataService.JobTagMappings')
+                  : abp.auth.isGranted('MasterDataService.PlaceTagMappings');
         var permTagCreate =
             kind === 'article'
                 ? abp.auth.isGranted('MasterDataService.ArticleTags.Create')
-                : abp.auth.isGranted('MasterDataService.PlaceTags.Create');
+                : kind === 'job'
+                  ? abp.auth.isGranted('MasterDataService.JobTags.Create')
+                  : abp.auth.isGranted('MasterDataService.PlaceTags.Create');
 
         if (!permLookup && !permTagCreate) {
             $root.addClass('khhub-tag-picker-disabled');
@@ -439,6 +471,10 @@
         syncPlaceTags: function (placeId, $form) {
             var ids = readSelectedIds($form, 'place');
             return syncMappings(placeId, ids, getServices('place'));
+        },
+        syncJobTags: function (jobId, $form) {
+            var ids = readSelectedIds($form, 'job');
+            return syncMappings(jobId, ids, getServices('job'));
         },
     };
 })();

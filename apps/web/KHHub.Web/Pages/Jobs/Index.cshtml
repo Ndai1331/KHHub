@@ -29,7 +29,7 @@
     <abp-button id="ExportToExcelButton" text="@L["ExportToExcel"].Value" icon="download" size="Small" button-type="Primary" />
     @if (await Authorization.IsGrantedAsync(MasterDataServicePermissions.Jobs.Create))
     {
-        <abp-button id="NewJobButton" text="@L["NewJob"].Value" icon="plus" size="Small" button-type="Primary" />
+        <a asp-page="./Create" class="btn btn-primary btn-sm"><i class="fa fa-plus me-1"></i>@L["NewJob"].Value</a>
     }
 @*//<suite-custom-code-block-3>*@
 @*//</suite-custom-code-block-3>*@
@@ -199,42 +199,25 @@
             </div>
             <hr class="my-1 mx-0"/>
         </div>
-        <abp-table striped-rows="true" id="JobsTable">
+        <abp-table striped-rows="true" hoverable-rows="true" id="JobsTable">
             <thead>
 				<tr>
 				    <th id="BulkDeleteCheckboxTheader"><input type="checkbox" id="select_all" class="form-check-input" /></th>
 					<th>@L["Actions"]</th>
 					<th>@L["Title"]</th>
-					<th>@L["Slug"]</th>
 					<th>@L["Summary"]</th>
-					<th>@L["Description"]</th>
-					<th>@L["Requirements"]</th>
-					<th>@L["Benefits"]</th>
-					<th>@L["ThumbnailUrl"]</th>
-					<th>@L["CoverImageUrl"]</th>
 					<th>@L["EmploymentType"]</th>
 					<th>@L["WorkMode"]</th>
 					<th>@L["ExperienceLevel"]</th>
-					<th>@L["SalaryMin"]</th>
-					<th>@L["SalaryMax"]</th>
 					<th>@L["SalaryText"]</th>
-					<th>@L["SalaryCurrency"]</th>
 					<th>@L["Location"]</th>
-					<th>@L["ContactEmail"]</th>
-					<th>@L["ContactPhone"]</th>
-					<th>@L["ApplicationUrl"]</th>
 					<th>@L["PublishedAt"]</th>
 					<th>@L["Status"]</th>
-					<th>@L["ViewCount"]</th>
 					<th>@L["ApplicationCount"]</th>
 					<th>@L["FavoriteCount"]</th>
-					<th>@L["ShareCount"]</th>
 					<th>@L["IsFeatured"]</th>
 					<th>@L["IsUrgent"]</th>
 					<th>@L["IsHot"]</th>
-					<th>@L["SeoTitle"]</th>
-					<th>@L["SeoDescription"]</th>
-					<th>@L["SeoKeywords"]</th>
 					<th>@L["Province"]</th>
 					<th>@L["Ward"]</th>
 					<th>@L["JobCategory"]</th>

@@ -15,10 +15,10 @@ public class MediaFilesStorageOptions
     public long MaxUploadBytes { get; set; } = 104_857_600;
 
     /// <summary>
-    /// When true (default), explorer list replaces the response <c>Url</c> with a temporary MinIO presigned GET URL.
-    /// Use false only if the bucket allows anonymous reads or CDN serves blobs without signatures.
+    /// When true, explorer list replaces the response <c>Url</c> with a temporary MinIO presigned GET URL.
+    /// Keep false because the MinIO bucket is public and browser previews can use stable public URLs directly.
     /// </summary>
-    public bool UsePresignedReadUrls { get; set; } = true;
+    public bool UsePresignedReadUrls { get; set; } = false;
 
     /// <summary>
     /// Presigned URL validity in seconds (clamped server-side).

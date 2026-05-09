@@ -64,7 +64,8 @@ public class MediaFilesAppService : MediaFilesAppServiceBase, IMediaFilesAppServ
 
         SetStablePublicPathsOnExplorerDtos(dtos);
 
-        await EnrichExplorerReadUrlsAsync(dtos);
+        // Signed URL enrichment is intentionally kept in the codebase but disabled for public MinIO buckets.
+        // await EnrichExplorerReadUrlsAsync(dtos);
 
         return new PagedResultDto<MediaFileDto>(total, dtos);
     }
@@ -299,6 +300,7 @@ public class MediaFilesAppService : MediaFilesAppServiceBase, IMediaFilesAppServ
 
     /// <remarks>
     /// Private MinIO buckets deny anonymous GET; presigned URLs work in browsers for thumbnails and preview.
+    /// Currently unused because the bucket is public; keep this code commented at the call site for rollback.
     /// </remarks>
     private async Task EnrichExplorerReadUrlsAsync(List<MediaFileDto> items)
     {

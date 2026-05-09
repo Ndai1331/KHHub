@@ -20,7 +20,7 @@ public abstract class JobCategoryManagerBase : DomainService
         _jobCategoryRepository = jobCategoryRepository;
     }
 
-    public virtual async Task<JobCategory> CreateAsync(string name, string slug, Guid parentId, int displayOrder, bool isActive, string? description = null, string? icon = null, string? color = null)
+    public virtual async Task<JobCategory> CreateAsync(string name, string slug, int displayOrder, bool isActive, string? description = null, string? icon = null, string? color = null, Guid? parentId = null)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
         Check.Length(name, nameof(name), JobCategoryConsts.NameMaxLength);
@@ -29,11 +29,11 @@ public abstract class JobCategoryManagerBase : DomainService
         Check.Length(description, nameof(description), JobCategoryConsts.DescriptionMaxLength);
         Check.Length(icon, nameof(icon), JobCategoryConsts.IconMaxLength);
         Check.Length(color, nameof(color), JobCategoryConsts.ColorMaxLength);
-        var jobCategory = new JobCategory(GuidGenerator.Create(), name, slug, parentId, displayOrder, isActive, description, icon, color);
+        var jobCategory = new JobCategory(GuidGenerator.Create(), name, slug, displayOrder, isActive, description, icon, color, parentId);
         return await _jobCategoryRepository.InsertAsync(jobCategory);
     }
 
-    public virtual async Task<JobCategory> UpdateAsync(Guid id, string name, string slug, Guid parentId, int displayOrder, bool isActive, string? description = null, string? icon = null, string? color = null, [CanBeNull] string? concurrencyStamp = null)
+    public virtual async Task<JobCategory> UpdateAsync(Guid id, string name, string slug, int displayOrder, bool isActive, string? description = null, string? icon = null, string? color = null, Guid? parentId = null, [CanBeNull] string? concurrencyStamp = null)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
         Check.Length(name, nameof(name), JobCategoryConsts.NameMaxLength);
@@ -45,12 +45,12 @@ public abstract class JobCategoryManagerBase : DomainService
         var jobCategory = await _jobCategoryRepository.GetAsync(id);
         jobCategory.Name = name;
         jobCategory.Slug = slug;
-        jobCategory.ParentId = parentId;
         jobCategory.DisplayOrder = displayOrder;
         jobCategory.IsActive = isActive;
         jobCategory.Description = description;
         jobCategory.Icon = icon;
         jobCategory.Color = color;
+        jobCategory.ParentId = parentId;
         jobCategory.SetConcurrencyStampIfNotNull(concurrencyStamp);
         return await _jobCategoryRepository.UpdateAsync(jobCategory);
     }

@@ -15,7 +15,7 @@ public abstract class JobCategoryDtoBase : FullAuditedEntityDto<Guid>, IHasConcu
 
     public string? Color { get; set; }
 
-    public Guid ParentId { get; set; }
+    public Guid? ParentId { get; set; }
 
     public int DisplayOrder { get; set; }
 

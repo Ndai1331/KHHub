@@ -7,6 +7,8 @@ using KHHub.MasterDataService.Localization;
 using KHHub.MasterDataService.Permissions;
 using KHHub.MasterDataService.Services.Dtos.Places;
 using KHHub.MasterDataService.Services.Places;
+using KHHub.MasterDataService.Services.Provinces;
+using KHHub.Web.Address;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -38,20 +40,28 @@ public class EditModel : AbpPageModel
 
     public bool CanDelete { get; set; }
 
+    public Guid DefaultProvinceId { get; set; }
+
+    public string DefaultProvinceDisplayName { get; set; } = "";
+
     private readonly IPlacesAppService _placesAppService;
 
     private readonly IAuthorizationService _authorizationService;
 
     private readonly IStringLocalizer<MasterDataServiceResource> _masterDataLocalizer;
 
+    private readonly IProvincesAppService _provincesAppService;
+
     public EditModel(
         IPlacesAppService placesAppService,
         IAuthorizationService authorizationService,
-        IStringLocalizer<MasterDataServiceResource> masterDataLocalizer)
+        IStringLocalizer<MasterDataServiceResource> masterDataLocalizer,
+        IProvincesAppService provincesAppService)
     {
         _placesAppService = placesAppService;
         _authorizationService = authorizationService;
         _masterDataLocalizer = masterDataLocalizer;
+        _provincesAppService = provincesAppService;
     }
 
     public async Task OnGetAsync()
@@ -61,10 +71,32 @@ public class EditModel : AbpPageModel
         var dto = await _placesAppService.GetWithNavigationPropertiesAsync(Id);
         Place = ObjectMapper.Map<PlaceDto, PlaceUpdateViewModel>(dto.Place);
         SelectedPlaceCategoryDisplayName = dto.PlaceCategory?.Name;
-        SelectedProvinceDisplayName = dto.Province?.Name;
-        SelectedWardDisplayName = dto.Ward?.Name;
         LastUpdatedAt = dto.Place.LastModificationTime ?? dto.Place.CreationTime;
         CanDelete = await _authorizationService.IsGrantedAsync(MasterDataServicePermissions.Places.Delete);
+
+        var prov = await KhHubDefaultProvinceAddress.TryGetAsync(_provincesAppService);
+        if (prov != null)
+        {
+            DefaultProvinceId = prov.Value.Id;
+            DefaultProvinceDisplayName = prov.Value.Name;
+            Place.ProvinceId = prov.Value.Id;
+            SelectedProvinceDisplayName = prov.Value.Name;
+
+            if (dto.Place.ProvinceId != prov.Value.Id)
+            {
+                Place.WardId = Guid.Empty;
+                SelectedWardDisplayName = null;
+            }
+            else
+            {
+                SelectedWardDisplayName = dto.Ward?.Name;
+            }
+        }
+        else
+        {
+            SelectedProvinceDisplayName = dto.Province?.Name;
+            SelectedWardDisplayName = dto.Ward?.Name;
+        }
     }
 
     private void FillEnumLookups()
@@ -77,4 +109,8 @@ public class EditModel : AbpPageModel
             .Select(s => new SelectListItem(_masterDataLocalizer[$"Enum:{nameof(PlaceStatus)}.{(int)s}"].Value, ((int)s).ToString()))
             .ToList();
     }
+}
+
+public class PlaceUpdateViewModel : PlaceUpdateDto
+{
 }

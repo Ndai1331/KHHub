@@ -1,3 +1,5 @@
+using KHHub.MasterDataService.Services.Dtos.JobCategories;
+using KHHub.Web.Pages.JobCategories;
 using KHHub.MasterDataService.Services.Dtos.JobTagMappings;
 using KHHub.Web.Pages.JobTagMappings;
 using KHHub.MasterDataService.Services.Dtos.JobViews;
@@ -482,6 +484,27 @@ public partial class JobCreateViewModelToJobCreateDto : MapperBase<JobCreateView
 {
     public override partial JobCreateDto Map(JobCreateViewModel source);
     public override partial void Map(JobCreateViewModel source, JobCreateDto destination);
+}
+
+[Mapper]
+public partial class JobCreatePageViewModelToJobCreateDto : MapperBase<JobCreatePageViewModel, JobCreateDto>
+{
+    public override partial JobCreateDto Map(JobCreatePageViewModel source);
+    public override partial void Map(JobCreatePageViewModel source, JobCreateDto destination);
+}
+
+[Mapper]
+public partial class JobDtoToJobUpdatePageViewModelMapper : MapperBase<JobDto, JobUpdatePageViewModel>
+{
+    public override partial JobUpdatePageViewModel Map(JobDto source);
+    public override partial void Map(JobDto source, JobUpdatePageViewModel destination);
+}
+
+[Mapper]
+public partial class JobUpdatePageViewModelToJobUpdateDto : MapperBase<JobUpdatePageViewModel, JobUpdateDto>
+{
+    public override partial JobUpdateDto Map(JobUpdatePageViewModel source);
+    public override partial void Map(JobUpdatePageViewModel source, JobUpdateDto destination);
 }
 
 [Mapper]

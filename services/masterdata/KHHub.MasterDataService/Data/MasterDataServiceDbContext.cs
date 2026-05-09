@@ -366,18 +366,6 @@ public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContex
 
         if (builder.IsHostDatabase())
         {
-            builder.Entity<JobCategory>(b => {
-                b.ToTable(DbTablePrefix + "JobCategories", DbSchema);
-                b.ConfigureByConvention();
-                b.Property(x => x.Name).HasColumnName(nameof(JobCategory.Name)).IsRequired().HasMaxLength(JobCategoryConsts.NameMaxLength);
-                b.Property(x => x.Slug).HasColumnName(nameof(JobCategory.Slug)).IsRequired().HasMaxLength(JobCategoryConsts.SlugMaxLength);
-                b.Property(x => x.Description).HasColumnName(nameof(JobCategory.Description)).HasMaxLength(JobCategoryConsts.DescriptionMaxLength);
-                b.Property(x => x.Icon).HasColumnName(nameof(JobCategory.Icon)).HasMaxLength(JobCategoryConsts.IconMaxLength);
-                b.Property(x => x.Color).HasColumnName(nameof(JobCategory.Color)).HasMaxLength(JobCategoryConsts.ColorMaxLength);
-                b.Property(x => x.ParentId).HasColumnName(nameof(JobCategory.ParentId));
-                b.Property(x => x.DisplayOrder).HasColumnName(nameof(JobCategory.DisplayOrder));
-                b.Property(x => x.IsActive).HasColumnName(nameof(JobCategory.IsActive));
-            });
         }
 
         if (builder.IsHostDatabase())
@@ -485,6 +473,22 @@ public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContex
                 b.Property(x => x.SortOrder).HasColumnName(nameof(JobTagMapping.SortOrder));
                 b.HasOne<JobTag>().WithMany().IsRequired().HasForeignKey(x => x.JobTagId).OnDelete(DeleteBehavior.NoAction);
                 b.HasOne<Job>().WithMany().IsRequired().HasForeignKey(x => x.JobId).OnDelete(DeleteBehavior.NoAction);
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<JobCategory>(b => {
+                b.ToTable(DbTablePrefix + "JobCategories", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.Name).HasColumnName(nameof(JobCategory.Name)).IsRequired().HasMaxLength(JobCategoryConsts.NameMaxLength);
+                b.Property(x => x.Slug).HasColumnName(nameof(JobCategory.Slug)).IsRequired().HasMaxLength(JobCategoryConsts.SlugMaxLength);
+                b.Property(x => x.Description).HasColumnName(nameof(JobCategory.Description)).HasMaxLength(JobCategoryConsts.DescriptionMaxLength);
+                b.Property(x => x.Icon).HasColumnName(nameof(JobCategory.Icon)).HasMaxLength(JobCategoryConsts.IconMaxLength);
+                b.Property(x => x.Color).HasColumnName(nameof(JobCategory.Color)).HasMaxLength(JobCategoryConsts.ColorMaxLength);
+                b.Property(x => x.ParentId).HasColumnName(nameof(JobCategory.ParentId));
+                b.Property(x => x.DisplayOrder).HasColumnName(nameof(JobCategory.DisplayOrder));
+                b.Property(x => x.IsActive).HasColumnName(nameof(JobCategory.IsActive));
             });
         }
     }

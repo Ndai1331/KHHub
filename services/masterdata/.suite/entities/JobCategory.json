@@ -183,7 +183,7 @@
       "EnumFilePath": null,
       "EnumSource": "new",
       "DefaultValue": null,
-      "IsNullable": false,
+      "IsNullable": true,
       "IsRequired": false,
       "IsFilterable": true,
       "AllowEmptyStrings": false,
