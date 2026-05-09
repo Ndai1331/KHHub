@@ -104,6 +104,8 @@
     "Landing:JobsTitle": "New jobs",
     "Landing:JobsLead": "Featured job opportunities for the community in Khanh Hoa.",
     "Landing:ViewsFormat": "({0} views)",
+    "Landing:NoJobsYet": "No new jobs yet.",
+    "Landing:ViewAllJobs": "View all jobs",
     "Landing:PositionFormat": "{0} position(s)",
     "Landing:SalaryFrom": "From",
     "Landing:Job1Title": "Hotel receptionist",

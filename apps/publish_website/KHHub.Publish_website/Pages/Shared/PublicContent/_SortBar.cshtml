@@ -12,6 +12,7 @@
         <h2>@Model.Heading</h2>
     </div>
     <form method="get" action="@Model.ActionPath" class="kh-sortbar__controls">
+        <input type="hidden" name="Search" value="@Model.Query.Search">
         <input type="hidden" name="Province" value="@Model.Query.Province">
         <input type="hidden" name="Ward" value="@Model.Query.Ward">
         <input type="hidden" name="Category" value="@Model.Query.Category">

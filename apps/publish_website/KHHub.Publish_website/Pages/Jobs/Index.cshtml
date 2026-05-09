@@ -21,9 +21,9 @@
 
 <main class="kh-public-page">
     <section class="kh-hero">
-        <p style="text-align: center;">Việc làm</p>
+        <p style="text-align: center;">@Model.SortBar.Heading</p>
         <h1>Cơ hội nghề nghiệp tại Khánh Hòa</h1>
-        <span>Lọc nhanh theo khu vực, danh mục và kỹ năng để tìm công việc phù hợp.</span>
+        <span>Lọc nhanh theo tên, khu vực, danh mục và tag để tìm công việc phù hợp.</span>
     </section>
 
     <section class="kh-content-layout">
@@ -49,10 +49,12 @@
             }
 
             <form method="get" class="kh-pagination" aria-label="Pagination">
+                <input type="hidden" name="Search" value="@Model.Query.Search">
                 <input type="hidden" name="Province" value="@Model.Query.Province">
                 <input type="hidden" name="Ward" value="@Model.Query.Ward">
                 <input type="hidden" name="Category" value="@Model.Query.Category">
                 <input type="hidden" name="Sort" value="@Model.Query.Sort">
+                <input type="hidden" name="View" value="@Model.Query.View">
                 @foreach (var tag in Model.Query.Tags)
                 {
                     <input type="hidden" name="Tags" value="@tag">

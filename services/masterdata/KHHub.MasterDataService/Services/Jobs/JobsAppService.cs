@@ -1,33 +1,32 @@
-using KHHub.MasterDataService.Services.Dtos.Shared;
 using KHHub.MasterDataService.Entities.JobCategories;
-using KHHub.MasterDataService.Entities.Wards;
+using KHHub.MasterDataService.Entities.Jobs;
 using KHHub.MasterDataService.Entities.Provinces;
+using KHHub.MasterDataService.Entities.Wards;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Distributed;
+using KHHub.MasterDataService.Data.Jobs;
+using KHHub.MasterDataService.Permissions;
+using KHHub.MasterDataService.Services.Dtos.Jobs;
+using KHHub.MasterDataService.Services.Dtos.Shared;
+using MiniExcelLibs;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Repositories;
-using KHHub.MasterDataService.Permissions;
-using KHHub.MasterDataService.Services.Jobs;
-using MiniExcelLibs;
-using Volo.Abp.Content;
 using Volo.Abp.Authorization;
 using Volo.Abp.Caching;
-using Microsoft.Extensions.Caching.Distributed;
-using KHHub.MasterDataService.Entities.Jobs;
-using KHHub.MasterDataService.Services.Dtos.Jobs;
-using KHHub.MasterDataService.Data.Jobs;
-using KHHub.MasterDataService.Services.Dtos.Shared;
+using Volo.Abp.Content;
+using Volo.Abp.Domain.Repositories;
 
 namespace KHHub.MasterDataService.Services.Jobs;
 
-[Authorize(MasterDataServicePermissions.Jobs.Default)]
+// Do not authorize at type level — explicit attributes per action so anonymous public reads stay reliable.
+
 public abstract class JobsAppServiceBase : ApplicationService
 {
     protected IDistributedCache<JobDownloadTokenCacheItem, string> _downloadTokenCache;
@@ -47,6 +46,7 @@ public abstract class JobsAppServiceBase : ApplicationService
         _jobCategoryRepository = jobCategoryRepository;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<JobWithNavigationPropertiesDto>> GetListAsync(GetJobsInput input)
     {
         var totalCount = await _jobRepository.GetCountAsync(input.FilterText, input.Title, input.Slug, input.Summary, input.Description, input.Requirements, input.Benefits, input.ThumbnailUrl, input.CoverImageUrl, input.EmploymentType, input.WorkMode, input.ExperienceLevel, input.SalaryMinMin, input.SalaryMinMax, input.SalaryMaxMin, input.SalaryMaxMax, input.SalaryText, input.SalaryCurrency, input.Location, input.ContactEmail, input.ContactPhone, input.ApplicationUrl, input.PublishedAtMin, input.PublishedAtMax, input.Status, input.ViewCountMin, input.ViewCountMax, input.ApplicationCountMin, input.ApplicationCountMax, input.FavoriteCountMin, input.FavoriteCountMax, input.ShareCountMin, input.ShareCountMax, input.IsFeatured, input.IsUrgent, input.IsHot, input.SeoTitle, input.SeoDescription, input.SeoKeywords, input.ProvinceId, input.WardId, input.JobCategoryId);
@@ -58,16 +58,19 @@ public abstract class JobsAppServiceBase : ApplicationService
         };
     }
 
+    [Authorize(MasterDataServicePermissions.Jobs.Default)]
     public virtual async Task<JobWithNavigationPropertiesDto> GetWithNavigationPropertiesAsync(Guid id)
     {
         return ObjectMapper.Map<JobWithNavigationProperties, JobWithNavigationPropertiesDto>(await _jobRepository.GetWithNavigationPropertiesAsync(id));
     }
 
+    [Authorize(MasterDataServicePermissions.Jobs.Default)]
     public virtual async Task<JobDto> GetAsync(Guid id)
     {
         return ObjectMapper.Map<Job, JobDto>(await _jobRepository.GetAsync(id));
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<LookupDto<Guid>>> GetProvinceLookupAsync(LookupRequestDto input)
     {
         var query = (await _provinceRepository.GetQueryableAsync()).WhereIf(!string.IsNullOrWhiteSpace(input.Filter), x => x.Name != null && x.Name.Contains(input.Filter));
@@ -80,6 +83,7 @@ public abstract class JobsAppServiceBase : ApplicationService
         };
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<LookupDto<Guid>>> GetWardLookupAsync(LookupRequestDto input)
     {
         var query = (await _wardRepository.GetQueryableAsync()).WhereIf(!string.IsNullOrWhiteSpace(input.Filter), x => x.Name != null && x.Name.Contains(input.Filter));
@@ -92,6 +96,7 @@ public abstract class JobsAppServiceBase : ApplicationService
         };
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<LookupDto<Guid>>> GetJobCategoryLookupAsync(LookupRequestDto input)
     {
         var query = (await _jobCategoryRepository.GetQueryableAsync()).WhereIf(!string.IsNullOrWhiteSpace(input.Filter), x => x.Name != null && x.Name.Contains(input.Filter));
@@ -183,6 +188,7 @@ public abstract class JobsAppServiceBase : ApplicationService
         await _jobRepository.DeleteAllAsync(input.FilterText, input.Title, input.Slug, input.Summary, input.Description, input.Requirements, input.Benefits, input.ThumbnailUrl, input.CoverImageUrl, input.EmploymentType, input.WorkMode, input.ExperienceLevel, input.SalaryMinMin, input.SalaryMinMax, input.SalaryMaxMin, input.SalaryMaxMax, input.SalaryText, input.SalaryCurrency, input.Location, input.ContactEmail, input.ContactPhone, input.ApplicationUrl, input.PublishedAtMin, input.PublishedAtMax, input.Status, input.ViewCountMin, input.ViewCountMax, input.ApplicationCountMin, input.ApplicationCountMax, input.FavoriteCountMin, input.FavoriteCountMax, input.ShareCountMin, input.ShareCountMax, input.IsFeatured, input.IsUrgent, input.IsHot, input.SeoTitle, input.SeoDescription, input.SeoKeywords, input.ProvinceId, input.WardId, input.JobCategoryId);
     }
 
+    [Authorize(MasterDataServicePermissions.Jobs.Default)]
     public virtual async Task<KHHub.MasterDataService.Services.Dtos.Shared.DownloadTokenResultDto> GetDownloadTokenAsync()
     {
         var token = Guid.NewGuid().ToString("N");

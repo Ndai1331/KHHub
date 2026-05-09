@@ -23,7 +23,8 @@ using KHHub.MasterDataService.Services.Dtos.Shared;
 
 namespace KHHub.MasterDataService.Services.JobTags;
 
-[Authorize(MasterDataServicePermissions.JobTags.Default)]
+// Explicit per-action authorization so anonymous reads (GetListAsync) are not blocked.
+
 public abstract class JobTagsAppServiceBase : ApplicationService
 {
     protected IDistributedCache<JobTagDownloadTokenCacheItem, string> _downloadTokenCache;
@@ -37,6 +38,7 @@ public abstract class JobTagsAppServiceBase : ApplicationService
         _jobTagManager = jobTagManager;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<JobTagDto>> GetListAsync(GetJobTagsInput input)
     {
         var totalCount = await _jobTagRepository.GetCountAsync(input.FilterText, input.Name, input.Slug, input.Description, input.UsageCountMin, input.UsageCountMax);
@@ -48,6 +50,7 @@ public abstract class JobTagsAppServiceBase : ApplicationService
         };
     }
 
+    [Authorize(MasterDataServicePermissions.JobTags.Default)]
     public virtual async Task<JobTagDto> GetAsync(Guid id)
     {
         return ObjectMapper.Map<JobTag, JobTagDto>(await _jobTagRepository.GetAsync(id));
@@ -101,6 +104,7 @@ public abstract class JobTagsAppServiceBase : ApplicationService
         await _jobTagRepository.DeleteAllAsync(input.FilterText, input.Name, input.Slug, input.Description, input.UsageCountMin, input.UsageCountMax);
     }
 
+    [Authorize(MasterDataServicePermissions.JobTags.Default)]
     public virtual async Task<KHHub.MasterDataService.Services.Dtos.Shared.DownloadTokenResultDto> GetDownloadTokenAsync()
     {
         var token = Guid.NewGuid().ToString("N");

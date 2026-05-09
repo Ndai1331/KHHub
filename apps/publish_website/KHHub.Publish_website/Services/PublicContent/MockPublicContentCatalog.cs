@@ -172,6 +172,13 @@ public sealed class MockPublicContentCatalog : IPublicContentCatalog
         PublicContentQuery query)
     {
         var filtered = cards;
+        if (!string.IsNullOrWhiteSpace(query.Search))
+        {
+            filtered = filtered.Where(x =>
+                x.Title.Contains(query.Search, StringComparison.OrdinalIgnoreCase) ||
+                x.Description.Contains(query.Search, StringComparison.OrdinalIgnoreCase));
+        }
+
         if (!string.IsNullOrWhiteSpace(query.Province))
         {
             filtered = filtered.Where(x => string.Equals(x.Province, query.Province, StringComparison.OrdinalIgnoreCase));

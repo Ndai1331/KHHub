@@ -3,6 +3,9 @@
     var currentPath = Context.Request.Path.Value ?? "/";
     var enUrl = $"{currentPath}?culture=en&ui-culture=en";
     var viUrl = $"{currentPath}?culture=vi&ui-culture=vi";
+    var jobsPath = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.OrdinalIgnoreCase)
+        ? "/jobs"
+        : "/viec-lam";
 }
 <header class="main-header main-header-nine landing-header">
     <div class="header-topbar topbar-four topbar-nine landing-header__topbar">
@@ -57,7 +60,7 @@
                         <li>
                             <a class="nav-link" href="#">@L["Menu:News"]</a>
                         </li>
-                        <li><a class="nav-link" href="#">@L["Menu:Jobs"]</a></li>
+                        <li><a class="nav-link" href="@jobsPath">@L["Menu:Jobs"]</a></li>
                         <li><a class="nav-link" href="#explore">@L["Menu:Places"]</a></li>
                         <li><a class="nav-link" href="#">@L["Menu:Food"]</a></li>
                         <li><a class="nav-link" href="#">@L["Menu:Entertainment"]</a></li>

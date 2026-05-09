@@ -4,10 +4,31 @@
         <name>KHHub.Publish_website</name>
     </assembly>
     <members>
+        <member name="F:KHHub.Publish_website.Pages.IndexModel.HeroBannerResponsiveWidths">
+            <summary>Hero banner derivative widths (webp). Stored object key pattern: stem-768.webp, stem-1280.webp, stem-1920.webp.</summary>
+        </member>
         <member name="M:KHHub.Publish_website.Pages.IndexModel.ResolveMediaUrl(System.String)">
             <summary>
             Resolves stored media paths to browser-loadable URL (same behavior as apps/web).
             </summary>
+        </member>
+        <member name="M:KHHub.Publish_website.Pages.IndexModel.GetHeroBannerResponsiveSources(System.String)">
+            <summary>
+            Original image URL for img fallback plus a webp srcset string for &lt;source type="image/webp"&gt;.
+            Derivatives fallback to master URL when a variant path is absent.
+            </summary>
+        </member>
+        <member name="M:KHHub.Publish_website.Pages.IndexModel.BuildHeroWebpVariantPublicPath(System.String,System.Int32)">
+            <remarks>Derived keys: path/to/name.ext → path/to/name-768.webp.</remarks>
+        </member>
+        <member name="M:KHHub.Publish_website.Pages.IndexModel.EscapeSrcsetUrlCandidate(System.String)">
+            <remarks>Commas inside URLs break srcset tokenization — encode them.</remarks>
+        </member>
+        <member name="T:KHHub.Publish_website.Pages.HeroBannerResponsiveSources">
+            <summary>Resolved hero slide assets for &lt;picture&gt; + webp srcset.</summary>
+        </member>
+        <member name="M:KHHub.Publish_website.Pages.HeroBannerResponsiveSources.#ctor(System.String,System.String)">
+            <summary>Resolved hero slide assets for &lt;picture&gt; + webp srcset.</summary>
         </member>
         <member name="T:KHHub.Publish_website.Pages.SetLanguageModel">
             <summary>

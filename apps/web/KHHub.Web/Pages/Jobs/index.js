@@ -87,31 +87,34 @@ $(function () {
         };
     };
 
+    var canEdit = abp.auth.isGranted('MasterDataService.Jobs.Edit');
+    var canDeleteRow = abp.auth.isGranted('MasterDataService.Jobs.Delete');
+
     var dataTableColumns = [
         {
-            rowAction: {
-                items: [
-                    {
-                        text: l('Edit'),
-                        visible: abp.auth.isGranted('MasterDataService.Jobs.Edit'),
-                        action: function (data) {
-                            window.location.href = abp.appPath + 'Jobs/Edit?id=' + data.record.job.id;
-                        },
-                    },
-                    {
-                        text: l('Delete'),
-                        visible: abp.auth.isGranted('MasterDataService.Jobs.Delete'),
-                        confirmMessage: function () {
-                            return l('DeleteConfirmationMessage');
-                        },
-                        action: function (data) {
-                            jobService.delete(data.record.job.id).then(function () {
-                                abp.notify.success(l('SuccessfullyDeleted'));
-                                dataTable.ajax.reloadEx();
-                            });
-                        },
-                    },
-                ],
+            data: null,
+            orderable: false,
+            render: function (data, type, row) {
+                var html = '<div class="d-flex gap-1">';
+                var jobId = row.job.id;
+                if (canEdit) {
+                    html +=
+                        '<button type="button" class="btn btn-sm btn-outline-primary action-edit" data-id="' +
+                        jobId +
+                        '" title="' +
+                        l('Edit') +
+                        '"><i class="fa fa-pen"></i></button>';
+                }
+                if (canDeleteRow) {
+                    html +=
+                        '<button type="button" class="btn btn-sm btn-outline-danger action-delete" data-id="' +
+                        jobId +
+                        '" title="' +
+                        l('Delete') +
+                        '"><i class="fa fa-trash"></i></button>';
+                }
+                html += '</div>';
+                return html;
             },
         },
         { data: 'job.title' },
@@ -286,6 +289,29 @@ $(function () {
             columnDefs: dataTableColumns,
         })
     );
+
+    $('#JobsTable').on('click', '.action-edit', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.href = abp.appPath + 'Jobs/Edit?id=' + $(this).data('id');
+    });
+
+    $('#JobsTable').on('click', '.action-delete', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var id = $(this).data('id');
+
+        abp.message.confirm(l('DeleteConfirmationMessage')).then(function (confirmed) {
+            if (!confirmed) {
+                return;
+            }
+
+            jobService.delete(id).then(function () {
+                abp.notify.success(l('SuccessfullyDeleted'));
+                dataTable.ajax.reloadEx();
+            });
+        });
+    });
 
     dataTable.on('xhr', function () {
         selectOrUnselectAllCheckboxes(false);

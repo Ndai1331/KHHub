@@ -18,12 +18,25 @@
                 @for (var i = 0; i < banners.Count; i++)
                 {
                     var b = banners[i];
-                    var img = Model.ResolveMediaUrl(b.ImageUrl);
+                    var heroSources = Model.GetHeroBannerResponsiveSources(b.ImageUrl);
                     <div class="carousel-item @(i == 0 ? "active" : null)">
                         <div class="landing-hero__slide position-relative">
-                            @if (!string.IsNullOrEmpty(img))
+                            @if (heroSources.HasImage)
                             {
-                                <img class="landing-hero__bg" src="@img" alt="@b.Title" width="1920" height="900" decoding="async" />
+                                var loading = i == 0 ? "eager" : "lazy";
+                                var fetchPriority = i == 0 ? "high" : "low";
+                                <picture>
+                                    <source type="image/webp" srcset="@heroSources.WebpSrcset" sizes="100vw" />
+                                    <img class="landing-hero__bg"
+                                         src="@heroSources.FallbackUrl"
+                                         alt="@b.Title"
+                                         width="1920"
+                                         height="900"
+                                         sizes="100vw"
+                                         decoding="async"
+                                         loading="@loading"
+                                         fetchpriority="@fetchPriority" />
+                                </picture>
                             }
                             <div class="landing-hero__overlay" aria-hidden="true"></div>
                             <div class="container landing-hero__content py-5 position-relative">

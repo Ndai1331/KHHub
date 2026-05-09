@@ -1,32 +1,26 @@
-using KHHub.MasterDataService.Services.Dtos.Shared;
-using KHHub.MasterDataService.Entities.Jobs;
-using KHHub.MasterDataService.Entities.JobTags;
-using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
+using KHHub.MasterDataService.Data.JobTagMappings;
+using KHHub.MasterDataService.Entities.JobTagMappings;
+using KHHub.MasterDataService.Entities.JobTags;
+using KHHub.MasterDataService.Entities.Jobs;
+using KHHub.MasterDataService.Permissions;
+using KHHub.MasterDataService.Services.Dtos.JobTagMappings;
+using KHHub.MasterDataService.Services.Dtos.Shared;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Distributed;
+using MiniExcelLibs;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Repositories;
-using KHHub.MasterDataService.Permissions;
-using KHHub.MasterDataService.Services.JobTagMappings;
-using MiniExcelLibs;
-using Volo.Abp.Content;
 using Volo.Abp.Authorization;
 using Volo.Abp.Caching;
-using Microsoft.Extensions.Caching.Distributed;
-using KHHub.MasterDataService.Entities.JobTagMappings;
-using KHHub.MasterDataService.Services.Dtos.JobTagMappings;
-using KHHub.MasterDataService.Data.JobTagMappings;
-using KHHub.MasterDataService.Services.Dtos.Shared;
+using Volo.Abp.Content;
+using Volo.Abp.Domain.Repositories;
 
 namespace KHHub.MasterDataService.Services.JobTagMappings;
 
-[Authorize(MasterDataServicePermissions.JobTagMappings.Default)]
+// Explicit per-action authorization so anonymous reads (GetListAsync) are never blocked by type-level policy.
+
 public abstract class JobTagMappingsAppServiceBase : ApplicationService
 {
     protected IDistributedCache<JobTagMappingDownloadTokenCacheItem, string> _downloadTokenCache;
@@ -44,6 +38,7 @@ public abstract class JobTagMappingsAppServiceBase : ApplicationService
         _jobRepository = jobRepository;
     }
 
+    [AllowAnonymous]
     public virtual async Task<PagedResultDto<JobTagMappingWithNavigationPropertiesDto>> GetListAsync(GetJobTagMappingsInput input)
     {
         var totalCount = await _jobTagMappingRepository.GetCountAsync(input.FilterText, input.IsPrimary, input.SortOrder, input.JobTagId, input.JobId);
@@ -55,16 +50,19 @@ public abstract class JobTagMappingsAppServiceBase : ApplicationService
         };
     }
 
+    [Authorize(MasterDataServicePermissions.JobTagMappings.Default)]
     public virtual async Task<JobTagMappingWithNavigationPropertiesDto> GetWithNavigationPropertiesAsync(Guid id)
     {
         return ObjectMapper.Map<JobTagMappingWithNavigationProperties, JobTagMappingWithNavigationPropertiesDto>(await _jobTagMappingRepository.GetWithNavigationPropertiesAsync(id));
     }
 
+    [Authorize(MasterDataServicePermissions.JobTagMappings.Default)]
     public virtual async Task<JobTagMappingDto> GetAsync(Guid id)
     {
         return ObjectMapper.Map<JobTagMapping, JobTagMappingDto>(await _jobTagMappingRepository.GetAsync(id));
     }
 
+    [Authorize(MasterDataServicePermissions.JobTagMappings.Default)]
     public virtual async Task<PagedResultDto<LookupDto<Guid>>> GetJobTagLookupAsync(LookupRequestDto input)
     {
         var query = (await _jobTagRepository.GetQueryableAsync()).WhereIf(!string.IsNullOrWhiteSpace(input.Filter), x => x.Name != null && x.Name.Contains(input.Filter));
@@ -77,6 +75,7 @@ public abstract class JobTagMappingsAppServiceBase : ApplicationService
         };
     }
 
+    [Authorize(MasterDataServicePermissions.JobTagMappings.Default)]
     public virtual async Task<PagedResultDto<LookupDto<Guid>>> GetJobLookupAsync(LookupRequestDto input)
     {
         var query = (await _jobRepository.GetQueryableAsync()).WhereIf(!string.IsNullOrWhiteSpace(input.Filter), x => x.Title != null && x.Title.Contains(input.Filter));
@@ -158,6 +157,7 @@ public abstract class JobTagMappingsAppServiceBase : ApplicationService
         await _jobTagMappingRepository.DeleteAllAsync(input.FilterText, input.IsPrimary, input.SortOrder, input.JobTagId, input.JobId);
     }
 
+    [Authorize(MasterDataServicePermissions.JobTagMappings.Default)]
     public virtual async Task<KHHub.MasterDataService.Services.Dtos.Shared.DownloadTokenResultDto> GetDownloadTokenAsync()
     {
         var token = Guid.NewGuid().ToString("N");

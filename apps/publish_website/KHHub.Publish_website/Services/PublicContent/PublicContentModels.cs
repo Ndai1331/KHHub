@@ -9,6 +9,8 @@ public enum PublicContentKind
 
 public sealed class PublicContentQuery
 {
+    public string? Search { get; set; }
+
     public string? Province { get; set; }
 
     public string? Ward { get; set; }
@@ -63,6 +65,13 @@ public sealed class FilterSidebarViewModel
     public IReadOnlyList<FilterOption> Categories { get; init; } = [];
 
     public IReadOnlyList<FilterOption> Tags { get; init; } = [];
+}
+
+public sealed class PublicJobListingResult
+{
+    public required PagedContentResult<PublicContentCardViewModel> Cards { get; init; }
+
+    public required FilterSidebarViewModel Filters { get; init; }
 }
 
 public sealed class SortBarViewModel

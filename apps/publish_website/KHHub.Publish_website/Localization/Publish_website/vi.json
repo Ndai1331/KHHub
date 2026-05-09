@@ -104,6 +104,8 @@
     "Landing:JobsTitle": "Việc làm mới",
     "Landing:JobsLead": "Cơ hội việc làm nổi bật dành cho cộng đồng tại Khánh Hòa.",
     "Landing:ViewsFormat": "({0} lượt xem)",
+    "Landing:NoJobsYet": "Chưa có việc làm mới.",
+    "Landing:ViewAllJobs": "Xem tất cả việc làm",
     "Landing:PositionFormat": "{0} vị trí",
     "Landing:SalaryFrom": "Từ",
     "Landing:Job1Title": "Nhân viên lễ tân khách sạn",

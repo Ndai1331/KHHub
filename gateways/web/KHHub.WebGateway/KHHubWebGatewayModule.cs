@@ -109,6 +109,9 @@ public class KHHubWebGatewayModule : AbpModule
         );
     }
 
+    // ReverseProxy routes use AuthorizationPolicy name "anonymous" where needed — YARP reserves that name:
+    // do NOT register ASP.NET Core policy "anonymous"; it breaks proxy configuration load.
+
     private void ConfigureYarp(ServiceConfigurationContext context, IConfiguration configuration)
     {
         var proxyBuilder = context.Services.AddReverseProxy()

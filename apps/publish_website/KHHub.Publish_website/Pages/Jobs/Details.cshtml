@@ -24,7 +24,7 @@
 <main class="kh-public-page">
     <article class="kh-detail">
         <nav class="kh-breadcrumb" aria-label="Breadcrumb">
-            <a href="/">Trang chủ</a><span>/</span><a href="/jobs">Việc làm</a><span>/</span><span>@Model.Detail.Title</span>
+            <a href="/">Trang chủ</a><span>/</span><a href="@Model.ListPath">@Model.ListTitle</a><span>/</span><span>@Model.Detail.Title</span>
         </nav>
         <header class="kh-detail__header">
             <p>@Model.Detail.Category</p>
@@ -66,7 +66,7 @@
     <section class="kh-detail-section" aria-labelledby="related-title">
         <div class="kh-section-title">
             <h2 id="related-title">Việc làm liên quan</h2>
-            <a href="/jobs">Xem tất cả</a>
+            <a href="@Model.ListPath">Xem tất cả</a>
         </div>
         <partial name="~/Pages/Shared/PublicContent/_GridView.cshtml" model="Model.Detail.RelatedItems" />
     </section>

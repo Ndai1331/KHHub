@@ -2,6 +2,7 @@
 @{
     var templateRoot = Url.Content("~/template");
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var jobsPath = currentCulture.Equals("en", StringComparison.OrdinalIgnoreCase) ? "/jobs" : "/viec-lam";
     var request = ViewContext.HttpContext.Request;
     var currentPath = request.Path.Value ?? "/";
     var currentQuery = request.QueryString.Value ?? string.Empty;
@@ -99,7 +100,7 @@
                         <a href="/news" class="@ActiveClass(IsActive("/news"))">@L["Menu:News"]</a>
                     </li>
                     <li>
-                        <a href="/jobs" class="@ActiveClass(IsActive("/jobs"))">@L["Menu:Jobs"]</a>
+                        <a href="@jobsPath" class="@ActiveClass(IsActive("/jobs") || IsActive("/viec-lam"))">@L["Menu:Jobs"]</a>
                     </li>
                     <li>
                         <a href="/gold-price" class="@ActiveClass(IsActive("/gold-price"))">@L["Menu:GoldPrice"]</a>

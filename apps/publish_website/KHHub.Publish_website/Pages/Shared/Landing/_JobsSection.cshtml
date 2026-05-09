@@ -1,6 +1,4 @@
-@{
-    var templateRoot = Url.Content("~/template");
-}
+@model KHHub.Publish_website.Pages.IndexModel
 
 <section class="khhub-job-section">
     <div class="container">
@@ -10,88 +8,59 @@
             <span class="section-separator"></span>
             <p>@L["Landing:JobsLead"]</p>
         </div>
-        <div class="khhub-job-list">
-            <article class="khhub-job-card">
-                <div class="khhub-job-card__media">
-                    <img src="@(templateRoot)/images/all/1.jpg" alt="@L["Landing:Job1Title"]">
-                    <span class="khhub-job-badge">Trending</span>
-                </div>
-                <div class="khhub-job-card__content">
-                    <div class="khhub-job-card__head">
-                        <h3>@L["Landing:Job1Title"]</h3>
-                        <div class="khhub-job-meta">
-                            <span>@L["Category:Hotel"]</span>
-                            <span class="khhub-job-rating">5.0</span>
-                            <span>@L["Landing:ViewsFormat", 105]</span>
+        @if (Model.Jobs.Count == 0)
+        {
+            <div class="kh-empty text-center">
+                <p>@L["Landing:NoJobsYet"]</p>
+            </div>
+        }
+        else
+        {
+            <div class="khhub-job-list">
+                @foreach (var job in Model.Jobs.Take(10))
+                {
+                    var imageUrl = Model.ResolveMediaUrl(job.ThumbnailUrl);
+                    <article class="khhub-job-card">
+                        <a class="khhub-job-card__media" href="@job.Url" aria-label="@job.Title">
+                            <img src="@imageUrl" alt="@job.Title" loading="lazy" decoding="async" width="640" height="360">
+                            <span class="khhub-job-badge">@job.Category</span>
+                        </a>
+                        <div class="khhub-job-card__content">
+                            <div class="khhub-job-card__head">
+                                <h3><a href="@job.Url">@job.Title</a></h3>
+                                <div class="khhub-job-meta">
+                                    <span>@job.Category</span>
+                                    <span>@L["Landing:ViewsFormat", job.Popularity]</span>
+                                </div>
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(job.Province))
+                            {
+                                <div class="khhub-job-location">
+                                    <i class="fa fa-map-marker"></i> @job.Province, @job.Ward
+                                </div>
+                            }
+                            <p>@job.Description</p>
+                            <div class="khhub-job-card__footer">
+                                <div class="khhub-job-tags">
+                                    @foreach (var tag in job.Tags.Take(2))
+                                    {
+                                        <span><i class="fa fa-tag"></i> @tag</span>
+                                    }
+                                </div>
+                                @if (!string.IsNullOrWhiteSpace(job.MetaLabel))
+                                {
+                                    <div class="khhub-job-salary">
+                                        <strong>@job.MetaLabel</strong>
+                                    </div>
+                                }
+                            </div>
                         </div>
-                    </div>
-                    <div class="khhub-job-location"><i class="fa fa-map-marker"></i> @L["Location:NhaTrangKhanhHoa"]</div>
-                    <p>@L["Landing:Job1Description"]</p>
-                    <div class="khhub-job-card__footer">
-                        <div class="khhub-job-tags">
-                            <span><i class="fa fa-clock-o"></i> @L["Job:FullTime"]</span>
-                            <span><i class="fa fa-users"></i> @L["Landing:PositionFormat", "01"]</span>
-                        </div>
-                        <div class="khhub-job-salary">
-                            @L["Landing:SalaryFrom"] <strong>@L["Landing:Job1Salary"]</strong>
-                        </div>
-                    </div>
-                </div>
-            </article>
-            <article class="khhub-job-card">
-                <div class="khhub-job-card__media">
-                    <img src="@(templateRoot)/images/bg/1.jpg" alt="@L["Landing:Job2Title"]">
-                    <span class="khhub-job-badge">New</span>
-                </div>
-                <div class="khhub-job-card__content">
-                    <div class="khhub-job-card__head">
-                        <h3>@L["Landing:Job2Title"]</h3>
-                        <div class="khhub-job-meta">
-                            <span>@L["Category:Restaurant"]</span>
-                            <span class="khhub-job-rating">4.8</span>
-                            <span>@L["Landing:ViewsFormat", 78]</span>
-                        </div>
-                    </div>
-                    <div class="khhub-job-location"><i class="fa fa-map-marker"></i> @L["Location:CamRanhKhanhHoa"]</div>
-                    <p>@L["Landing:Job2Description"]</p>
-                    <div class="khhub-job-card__footer">
-                        <div class="khhub-job-tags">
-                            <span><i class="fa fa-clock-o"></i> @L["Job:Shift"]</span>
-                            <span><i class="fa fa-users"></i> @L["Landing:PositionFormat", "02"]</span>
-                        </div>
-                        <div class="khhub-job-salary">
-                            @L["Landing:SalaryFrom"] <strong>@L["Landing:Job2Salary"]</strong>
-                        </div>
-                    </div>
-                </div>
-            </article>
-            <article class="khhub-job-card">
-                <div class="khhub-job-card__media">
-                    <img src="@(templateRoot)/images/all/1.jpg" alt="@L["Landing:Job3Title"]">
-                    <span class="khhub-job-badge">Hot</span>
-                </div>
-                <div class="khhub-job-card__content">
-                    <div class="khhub-job-card__head">
-                        <h3>@L["Landing:Job3Title"]</h3>
-                        <div class="khhub-job-meta">
-                            <span>@L["Category:Travel"]</span>
-                            <span class="khhub-job-rating">4.9</span>
-                            <span>@L["Landing:ViewsFormat", 126]</span>
-                        </div>
-                    </div>
-                    <div class="khhub-job-location"><i class="fa fa-map-marker"></i> @L["Location:NinhHoaKhanhHoa"]</div>
-                    <p>@L["Landing:Job3Description"]</p>
-                    <div class="khhub-job-card__footer">
-                        <div class="khhub-job-tags">
-                            <span><i class="fa fa-clock-o"></i> @L["Job:FullTime"]</span>
-                            <span><i class="fa fa-users"></i> @L["Landing:PositionFormat", "03"]</span>
-                        </div>
-                        <div class="khhub-job-salary">
-                            @L["Landing:SalaryFrom"] <strong>@L["Landing:Job3Salary"]</strong>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        </div>
+                    </article>
+                }
+            </div>
+            <div class="text-center mt-4">
+                <a class="kh-button kh-button--primary" href="@Model.JobsListPath">@L["Landing:ViewAllJobs"]</a>
+            </div>
+        }
     </div>
 </section>

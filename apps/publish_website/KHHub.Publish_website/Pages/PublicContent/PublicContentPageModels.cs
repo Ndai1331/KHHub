@@ -23,6 +23,9 @@ public abstract class PublicListingPageModel : PageModel
     public PublicContentQuery Query { get; set; } = new();
 
     [BindProperty(SupportsGet = true)]
+    public string? Search { get; set; }
+
+    [BindProperty(SupportsGet = true)]
     public string? Province { get; set; }
 
     [BindProperty(SupportsGet = true)]
@@ -78,6 +81,7 @@ public abstract class PublicListingPageModel : PageModel
 
         Query = new PublicContentQuery
         {
+            Search = Search,
             Province = Province,
             Ward = Ward,
             Category = Category,

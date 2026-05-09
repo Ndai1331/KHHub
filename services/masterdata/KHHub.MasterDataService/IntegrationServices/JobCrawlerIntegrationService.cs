@@ -11,6 +11,7 @@ using KHHub.MasterDataService.Data.JobTags;
 using KHHub.MasterDataService.Data.Jobs;
 using KHHub.MasterDataService.Data.Wards;
 using KHHub.MasterDataService.Entities.JobCategories;
+using KHHub.MasterDataService.Entities.JobTagMappings;
 using KHHub.MasterDataService.Entities.JobTags;
 using KHHub.MasterDataService.Entities.Jobs;
 using KHHub.MasterDataService.Services.Dtos.JobCrawler;
