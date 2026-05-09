@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Dynamic.Core.Exceptions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +40,10 @@ public abstract class EfCoreJobRepositoryBase : EfCoreRepository<MasterDataServi
     {
         var query = await GetQueryForNavigationPropertiesAsync();
         query = ApplyFilter(query, filterText, title, slug, summary, description, requirements, benefits, thumbnailUrl, coverImageUrl, employmentType, workMode, experienceLevel, salaryMinMin, salaryMinMax, salaryMaxMin, salaryMaxMax, salaryText, salaryCurrency, location, contactEmail, contactPhone, applicationUrl, publishedAtMin, publishedAtMax, status, viewCountMin, viewCountMax, applicationCountMin, applicationCountMax, favoriteCountMin, favoriteCountMax, shareCountMin, shareCountMax, isFeatured, isUrgent, isHot, seoTitle, seoDescription, seoKeywords, provinceId, wardId, jobCategoryId);
-        query = query.OrderBy(string.IsNullOrWhiteSpace(sorting) ? JobConsts.GetDefaultSorting(true) : sorting);
+        query = ApplySortingWithFallback(
+            query,
+            sorting,
+            JobConsts.GetDefaultSorting(true));
         return await query.PageBy(skipCount, maxResultCount).ToListAsync(cancellationToken);
     }
 
@@ -69,7 +73,10 @@ public abstract class EfCoreJobRepositoryBase : EfCoreRepository<MasterDataServi
     public virtual async Task<List<Job>> GetListAsync(string? filterText = null, string? title = null, string? slug = null, string? summary = null, string? description = null, string? requirements = null, string? benefits = null, string? thumbnailUrl = null, string? coverImageUrl = null, EmploymentType? employmentType = null, WorkMode? workMode = null, ExperienceLevel? experienceLevel = null, decimal? salaryMinMin = null, decimal? salaryMinMax = null, decimal? salaryMaxMin = null, decimal? salaryMaxMax = null, string? salaryText = null, string? salaryCurrency = null, string? location = null, string? contactEmail = null, string? contactPhone = null, string? applicationUrl = null, DateTime? publishedAtMin = null, DateTime? publishedAtMax = null, JobStatus? status = null, int? viewCountMin = null, int? viewCountMax = null, int? applicationCountMin = null, int? applicationCountMax = null, int? favoriteCountMin = null, int? favoriteCountMax = null, int? shareCountMin = null, int? shareCountMax = null, bool? isFeatured = null, bool? isUrgent = null, bool? isHot = null, string? seoTitle = null, string? seoDescription = null, string? seoKeywords = null, string? sorting = null, int maxResultCount = int.MaxValue, int skipCount = 0, CancellationToken cancellationToken = default)
     {
         var query = ApplyFilter((await GetQueryableAsync()), filterText, title, slug, summary, description, requirements, benefits, thumbnailUrl, coverImageUrl, employmentType, workMode, experienceLevel, salaryMinMin, salaryMinMax, salaryMaxMin, salaryMaxMax, salaryText, salaryCurrency, location, contactEmail, contactPhone, applicationUrl, publishedAtMin, publishedAtMax, status, viewCountMin, viewCountMax, applicationCountMin, applicationCountMax, favoriteCountMin, favoriteCountMax, shareCountMin, shareCountMax, isFeatured, isUrgent, isHot, seoTitle, seoDescription, seoKeywords);
-        query = query.OrderBy(string.IsNullOrWhiteSpace(sorting) ? JobConsts.GetDefaultSorting(false) : sorting);
+        query = ApplySortingWithFallback(
+            query,
+            sorting,
+            JobConsts.GetDefaultSorting(false));
         return await query.PageBy(skipCount, maxResultCount).ToListAsync(cancellationToken);
     }
 
@@ -83,5 +90,22 @@ public abstract class EfCoreJobRepositoryBase : EfCoreRepository<MasterDataServi
     protected virtual IQueryable<Job> ApplyFilter(IQueryable<Job> query, string? filterText = null, string? title = null, string? slug = null, string? summary = null, string? description = null, string? requirements = null, string? benefits = null, string? thumbnailUrl = null, string? coverImageUrl = null, EmploymentType? employmentType = null, WorkMode? workMode = null, ExperienceLevel? experienceLevel = null, decimal? salaryMinMin = null, decimal? salaryMinMax = null, decimal? salaryMaxMin = null, decimal? salaryMaxMax = null, string? salaryText = null, string? salaryCurrency = null, string? location = null, string? contactEmail = null, string? contactPhone = null, string? applicationUrl = null, DateTime? publishedAtMin = null, DateTime? publishedAtMax = null, JobStatus? status = null, int? viewCountMin = null, int? viewCountMax = null, int? applicationCountMin = null, int? applicationCountMax = null, int? favoriteCountMin = null, int? favoriteCountMax = null, int? shareCountMin = null, int? shareCountMax = null, bool? isFeatured = null, bool? isUrgent = null, bool? isHot = null, string? seoTitle = null, string? seoDescription = null, string? seoKeywords = null)
     {
         return query.WhereIf(!string.IsNullOrWhiteSpace(filterText), e => e.Title!.Contains(filterText!) || e.Slug!.Contains(filterText!) || e.Summary!.Contains(filterText!) || e.Description!.Contains(filterText!) || e.Requirements!.Contains(filterText!) || e.Benefits!.Contains(filterText!) || e.ThumbnailUrl!.Contains(filterText!) || e.CoverImageUrl!.Contains(filterText!) || e.SalaryText!.Contains(filterText!) || e.SalaryCurrency!.Contains(filterText!) || e.Location!.Contains(filterText!) || e.ContactEmail!.Contains(filterText!) || e.ContactPhone!.Contains(filterText!) || e.ApplicationUrl!.Contains(filterText!) || e.SeoTitle!.Contains(filterText!) || e.SeoDescription!.Contains(filterText!) || e.SeoKeywords!.Contains(filterText!)).WhereIf(!string.IsNullOrWhiteSpace(title), e => e.Title.Contains(title)).WhereIf(!string.IsNullOrWhiteSpace(slug), e => e.Slug.Contains(slug)).WhereIf(!string.IsNullOrWhiteSpace(summary), e => e.Summary.Contains(summary)).WhereIf(!string.IsNullOrWhiteSpace(description), e => e.Description.Contains(description)).WhereIf(!string.IsNullOrWhiteSpace(requirements), e => e.Requirements.Contains(requirements)).WhereIf(!string.IsNullOrWhiteSpace(benefits), e => e.Benefits.Contains(benefits)).WhereIf(!string.IsNullOrWhiteSpace(thumbnailUrl), e => e.ThumbnailUrl.Contains(thumbnailUrl)).WhereIf(!string.IsNullOrWhiteSpace(coverImageUrl), e => e.CoverImageUrl.Contains(coverImageUrl)).WhereIf(employmentType.HasValue, e => e.EmploymentType == employmentType).WhereIf(workMode.HasValue, e => e.WorkMode == workMode).WhereIf(experienceLevel.HasValue, e => e.ExperienceLevel == experienceLevel).WhereIf(salaryMinMin.HasValue, e => e.SalaryMin >= salaryMinMin!.Value).WhereIf(salaryMinMax.HasValue, e => e.SalaryMin <= salaryMinMax!.Value).WhereIf(salaryMaxMin.HasValue, e => e.SalaryMax >= salaryMaxMin!.Value).WhereIf(salaryMaxMax.HasValue, e => e.SalaryMax <= salaryMaxMax!.Value).WhereIf(!string.IsNullOrWhiteSpace(salaryText), e => e.SalaryText.Contains(salaryText)).WhereIf(!string.IsNullOrWhiteSpace(salaryCurrency), e => e.SalaryCurrency.Contains(salaryCurrency)).WhereIf(!string.IsNullOrWhiteSpace(location), e => e.Location.Contains(location)).WhereIf(!string.IsNullOrWhiteSpace(contactEmail), e => e.ContactEmail.Contains(contactEmail)).WhereIf(!string.IsNullOrWhiteSpace(contactPhone), e => e.ContactPhone.Contains(contactPhone)).WhereIf(!string.IsNullOrWhiteSpace(applicationUrl), e => e.ApplicationUrl.Contains(applicationUrl)).WhereIf(publishedAtMin.HasValue, e => e.PublishedAt >= publishedAtMin!.Value).WhereIf(publishedAtMax.HasValue, e => e.PublishedAt <= publishedAtMax!.Value).WhereIf(status.HasValue, e => e.Status == status).WhereIf(viewCountMin.HasValue, e => e.ViewCount >= viewCountMin!.Value).WhereIf(viewCountMax.HasValue, e => e.ViewCount <= viewCountMax!.Value).WhereIf(applicationCountMin.HasValue, e => e.ApplicationCount >= applicationCountMin!.Value).WhereIf(applicationCountMax.HasValue, e => e.ApplicationCount <= applicationCountMax!.Value).WhereIf(favoriteCountMin.HasValue, e => e.FavoriteCount >= favoriteCountMin!.Value).WhereIf(favoriteCountMax.HasValue, e => e.FavoriteCount <= favoriteCountMax!.Value).WhereIf(shareCountMin.HasValue, e => e.ShareCount >= shareCountMin!.Value).WhereIf(shareCountMax.HasValue, e => e.ShareCount <= shareCountMax!.Value).WhereIf(isFeatured.HasValue, e => e.IsFeatured == isFeatured).WhereIf(isUrgent.HasValue, e => e.IsUrgent == isUrgent).WhereIf(isHot.HasValue, e => e.IsHot == isHot).WhereIf(!string.IsNullOrWhiteSpace(seoTitle), e => e.SeoTitle.Contains(seoTitle)).WhereIf(!string.IsNullOrWhiteSpace(seoDescription), e => e.SeoDescription.Contains(seoDescription)).WhereIf(!string.IsNullOrWhiteSpace(seoKeywords), e => e.SeoKeywords.Contains(seoKeywords));
+    }
+
+    private static IQueryable<T> ApplySortingWithFallback<T>(
+        IQueryable<T> query,
+        string? sorting,
+        string fallbackSorting)
+    {
+        var requestedSorting = string.IsNullOrWhiteSpace(sorting) ? fallbackSorting : sorting;
+        try
+        {
+            return query.OrderBy(requestedSorting);
+        }
+        catch (ParseException)
+        {
+            // Keep API stable even when caller sends invalid dynamic-linq field names.
+            return query.OrderBy(fallbackSorting);
+        }
     }
 }

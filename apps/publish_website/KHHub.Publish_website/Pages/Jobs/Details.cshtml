@@ -63,13 +63,59 @@
 
     <partial name="~/Pages/Shared/PublicContent/_CommentSection.cshtml" model="Model.Detail" />
 
-    <section class="kh-detail-section" aria-labelledby="related-title">
-        <div class="kh-section-title">
-            <h2 id="related-title">Việc làm liên quan</h2>
-            <a href="@Model.ListPath">Xem tất cả</a>
-        </div>
-        <partial name="~/Pages/Shared/PublicContent/_GridView.cshtml" model="Model.Detail.RelatedItems" />
-    </section>
+    @if (Model.Detail.RelatedItems.Count > 0)
+    {
+        var templateRoot = Url.Content("~/template");
+        <section class="gray-section kh-detail-section" aria-labelledby="related-title">
+            <div class="container">
+                <div class="section-title">
+                    <h2 id="related-title">Việc làm liên quan</h2>
+                    <div class="section-subtitle">Gợi ý thêm công việc phù hợp để bạn tham khảo.</div>
+                    <span class="section-separator"></span>
+                    <p>Xem thêm các tin tuyển dụng cùng nhóm ngành hoặc khu vực.</p>
+                    <a href="@Model.ListPath">Xem tất cả</a>
+                </div>
+            </div>
+            <div class="list-carousel fl-wrap card-listing">
+                <div class="listing-carousel fl-wrap">
+                    @foreach (var item in Model.Detail.RelatedItems)
+                    {
+                        var location = string.Join(", ", new[] { item.Province, item.Ward }.Where(x => !string.IsNullOrWhiteSpace(x)));
+                        var meta = string.IsNullOrWhiteSpace(item.MetaLabel) ? "Tin tuyển dụng mới" : item.MetaLabel;
+                        <div class="slick-slide-item">
+                            <div class="listing-item">
+                                <article class="geodir-category-listing fl-wrap">
+                                    <div class="geodir-category-img">
+                                        <img src="@item.ThumbnailUrl" alt="@item.Title" loading="lazy" decoding="async">
+                                        <div class="overlay"></div>
+                                        <div class="list-post-counter"><span>@item.Popularity</span><i class="fa fa-eye"></i></div>
+                                    </div>
+                                    <div class="geodir-category-content fl-wrap">
+                                        <a class="listing-geodir-category" href="@Model.ListPath">@item.Category</a>
+                                        <div class="listing-avatar">
+                                            <a href="@item.Url"><img src="@(templateRoot)/images/avatar/1.jpg" alt="@item.Title"></a>
+                                            <span class="avatar-tooltip">Đăng bởi <strong>KH HUB</strong></span>
+                                        </div>
+                                        <h3><a href="@item.Url">@item.Title</a></h3>
+                                        <div class="geodir-category-options fl-wrap">
+                                            <div class="listing-rating card-popup-rainingvis" data-starrating2="@(item.Rating ?? 4)">
+                                                <span>@meta</span>
+                                            </div>
+                                            <div class="geodir-category-location">
+                                                <a href="@item.Url"><i class="fa fa-map-marker" aria-hidden="true"></i> @location</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="swiper-button-prev sw-btn"><i class="fa fa-long-arrow-left"></i></div>
+                <div class="swiper-button-next sw-btn"><i class="fa fa-long-arrow-right"></i></div>
+            </div>
+        </section>
+    }
 </main>
 
 @section Scripts {

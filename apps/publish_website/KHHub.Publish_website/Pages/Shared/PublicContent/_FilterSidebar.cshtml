@@ -14,7 +14,7 @@
 
         <label class="kh-field">
             <span>Tên / tiêu đề</span>
-            <input type="search" name="Search" value="@Model.Query.Search" placeholder="Nhập tên hoặc tiêu đề việc làm">
+            <input class="kh-field__search" type="search" name="Search" value="@Model.Query.Search" placeholder="Nhập tên hoặc tiêu đề việc làm">
         </label>
 
         <label class="kh-field">
@@ -50,15 +50,44 @@
             </select>
         </label>
 
-        <fieldset class="kh-filter__tags">
+        <fieldset class="kh-filter__tags" data-tag-filter>
             <legend>Tags</legend>
-            @foreach (var tag in Model.Tags)
-            {
-                <label>
-                    <input type="checkbox" name="Tags" value="@tag.Value" checked="@selectedTags.Contains(tag.Value)">
-                    <span>#@tag.Label</span>
-                </label>
-            }
+            <label class="kh-field kh-field--tag-picker">
+                <select data-tag-select>
+                    <option value="">Chọn tag để lọc</option>
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <option value="@tag.Value" data-tag-label="@tag.Label">#@tag.Label (@tag.Count)</option>
+                    }
+                </select>
+            </label>
+
+            <div class="kh-selected-tags" data-selected-tags>
+                @foreach (var tag in Model.Tags.Where(t => selectedTags.Contains(t.Value)))
+                {
+                    <button type="button"
+                            class="kh-selected-tag"
+                            data-tag-chip
+                            data-tag-value="@tag.Value"
+                            aria-label="Xóa tag @tag.Label">
+                        <span>#@tag.Label</span>
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                }
+            </div>
+
+            <div class="kh-filter__tags-inputs" aria-hidden="true">
+                @foreach (var tag in Model.Tags)
+                {
+                    <input type="checkbox"
+                           name="Tags"
+                           value="@tag.Value"
+                           checked="@selectedTags.Contains(tag.Value)"
+                           data-tag-input
+                           data-tag-label="@tag.Label"
+                           tabindex="-1">
+                }
+            </div>
         </fieldset>
 
         <button class="kh-button kh-button--primary" type="submit">Áp dụng bộ lọc</button>

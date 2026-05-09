@@ -104,6 +104,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    margin-bottom: 24px;
 }
 
 .khhub-job-card {
@@ -162,9 +163,23 @@
 
 .khhub-job-card__head h3 {
     margin: 0;
-    font-size: 30px;
-    line-height: 1.2;
+    font-size: 24px;
+    line-height: 1.35;
     color: #111827;
+}
+
+.khhub-job-card__head h3 a {
+    color: inherit;
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.khhub-job-card__head h3 a:hover {
+    color: #2563eb;
 }
 
 .khhub-job-meta {
@@ -185,11 +200,16 @@
 }
 
 .khhub-job-location {
-    color: #6b7280;
-    font-size: 16px;
+    color: #4b5563;
+    font-size: 14px;
     display: flex;
     align-items: center;
     gap: 8px;
+    line-height: 1.5;
+}
+
+.khhub-job-location i {
+    color: #3b82f6;
 }
 
 .khhub-job-card__content p {
@@ -212,10 +232,24 @@
 .khhub-job-tags {
     display: flex;
     align-items: center;
-    gap: 16px;
-    color: #374151;
-    font-size: 15px;
+    gap: 8px;
+    color: #334155;
+    font-size: 13px;
     flex-wrap: wrap;
+}
+
+.khhub-job-tags span {
+    align-items: center;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 999px;
+    display: inline-flex;
+    gap: 6px;
+    padding: 4px 10px;
+}
+
+.khhub-job-tags span i {
+    color: #3b82f6;
 }
 
 .khhub-job-salary {
@@ -225,7 +259,19 @@
 
 .khhub-job-salary strong {
     color: #ef4444;
-    font-size: 30px;
+    font-size: 24px;
+}
+
+.khhub-job-section__cta {
+    margin-top: 24px;
+    padding: 20px 16px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #eff6ff 0%, #eef2ff 100%);
+    border: 1px solid #dbeafe;
+}
+
+.khhub-job-section__cta .btn {
+    box-shadow: 0 10px 24px rgba(59, 130, 246, 0.25);
 }
 
 @media (max-width: 991px) {
@@ -258,7 +304,7 @@
     }
 
     .khhub-job-card__head h3 {
-        font-size: 24px;
+        font-size: 20px;
     }
 
     .khhub-job-salary strong {

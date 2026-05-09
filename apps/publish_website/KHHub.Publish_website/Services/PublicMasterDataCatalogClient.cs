@@ -75,10 +75,9 @@ public class PublicMasterDataCatalogClient
     {
         try
         {
-            var sorting = Uri.EscapeDataString("RatingAveraged desc,ViewCount desc");
             var status = (int)PlaceStatus.Published;
             var path =
-                $"api/masterdata/places?skipCount=0&maxResultCount={maxCount}&sorting={sorting}&status={status}";
+                $"api/masterdata/places?skipCount=0&maxResultCount={maxCount}&status={status}";
             using var response = await _httpClient.GetAsync(path, cancellationToken);
             response.EnsureSuccessStatusCode();
             var page = await response.Content.ReadFromJsonAsync<PagedResult<PlaceWithNavigationPropertiesDto>>(
@@ -202,9 +201,8 @@ public class PublicMasterDataCatalogClient
     {
         try
         {
-            var sorting = Uri.EscapeDataString("PublishedAt desc,CreationTime desc");
             var status = (int)JobStatus.Published;
-            var path = $"api/masterdata/jobs?skipCount=0&maxResultCount={maxCount}&sorting={sorting}&status={status}";
+            var path = $"api/masterdata/jobs?skipCount=0&maxResultCount={maxCount}&status={status}";
             using var response = await _httpClient.GetAsync(path, cancellationToken);
             response.EnsureSuccessStatusCode();
             var page = await response.Content.ReadFromJsonAsync<PagedResult<JobWithNavigationPropertiesDto>>(
@@ -227,8 +225,7 @@ public class PublicMasterDataCatalogClient
     {
         try
         {
-            var sorting = Uri.EscapeDataString("SortOrder asc");
-            var path = $"api/masterdata/job-tag-mappings?skipCount=0&maxResultCount=1000&sorting={sorting}";
+            var path = "api/masterdata/job-tag-mappings?skipCount=0&maxResultCount=1000";
             using var response = await _httpClient.GetAsync(path, cancellationToken);
             response.EnsureSuccessStatusCode();
             var page = await response.Content.ReadFromJsonAsync<PagedResult<JobTagMappingWithNavigationPropertiesDto>>(

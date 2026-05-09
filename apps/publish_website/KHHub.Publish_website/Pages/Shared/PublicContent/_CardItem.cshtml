@@ -23,7 +23,7 @@
             <time datetime="@Model.CreatedAt.ToString("O")">@Model.CreatedAt.ToString("dd/MM/yyyy")</time>
         </div>
         <h2 class="kh-card__title"><a href="@Model.Url">@Model.Title</a></h2>
-        <p>@Model.Description</p>
+        <!-- <p>@Model.Description</p> -->
         @if (!string.IsNullOrWhiteSpace(Model.MetaLabel))
         {
             <p class="kh-card__label">@Model.MetaLabel</p>

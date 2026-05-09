@@ -141,6 +141,76 @@
         });
     });
 
+    document.querySelectorAll('[data-tag-filter]').forEach(function (container) {
+        var select = container.querySelector('[data-tag-select]');
+        var selectedHost = container.querySelector('[data-selected-tags]');
+        var inputs = Array.prototype.slice.call(container.querySelectorAll('[data-tag-input]'));
+
+        if (!select || !selectedHost || inputs.length === 0) {
+            return;
+        }
+
+        var escapeHtml = function (value) {
+            return (value || '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#39;');
+        };
+
+        var buildChipHtml = function (value, label) {
+            return ''
+                + '<button type="button"'
+                + ' class="kh-selected-tag"'
+                + ' data-tag-chip'
+                + ' data-tag-value="' + escapeHtml(value) + '"'
+                + ' aria-label="Xóa tag ' + escapeHtml(label) + '">'
+                + '<span>#' + escapeHtml(label) + '</span>'
+                + '<i class="fa fa-times" aria-hidden="true"></i>'
+                + '</button>';
+        };
+
+        var render = function () {
+            var selected = inputs.filter(function (input) { return input.checked; });
+            selectedHost.innerHTML = selected.map(function (input) {
+                return buildChipHtml(input.value, input.getAttribute('data-tag-label') || input.value);
+            }).join('');
+            selectedHost.classList.toggle('is-empty', selected.length === 0);
+        };
+
+        select.addEventListener('change', function () {
+            var value = select.value;
+            if (!value) {
+                return;
+            }
+
+            var input = inputs.find(function (item) { return item.value === value; });
+            if (input) {
+                input.checked = true;
+                render();
+            }
+
+            select.value = '';
+        });
+
+        selectedHost.addEventListener('click', function (event) {
+            var button = event.target.closest('[data-tag-chip]');
+            if (!button) {
+                return;
+            }
+
+            var value = button.getAttribute('data-tag-value');
+            var input = inputs.find(function (item) { return item.value === value; });
+            if (input) {
+                input.checked = false;
+                render();
+            }
+        });
+
+        render();
+    });
+
     // Lightweight image lightbox with prev/next, counter and keyboard support.
     var lightbox = (function () {
         var root = null;

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Dynamic.Core.Exceptions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +39,10 @@ public abstract class EfCoreJobTagMappingRepositoryBase : EfCoreRepository<Maste
     {
         var query = await GetQueryForNavigationPropertiesAsync();
         query = ApplyFilter(query, filterText, isPrimary, sortOrder, jobTagId, jobId);
-        query = query.OrderBy(string.IsNullOrWhiteSpace(sorting) ? JobTagMappingConsts.GetDefaultSorting(true) : sorting);
+        query = ApplySortingWithFallback(
+            query,
+            sorting,
+            JobTagMappingConsts.GetDefaultSorting(true));
         return await query.PageBy(skipCount, maxResultCount).ToListAsync(cancellationToken);
     }
 
@@ -65,7 +69,10 @@ public abstract class EfCoreJobTagMappingRepositoryBase : EfCoreRepository<Maste
     public virtual async Task<List<JobTagMapping>> GetListAsync(string? filterText = null, bool? isPrimary = null, string? sortOrder = null, string? sorting = null, int maxResultCount = int.MaxValue, int skipCount = 0, CancellationToken cancellationToken = default)
     {
         var query = ApplyFilter((await GetQueryableAsync()), filterText, isPrimary, sortOrder);
-        query = query.OrderBy(string.IsNullOrWhiteSpace(sorting) ? JobTagMappingConsts.GetDefaultSorting(false) : sorting);
+        query = ApplySortingWithFallback(
+            query,
+            sorting,
+            JobTagMappingConsts.GetDefaultSorting(false));
         return await query.PageBy(skipCount, maxResultCount).ToListAsync(cancellationToken);
     }
 
@@ -79,5 +86,22 @@ public abstract class EfCoreJobTagMappingRepositoryBase : EfCoreRepository<Maste
     protected virtual IQueryable<JobTagMapping> ApplyFilter(IQueryable<JobTagMapping> query, string? filterText = null, bool? isPrimary = null, string? sortOrder = null)
     {
         return query.WhereIf(!string.IsNullOrWhiteSpace(filterText), e => e.SortOrder!.Contains(filterText!)).WhereIf(isPrimary.HasValue, e => e.IsPrimary == isPrimary).WhereIf(!string.IsNullOrWhiteSpace(sortOrder), e => e.SortOrder.Contains(sortOrder));
+    }
+
+    private static IQueryable<T> ApplySortingWithFallback<T>(
+        IQueryable<T> query,
+        string? sorting,
+        string fallbackSorting)
+    {
+        var requestedSorting = string.IsNullOrWhiteSpace(sorting) ? fallbackSorting : sorting;
+        try
+        {
+            return query.OrderBy(requestedSorting);
+        }
+        catch (ParseException)
+        {
+            // Keep API stable even when caller sends invalid dynamic-linq field names.
+            return query.OrderBy(fallbackSorting);
+        }
     }
 }

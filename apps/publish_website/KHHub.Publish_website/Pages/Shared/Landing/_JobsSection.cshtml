@@ -39,7 +39,6 @@
                                     <i class="fa fa-map-marker"></i> @job.Province, @job.Ward
                                 </div>
                             }
-                            <p>@job.Description</p>
                             <div class="khhub-job-card__footer">
                                 <div class="khhub-job-tags">
                                     @foreach (var tag in job.Tags.Take(2))
@@ -58,8 +57,11 @@
                     </article>
                 }
             </div>
-            <div class="text-center mt-4">
-                <a class="kh-button kh-button--primary" href="@Model.JobsListPath">@L["Landing:ViewAllJobs"]</a>
+            <div class="khhub-job-section__cta text-center mt-4">
+                <a class="btn big-btn circle-btn dec-btn color-bg flat-btn" href="@Model.JobsListPath">
+                    @L["Landing:ViewAllJobs"]
+                    <i class="fa fa-eye"></i>
+                </a>
             </div>
         }
     </div>
