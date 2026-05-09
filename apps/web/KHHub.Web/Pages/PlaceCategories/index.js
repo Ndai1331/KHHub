@@ -46,12 +46,11 @@ $(function () {
             iconHtml =
                 '<i class="' +
                 safeIcon +
-                '" style="font-size:1.25rem;color:rgba(0,0,0,0.55);" aria-hidden="true"></i>';
+                '" style="font-size:1.25rem;color:'+bg+';" aria-hidden="true"></i>';
         }
         return (
             '<div class="d-inline-flex align-items-center justify-content-center rounded border bg-body" ' +
-            'style="width:48px;height:48px;background:' +
-            bg +
+            'style="width:48px;height:48px;background:#ffffff' +
             '!important;">' +
             iconHtml +
             '</div>'

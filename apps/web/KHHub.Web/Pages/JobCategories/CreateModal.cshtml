@@ -3,34 +3,125 @@
 @using KHHub.MasterDataService.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using KHHub.Web.Pages.JobCategories
-@using System.Globalization
 @inject IHtmlLocalizer<MasterDataServiceResource> L
 @model CreateModalModel
 @{
     Layout = null;
 }
-<form data-ajaxForm="true" asp-page="/JobCategories/CreateModal" autocomplete="off">
-    <abp-modal id="JobCategoryCreateModal">
+<form id="JobCategoryCreateForm" data-ajaxForm="true" asp-page="/JobCategories/CreateModal" autocomplete="off">
+    @Html.AntiForgeryToken()
+    <abp-modal id="JobCategoryCreateModal"
+               size="ExtraLarge"
+               scrollable="true"
+               centered="true">
         <abp-modal-header title="@L["NewJobCategory"].Value"></abp-modal-header>
         <abp-modal-body>
-@*//<suite-custom-code-block-1>*@
-@*//</suite-custom-code-block-1>*@
-            <abp-input asp-for="JobCategory.Name"    />
-            <abp-input asp-for="JobCategory.Slug"    />
-            <abp-input asp-for="JobCategory.Description" text-area   />
-            <abp-input asp-for="JobCategory.Icon"    />
-            <abp-input asp-for="JobCategory.Color"    />
-            <abp-input asp-for="JobCategory.ParentId"    />
-            <abp-input asp-for="JobCategory.DisplayOrder"    />
-            <abp-input asp-for="JobCategory.IsActive"    />
-@*//<suite-custom-code-block-2>*@
-@*//</suite-custom-code-block-2>*@
-@*//<suite-custom-code-block-3>*@
-@*//</suite-custom-code-block-3>*@
+            <abp-row class="g-3 mb-0 align-items-start">
+                <abp-column size-md="_8">
+                    <abp-row class="g-3 align-items-start">
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="JobCategory.Name" label="@L["Name"].Value" />
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <div class="mb-0">
+                                <label class="form-label" asp-for="JobCategory.ParentId">@L["JobCategoryParentId"].Value</label>
+                                <select asp-for="JobCategory.ParentId"
+                                        class="auto-complete-select"
+                                        data-autocomplete-api-url="@Url.Content("~/api/masterdata/jobs/job-category-lookup")"
+                                        data-autocomplete-display-property="displayName"
+                                        data-autocomplete-value-property="id"
+                                        data-autocomplete-items-property="items"
+                                        data-autocomplete-filter-param-name="filter"
+                                        data-autocomplete-allow-clear="true"
+                                        data-autocomplete-placeholder="@L["Search"].Value">
+                                </select>
+                                <span asp-validation-for="JobCategory.ParentId" class="text-danger d-block"></span>
+                            </div>
+                        </abp-column>
+                    </abp-row>
+                    <abp-row class="g-3 align-items-start">
+                        <abp-column size-md="_6">
+                            <div class="mb-3">
+                                <label class="form-label" asp-for="JobCategory.Slug">@L["Slug"].Value</label>
+                                <input asp-for="JobCategory.Slug"
+                                       type="text"
+                                       class="form-control bg-body-secondary"
+                                       readonly="readonly"
+                                       tabindex="-1"
+                                       aria-readonly="true"
+                                       autocomplete="off" />
+                                <span asp-validation-for="JobCategory.Slug" class="text-danger d-block"></span>
+                            </div>
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <div class="mb-3">
+                                <label class="form-label" asp-for="JobCategory.Icon">@L["Icon"].Value</label>
+                                <div class="input-group">
+                                    <input asp-for="JobCategory.Icon"
+                                           type="text"
+                                           class="form-control"
+                                           id="JobCategoryCreateIconInput"
+                                           autocomplete="off" />
+                                    <button type="button"
+                                            class="btn btn-outline-secondary"
+                                            id="JobCategoryCreateIconPicker"
+                                            role="iconpicker"></button>
+                                </div>
+                                <span asp-validation-for="JobCategory.Icon" class="text-danger d-block"></span>
+                            </div>
+                        </abp-column>
+                    </abp-row>
+                    <abp-row class="g-3 align-items-start">
+                        <abp-column size-md="_12">
+                            <abp-input asp-for="JobCategory.Description" text-area="true" label="@L["Description"].Value" />
+                        </abp-column>
+                    </abp-row>
+                    <abp-row class="g-3 align-items-start">
+                        <abp-column size-md="_6">
+                            <label class="form-label" asp-for="JobCategory.DisplayOrder">@L["DisplayOrder"].Value</label>
+                            <input asp-for="JobCategory.DisplayOrder"
+                                   type="number"
+                                   class="form-control"
+                                   autocomplete="off" />
+                            <span asp-validation-for="JobCategory.DisplayOrder" class="text-danger d-block"></span>
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <label class="form-label" asp-for="JobCategory.IsActive">@L["IsActive"].Value</label>
+                            <div class="d-flex align-items-center" style="min-height: 38px;">
+                                <input asp-for="JobCategory.IsActive"
+                                       type="checkbox"
+                                       class="form-check-input mb-0" />
+                            </div>
+                            <span asp-validation-for="JobCategory.IsActive" class="text-danger d-block"></span>
+                        </abp-column>
+                    </abp-row>
+                </abp-column>
+                <abp-column size-md="_4">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="JobCategory.Color">@L["Color"].Value</label>
+                        <div class="d-flex gap-2 align-items-stretch">
+                            <input asp-for="JobCategory.Color"
+                                   type="text"
+                                   class="form-control flex-grow-1"
+                                   placeholder="#3B82F6"
+                                   autocomplete="off" />
+                            <input type="color"
+                                   id="JobCategoryCreateColorPicker"
+                                   class="form-control form-control-color border rounded-2 p-1"
+                                   title="@L["Color"].Value"
+                                   value="#3B82F6"
+                                   style="width: 3rem; min-width: 3rem; height: 38px; cursor: pointer;" />
+                        </div>
+                        <span asp-validation-for="JobCategory.Color" class="text-danger d-block"></span>
+                        <div id="JobCategoryColorPreview"
+                             class="rounded border mt-3"
+                             style="width: 100%; height: 96px; background-color: #e5e7eb;"
+                             aria-hidden="true"></div>
+                    </div>
+                </abp-column>
+            </abp-row>
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
-@*//<suite-custom-code-block-4>*@
-@*//</suite-custom-code-block-4>*@
         </abp-modal-footer>
     </abp-modal>
-</form>
+</form>

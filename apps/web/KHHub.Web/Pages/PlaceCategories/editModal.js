@@ -20,6 +20,68 @@ function placeCategoryNormalizeHexToRrggbb(raw) {
     return null;
 }
 
+function initPlaceCategoryEditIconPicker($modal, inputSelector, pickerSelector) {
+    if (typeof jQuery === 'undefined' || !jQuery.fn || !jQuery.fn.iconpicker) {
+        return;
+    }
+
+    var $input = $modal.find(inputSelector).first();
+    var $picker = $modal.find(pickerSelector).first();
+    if (!$input.length || !$picker.length) {
+        return;
+    }
+
+    try {
+        $picker.iconpicker('destroy');
+    } catch (e) {}
+
+    $picker.iconpicker({
+        iconset: 'fontawesome5',
+        placement: 'bottom',
+        search: true,
+    });
+
+    var current = ($input.val() || '').trim();
+    if (current) {
+        try {
+            $picker.iconpicker('setIcon', current);
+        } catch (e) {}
+    }
+
+    $picker.off('.khPlaceEditIconPicker');
+    $input.off('.khPlaceEditIconPicker');
+
+    $picker.on('mousedown.khPlaceEditIconPicker', function (e) {
+        e.preventDefault();
+    });
+
+    $picker.on('click.khPlaceEditIconPicker', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        try {
+            $picker.iconpicker('show');
+        } catch (err) {}
+    });
+
+    $picker.on('iconpickerSelected.khPlaceEditIconPicker', function (event) {
+        var icon = event.iconpickerValue || '';
+        $input.val(icon).trigger('input');
+        try {
+            $picker.iconpicker('hide');
+        } catch (err) {}
+    });
+
+    $input.on('input.khPlaceEditIconPicker change.khPlaceEditIconPicker', function () {
+        var value = ($(this).val() || '').trim();
+        if (!value) {
+            return;
+        }
+        try {
+            $picker.iconpicker('setIcon', value);
+        } catch (e) {}
+    });
+}
+
 function bindPlaceCategoryColorPreview(publicApi, pickerSelector) {
     var ns = '.khPlaceCatColorEdit';
 
@@ -78,6 +140,11 @@ function bindPlaceCategoryColorPreview(publicApi, pickerSelector) {
             });
 
             syncTextToPicker();
+            initPlaceCategoryEditIconPicker(
+                $modal,
+                '#PlaceCategoryEditIconInput',
+                '#PlaceCategoryEditIconPicker'
+            );
         }, 0);
     });
 }

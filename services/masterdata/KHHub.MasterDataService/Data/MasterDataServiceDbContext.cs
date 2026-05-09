@@ -478,6 +478,10 @@ public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContex
 
         if (builder.IsHostDatabase())
         {
+        }
+
+        if (builder.IsHostDatabase())
+        {
             builder.Entity<JobCategory>(b => {
                 b.ToTable(DbTablePrefix + "JobCategories", DbSchema);
                 b.ConfigureByConvention();

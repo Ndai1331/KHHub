@@ -56,7 +56,21 @@
                             </div>
                         </abp-column>
                         <abp-column size-md="_6">
-                            <abp-input asp-for="PlaceCategory.Icon" label="@L["Icon"].Value" />
+                            <div class="mb-3">
+                                <label class="form-label" asp-for="PlaceCategory.Icon">@L["Icon"].Value</label>
+                                <div class="input-group">
+                                    <input asp-for="PlaceCategory.Icon"
+                                           type="text"
+                                           class="form-control"
+                                           id="PlaceCategoryEditIconInput"
+                                           autocomplete="off" />
+                                    <button type="button"
+                                            class="btn btn-outline-secondary"
+                                            id="PlaceCategoryEditIconPicker"
+                                            role="iconpicker"></button>
+                                </div>
+                                <span asp-validation-for="PlaceCategory.Icon" class="text-danger d-block"></span>
+                            </div>
                         </abp-column>
                     </abp-row>
                     <abp-row class="g-3 align-items-start">

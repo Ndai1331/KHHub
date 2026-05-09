@@ -3,6 +3,7 @@ using System;
 using KHHub.MasterDataService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KHHub.MasterDataService.Migrations
 {
     [DbContext(typeof(MasterDataServiceDbContext))]
-    partial class MasterDataServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260509053351_Updated_JobCategory_26050912334634")]
+    partial class Updated_JobCategory_26050912334634
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

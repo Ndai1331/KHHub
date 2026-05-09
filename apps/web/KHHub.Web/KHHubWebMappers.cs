@@ -1,5 +1,7 @@
 using KHHub.MasterDataService.Services.Dtos.JobCategories;
 using KHHub.Web.Pages.JobCategories;
+using KHHub.MasterDataService.Services.Dtos.JobCategories;
+using KHHub.Web.Pages.JobCategories;
 using KHHub.MasterDataService.Services.Dtos.JobTagMappings;
 using KHHub.Web.Pages.JobTagMappings;
 using KHHub.MasterDataService.Services.Dtos.JobViews;
