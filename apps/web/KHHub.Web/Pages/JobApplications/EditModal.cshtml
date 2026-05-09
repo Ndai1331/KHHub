@@ -1,0 +1,40 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@using KHHub.Web.Pages.JobApplications
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using KHHub.MasterDataService.Services.JobApplications; 
+@using System.Globalization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@model EditModalModel
+@{
+    Layout = null;
+}
+<form data-ajaxForm="true" asp-page="/JobApplications/EditModal" autocomplete="off">
+    <abp-modal id="JobApplicationEditModal">
+        <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
+        <abp-modal-body>
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+            <abp-input asp-for="Id" />
+                    <abp-input asp-for="JobApplication.ConcurrencyStamp" hidden="true" suppress-label="true"/>
+            <abp-input asp-for="JobApplication.UserId"    />
+            <abp-input asp-for="JobApplication.FullName"    />
+            <abp-input asp-for="JobApplication.Email"    />
+            <abp-input asp-for="JobApplication.PhoneNumber"    />
+            <abp-input asp-for="JobApplication.CvUrl"    />
+            <abp-input asp-for="JobApplication.PortfolioUrl"    />
+            <abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="JobApplication.AppliedAt"  />
+            <abp-select asp-for="JobApplication.Status"    />
+                                <abp-select asp-for="JobApplication.JobId" asp-items="Model.JobLookupListRequired" label="@L["Job"].Value"/>
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+        </abp-modal-footer>
+    </abp-modal>
+</form>

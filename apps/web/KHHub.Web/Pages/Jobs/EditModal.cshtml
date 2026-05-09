@@ -1,0 +1,76 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@using KHHub.Web.Pages.Jobs
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using KHHub.MasterDataService.Services.Jobs; 
+@using System.Globalization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@model EditModalModel
+@{
+    Layout = null;
+}
+<form data-ajaxForm="true" asp-page="/Jobs/EditModal" autocomplete="off">
+    <abp-modal id="JobEditModal">
+        <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
+        <abp-modal-body>
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+            <abp-input asp-for="Id" />
+                    <abp-input asp-for="Job.ConcurrencyStamp" hidden="true" suppress-label="true"/>
+            <abp-input asp-for="Job.Title"    />
+            <abp-input asp-for="Job.Slug"    />
+            <abp-input asp-for="Job.Summary" text-area   />
+            <abp-input asp-for="Job.Description" text-area   />
+            <abp-input asp-for="Job.Requirements" text-area   />
+            <abp-input asp-for="Job.Benefits" text-area   />
+            <abp-input asp-for="Job.ThumbnailUrl"    />
+            <abp-input asp-for="Job.CoverImageUrl"    />
+            <abp-select asp-for="Job.EmploymentType"    />
+            <abp-select asp-for="Job.WorkMode"    />
+            <abp-select asp-for="Job.ExperienceLevel"    />
+            <abp-input asp-for="Job.SalaryMin"   data-val="false" />
+            <abp-input asp-for="Job.SalaryMax"   data-val="false" />
+            <abp-input asp-for="Job.SalaryText"    />
+            <abp-input asp-for="Job.SalaryCurrency"    />
+            <abp-input asp-for="Job.Location"    />
+            <abp-input asp-for="Job.ContactEmail"    />
+            <abp-input asp-for="Job.ContactPhone"    />
+            <abp-input asp-for="Job.ApplicationUrl"    />
+            <abp-date-picker auto-update-input="false" today-button-classes="btn-primary" asp-for="Job.PublishedAt"  />
+            <abp-select asp-for="Job.Status"    />
+            <abp-input asp-for="Job.ViewCount"    />
+            <abp-input asp-for="Job.ApplicationCount"    />
+            <abp-input asp-for="Job.FavoriteCount"    />
+            <abp-input asp-for="Job.ShareCount"    />
+            <abp-input asp-for="Job.IsFeatured"    />
+            <abp-input asp-for="Job.IsUrgent"    />
+            <abp-input asp-for="Job.IsHot"    />
+            <abp-input asp-for="Job.SeoTitle"    />
+            <abp-input asp-for="Job.SeoDescription" text-area   />
+            <abp-input asp-for="Job.SeoKeywords"    />
+                                <abp-select asp-for="Job.ProvinceId" asp-items="Model.ProvinceLookupListRequired" label="@L["Province"].Value"/>
+            <abp-select asp-for="Job.WardId" asp-items="Model.WardLookupListRequired" label="@L["Ward"].Value"/>
+            <div class="form-group">
+                <label for="Job_JobCategoryId">@L["JobCategory"]</label>
+                <select id="Job_JobCategoryId"
+                         name="Job.JobCategoryId"
+                         class="custom-select form-control"
+                         data-value="@Model.Job.JobCategoryId" required>
+                    @if (Model.JobCategory != null)
+                    {
+                        <option value="@Model.Job.JobCategoryId">@Model.JobCategory.Name</option>
+                    }
+                </select>
+            </div>
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+        </abp-modal-footer>
+    </abp-modal>
+</form>

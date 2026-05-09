@@ -26,4 +26,11 @@ public class KHHubMenus
     public const string PlaceFavorites = Prefix + ".PlaceFavorites";
     public const string PlaceViews = Prefix + ".PlaceViews";
     public const string HomeBanners = Prefix + ".HomeBanners";
+    public const string JobCategories = Prefix + ".JobCategories";
+    public const string Jobs = Prefix + ".Jobs";
+    public const string JobTags = Prefix + ".JobTags";
+    public const string JobApplications = Prefix + ".JobApplications";
+    public const string JobFavorites = Prefix + ".JobFavorites";
+    public const string JobViews = Prefix + ".JobViews";
+    public const string JobTagMappings = Prefix + ".JobTagMappings";
 }

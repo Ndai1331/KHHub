@@ -1,3 +1,10 @@
+using KHHub.MasterDataService.Entities.JobTagMappings;
+using KHHub.MasterDataService.Entities.JobViews;
+using KHHub.MasterDataService.Entities.JobFavorites;
+using KHHub.MasterDataService.Entities.JobApplications;
+using KHHub.MasterDataService.Entities.JobTags;
+using KHHub.MasterDataService.Entities.Jobs;
+using KHHub.MasterDataService.Entities.JobCategories;
 using KHHub.MasterDataService.Entities.HomeBanners;
 using KHHub.MasterDataService.Entities.PlaceViews;
 using KHHub.MasterDataService.Entities.PlaceFavorites;
@@ -26,6 +33,13 @@ namespace KHHub.MasterDataService.Data;
 [ConnectionStringName(DatabaseName)]
 public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContext>, IHasEventInbox, IHasEventOutbox
 {
+    public DbSet<JobTagMapping> JobTagMappings { get; set; } = null!;
+    public DbSet<JobView> JobViews { get; set; } = null!;
+    public DbSet<JobFavorite> JobFavorites { get; set; } = null!;
+    public DbSet<JobApplication> JobApplications { get; set; } = null!;
+    public DbSet<JobTag> JobTags { get; set; } = null!;
+    public DbSet<Job> Jobs { get; set; } = null!;
+    public DbSet<JobCategory> JobCategories { get; set; } = null!;
     public DbSet<HomeBanner> HomeBanners { get; set; } = null!;
     public DbSet<PlaceView> PlaceViews { get; set; } = null!;
     public DbSet<PlaceFavorite> PlaceFavorites { get; set; } = null!;
@@ -347,6 +361,130 @@ public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContex
                 b.Property(x => x.IsActive).HasColumnName(nameof(HomeBanner.IsActive));
                 b.Property(x => x.StartDate).HasColumnName(nameof(HomeBanner.StartDate));
                 b.Property(x => x.EndDate).HasColumnName(nameof(HomeBanner.EndDate));
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<JobCategory>(b => {
+                b.ToTable(DbTablePrefix + "JobCategories", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.Name).HasColumnName(nameof(JobCategory.Name)).IsRequired().HasMaxLength(JobCategoryConsts.NameMaxLength);
+                b.Property(x => x.Slug).HasColumnName(nameof(JobCategory.Slug)).IsRequired().HasMaxLength(JobCategoryConsts.SlugMaxLength);
+                b.Property(x => x.Description).HasColumnName(nameof(JobCategory.Description)).HasMaxLength(JobCategoryConsts.DescriptionMaxLength);
+                b.Property(x => x.Icon).HasColumnName(nameof(JobCategory.Icon)).HasMaxLength(JobCategoryConsts.IconMaxLength);
+                b.Property(x => x.Color).HasColumnName(nameof(JobCategory.Color)).HasMaxLength(JobCategoryConsts.ColorMaxLength);
+                b.Property(x => x.ParentId).HasColumnName(nameof(JobCategory.ParentId));
+                b.Property(x => x.DisplayOrder).HasColumnName(nameof(JobCategory.DisplayOrder));
+                b.Property(x => x.IsActive).HasColumnName(nameof(JobCategory.IsActive));
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<Job>(b => {
+                b.ToTable(DbTablePrefix + "Jobs", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.Title).HasColumnName(nameof(Job.Title)).IsRequired().HasMaxLength(JobConsts.TitleMaxLength);
+                b.Property(x => x.Slug).HasColumnName(nameof(Job.Slug)).IsRequired().HasMaxLength(JobConsts.SlugMaxLength);
+                b.Property(x => x.Summary).HasColumnName(nameof(Job.Summary)).HasMaxLength(JobConsts.SummaryMaxLength);
+                b.Property(x => x.Description).HasColumnName(nameof(Job.Description));
+                b.Property(x => x.Requirements).HasColumnName(nameof(Job.Requirements));
+                b.Property(x => x.Benefits).HasColumnName(nameof(Job.Benefits));
+                b.Property(x => x.ThumbnailUrl).HasColumnName(nameof(Job.ThumbnailUrl)).HasMaxLength(JobConsts.ThumbnailUrlMaxLength);
+                b.Property(x => x.CoverImageUrl).HasColumnName(nameof(Job.CoverImageUrl)).HasMaxLength(JobConsts.CoverImageUrlMaxLength);
+                b.Property(x => x.EmploymentType).HasColumnName(nameof(Job.EmploymentType));
+                b.Property(x => x.WorkMode).HasColumnName(nameof(Job.WorkMode));
+                b.Property(x => x.ExperienceLevel).HasColumnName(nameof(Job.ExperienceLevel));
+                b.Property(x => x.SalaryMin).HasColumnName(nameof(Job.SalaryMin));
+                b.Property(x => x.SalaryMax).HasColumnName(nameof(Job.SalaryMax));
+                b.Property(x => x.SalaryText).HasColumnName(nameof(Job.SalaryText)).HasMaxLength(JobConsts.SalaryTextMaxLength);
+                b.Property(x => x.SalaryCurrency).HasColumnName(nameof(Job.SalaryCurrency)).HasMaxLength(JobConsts.SalaryCurrencyMaxLength);
+                b.Property(x => x.Location).HasColumnName(nameof(Job.Location)).HasMaxLength(JobConsts.LocationMaxLength);
+                b.Property(x => x.ContactEmail).HasColumnName(nameof(Job.ContactEmail)).HasMaxLength(JobConsts.ContactEmailMaxLength);
+                b.Property(x => x.ContactPhone).HasColumnName(nameof(Job.ContactPhone)).HasMaxLength(JobConsts.ContactPhoneMaxLength);
+                b.Property(x => x.ApplicationUrl).HasColumnName(nameof(Job.ApplicationUrl)).HasMaxLength(JobConsts.ApplicationUrlMaxLength);
+                b.Property(x => x.PublishedAt).HasColumnName(nameof(Job.PublishedAt));
+                b.Property(x => x.Status).HasColumnName(nameof(Job.Status));
+                b.Property(x => x.ViewCount).HasColumnName(nameof(Job.ViewCount));
+                b.Property(x => x.ApplicationCount).HasColumnName(nameof(Job.ApplicationCount));
+                b.Property(x => x.FavoriteCount).HasColumnName(nameof(Job.FavoriteCount));
+                b.Property(x => x.ShareCount).HasColumnName(nameof(Job.ShareCount));
+                b.Property(x => x.IsFeatured).HasColumnName(nameof(Job.IsFeatured));
+                b.Property(x => x.IsUrgent).HasColumnName(nameof(Job.IsUrgent));
+                b.Property(x => x.IsHot).HasColumnName(nameof(Job.IsHot));
+                b.Property(x => x.SeoTitle).HasColumnName(nameof(Job.SeoTitle)).IsRequired().HasMaxLength(JobConsts.SeoTitleMaxLength);
+                b.Property(x => x.SeoDescription).HasColumnName(nameof(Job.SeoDescription)).HasMaxLength(JobConsts.SeoDescriptionMaxLength);
+                b.Property(x => x.SeoKeywords).HasColumnName(nameof(Job.SeoKeywords)).HasMaxLength(JobConsts.SeoKeywordsMaxLength);
+                b.HasOne<Province>().WithMany().IsRequired().HasForeignKey(x => x.ProvinceId).OnDelete(DeleteBehavior.NoAction);
+                b.HasOne<Ward>().WithMany().IsRequired().HasForeignKey(x => x.WardId).OnDelete(DeleteBehavior.NoAction);
+                b.HasOne<JobCategory>().WithMany().IsRequired().HasForeignKey(x => x.JobCategoryId).OnDelete(DeleteBehavior.NoAction);
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<JobTag>(b => {
+                b.ToTable(DbTablePrefix + "JobTags", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.Name).HasColumnName(nameof(JobTag.Name)).IsRequired().HasMaxLength(JobTagConsts.NameMaxLength);
+                b.Property(x => x.Slug).HasColumnName(nameof(JobTag.Slug)).IsRequired().HasMaxLength(JobTagConsts.SlugMaxLength);
+                b.Property(x => x.Description).HasColumnName(nameof(JobTag.Description)).HasMaxLength(JobTagConsts.DescriptionMaxLength);
+                b.Property(x => x.UsageCount).HasColumnName(nameof(JobTag.UsageCount));
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<JobApplication>(b => {
+                b.ToTable(DbTablePrefix + "JobApplications", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.UserId).HasColumnName(nameof(JobApplication.UserId));
+                b.Property(x => x.FullName).HasColumnName(nameof(JobApplication.FullName)).IsRequired().HasMaxLength(JobApplicationConsts.FullNameMaxLength);
+                b.Property(x => x.Email).HasColumnName(nameof(JobApplication.Email));
+                b.Property(x => x.PhoneNumber).HasColumnName(nameof(JobApplication.PhoneNumber)).HasMaxLength(JobApplicationConsts.PhoneNumberMaxLength);
+                b.Property(x => x.CvUrl).HasColumnName(nameof(JobApplication.CvUrl)).HasMaxLength(JobApplicationConsts.CvUrlMaxLength);
+                b.Property(x => x.PortfolioUrl).HasColumnName(nameof(JobApplication.PortfolioUrl)).HasMaxLength(JobApplicationConsts.PortfolioUrlMaxLength);
+                b.Property(x => x.AppliedAt).HasColumnName(nameof(JobApplication.AppliedAt));
+                b.Property(x => x.Status).HasColumnName(nameof(JobApplication.Status));
+                b.HasOne<Job>().WithMany().IsRequired().HasForeignKey(x => x.JobId).OnDelete(DeleteBehavior.NoAction);
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<JobFavorite>(b => {
+                b.ToTable(DbTablePrefix + "JobFavorites", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.UserId).HasColumnName(nameof(JobFavorite.UserId));
+                b.HasOne<Job>().WithMany().IsRequired().HasForeignKey(x => x.JobId).OnDelete(DeleteBehavior.NoAction);
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<JobView>(b => {
+                b.ToTable(DbTablePrefix + "JobViews", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.UserId).HasColumnName(nameof(JobView.UserId));
+                b.Property(x => x.IpAddress).HasColumnName(nameof(JobView.IpAddress)).HasMaxLength(JobViewConsts.IpAddressMaxLength);
+                b.Property(x => x.Device).HasColumnName(nameof(JobView.Device)).HasMaxLength(JobViewConsts.DeviceMaxLength);
+                b.Property(x => x.ViewedAt).HasColumnName(nameof(JobView.ViewedAt));
+                b.Property(x => x.Duration).HasColumnName(nameof(JobView.Duration));
+                b.Property(x => x.Source).HasColumnName(nameof(JobView.Source)).HasMaxLength(JobViewConsts.SourceMaxLength);
+                b.HasOne<Job>().WithMany().IsRequired().HasForeignKey(x => x.JobId).OnDelete(DeleteBehavior.NoAction);
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<JobTagMapping>(b => {
+                b.ToTable(DbTablePrefix + "JobTagMappings", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.IsPrimary).HasColumnName(nameof(JobTagMapping.IsPrimary));
+                b.Property(x => x.SortOrder).HasColumnName(nameof(JobTagMapping.SortOrder));
+                b.HasOne<JobTag>().WithMany().IsRequired().HasForeignKey(x => x.JobTagId).OnDelete(DeleteBehavior.NoAction);
+                b.HasOne<Job>().WithMany().IsRequired().HasForeignKey(x => x.JobId).OnDelete(DeleteBehavior.NoAction);
             });
         }
     }

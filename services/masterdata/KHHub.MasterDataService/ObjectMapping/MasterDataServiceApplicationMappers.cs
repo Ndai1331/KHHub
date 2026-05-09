@@ -1,3 +1,17 @@
+using KHHub.MasterDataService.Services.Dtos.JobTagMappings;
+using KHHub.MasterDataService.Entities.JobTagMappings;
+using KHHub.MasterDataService.Services.Dtos.JobViews;
+using KHHub.MasterDataService.Entities.JobViews;
+using KHHub.MasterDataService.Services.Dtos.JobFavorites;
+using KHHub.MasterDataService.Entities.JobFavorites;
+using KHHub.MasterDataService.Services.Dtos.JobApplications;
+using KHHub.MasterDataService.Entities.JobApplications;
+using KHHub.MasterDataService.Services.Dtos.JobTags;
+using KHHub.MasterDataService.Entities.JobTags;
+using KHHub.MasterDataService.Services.Dtos.Jobs;
+using KHHub.MasterDataService.Entities.Jobs;
+using KHHub.MasterDataService.Services.Dtos.JobCategories;
+using KHHub.MasterDataService.Entities.JobCategories;
 using KHHub.MasterDataService.Services.Dtos.HomeBanners;
 using KHHub.MasterDataService.Entities.HomeBanners;
 using KHHub.MasterDataService.Services.Dtos.PlaceViews;
@@ -466,4 +480,173 @@ public partial class HomeBannerToHomeBannerExcelDtoMappers : MapperBase<HomeBann
 {
     public override partial HomeBannerExcelDto Map(HomeBanner source);
     public override partial void Map(HomeBanner source, HomeBannerExcelDto destination);
+}
+
+[Mapper]
+public partial class JobCategoryToJobCategoryDtoMappers : MapperBase<JobCategory, JobCategoryDto>
+{
+    public override partial JobCategoryDto Map(JobCategory source);
+    public override partial void Map(JobCategory source, JobCategoryDto destination);
+}
+
+[Mapper]
+public partial class JobCategoryToJobCategoryExcelDtoMappers : MapperBase<JobCategory, JobCategoryExcelDto>
+{
+    public override partial JobCategoryExcelDto Map(JobCategory source);
+    public override partial void Map(JobCategory source, JobCategoryExcelDto destination);
+}
+
+[Mapper]
+public partial class JobToJobDtoMappers : MapperBase<Job, JobDto>
+{
+    public override partial JobDto Map(Job source);
+    public override partial void Map(Job source, JobDto destination);
+}
+
+[Mapper]
+public partial class JobToJobExcelDtoMappers : MapperBase<Job, JobExcelDto>
+{
+    public override partial JobExcelDto Map(Job source);
+    public override partial void Map(Job source, JobExcelDto destination);
+}
+
+[Mapper]
+public partial class JobWithNavigationPropertiesToJobWithNavigationPropertiesDtoMapper : MapperBase<JobWithNavigationProperties, JobWithNavigationPropertiesDto>
+{
+    public override partial JobWithNavigationPropertiesDto Map(JobWithNavigationProperties source);
+    public override partial void Map(JobWithNavigationProperties source, JobWithNavigationPropertiesDto destination);
+}
+
+[Mapper]
+public partial class JobCategoryToLookupDtoGuidMapper : MapperBase<JobCategory, LookupDto<Guid>>
+{
+    public override partial LookupDto<Guid> Map(JobCategory source);
+    public override partial void Map(JobCategory source, LookupDto<Guid> destination);
+
+    public override void AfterMap(JobCategory source, LookupDto<Guid> destination)
+    {
+        destination.DisplayName = source.Name;
+    }
+}
+
+[Mapper]
+public partial class JobTagToJobTagDtoMappers : MapperBase<JobTag, JobTagDto>
+{
+    public override partial JobTagDto Map(JobTag source);
+    public override partial void Map(JobTag source, JobTagDto destination);
+}
+
+[Mapper]
+public partial class JobTagToJobTagExcelDtoMappers : MapperBase<JobTag, JobTagExcelDto>
+{
+    public override partial JobTagExcelDto Map(JobTag source);
+    public override partial void Map(JobTag source, JobTagExcelDto destination);
+}
+
+[Mapper]
+public partial class JobApplicationToJobApplicationDtoMappers : MapperBase<JobApplication, JobApplicationDto>
+{
+    public override partial JobApplicationDto Map(JobApplication source);
+    public override partial void Map(JobApplication source, JobApplicationDto destination);
+}
+
+[Mapper]
+public partial class JobApplicationToJobApplicationExcelDtoMappers : MapperBase<JobApplication, JobApplicationExcelDto>
+{
+    public override partial JobApplicationExcelDto Map(JobApplication source);
+    public override partial void Map(JobApplication source, JobApplicationExcelDto destination);
+}
+
+[Mapper]
+public partial class JobApplicationWithNavigationPropertiesToJobApplicationWithNavigationPropertiesDtoMapper : MapperBase<JobApplicationWithNavigationProperties, JobApplicationWithNavigationPropertiesDto>
+{
+    public override partial JobApplicationWithNavigationPropertiesDto Map(JobApplicationWithNavigationProperties source);
+    public override partial void Map(JobApplicationWithNavigationProperties source, JobApplicationWithNavigationPropertiesDto destination);
+}
+
+[Mapper]
+public partial class JobToLookupDtoGuidMapper : MapperBase<Job, LookupDto<Guid>>
+{
+    public override partial LookupDto<Guid> Map(Job source);
+    public override partial void Map(Job source, LookupDto<Guid> destination);
+
+    public override void AfterMap(Job source, LookupDto<Guid> destination)
+    {
+        destination.DisplayName = source.Title;
+    }
+}
+
+[Mapper]
+public partial class JobFavoriteToJobFavoriteDtoMappers : MapperBase<JobFavorite, JobFavoriteDto>
+{
+    public override partial JobFavoriteDto Map(JobFavorite source);
+    public override partial void Map(JobFavorite source, JobFavoriteDto destination);
+}
+
+[Mapper]
+public partial class JobFavoriteToJobFavoriteExcelDtoMappers : MapperBase<JobFavorite, JobFavoriteExcelDto>
+{
+    public override partial JobFavoriteExcelDto Map(JobFavorite source);
+    public override partial void Map(JobFavorite source, JobFavoriteExcelDto destination);
+}
+
+[Mapper]
+public partial class JobFavoriteWithNavigationPropertiesToJobFavoriteWithNavigationPropertiesDtoMapper : MapperBase<JobFavoriteWithNavigationProperties, JobFavoriteWithNavigationPropertiesDto>
+{
+    public override partial JobFavoriteWithNavigationPropertiesDto Map(JobFavoriteWithNavigationProperties source);
+    public override partial void Map(JobFavoriteWithNavigationProperties source, JobFavoriteWithNavigationPropertiesDto destination);
+}
+
+[Mapper]
+public partial class JobViewToJobViewDtoMappers : MapperBase<JobView, JobViewDto>
+{
+    public override partial JobViewDto Map(JobView source);
+    public override partial void Map(JobView source, JobViewDto destination);
+}
+
+[Mapper]
+public partial class JobViewToJobViewExcelDtoMappers : MapperBase<JobView, JobViewExcelDto>
+{
+    public override partial JobViewExcelDto Map(JobView source);
+    public override partial void Map(JobView source, JobViewExcelDto destination);
+}
+
+[Mapper]
+public partial class JobViewWithNavigationPropertiesToJobViewWithNavigationPropertiesDtoMapper : MapperBase<JobViewWithNavigationProperties, JobViewWithNavigationPropertiesDto>
+{
+    public override partial JobViewWithNavigationPropertiesDto Map(JobViewWithNavigationProperties source);
+    public override partial void Map(JobViewWithNavigationProperties source, JobViewWithNavigationPropertiesDto destination);
+}
+
+[Mapper]
+public partial class JobTagMappingToJobTagMappingDtoMappers : MapperBase<JobTagMapping, JobTagMappingDto>
+{
+    public override partial JobTagMappingDto Map(JobTagMapping source);
+    public override partial void Map(JobTagMapping source, JobTagMappingDto destination);
+}
+
+[Mapper]
+public partial class JobTagMappingToJobTagMappingExcelDtoMappers : MapperBase<JobTagMapping, JobTagMappingExcelDto>
+{
+    public override partial JobTagMappingExcelDto Map(JobTagMapping source);
+    public override partial void Map(JobTagMapping source, JobTagMappingExcelDto destination);
+}
+
+[Mapper]
+public partial class JobTagMappingWithNavigationPropertiesToJobTagMappingWithNavigationPropertiesDtoMapper : MapperBase<JobTagMappingWithNavigationProperties, JobTagMappingWithNavigationPropertiesDto>
+{
+    public override partial JobTagMappingWithNavigationPropertiesDto Map(JobTagMappingWithNavigationProperties source);
+    public override partial void Map(JobTagMappingWithNavigationProperties source, JobTagMappingWithNavigationPropertiesDto destination);
+}
+
+[Mapper]
+public partial class JobTagToLookupDtoGuidMapper : MapperBase<JobTag, LookupDto<Guid>>
+{
+    public override partial LookupDto<Guid> Map(JobTag source);
+    public override partial void Map(JobTag source, LookupDto<Guid> destination);
+
+    public override void AfterMap(JobTag source, LookupDto<Guid> destination)
+    {
+        destination.DisplayName = source.Name;
+    }
 }

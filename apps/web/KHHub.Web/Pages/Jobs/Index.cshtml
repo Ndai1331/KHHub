@@ -1,0 +1,249 @@
+@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using KHHub.MasterDataService.Permissions
+@using KHHub.Web.Pages.Jobs
+@using KHHub.Web.Navigation
+@using Microsoft.AspNetCore.Mvc.Localization
+@using KHHub.MasterDataService.Localization
+@inject IHtmlLocalizer<MasterDataServiceResource> L
+@inject IAuthorizationService Authorization
+@model IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["Jobs"].Value;
+    PageLayout.Content.MenuItemName = KHHubMenus.Jobs;
+}
+@section styles
+{
+@*//<suite-custom-code-block-1>*@
+@*//</suite-custom-code-block-1>*@
+}
+@section scripts
+{
+    <abp-script src="/Pages/Jobs/index.js" />
+@*//<suite-custom-code-block-2>*@
+@*//</suite-custom-code-block-2>*@
+}
+@section content_toolbar {
+    <abp-button id="ExportToExcelButton" text="@L["ExportToExcel"].Value" icon="download" size="Small" button-type="Primary" />
+    @if (await Authorization.IsGrantedAsync(MasterDataServicePermissions.Jobs.Create))
+    {
+        <abp-button id="NewJobButton" text="@L["NewJob"].Value" icon="plus" size="Small" button-type="Primary" />
+    }
+@*//<suite-custom-code-block-3>*@
+@*//</suite-custom-code-block-3>*@
+}
+@*//<suite-custom-code-block-4>*@
+@*//</suite-custom-code-block-4>*@
+<abp-card>
+    <abp-card-body>
+		<abp-row class="mb-3">
+            <abp-column size-md="_8" size-lg="_10">
+                <div class="mb-3">
+                    <form id="SearchForm" autocomplete="off">
+                        <div class="input-group">
+                            <input class="form-control page-search-filter-text" id="FilterText" placeholder="@L["Search"]"/>
+                            <abp-button button-type="Primary" type="submit" icon="search"/>
+                        </div>
+                    </form>
+                </div>
+            </abp-column>
+            <abp-column size-md="_4" size-lg="_2">
+                <div class="mb-3">
+                    <abp-button style="width:100%" id="AdvancedFilterSectionToggler" button-type="Outline_Primary">
+                        @L["Filters"]<i aria-hidden="true" class="fa ms-1 fa-angle-down"></i>
+                    </abp-button>
+                </div>
+            </abp-column>
+        </abp-row>
+        <abp-row id="AdvancedFilterSection" class="mt-3" style="display: none;">
+            <abp-column size="_3">
+                <abp-input asp-for="TitleFilter" label="@L["Title"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SlugFilter" label="@L["Slug"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SummaryFilter" label="@L["Summary"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="DescriptionFilter" label="@L["Description"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="RequirementsFilter" label="@L["Requirements"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="BenefitsFilter" label="@L["Benefits"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ThumbnailUrlFilter" label="@L["ThumbnailUrl"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="CoverImageUrlFilter" label="@L["CoverImageUrl"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="EmploymentTypeFilter" label="@L["EmploymentType"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="WorkModeFilter" label="@L["WorkMode"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="ExperienceLevelFilter" label="@L["ExperienceLevel"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SalaryMinFilterMin" label="@L["MinSalaryMin"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SalaryMinFilterMax" label="@L["MaxSalaryMin"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SalaryMaxFilterMin" label="@L["MinSalaryMax"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SalaryMaxFilterMax" label="@L["MaxSalaryMax"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SalaryTextFilter" label="@L["SalaryText"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SalaryCurrencyFilter" label="@L["SalaryCurrency"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="LocationFilter" label="@L["Location"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ContactEmailFilter" label="@L["ContactEmail"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ContactPhoneFilter" label="@L["ContactPhone"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ApplicationUrlFilter" label="@L["ApplicationUrl"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-date-picker auto-update-input="false" today-button-classes="btn-primary" asp-for="PublishedAtFilterMin" label="@L["MinPublishedAt"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-date-picker auto-update-input="false" today-button-classes="btn-primary" asp-for="PublishedAtFilterMax" label="@L["MaxPublishedAt"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="StatusFilter" label="@L["Status"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ViewCountFilterMin" label="@L["MinViewCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ViewCountFilterMax" label="@L["MaxViewCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ApplicationCountFilterMin" label="@L["MinApplicationCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ApplicationCountFilterMax" label="@L["MaxApplicationCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="FavoriteCountFilterMin" label="@L["MinFavoriteCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="FavoriteCountFilterMax" label="@L["MaxFavoriteCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ShareCountFilterMin" label="@L["MinShareCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="ShareCountFilterMax" label="@L["MaxShareCount"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="IsFeaturedFilter" label="@L["IsFeatured"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="IsUrgentFilter" label="@L["IsUrgent"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="IsHotFilter" label="@L["IsHot"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SeoTitleFilter" label="@L["SeoTitle"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SeoDescriptionFilter" label="@L["SeoDescription"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="SeoKeywordsFilter" label="@L["SeoKeywords"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="ProvinceIdFilter" label="@L["Province"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="WardIdFilter" label="@L["Ward"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-select asp-for="JobCategoryIdFilter" label="@L["JobCategory"].Value" />
+            </abp-column>
+@*//<suite-custom-code-block-5>*@
+@*//</suite-custom-code-block-5>*@
+        </abp-row>
+        <div id="bulk-delete-context-menu" class="d-none">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <p class="lead mb-0 d-none" id="items-selected-info-message"></p>
+                <div>
+                    <button class="btn btn-outline-secondary d-none mx-1" id="select-all-items-btn"></button>
+                    <button class="btn btn-outline-secondary d-none mx-1" id="clear-selection-btn">
+                        @L["ClearSelection"]
+                    </button>
+                    <button class="btn btn-danger mx-1" id="delete-selected-items">
+                        <i class="fa fa-trash"></i> @L["Delete"]
+                    </button>
+                </div>
+            </div>
+            <hr class="my-1 mx-0"/>
+        </div>
+        <abp-table striped-rows="true" id="JobsTable">
+            <thead>
+				<tr>
+				    <th id="BulkDeleteCheckboxTheader"><input type="checkbox" id="select_all" class="form-check-input" /></th>
+					<th>@L["Actions"]</th>
+					<th>@L["Title"]</th>
+					<th>@L["Slug"]</th>
+					<th>@L["Summary"]</th>
+					<th>@L["Description"]</th>
+					<th>@L["Requirements"]</th>
+					<th>@L["Benefits"]</th>
+					<th>@L["ThumbnailUrl"]</th>
+					<th>@L["CoverImageUrl"]</th>
+					<th>@L["EmploymentType"]</th>
+					<th>@L["WorkMode"]</th>
+					<th>@L["ExperienceLevel"]</th>
+					<th>@L["SalaryMin"]</th>
+					<th>@L["SalaryMax"]</th>
+					<th>@L["SalaryText"]</th>
+					<th>@L["SalaryCurrency"]</th>
+					<th>@L["Location"]</th>
+					<th>@L["ContactEmail"]</th>
+					<th>@L["ContactPhone"]</th>
+					<th>@L["ApplicationUrl"]</th>
+					<th>@L["PublishedAt"]</th>
+					<th>@L["Status"]</th>
+					<th>@L["ViewCount"]</th>
+					<th>@L["ApplicationCount"]</th>
+					<th>@L["FavoriteCount"]</th>
+					<th>@L["ShareCount"]</th>
+					<th>@L["IsFeatured"]</th>
+					<th>@L["IsUrgent"]</th>
+					<th>@L["IsHot"]</th>
+					<th>@L["SeoTitle"]</th>
+					<th>@L["SeoDescription"]</th>
+					<th>@L["SeoKeywords"]</th>
+					<th>@L["Province"]</th>
+					<th>@L["Ward"]</th>
+					<th>@L["JobCategory"]</th>
+@*//<suite-custom-code-block-6>*@
+@*//</suite-custom-code-block-6>*@
+				</tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>
+@*//<suite-custom-code-block-7>*@
+@*//</suite-custom-code-block-7>*@

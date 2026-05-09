@@ -209,6 +209,13 @@ public class KHHubWebModule : AbpModule
             options.Conventions.AuthorizePage("/PlaceFavorites/Index", MasterDataServicePermissions.PlaceFavorites.Default);
             options.Conventions.AuthorizePage("/PlaceViews/Index", MasterDataServicePermissions.PlaceViews.Default);
             options.Conventions.AuthorizePage("/HomeBanners/Index", MasterDataServicePermissions.HomeBanners.Default);
+            options.Conventions.AuthorizePage("/JobCategories/Index", MasterDataServicePermissions.JobCategories.Default);
+            options.Conventions.AuthorizePage("/Jobs/Index", MasterDataServicePermissions.Jobs.Default);
+            options.Conventions.AuthorizePage("/JobTags/Index", MasterDataServicePermissions.JobTags.Default);
+            options.Conventions.AuthorizePage("/JobApplications/Index", MasterDataServicePermissions.JobApplications.Default);
+            options.Conventions.AuthorizePage("/JobFavorites/Index", MasterDataServicePermissions.JobFavorites.Default);
+            options.Conventions.AuthorizePage("/JobViews/Index", MasterDataServicePermissions.JobViews.Default);
+            options.Conventions.AuthorizePage("/JobTagMappings/Index", MasterDataServicePermissions.JobTagMappings.Default);
         });
     }
 

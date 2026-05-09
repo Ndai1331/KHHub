@@ -1,3 +1,17 @@
+using KHHub.MasterDataService.Services.Dtos.JobTagMappings;
+using KHHub.Web.Pages.JobTagMappings;
+using KHHub.MasterDataService.Services.Dtos.JobViews;
+using KHHub.Web.Pages.JobViews;
+using KHHub.MasterDataService.Services.Dtos.JobFavorites;
+using KHHub.Web.Pages.JobFavorites;
+using KHHub.MasterDataService.Services.Dtos.JobApplications;
+using KHHub.Web.Pages.JobApplications;
+using KHHub.MasterDataService.Services.Dtos.JobTags;
+using KHHub.Web.Pages.JobTags;
+using KHHub.MasterDataService.Services.Dtos.Jobs;
+using KHHub.Web.Pages.Jobs;
+using KHHub.MasterDataService.Services.Dtos.JobCategories;
+using KHHub.Web.Pages.JobCategories;
 using KHHub.MasterDataService.Services.Dtos.HomeBanners;
 using KHHub.Web.Pages.HomeBanners;
 using KHHub.MasterDataService.Services.Dtos.PlaceCategories;
@@ -426,4 +440,151 @@ public partial class HomeBannerCreateViewModelToHomeBannerCreateDto : MapperBase
 {
     public override partial HomeBannerCreateDto Map(HomeBannerCreateViewModel source);
     public override partial void Map(HomeBannerCreateViewModel source, HomeBannerCreateDto destination);
+}
+
+[Mapper]
+public partial class JobCategoryDtoToJobCategoryUpdateViewModelMapper : MapperBase<JobCategoryDto, JobCategoryUpdateViewModel>
+{
+    public override partial JobCategoryUpdateViewModel Map(JobCategoryDto source);
+    public override partial void Map(JobCategoryDto source, JobCategoryUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class JobCategoryUpdateViewModelToJobCategoryUpdateDto : MapperBase<JobCategoryUpdateViewModel, JobCategoryUpdateDto>
+{
+    public override partial JobCategoryUpdateDto Map(JobCategoryUpdateViewModel source);
+    public override partial void Map(JobCategoryUpdateViewModel source, JobCategoryUpdateDto destination);
+}
+
+[Mapper]
+public partial class JobCategoryCreateViewModelToJobCategoryCreateDto : MapperBase<JobCategoryCreateViewModel, JobCategoryCreateDto>
+{
+    public override partial JobCategoryCreateDto Map(JobCategoryCreateViewModel source);
+    public override partial void Map(JobCategoryCreateViewModel source, JobCategoryCreateDto destination);
+}
+
+[Mapper]
+public partial class JobDtoToJobUpdateViewModelMapper : MapperBase<JobDto, JobUpdateViewModel>
+{
+    public override partial JobUpdateViewModel Map(JobDto source);
+    public override partial void Map(JobDto source, JobUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class JobUpdateViewModelToJobUpdateDto : MapperBase<JobUpdateViewModel, JobUpdateDto>
+{
+    public override partial JobUpdateDto Map(JobUpdateViewModel source);
+    public override partial void Map(JobUpdateViewModel source, JobUpdateDto destination);
+}
+
+[Mapper]
+public partial class JobCreateViewModelToJobCreateDto : MapperBase<JobCreateViewModel, JobCreateDto>
+{
+    public override partial JobCreateDto Map(JobCreateViewModel source);
+    public override partial void Map(JobCreateViewModel source, JobCreateDto destination);
+}
+
+[Mapper]
+public partial class JobTagDtoToJobTagUpdateViewModelMapper : MapperBase<JobTagDto, JobTagUpdateViewModel>
+{
+    public override partial JobTagUpdateViewModel Map(JobTagDto source);
+    public override partial void Map(JobTagDto source, JobTagUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class JobTagUpdateViewModelToJobTagUpdateDto : MapperBase<JobTagUpdateViewModel, JobTagUpdateDto>
+{
+    public override partial JobTagUpdateDto Map(JobTagUpdateViewModel source);
+    public override partial void Map(JobTagUpdateViewModel source, JobTagUpdateDto destination);
+}
+
+[Mapper]
+public partial class JobTagCreateViewModelToJobTagCreateDto : MapperBase<JobTagCreateViewModel, JobTagCreateDto>
+{
+    public override partial JobTagCreateDto Map(JobTagCreateViewModel source);
+    public override partial void Map(JobTagCreateViewModel source, JobTagCreateDto destination);
+}
+
+[Mapper]
+public partial class JobApplicationDtoToJobApplicationUpdateViewModelMapper : MapperBase<JobApplicationDto, JobApplicationUpdateViewModel>
+{
+    public override partial JobApplicationUpdateViewModel Map(JobApplicationDto source);
+    public override partial void Map(JobApplicationDto source, JobApplicationUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class JobApplicationUpdateViewModelToJobApplicationUpdateDto : MapperBase<JobApplicationUpdateViewModel, JobApplicationUpdateDto>
+{
+    public override partial JobApplicationUpdateDto Map(JobApplicationUpdateViewModel source);
+    public override partial void Map(JobApplicationUpdateViewModel source, JobApplicationUpdateDto destination);
+}
+
+[Mapper]
+public partial class JobApplicationCreateViewModelToJobApplicationCreateDto : MapperBase<JobApplicationCreateViewModel, JobApplicationCreateDto>
+{
+    public override partial JobApplicationCreateDto Map(JobApplicationCreateViewModel source);
+    public override partial void Map(JobApplicationCreateViewModel source, JobApplicationCreateDto destination);
+}
+
+[Mapper]
+public partial class JobFavoriteDtoToJobFavoriteUpdateViewModelMapper : MapperBase<JobFavoriteDto, JobFavoriteUpdateViewModel>
+{
+    public override partial JobFavoriteUpdateViewModel Map(JobFavoriteDto source);
+    public override partial void Map(JobFavoriteDto source, JobFavoriteUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class JobFavoriteUpdateViewModelToJobFavoriteUpdateDto : MapperBase<JobFavoriteUpdateViewModel, JobFavoriteUpdateDto>
+{
+    public override partial JobFavoriteUpdateDto Map(JobFavoriteUpdateViewModel source);
+    public override partial void Map(JobFavoriteUpdateViewModel source, JobFavoriteUpdateDto destination);
+}
+
+[Mapper]
+public partial class JobFavoriteCreateViewModelToJobFavoriteCreateDto : MapperBase<JobFavoriteCreateViewModel, JobFavoriteCreateDto>
+{
+    public override partial JobFavoriteCreateDto Map(JobFavoriteCreateViewModel source);
+    public override partial void Map(JobFavoriteCreateViewModel source, JobFavoriteCreateDto destination);
+}
+
+[Mapper]
+public partial class JobViewDtoToJobViewUpdateViewModelMapper : MapperBase<JobViewDto, JobViewUpdateViewModel>
+{
+    public override partial JobViewUpdateViewModel Map(JobViewDto source);
+    public override partial void Map(JobViewDto source, JobViewUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class JobViewUpdateViewModelToJobViewUpdateDto : MapperBase<JobViewUpdateViewModel, JobViewUpdateDto>
+{
+    public override partial JobViewUpdateDto Map(JobViewUpdateViewModel source);
+    public override partial void Map(JobViewUpdateViewModel source, JobViewUpdateDto destination);
+}
+
+[Mapper]
+public partial class JobViewCreateViewModelToJobViewCreateDto : MapperBase<JobViewCreateViewModel, JobViewCreateDto>
+{
+    public override partial JobViewCreateDto Map(JobViewCreateViewModel source);
+    public override partial void Map(JobViewCreateViewModel source, JobViewCreateDto destination);
+}
+
+[Mapper]
+public partial class JobTagMappingDtoToJobTagMappingUpdateViewModelMapper : MapperBase<JobTagMappingDto, JobTagMappingUpdateViewModel>
+{
+    public override partial JobTagMappingUpdateViewModel Map(JobTagMappingDto source);
+    public override partial void Map(JobTagMappingDto source, JobTagMappingUpdateViewModel destination);
+}
+
+[Mapper]
+public partial class JobTagMappingUpdateViewModelToJobTagMappingUpdateDto : MapperBase<JobTagMappingUpdateViewModel, JobTagMappingUpdateDto>
+{
+    public override partial JobTagMappingUpdateDto Map(JobTagMappingUpdateViewModel source);
+    public override partial void Map(JobTagMappingUpdateViewModel source, JobTagMappingUpdateDto destination);
+}
+
+[Mapper]
+public partial class JobTagMappingCreateViewModelToJobTagMappingCreateDto : MapperBase<JobTagMappingCreateViewModel, JobTagMappingCreateDto>
+{
+    public override partial JobTagMappingCreateDto Map(JobTagMappingCreateViewModel source);
+    public override partial void Map(JobTagMappingCreateViewModel source, JobTagMappingCreateDto destination);
 }

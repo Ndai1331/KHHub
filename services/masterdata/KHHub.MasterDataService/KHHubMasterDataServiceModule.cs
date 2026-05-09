@@ -1,3 +1,10 @@
+using KHHub.MasterDataService.Entities.JobTagMappings;
+using KHHub.MasterDataService.Entities.JobViews;
+using KHHub.MasterDataService.Entities.JobFavorites;
+using KHHub.MasterDataService.Entities.JobApplications;
+using KHHub.MasterDataService.Entities.JobTags;
+using KHHub.MasterDataService.Entities.Jobs;
+using KHHub.MasterDataService.Entities.JobCategories;
 using KHHub.MasterDataService.Entities.HomeBanners;
 using KHHub.MasterDataService.Entities.PlaceViews;
 using KHHub.MasterDataService.Entities.PlaceFavorites;
@@ -281,6 +288,13 @@ public class KHHubMasterDataServiceModule : AbpModule
             options.AddRepository<KHHub.MasterDataService.Entities.PlaceFavorites.PlaceFavorite, Data.PlaceFavorites.EfCorePlaceFavoriteRepository>();
             options.AddRepository<KHHub.MasterDataService.Entities.PlaceViews.PlaceView, Data.PlaceViews.EfCorePlaceViewRepository>();
             options.AddRepository<KHHub.MasterDataService.Entities.HomeBanners.HomeBanner, Data.HomeBanners.EfCoreHomeBannerRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.JobCategories.JobCategory, Data.JobCategories.EfCoreJobCategoryRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.Jobs.Job, Data.Jobs.EfCoreJobRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.JobTags.JobTag, Data.JobTags.EfCoreJobTagRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.JobApplications.JobApplication, Data.JobApplications.EfCoreJobApplicationRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.JobFavorites.JobFavorite, Data.JobFavorites.EfCoreJobFavoriteRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.JobViews.JobView, Data.JobViews.EfCoreJobViewRepository>();
+            options.AddRepository<KHHub.MasterDataService.Entities.JobTagMappings.JobTagMapping, Data.JobTagMappings.EfCoreJobTagMappingRepository>();
         });
         Configure<AbpDbContextOptions>(options => {
             options.Configure(opts => {
@@ -407,27 +421,19 @@ public class KHHubMasterDataServiceModule : AbpModule
 
         private static bool IsHttpGetAction(ActionModel action)
         {
-            return action.Selectors.Any(selector =>
-                selector.ActionConstraints?
-                    .OfType<HttpMethodActionConstraint>()
-                    .Any(constraint => constraint.HttpMethods.Any(method =>
-                        string.Equals(method, "GET", StringComparison.OrdinalIgnoreCase))) == true);
+            return action.Selectors.Any(selector => selector.ActionConstraints?.OfType<HttpMethodActionConstraint>().Any(constraint => constraint.HttpMethods.Any(method => string.Equals(method, "GET", StringComparison.OrdinalIgnoreCase))) == true);
         }
 
         private static bool IsMasterDataApiAction(ActionModel action)
         {
-            return action.Selectors.Any(selector =>
-            {
+            return action.Selectors.Any(selector => {
                 var template = selector.AttributeRouteModel?.Template;
                 if (string.IsNullOrWhiteSpace(template))
                 {
                     return false;
                 }
 
-                return template.StartsWith("api/masterdata/", StringComparison.OrdinalIgnoreCase)
-                    || template.StartsWith("api/master-data/", StringComparison.OrdinalIgnoreCase)
-                    || string.Equals(template, "api/masterdata", StringComparison.OrdinalIgnoreCase)
-                    || string.Equals(template, "api/master-data", StringComparison.OrdinalIgnoreCase);
+                return template.StartsWith("api/masterdata/", StringComparison.OrdinalIgnoreCase) || template.StartsWith("api/master-data/", StringComparison.OrdinalIgnoreCase) || string.Equals(template, "api/masterdata", StringComparison.OrdinalIgnoreCase) || string.Equals(template, "api/master-data", StringComparison.OrdinalIgnoreCase);
             });
         }
     }

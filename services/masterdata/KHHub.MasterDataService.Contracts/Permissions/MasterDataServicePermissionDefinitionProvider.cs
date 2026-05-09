@@ -77,6 +77,34 @@ public class MasterDataServicePermissionDefinitionProvider : PermissionDefinitio
         homeBannerPermission.AddChild(MasterDataServicePermissions.HomeBanners.Create, L("Permission:Create"));
         homeBannerPermission.AddChild(MasterDataServicePermissions.HomeBanners.Edit, L("Permission:Edit"));
         homeBannerPermission.AddChild(MasterDataServicePermissions.HomeBanners.Delete, L("Permission:Delete"));
+        var jobCategoryPermission = myGroup.AddPermission(MasterDataServicePermissions.JobCategories.Default, L("Permission:JobCategories"));
+        jobCategoryPermission.AddChild(MasterDataServicePermissions.JobCategories.Create, L("Permission:Create"));
+        jobCategoryPermission.AddChild(MasterDataServicePermissions.JobCategories.Edit, L("Permission:Edit"));
+        jobCategoryPermission.AddChild(MasterDataServicePermissions.JobCategories.Delete, L("Permission:Delete"));
+        var jobPermission = myGroup.AddPermission(MasterDataServicePermissions.Jobs.Default, L("Permission:Jobs"));
+        jobPermission.AddChild(MasterDataServicePermissions.Jobs.Create, L("Permission:Create"));
+        jobPermission.AddChild(MasterDataServicePermissions.Jobs.Edit, L("Permission:Edit"));
+        jobPermission.AddChild(MasterDataServicePermissions.Jobs.Delete, L("Permission:Delete"));
+        var jobTagPermission = myGroup.AddPermission(MasterDataServicePermissions.JobTags.Default, L("Permission:JobTags"));
+        jobTagPermission.AddChild(MasterDataServicePermissions.JobTags.Create, L("Permission:Create"));
+        jobTagPermission.AddChild(MasterDataServicePermissions.JobTags.Edit, L("Permission:Edit"));
+        jobTagPermission.AddChild(MasterDataServicePermissions.JobTags.Delete, L("Permission:Delete"));
+        var jobApplicationPermission = myGroup.AddPermission(MasterDataServicePermissions.JobApplications.Default, L("Permission:JobApplications"));
+        jobApplicationPermission.AddChild(MasterDataServicePermissions.JobApplications.Create, L("Permission:Create"));
+        jobApplicationPermission.AddChild(MasterDataServicePermissions.JobApplications.Edit, L("Permission:Edit"));
+        jobApplicationPermission.AddChild(MasterDataServicePermissions.JobApplications.Delete, L("Permission:Delete"));
+        var jobFavoritePermission = myGroup.AddPermission(MasterDataServicePermissions.JobFavorites.Default, L("Permission:JobFavorites"));
+        jobFavoritePermission.AddChild(MasterDataServicePermissions.JobFavorites.Create, L("Permission:Create"));
+        jobFavoritePermission.AddChild(MasterDataServicePermissions.JobFavorites.Edit, L("Permission:Edit"));
+        jobFavoritePermission.AddChild(MasterDataServicePermissions.JobFavorites.Delete, L("Permission:Delete"));
+        var jobViewPermission = myGroup.AddPermission(MasterDataServicePermissions.JobViews.Default, L("Permission:JobViews"));
+        jobViewPermission.AddChild(MasterDataServicePermissions.JobViews.Create, L("Permission:Create"));
+        jobViewPermission.AddChild(MasterDataServicePermissions.JobViews.Edit, L("Permission:Edit"));
+        jobViewPermission.AddChild(MasterDataServicePermissions.JobViews.Delete, L("Permission:Delete"));
+        var jobTagMappingPermission = myGroup.AddPermission(MasterDataServicePermissions.JobTagMappings.Default, L("Permission:JobTagMappings"));
+        jobTagMappingPermission.AddChild(MasterDataServicePermissions.JobTagMappings.Create, L("Permission:Create"));
+        jobTagMappingPermission.AddChild(MasterDataServicePermissions.JobTagMappings.Edit, L("Permission:Edit"));
+        jobTagMappingPermission.AddChild(MasterDataServicePermissions.JobTagMappings.Delete, L("Permission:Delete"));
     }
 
     private static LocalizableString L(string name)

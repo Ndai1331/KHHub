@@ -146,4 +146,60 @@ public class MasterDataServicePermissions
         public const string Create = Default + ".Create";
         public const string Delete = Default + ".Delete";
     }
+
+    public static class JobCategories
+    {
+        public const string Default = GroupName + ".JobCategories";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class Jobs
+    {
+        public const string Default = GroupName + ".Jobs";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class JobTags
+    {
+        public const string Default = GroupName + ".JobTags";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class JobApplications
+    {
+        public const string Default = GroupName + ".JobApplications";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class JobFavorites
+    {
+        public const string Default = GroupName + ".JobFavorites";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class JobViews
+    {
+        public const string Default = GroupName + ".JobViews";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class JobTagMappings
+    {
+        public const string Default = GroupName + ".JobTagMappings";
+        public const string Edit = Default + ".Edit";
+        public const string Create = Default + ".Create";
+        public const string Delete = Default + ".Delete";
+    }
 }

@@ -93,6 +93,13 @@ public class KHHubMenuContributor : IMenuContributor
         mediaFilesMenu.AddItem(new ApplicationMenuItem(KHHubMenus.EntityFiles, md["Menu:EntityFiles"], url: "/EntityFiles", icon: "fa fa-paperclip", requiredPermissionName: MasterDataServicePermissions.EntityFiles.Default));
         context.Menu.AddItem(mediaFilesMenu);
         context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.HomeBanners, context.GetLocalizer<MasterDataServiceResource>()["Menu:HomeBanners"], url: "/HomeBanners", icon: "fa fa-picture-o", requiredPermissionName: MasterDataServicePermissions.HomeBanners.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.JobCategories, context.GetLocalizer<MasterDataServiceResource>()["Menu:JobCategories"], url: "/JobCategories", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.JobCategories.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.Jobs, context.GetLocalizer<MasterDataServiceResource>()["Menu:Jobs"], url: "/Jobs", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.Jobs.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.JobTags, context.GetLocalizer<MasterDataServiceResource>()["Menu:JobTags"], url: "/JobTags", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.JobTags.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.JobApplications, context.GetLocalizer<MasterDataServiceResource>()["Menu:JobApplications"], url: "/JobApplications", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.JobApplications.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.JobFavorites, context.GetLocalizer<MasterDataServiceResource>()["Menu:JobFavorites"], url: "/JobFavorites", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.JobFavorites.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.JobViews, context.GetLocalizer<MasterDataServiceResource>()["Menu:JobViews"], url: "/JobViews", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.JobViews.Default));
+        context.Menu.AddItem(new ApplicationMenuItem(KHHubMenus.JobTagMappings, context.GetLocalizer<MasterDataServiceResource>()["Menu:JobTagMappings"], url: "/JobTagMappings", icon: "fa fa-file-alt", requiredPermissionName: MasterDataServicePermissions.JobTagMappings.Default));
     }
 
     private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
