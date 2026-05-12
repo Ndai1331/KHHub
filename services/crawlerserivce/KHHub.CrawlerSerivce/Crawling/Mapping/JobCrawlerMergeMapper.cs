@@ -88,7 +88,6 @@ public static class JobCrawlerMergeMapper
             Location = TruncateField(location, JobConsts.LocationMaxLength),
             ContactEmail = detail.ContactEmail,
             ContactPhone = detail.ContactPhone,
-            PublishedAt = listing.PublishedAt,
             Status = JobStatus.Published,
             ProvinceId = provinceId,
             WardId = wardId,
@@ -97,7 +96,8 @@ public static class JobCrawlerMergeMapper
             PrimaryJobCategoryName = primaryCategory,
             TagNames = tags,
             SeoDescription = summary,
-            SeoKeywords = BuildIndustryKeywords(detail.IndustryLabels)
+            SeoKeywords = BuildIndustryKeywords(detail.IndustryLabels),
+            PublishedAt = detail.PublishedAt ?? listing.PublishedAt
         };
     }
 

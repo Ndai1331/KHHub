@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace KHHub.CrawlerSerivce.Crawling.Models;
@@ -7,6 +8,11 @@ namespace KHHub.CrawlerSerivce.Crawling.Models;
 /// </summary>
 public class CrawledJobDetailPatch
 {
+    /// <summary>
+    /// When set (e.g. from JSON-LD <c>datePosted</c>), overrides listing row for MasterData <c>PublishedAt</c>.
+    /// </summary>
+    public DateTime? PublishedAt { get; set; }
+
     public string? Summary { get; set; }
 
     public string? Description { get; set; }

@@ -70,16 +70,15 @@ public class JobBoardImportAppService : CrawlerSerivceAppService, IJobBoardImpor
             }
 
             var pageUri = listingHandler.BuildListingPageUri(seed, page);
-            string html;
-            try
+            var fetchResult = await CrawlerHtmlFetchRetry.GetStringWithRetriesAsync(_htmlFetcher, pageUri);
+            if (!fetchResult.Success)
             {
-                html = await _htmlFetcher.GetStringAsync(pageUri);
-            }
-            catch (Exception ex)
-            {
-                result.Warnings.Add($"Listing page {page} ({pageUri}): {ex.Message}");
+                result.Warnings.Add(
+                    $"Listing page {page} ({pageUri}): failed after {fetchResult.AttemptsMade} attempt(s) — {fetchResult.ErrorMessage}");
                 break;
             }
+
+            var html = fetchResult.Html!;
 
             var rows = await listingHandler.ParseListingHtmlAsync(html, pageUri);
             foreach (var row in rows)

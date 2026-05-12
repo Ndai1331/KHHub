@@ -10,7 +10,7 @@
         "projectUniqueName": "/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/KHHub.ServiceDefaults.csproj",
         "projectName": "KHHub.ServiceDefaults",
         "projectPath": "/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/KHHub.ServiceDefaults.csproj",
-        "packagesPath": "/Users/user/.nuget/packages/",
+        "packagesPath": "/var/folders/tp/v8g8_3g93_xgy4zrvs4lhv0c0000gq/T/cursor-sandbox-cache/5f7cd61e8208d312a7298cd4fe9a2c33/nuget",
         "outputPath": "/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [

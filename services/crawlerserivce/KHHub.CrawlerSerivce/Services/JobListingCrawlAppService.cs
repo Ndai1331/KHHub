@@ -47,16 +47,15 @@ public class JobListingCrawlAppService : CrawlerSerivceAppService, IJobListingCr
         for (var page = 1; page <= input.MaxPages; page++)
         {
             var pageUri = handler.BuildListingPageUri(seed, page);
-            string html;
-            try
+            var fetchResult = await CrawlerHtmlFetchRetry.GetStringWithRetriesAsync(_htmlFetcher, pageUri);
+            if (!fetchResult.Success)
             {
-                html = await _htmlFetcher.GetStringAsync(pageUri);
-            }
-            catch (Exception ex)
-            {
-                result.Warnings.Add($"Page {page} ({pageUri}): {ex.Message}");
+                result.Warnings.Add(
+                    $"Page {page} ({pageUri}): failed after {fetchResult.AttemptsMade} attempt(s) — {fetchResult.ErrorMessage}");
                 break;
             }
+
+            var html = fetchResult.Html!;
 
             var rows = await handler.ParseListingHtmlAsync(html, pageUri);
             foreach (var row in rows)
