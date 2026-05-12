@@ -1,3 +1,4 @@
+using System.Globalization;
 using KHHub.Publish_website.Pages.PublicContent;
 using KHHub.Publish_website.Services.PublicContent;
 
@@ -12,9 +13,12 @@ public sealed class IndexModel : PublicListingPageModel
 
     public void OnGet()
     {
+        var path = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.OrdinalIgnoreCase)
+            ? "/news"
+            : "/tin-tuc";
         LoadListing(
             PublicContentKind.News,
-            "/news",
+            path,
             "Tin tức Khánh Hòa | KH HUB",
             "Tin tức mới nhất",
             "Cập nhật tin tức, sự kiện, du lịch, công nghệ và đời sống tại Khánh Hòa.");

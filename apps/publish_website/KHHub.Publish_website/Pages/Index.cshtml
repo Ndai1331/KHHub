@@ -6,7 +6,7 @@
     Layout = null;
     ViewData["Title"] = L["Landing:PageTitle"];
     var templateRoot = Url.Content("~/template");
-    var siteUrl = $"{Request.Scheme}://{Request.Host}/";
+    var siteUrl = Model.SeoCanonicalUrl;
     var isAuthenticated = HttpContext.User?.Identity?.IsAuthenticated == true ? "true" : "false";
     var returnUrl = (Request.Path.Value ?? "/") + Request.QueryString.Value;
     var loginUrl = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/Account/Login", "returnUrl", returnUrl);
@@ -26,8 +26,16 @@
     <head>
         <meta charset="UTF-8">
         <title>@ViewData["Title"]</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="@Model.SeoCanonicalUrl" />
+        <meta property="og:title" content="@ViewData["Title"]" />
+        <meta property="og:description" content="@L["Landing:MetaDescription"]" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="@Model.SeoCanonicalUrl" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="@ViewData["Title"]" />
+        <meta name="twitter:description" content="@L["Landing:MetaDescription"]" />
         <meta name="keywords" content="@L["Landing:MetaKeywords"]" />
         <meta name="description" content="@L["Landing:MetaDescription"]" />
         <meta itemprop="name" content="@L["Landing:PageTitle"]" />
@@ -40,6 +48,8 @@
         <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/plugins.css">
         <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/style.css">
         <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/color.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/v4-shims.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link type="text/css" rel="stylesheet" href="@(templateRoot)/css/khhub.css">
         <link rel="shortcut icon" href="@(templateRoot)/images/favicon.ico">
     </head>
@@ -63,9 +73,9 @@
             <partial name="~/Pages/Shared/Landing/_AuthModal.cshtml" />
             <a class="to-top"><i class="fa fa-angle-up"></i></a>
         </div>
-        <script type="text/javascript" src="@(templateRoot)/js/jquery.min.js"></script>
-        <script type="text/javascript" src="@(templateRoot)/js/plugins.js"></script>
-        <script type="text/javascript" src="@(templateRoot)/js/scripts.js"></script>
+        <script type="text/javascript" src="@(templateRoot)/js/jquery.min.js" defer></script>
+        <script type="text/javascript" src="@(templateRoot)/js/plugins.js" defer></script>
+        <script type="text/javascript" src="@(templateRoot)/js/scripts.js" defer></script>
         <script type="text/javascript" src="@(templateRoot)/js/khhub-jobs-section.js" defer></script>
     </body>
 </html>

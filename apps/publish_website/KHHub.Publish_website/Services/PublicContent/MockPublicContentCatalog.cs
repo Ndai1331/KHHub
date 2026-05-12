@@ -62,7 +62,7 @@ public sealed class MockPublicContentCatalog : IPublicContentCatalog
 
     private static readonly IReadOnlyList<JobItem> Jobs =
     [
-        Job("Frontend Developer Razor Pages", "frontend-developer-razor-pages", "Cong nghe", "KHHub Labs", "18 - 30 trieu", "Nha Trang", "Loc Tho", 900, ["dotnet", "javascript", "ui"]),
+        Job("Frontend Developer Razor Pages", "frontend-developer-razor-pages", "Cong nghe", "KHHub Labs", "18 - 30 trieu", "Nha Trang", "Loc Tho", 900, ["dotnet", "javascript", "ui"], "25748"),
         Job("Nhan vien dieu phoi tour", "nhan-vien-dieu-phoi-tour", "Du lich", "Blue Sea Travel", "10 - 15 trieu", "Nha Trang", "Tan Tien", 720, ["tour", "english", "customer-service"]),
         Job("Chuyen vien marketing dia diem", "chuyen-vien-marketing-dia-diem", "Marketing", "Khanh Hoa Local Guide", "12 - 18 trieu", "Nha Trang", "Phuoc Hai", 680, ["content", "seo", "social"]),
         Job("Quan ly van hanh homestay", "quan-ly-van-hanh-homestay", "Luu tru", "Van Ninh Bay Stay", "14 - 20 trieu", "Khanh Hoa", "Van Ninh", 620, ["homestay", "operations", "hospitality"]),
@@ -267,6 +267,7 @@ public sealed class MockPublicContentCatalog : IPublicContentCatalog
             Category = item.Category,
             Province = item.Province,
             Ward = item.Ward,
+            WardCode = item.WardCode,
             MetaLabel = $"{item.Company} · {item.Salary}",
             CreatedAt = item.CreatedAt,
             Popularity = item.Popularity,
@@ -335,6 +336,7 @@ public sealed class MockPublicContentCatalog : IPublicContentCatalog
             Ward = item.Ward,
             Rating = 4.5m,
             Tags = item.Tags,
+            JobTagLinks = item.Tags.Select(t => new JobDetailTagLink(t, t)).ToList(),
             RelatedItems = GetRelated(PublicContentKind.Job, item.Slug, 3),
             Comments = Comments()
         };
@@ -400,7 +402,8 @@ public sealed class MockPublicContentCatalog : IPublicContentCatalog
         string province,
         string ward,
         int popularity,
-        IReadOnlyList<string> tags)
+        IReadOnlyList<string> tags,
+        string? wardCode = null)
     {
         return new JobItem
         {
@@ -412,6 +415,7 @@ public sealed class MockPublicContentCatalog : IPublicContentCatalog
             Salary = salary,
             Province = province,
             Ward = ward,
+            WardCode = wardCode,
             Popularity = popularity,
             CreatedAt = SeedDate.AddDays(-NewsSeedOffset(popularity)),
             Description = $"Co hoi {title.ToLowerInvariant()} tai {company}, moi truong tre va uu tien ung vien hieu thi truong Khanh Hoa.",

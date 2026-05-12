@@ -1,0 +1,84 @@
+---
+description: SEO checklist, acceptance criteria, and audit-to-code mapping for KHHub.Publish_website
+globs: apps/publish_website/KHHub.Publish_website/**/*
+alwaysApply: false
+---
+
+# SEO improvements — Publish website
+
+Cross-reference: [seo.mdc](./seo.mdc) (baseline rules: title, meta description, one H1, image alt, friendly URLs).
+
+## Purpose
+
+Guide implementation and PR review for public SEO (technical, on-page, performance, social). Aligns with Lighthouse / third-party SEO audits.
+
+## Technical SEO
+
+| Item | Done when | Primary locations |
+|------|-----------|-------------------|
+| **robots.txt** | `GET /robots.txt` returns `200`, `text/plain`, `Allow: /`, and a valid absolute `Sitemap:` line | [Pages/RobotsTxt.cshtml](../Pages/RobotsTxt.cshtml), `App:SelfUrl` / `Seo:PublicSiteUrl` |
+| **sitemap.xml** | `GET /sitemap.xml` returns well-formed XML, `urlset` namespace `http://www.sitemaps.org/schemas/sitemap/0.9`, absolute `<loc>` URLs | [Pages/SitemapXml.cshtml](../Pages/SitemapXml.cshtml) |
+| **Canonical** | Each important page has **exactly one** `<link rel="canonical" href="https://host/path">` pointing to the preferred live URL | Landing: [Pages/Index.cshtml](../Pages/Index.cshtml); others already use `@Model.Seo.CanonicalUrl` or similar |
+| **JSON-LD** | `WebSite` schema remains valid; `url` matches public home URL | [Pages/Index.cshtml](../Pages/Index.cshtml) |
+
+## Hreflang and multilingual URLs
+
+**Current behavior:** UI culture is driven by cookie (`SetLanguage`) and query, not by distinct URLs per language.
+
+- **Minimum:** Do not emit misleading `hreflang` pairs that all point to the same URL.
+- **Phase 2 (recommended for Google):** Introduce per-locale URLs (e.g. path prefix `/en/...`) with reciprocal `link rel="alternate" hreflang="vi|en|x-default"` on every localized template.
+
+Document locale URL strategy before adding hreflang.
+
+## On-page SEO
+
+| Item | Done when | Notes |
+|------|-----------|--------|
+| **H1** | Exactly **one** visible (or one visible + none duplicated) `h1` on the landing hero | [Pages/Shared/Landing/_HeroSlider.cshtml](../Pages/Shared/Landing/_HeroSlider.cshtml): first slide / fallback uses `h1`, others `h2` |
+| **Title length** | `Landing:PageTitle` per culture is roughly **50–60** characters, unique, human-readable | [Localization/Publish_website/*.json](../Localization/Publish_website/) |
+| **Meta description** | Present, aligned with page content, not keyword-stuffed | Landing `Index`; section `@Meta` on other pages |
+| **Image alt** | Meaningful `alt` for informative images; decorative assets use `alt=""` + `aria-hidden="true"` on wrapper | Landing partials under `Pages/Shared/Landing/` |
+
+## Performance (Core Web Vitals–oriented)
+
+| Item | Done when |
+|------|-----------|
+| **INP / TBT** | Non-critical scripts use `defer` where order-safe; avoid long main-thread work on first interaction |
+| **Speed Index** | Large hero imagery uses responsive / compressed formats (existing banner webp helpers in `IndexModel`) |
+| **Unused assets** | Periodically audit template CSS/JS; remove dead template includes when safe |
+| **DOM size** | If audit tools fail to measure, re-test after deploy; simplify redundant nodes only when measured |
+
+## Mobile friendliness
+
+- Viewport must **not** use `user-scalable=no` / `maximum-scale=1` for primary public pages (accessibility + audit tools).
+- Tap targets and base font sizes meet [khhub.css](../wwwroot/template/css/khhub.css) / design system (≥ ~44px touch targets where possible).
+
+## Social links
+
+- Real outbound URLs only; no `href="#"`.
+- Configure under `Social:*` in appsettings; hide icon when URL is empty.
+- Optional: `rel="noopener noreferrer"` on external links.
+
+## Verification checklist (before merge)
+
+1. `curl -sI https://<host>/robots.txt` → `200`, `content-type: text/plain`
+2. `curl -s https://<host>/sitemap.xml` → parse XML, all `<loc>` absolute HTTPS in production
+3. View-source home: single canonical, OG tags, one `h1`, viewport allows zoom
+4. Lighthouse (mobile): performance + SEO + “best practices” spot-check
+5. After production deploy: Google Search Console → sitemap submit, coverage spot-check
+
+## Audit red-flag → remediation map
+
+| Audit theme | Remediation |
+|-------------|-------------|
+| No sitemap | `SitemapXml` page + `Sitemap:` in robots |
+| No robots | `RobotsTxt` page |
+| Canonical issues | Add missing canonical + OG on landing `Index` |
+| Missing H1 | Hero slider: first slide / fallback `h1` |
+| Title too short | Lengthen localized `Landing:PageTitle` |
+| Missing alt | Replace empty alts with localized or contextual text; decorative SVGs `aria-hidden` |
+| Social placeholders | `Social:*` config + footer partial |
+| Mobile viewport | Remove zoom lock on landing |
+| INP / TBT | `defer` on landing scripts (order preserved) |
+| Hreflang | Defer until URL-per-locale exists |
+| DOM metric unavailable | Re-run tool on public URL; reduce weight if still failing |

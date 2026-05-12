@@ -1,0 +1,11 @@
+@page "/robots.txt"
+@model RobotsTxtModel
+@{
+    Layout = null;
+    Response.ContentType = "text/plain; charset=utf-8";
+    Response.Headers.CacheControl = "public, max-age=3600";
+}
+User-agent: *
+Allow: /
+
+Sitemap: @Model.SitemapAbsoluteUrl

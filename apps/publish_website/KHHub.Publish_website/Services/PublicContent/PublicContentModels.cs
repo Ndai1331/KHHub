@@ -103,9 +103,16 @@ public sealed class PublicContentCardViewModel
 
     public required string Category { get; init; }
 
+    public string? CategoryIcon { get; init; } = null;
+
+    public string? CategoryIconColor { get; init; } = null;
+
     public string? Province { get; init; }
 
     public string? Ward { get; init; }
+
+    /// <summary>Ward administrative code from MasterData (used for stable badge color).</summary>
+    public string? WardCode { get; init; }
 
     public string? MetaLabel { get; init; }
 
@@ -178,6 +185,8 @@ public sealed class JobItem
 
     public required string Ward { get; init; }
 
+    public string? WardCode { get; init; }
+
     public required string Description { get; init; }
 
     public required string Requirements { get; init; }
@@ -220,6 +229,9 @@ public sealed class LocationItem
 
 public sealed record CommentViewModel(string Author, string Body, DateTimeOffset CreatedAt, decimal Rating);
 
+/// <summary>Job tag for detail pills: <see cref="Slug"/> in filter URLs, <see cref="Name"/> for display.</summary>
+public sealed record JobDetailTagLink(string Slug, string Name);
+
 public sealed class DetailPageViewModel
 {
     public required PublicContentKind Kind { get; init; }
@@ -248,9 +260,30 @@ public sealed class DetailPageViewModel
 
     public string? Address { get; init; }
 
+    /// <summary>Free-text workplace / employer line from MasterData Job.Location.</summary>
+    public string? JobLocation { get; init; }
+
+    /// <summary>HTML body for benefits section (optional).</summary>
+    public string? BenefitsHtml { get; init; }
+
+    public string? ApplicationUrl { get; init; }
+
+    public string? ContactEmail { get; init; }
+
+    public string? ContactPhone { get; init; }
+
+    public string? EmploymentTypeLabel { get; init; }
+
+    public string? ExperienceLevelLabel { get; init; }
+
+    public string? WorkModeLabel { get; init; }
+
     public decimal Rating { get; init; }
 
     public IReadOnlyList<string> Tags { get; init; } = [];
+
+    /// <summary>Job tags with slug for URLs and name for UI (empty for news/locations).</summary>
+    public IReadOnlyList<JobDetailTagLink> JobTagLinks { get; init; } = [];
 
     public IReadOnlyList<string> Images { get; init; } = [];
 

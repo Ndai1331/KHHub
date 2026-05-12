@@ -15,7 +15,9 @@ public sealed class IndexModel(IGoldPriceClient goldPriceClient) : PageModel
     public async Task OnGetAsync(CancellationToken cancellationToken)
     {
         Snapshot = await goldPriceClient.GetLatestAsync(cancellationToken);
-        CanonicalUrl = $"{Request.Scheme}://{Request.Host}/gold-price";
+        var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        var goldPricePath = currentCulture.Equals("en", StringComparison.OrdinalIgnoreCase) ? "/gold-price" : "/gia-vang";
+        CanonicalUrl = $"{Request.Scheme}://{Request.Host}{goldPricePath}";
         JsonLd = BuildJsonLd();
     }
 

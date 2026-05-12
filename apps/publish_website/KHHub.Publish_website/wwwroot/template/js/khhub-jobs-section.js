@@ -50,11 +50,18 @@
     if (loc) {
       parts.push(loc);
     }
-    var tags = job.tags || [];
-    if (tags.length > 0 && tags[0]) {
-      parts.push(tags[0]);
-    }
     return parts.join(' · ');
+  }
+
+  function buildJobsFilterUrl(basePath, params) {
+    var u = new URL(basePath || '/jobs', window.location.origin);
+    Object.keys(params).forEach(function (k) {
+      var v = params[k];
+      if (v) {
+        u.searchParams.set(k, v);
+      }
+    });
+    return u.pathname + u.search;
   }
 
   function firstCharUpper(title) {
@@ -65,36 +72,82 @@
     return t.charAt(0).toUpperCase();
   }
 
-  function buildJobArticle(job, viewsLabel, uiLang, childIndex) {
+  function buildJobArticle(job, viewsLabel, uiLang, childIndex, jobsListPath) {
     var rowTone = childIndex % 2 === 0 ? 'even' : 'odd';
     var article = document.createElement('article');
     article.className = 'khhub-job-forum-row khhub-job-forum-row--' + rowTone;
     article.setAttribute('role', 'listitem');
 
-    var link = document.createElement('a');
-    link.className = 'khhub-job-forum-row__link';
-    link.href = job.url || '#';
+    var row = document.createElement('div');
+    row.className = 'khhub-job-forum-row__link';
 
-    var avatar = document.createElement('span');
+    var base = jobsListPath || '/jobs';
+
+    var avatar = document.createElement('a');
     avatar.className = 'khhub-job-forum-avatar';
-    avatar.setAttribute('aria-hidden', 'true');
+    avatar.href = job.url || '#';
+    avatar.setAttribute('aria-label', job.title || '');
     var glyph = document.createElement('span');
     glyph.className = 'khhub-job-forum-avatar__glyph';
+    glyph.setAttribute('aria-hidden', 'true');
     glyph.textContent = firstCharUpper(job.title);
     avatar.appendChild(glyph);
 
     var main = document.createElement('div');
     main.className = 'khhub-job-forum-main';
 
-    var badge = document.createElement('span');
-    badge.className = 'khhub-job-forum-badge';
-    badge.textContent = job.category || '';
+    var badges = document.createElement('div');
+    badges.className = 'khhub-job-forum-badges';
+
+    if (job.category) {
+      var catA = document.createElement('a');
+      catA.className = 'khhub-job-forum-badge';
+      catA.href = buildJobsFilterUrl(base, { Category: job.category });
+      catA.setAttribute('rel', 'tag');
+      if (job.categoryIcon) {
+        var ic = document.createElement('i');
+        ic.className = job.categoryIcon;
+        ic.setAttribute('aria-hidden', 'true');
+        ic.style.marginRight = '4px';
+        if (job.categoryIconColor) {
+          ic.style.color = job.categoryIconColor;
+        }
+        catA.appendChild(ic);
+      }
+      catA.appendChild(document.createTextNode(job.category));
+      badges.appendChild(catA);
+    }
+
+    if (job.ward) {
+      var wParams = { Ward: job.ward };
+      if (job.province) {
+        wParams.Province = job.province;
+      }
+      var wardA = document.createElement('a');
+      wardA.className = 'khhub-job-forum-badge khhub-job-forum-badge--ward';
+      wardA.href = buildJobsFilterUrl(base, wParams);
+      wardA.textContent = job.ward;
+      var wHex = job.wardBadgeColorHex;
+      if (wHex && wHex.length === 7 && wHex.charAt(0) === '#') {
+        wardA.style.color = '#fff';
+        wardA.style.borderColor = wHex;
+        wardA.style.backgroundColor = wHex;
+      }
+      badges.appendChild(wardA);
+    }
+
+    if (badges.childNodes.length > 0) {
+      main.appendChild(badges);
+    }
 
     var title = document.createElement('h3');
     title.className = 'khhub-job-forum-title';
-    title.textContent = job.title || '';
+    var titleA = document.createElement('a');
+    titleA.className = 'khhub-job-forum-title__a';
+    titleA.href = job.url || '#';
+    titleA.textContent = job.title || '';
+    title.appendChild(titleA);
 
-    main.appendChild(badge);
     main.appendChild(title);
 
     var excerptText = buildExcerpt(job);
@@ -134,10 +187,10 @@
     side.appendChild(stats);
     side.appendChild(activity);
 
-    link.appendChild(avatar);
-    link.appendChild(main);
-    link.appendChild(side);
-    article.appendChild(link);
+    row.appendChild(avatar);
+    row.appendChild(main);
+    row.appendChild(side);
+    article.appendChild(row);
     return article;
   }
 
@@ -149,6 +202,7 @@
 
     var listEl = document.getElementById('khhub-jobs-list');
     var loadingEl = document.getElementById('khhub-jobs-loading');
+    var endEl = document.getElementById('khhub-jobs-end');
     var sentinel = document.getElementById('khhub-jobs-sentinel');
     if (!listEl || !loadingEl || !sentinel) {
       return;
@@ -157,6 +211,7 @@
     var feedUrl = host.dataset.feedUrl;
     var take = parseInt(host.dataset.take || '10', 10) || 10;
     var viewsLabel = decodeHtmlEntities(host.dataset.viewsLabel || '');
+    var jobsListPath = host.dataset.jobsListPath || '/jobs';
     var uiLang = host.dataset.uiLang || '';
     var errorText = decodeHtmlEntities(host.dataset.errorText || 'Could not load more jobs.');
     var skip = parseInt(host.dataset.initialSkip || '0', 10) || 0;
@@ -167,6 +222,7 @@
 
     var loading = false;
     var exhausted = skip >= total || total === 0;
+    var lastLoadSucceeded = false;
 
     function setLoading(on) {
       loading = on;
@@ -177,7 +233,7 @@
     function appendJobs(items) {
       for (var i = 0; i < items.length; i++) {
         listEl.appendChild(
-          buildJobArticle(items[i], viewsLabel, uiLang, listEl.children.length)
+          buildJobArticle(items[i], viewsLabel, uiLang, listEl.children.length, jobsListPath)
         );
       }
     }
@@ -186,6 +242,10 @@
       if (loading || exhausted) {
         return;
       }
+      if (endEl) {
+        endEl.hidden = true;
+      }
+      lastLoadSucceeded = false;
       setLoading(true);
       var url =
         feedUrl +
@@ -203,6 +263,7 @@
           return res.json();
         })
         .then(function (data) {
+          lastLoadSucceeded = true;
           var items = data.items || [];
           var totalCount =
             typeof data.totalCount === 'number' ? data.totalCount : parseInt(data.totalCount, 10) || 0;
@@ -227,6 +288,9 @@
         })
         .finally(function () {
           setLoading(false);
+          if (exhausted && lastLoadSucceeded && endEl) {
+            endEl.hidden = false;
+          }
         });
     }
 

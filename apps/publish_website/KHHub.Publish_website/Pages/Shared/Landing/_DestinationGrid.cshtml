@@ -24,7 +24,7 @@
                 {
                     var p = item.Place;
                     var thumb = Model.ResolveMediaUrl(p.ThumbnailUrl ?? p.CoverImageUrl);
-                    var placeUrl = $"/places/{p.Slug}";
+                    var placeUrl = $"{Model.PlacesListPath.TrimEnd('/')}/{p.Slug}";
                     <div class="col-md-6 col-xl-4">
                         <article class="landing-place-card abp-card h-100 border-0 shadow-sm">
                             <a class="landing-place-card__media-link" href="@placeUrl" aria-label="@p.Name">

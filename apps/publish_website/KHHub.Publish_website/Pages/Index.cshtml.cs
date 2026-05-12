@@ -1,5 +1,6 @@
 ﻿using KHHub.MasterDataService.Services.Dtos.HomeBanners;
 using KHHub.MasterDataService.Services.Dtos.Places;
+using KHHub.Publish_website.Seo;
 using KHHub.Publish_website.Services;
 using KHHub.Publish_website.Services.PublicContent;
 using Microsoft.AspNetCore.Authentication;
@@ -53,12 +54,29 @@ public class IndexModel : PageModel
     /// <summary>Total published jobs count from MasterData (for landing infinite scroll).</summary>
     public long JobsTotalCount { get; private set; }
 
+    /// <summary>Absolute canonical URL for the home page (trailing slash).</summary>
+    public string SeoCanonicalUrl { get; private set; } = string.Empty;
+
     public string JobsListPath => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.OrdinalIgnoreCase)
         ? "/jobs"
         : "/viec-lam";
 
+    public string NewsListPath => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.OrdinalIgnoreCase)
+        ? "/news"
+        : "/tin-tuc";
+
+    public string PlacesListPath => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.OrdinalIgnoreCase)
+        ? "/places"
+        : "/dia-diem";
+
+    public string GoldPriceListPath => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.OrdinalIgnoreCase)
+        ? "/gold-price"
+        : "/gia-vang";
+
     public async Task OnGetAsync(CancellationToken cancellationToken)
     {
+        SeoCanonicalUrl = SeoUrls.ResolvePublicSiteBase(HttpContext.Request, _configuration).TrimEnd('/') + "/";
+
         var dataCacheKey = $"{LandingDataCacheKey}:{CultureInfo.CurrentUICulture.Name}";
         var data = await _cache.GetOrCreateAsync(
             dataCacheKey,
@@ -101,9 +119,13 @@ public class IndexModel : PageModel
                     j.Title,
                     j.Url,
                     j.Category,
+                    j.CategoryIcon,
+                    j.CategoryIconColor,
                     j.Popularity,
                     j.Province,
                     j.Ward,
+                    j.WardCode,
+                    WardBadgeFormat.ForegroundHex(j.WardCode, j.Ward),
                     j.MetaLabel,
                     j.Tags,
                     j.CreatedAt))
@@ -331,9 +353,13 @@ public sealed record LandingJobFeedItem(
     string Title,
     string Url,
     string Category,
+    string? CategoryIcon,
+    string? CategoryIconColor,
     int Popularity,
     string? Province,
     string? Ward,
+    string? WardCode,
+    string WardBadgeColorHex,
     string? MetaLabel,
     IReadOnlyList<string> Tags,
     DateTimeOffset CreatedAt);

@@ -10,6 +10,9 @@
         <member name="P:KHHub.Publish_website.Pages.IndexModel.JobsTotalCount">
             <summary>Total published jobs count from MasterData (for landing infinite scroll).</summary>
         </member>
+        <member name="P:KHHub.Publish_website.Pages.IndexModel.SeoCanonicalUrl">
+            <summary>Absolute canonical URL for the home page (trailing slash).</summary>
+        </member>
         <member name="M:KHHub.Publish_website.Pages.IndexModel.ResolveMediaUrl(System.String)">
             <summary>
             Resolves stored media paths to browser-loadable URL (same behavior as apps/web).
@@ -30,7 +33,7 @@
         <member name="T:KHHub.Publish_website.Pages.LandingJobFeedItem">
             <summary>JSON payload for landing job infinite scroll.</summary>
         </member>
-        <member name="M:KHHub.Publish_website.Pages.LandingJobFeedItem.#ctor(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String},System.DateTimeOffset)">
+        <member name="M:KHHub.Publish_website.Pages.LandingJobFeedItem.#ctor(System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String},System.DateTimeOffset)">
             <summary>JSON payload for landing job infinite scroll.</summary>
         </member>
         <member name="T:KHHub.Publish_website.Pages.HeroBannerResponsiveSources">
@@ -38,6 +41,9 @@
         </member>
         <member name="M:KHHub.Publish_website.Pages.HeroBannerResponsiveSources.#ctor(System.String,System.String)">
             <summary>Resolved hero slide assets for &lt;picture&gt; + webp srcset.</summary>
+        </member>
+        <member name="P:KHHub.Publish_website.Pages.PublicContent.PublicDetailPageModel.ContentListPath">
+            <summary>Listing path for the current culture (e.g. /tin-tuc, /news).</summary>
         </member>
         <member name="T:KHHub.Publish_website.Pages.SetLanguageModel">
             <summary>
@@ -47,6 +53,40 @@
             the configured default culture (vi) on the next page.
             </summary>
         </member>
+        <member name="F:KHHub.Publish_website.Pages.SitemapXmlModel.DefaultPaths">
+            <summary>Default hub URLs (Vi + En list routes). Detail URLs are appended when <c>Seo:SitemapIncludeDetailUrls</c> is true.</summary>
+        </member>
+        <member name="M:KHHub.Publish_website.Pages.SitemapXmlModel.EnumerateCatalogDetailRelativePaths(KHHub.Publish_website.Services.PublicContent.IPublicContentCatalog)">
+            <summary>Vietnamese canonical detail prefixes (default site locale).</summary>
+        </member>
+        <member name="T:KHHub.Publish_website.Seo.SeoUrls">
+            <summary>
+            Resolves the public absolute site base (no trailing slash) for canonical, Open Graph, sitemap, and robots.
+            </summary>
+        </member>
+        <member name="M:KHHub.Publish_website.Seo.SeoUrls.ResolvePublicSiteBase(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Order: Seo:PublicSiteUrl, App:SelfUrl, then current request origin.
+            </summary>
+        </member>
+        <member name="P:KHHub.Publish_website.Services.PublicContent.PublicContentCardViewModel.WardCode">
+            <summary>Ward administrative code from MasterData (used for stable badge color).</summary>
+        </member>
+        <member name="T:KHHub.Publish_website.Services.PublicContent.JobDetailTagLink">
+            <summary>Job tag for detail pills: <see cref="P:KHHub.Publish_website.Services.PublicContent.JobDetailTagLink.Slug"/> in filter URLs, <see cref="P:KHHub.Publish_website.Services.PublicContent.JobDetailTagLink.Name"/> for display.</summary>
+        </member>
+        <member name="M:KHHub.Publish_website.Services.PublicContent.JobDetailTagLink.#ctor(System.String,System.String)">
+            <summary>Job tag for detail pills: <see cref="P:KHHub.Publish_website.Services.PublicContent.JobDetailTagLink.Slug"/> in filter URLs, <see cref="P:KHHub.Publish_website.Services.PublicContent.JobDetailTagLink.Name"/> for display.</summary>
+        </member>
+        <member name="P:KHHub.Publish_website.Services.PublicContent.DetailPageViewModel.JobLocation">
+            <summary>Free-text workplace / employer line from MasterData Job.Location.</summary>
+        </member>
+        <member name="P:KHHub.Publish_website.Services.PublicContent.DetailPageViewModel.BenefitsHtml">
+            <summary>HTML body for benefits section (optional).</summary>
+        </member>
+        <member name="P:KHHub.Publish_website.Services.PublicContent.DetailPageViewModel.JobTagLinks">
+            <summary>Job tags with slug for URLs and name for UI (empty for news/locations).</summary>
+        </member>
         <member name="T:KHHub.Publish_website.Services.PublicMasterDataCatalogClient">
             <summary>
             Loads public catalog data from MasterData via the Web Gateway (YARP).
@@ -55,6 +95,12 @@
         <member name="M:KHHub.Publish_website.Services.PublicMasterDataCatalogClient.GetLatestPublishedJobCardsPageAsync(System.Int32,System.Int32,System.String,System.Threading.CancellationToken)">
             <summary>
             Paged published jobs for the landing feed (same ordering as MasterData jobs list API).
+            </summary>
+        </member>
+        <member name="T:KHHub.Publish_website.Services.WardBadgeFormat">
+            <summary>
+            Ward badge fill color: rule "#" + wardCode + "0", then first 6 hex digits for #RRGGBB (text uses white on top).
+            Falls back to SHA-256 of the seed when there are not enough hex digits.
             </summary>
         </member>
     </members>

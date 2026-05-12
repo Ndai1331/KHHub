@@ -159,6 +159,9 @@ public abstract class PublicDetailPageModel : PageModel
 
     public string BreadcrumbJsonLd { get; protected set; } = string.Empty;
 
+    /// <summary>Listing path for the current culture (e.g. /tin-tuc, /news).</summary>
+    public string ContentListPath { get; protected set; } = string.Empty;
+
     protected IActionResult LoadDetail(PublicContentKind kind, string slug, string listPath, string listTitle)
     {
         var detail = _catalog.GetDetail(kind, slug);
@@ -168,6 +171,7 @@ public abstract class PublicDetailPageModel : PageModel
         }
 
         Detail = detail;
+        ContentListPath = listPath;
         var path = $"{listPath}/{slug}";
         Seo = new SeoMetadata(
             $"{detail.Title} | KH HUB",

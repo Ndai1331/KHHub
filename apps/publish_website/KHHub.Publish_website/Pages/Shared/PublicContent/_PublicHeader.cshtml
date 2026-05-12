@@ -1,6 +1,13 @@
 @{
     var path = Context.Request.Path.Value ?? "/";
-    string Active(string prefix) => path.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) ? "is-active" : string.Empty;
+    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var isEn = currentCulture.Equals("en", StringComparison.OrdinalIgnoreCase);
+    var newsPath = isEn ? "/news" : "/tin-tuc";
+    var jobsPath = isEn ? "/jobs" : "/viec-lam";
+    var placesPath = isEn ? "/places" : "/dia-diem";
+    string ActiveNews() => path.StartsWith("/news", StringComparison.OrdinalIgnoreCase) || path.StartsWith("/tin-tuc", StringComparison.OrdinalIgnoreCase) ? "is-active" : string.Empty;
+    string ActiveJobs() => path.StartsWith("/jobs", StringComparison.OrdinalIgnoreCase) || path.StartsWith("/viec-lam", StringComparison.OrdinalIgnoreCase) ? "is-active" : string.Empty;
+    string ActivePlaces() => path.StartsWith("/places", StringComparison.OrdinalIgnoreCase) || path.StartsWith("/dia-diem", StringComparison.OrdinalIgnoreCase) ? "is-active" : string.Empty;
 }
 
 <header class="kh-public-header">
@@ -8,9 +15,9 @@
         <span>KH</span> HUB
     </a>
     <nav aria-label="Public content">
-        <a class="@Active("/news")" href="/news">Tin tức</a>
-        <a class="@Active("/jobs")" href="/jobs">Việc làm</a>
-        <a class="@Active("/places")" href="/places">Địa điểm</a>
+        <a class="@ActiveNews()" href="@newsPath">Tin tức</a>
+        <a class="@ActiveJobs()" href="@jobsPath">Việc làm</a>
+        <a class="@ActivePlaces()" href="@placesPath">Địa điểm</a>
     </nav>
-    <a class="kh-public-header__cta" href="/places">Khám phá</a>
+    <a class="kh-public-header__cta" href="@placesPath">Khám phá</a>
 </header>

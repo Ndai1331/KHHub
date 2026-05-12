@@ -3,6 +3,22 @@
 @{
     Layout = "/Pages/Shared/PublicContent/_CityBookPublicLayout.cshtml";
     ViewData["Title"] = Model.Seo.Title;
+    var locationLine = string.Join(", ", new[] { Model.Detail.Ward, Model.Detail.Province }.Where(x => !string.IsNullOrWhiteSpace(x)));
+    var shareUrl = Model.Seo.CanonicalUrl;
+    var shareText = Uri.EscapeDataString(Model.Detail.Title);
+    var encodedShareUrl = Uri.EscapeDataString(shareUrl);
+    var applyUrl = !string.IsNullOrWhiteSpace(Model.Detail.ApplicationUrl)
+        ? Model.Detail.ApplicationUrl!.Trim()
+        : !string.IsNullOrWhiteSpace(Model.Detail.ContactEmail)
+            ? $"mailto:{Model.Detail.ContactEmail!.Trim()}?subject={Uri.EscapeDataString("Ứng tuyển: " + Model.Detail.Title)}"
+            : "#kh-job-contact";
+    var applyOpensNewTab = !string.IsNullOrWhiteSpace(Model.Detail.ApplicationUrl) &&
+        Model.Detail.ApplicationUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase);
+    var hasBenefits = !string.IsNullOrWhiteSpace(Model.Detail.BenefitsHtml);
+    var hasRequirements = !string.IsNullOrWhiteSpace(Model.Detail.Requirements);
+    List<(string Slug, string Label)> jobKeywordPills = Model.Detail.JobTagLinks.Count > 0
+        ? Model.Detail.JobTagLinks.Select(t => (t.Slug, t.Name)).ToList()
+        : Model.Detail.Tags.Select(t => (Slug: t, Label: t)).ToList();
 }
 
 @section Meta {
@@ -21,90 +37,257 @@
     <link rel="stylesheet" href="/template/css/public-content.css" asp-append-version="true">
 }
 
-<main class="kh-public-page">
-    <article class="kh-detail">
+<main class="kh-public-page kh-job-detail-page">
+    <article class="kh-detail kh-job-detail">
         <nav class="kh-breadcrumb" aria-label="Breadcrumb">
             <a href="/">Trang chủ</a><span>/</span><a href="@Model.ListPath">@Model.ListTitle</a><span>/</span><span>@Model.Detail.Title</span>
         </nav>
-        <header class="kh-detail__header">
-            <p>@Model.Detail.Category</p>
-            <h1>@Model.Detail.Title</h1>
-            <div class="kh-detail__meta">
-                <span>@Model.Detail.AuthorOrCompany</span>
-                <span>@Model.Detail.Province, @Model.Detail.Ward</span>
-                <time datetime="@Model.Detail.CreatedAt.ToString("O")">@Model.Detail.CreatedAt.ToString("dd/MM/yyyy")</time>
-                <button class="kh-favorite" type="button" data-favorite="@Model.Detail.Title" aria-pressed="false">
+
+        <header class="kh-job-detail__hero">
+            <div class="kh-job-detail__hero-main">
+                <div class="kh-job-detail__logo" aria-hidden="true">
+                    <img src="@Model.Detail.ThumbnailUrl" alt="" width="72" height="72" loading="eager" decoding="async">
+                </div>
+                <div class="kh-job-detail__hero-text">
+                    <p class="kh-job-detail__eyebrow">@Model.Detail.Category</p>
+                    <h1 class="kh-job-detail__title">@Model.Detail.Title</h1>
+                    <p class="kh-job-detail__employer">@Model.Detail.AuthorOrCompany</p>
+                    <ul class="kh-job-detail__facts" role="list">
+                        <li>
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            <span>@(string.IsNullOrWhiteSpace(locationLine) ? "—" : locationLine)</span>
+                        </li>
+                        <li>
+                            <i class="fa fa-money" aria-hidden="true"></i>
+                            <span>@(string.IsNullOrWhiteSpace(Model.Detail.Salary) ? "Thỏa thuận" : Model.Detail.Salary)</span>
+                        </li>
+                        <li>
+                            <i class="fa fa-briefcase" aria-hidden="true"></i>
+                            <span>@(Model.Detail.ExperienceLevelLabel ?? "Theo mô tả công việc")</span>
+                        </li>
+                        <li>
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            <span>Ngày đăng: @Model.Detail.CreatedAt.ToString("dd-MM-yyyy")</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="kh-job-detail__actions">
+                <a class="kh-job-detail__btn kh-job-detail__btn--primary" href="@applyUrl" @(applyOpensNewTab ? Html.Raw("target=\"_blank\" rel=\"nofollow noopener noreferrer\"") : Html.Raw("rel=\"nofollow\""))>Nộp đơn ngay</a>
+                <button class="kh-job-detail__btn kh-job-detail__btn--ghost kh-favorite" type="button" data-favorite="@Model.Detail.Title" aria-pressed="false">
                     <i class="fa fa-heart-o" aria-hidden="true"></i> Lưu
                 </button>
             </div>
         </header>
-        <div class="kh-job-summary">
-            <div>
-                <span>Mức lương</span>
-                <strong>@Model.Detail.Salary</strong>
-            </div>
-            <div>
-                <span>Công ty</span>
-                <strong>@Model.Detail.AuthorOrCompany</strong>
-            </div>
-            <div>
-                <span>Khu vực</span>
-                <strong>@Model.Detail.Ward, @Model.Detail.Province</strong>
-            </div>
-        </div>
-        <div class="kh-detail__content">
-            <h2>Mô tả công việc</h2>
-            @Html.Raw(Model.Detail.ContentHtml)
-            <h2>Yêu cầu</h2>
-            <p>@Model.Detail.Requirements</p>
-        </div>
-        <partial name="~/Pages/Shared/PublicContent/_TagList.cshtml" model="Model.Detail.Tags" />
-    </article>
 
-    <partial name="~/Pages/Shared/PublicContent/_CommentSection.cshtml" model="Model.Detail" />
+        <nav class="kh-job-detail__toc" aria-label="Nội dung chi tiết">
+            <a href="#kh-job-desc">Mô tả</a>
+            @if (hasBenefits)
+            {
+                <a href="#kh-job-benefits">Quyền lợi</a>
+            }
+            @if (hasRequirements)
+            {
+                <a href="#kh-job-requirements">Kỹ năng yêu cầu</a>
+            }
+            <a href="#kh-job-specs">Chi tiết công việc</a>
+            <a href="#kh-job-contact">Liên hệ</a>
+            <a href="#kh-job-employer">Về công ty</a>
+        </nav>
+
+        <section id="kh-job-desc" class="kh-job-detail__section kh-job-detail__section--body">
+            <h2 class="kh-job-detail__h2">Mô tả công việc</h2>
+            <div class="kh-job-detail__prose kh-detail__content">
+                @Html.Raw(Model.Detail.ContentHtml)
+            </div>
+        </section>
+
+        @if (hasBenefits)
+        {
+            <section id="kh-job-benefits" class="kh-job-detail__section kh-job-detail__section--body">
+                <h2 class="kh-job-detail__h2">Quyền lợi</h2>
+                <div class="kh-job-detail__prose kh-detail__content">
+                    @Html.Raw(Model.Detail.BenefitsHtml)
+                </div>
+            </section>
+        }
+
+        @if (hasRequirements)
+        {
+            <section id="kh-job-requirements" class="kh-job-detail__section kh-job-detail__section--body">
+                <h2 class="kh-job-detail__h2">Kỹ năng &amp; kinh nghiệm</h2>
+                <div class="kh-job-detail__prose kh-detail__content">
+                    @Html.Raw(Model.Detail.Requirements)
+                </div>
+            </section>
+        }
+
+        <section id="kh-job-specs" class="kh-job-detail__section">
+            <h2 class="kh-job-detail__h2">Chi tiết tin tuyển dụng</h2>
+            <div class="kh-job-detail__spec-grid" role="list">
+                @if (!string.IsNullOrWhiteSpace(Model.Detail.EmploymentTypeLabel))
+                {
+                    <div class="kh-job-detail__spec-cell" role="listitem">
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                        <span class="kh-job-detail__spec-label">Loại công việc</span>
+                        <strong class="kh-job-detail__spec-value">@Model.Detail.EmploymentTypeLabel</strong>
+                    </div>
+                }
+                <div class="kh-job-detail__spec-cell" role="listitem">
+                    <i class="fa fa-sitemap" aria-hidden="true"></i>
+                    <span class="kh-job-detail__spec-label">Ngành nghề</span>
+                    <strong class="kh-job-detail__spec-value">@Model.Detail.Category</strong>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(Model.Detail.ExperienceLevelLabel))
+                {
+                    <div class="kh-job-detail__spec-cell" role="listitem">
+                        <i class="fa fa-line-chart" aria-hidden="true"></i>
+                    <span class="kh-job-detail__spec-label">Kinh nghiệm</span>
+                        <strong class="kh-job-detail__spec-value">@Model.Detail.ExperienceLevelLabel</strong>
+                    </div>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Detail.WorkModeLabel))
+                {
+                    <div class="kh-job-detail__spec-cell" role="listitem">
+                        <i class="fa fa-building-o" aria-hidden="true"></i>
+                        <span class="kh-job-detail__spec-label">Hình thức làm việc</span>
+                        <strong class="kh-job-detail__spec-value">@Model.Detail.WorkModeLabel</strong>
+                    </div>
+                }
+                <div class="kh-job-detail__spec-cell" role="listitem">
+                    <i class="fa fa-money" aria-hidden="true"></i>
+                    <span class="kh-job-detail__spec-label">Mức lương</span>
+                    <strong class="kh-job-detail__spec-value">@(string.IsNullOrWhiteSpace(Model.Detail.Salary) ? "Thỏa thuận" : Model.Detail.Salary)</strong>
+                </div>
+                <div class="kh-job-detail__spec-cell" role="listitem">
+                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    <span class="kh-job-detail__spec-label">Địa điểm</span>
+                    <strong class="kh-job-detail__spec-value">@(string.IsNullOrWhiteSpace(locationLine) ? (Model.Detail.JobLocation ?? "—") : locationLine)</strong>
+                </div>
+            </div>
+        </section>
+
+        <section id="kh-job-contact" class="kh-job-detail__section kh-job-detail__section--contact">
+            <h2 class="kh-job-detail__h2">Thông tin liên hệ</h2>
+            <div class="kh-job-detail__contact-card">
+                <ul class="kh-job-detail__contact-list" role="list">
+                    @if (!string.IsNullOrWhiteSpace(Model.Detail.Address))
+                    {
+                        <li>
+                            <span class="kh-job-detail__contact-dot kh-job-detail__contact-dot--green"></span>
+                            <span><strong>Địa chỉ:</strong> @Model.Detail.Address</span>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(locationLine))
+                    {
+                        <li>
+                            <span class="kh-job-detail__contact-dot kh-job-detail__contact-dot--teal"></span>
+                            <span><strong>Khu vực:</strong> @locationLine</span>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Detail.JobLocation) && !string.Equals(Model.Detail.JobLocation, locationLine, StringComparison.Ordinal))
+                    {
+                        <li>
+                            <span class="kh-job-detail__contact-dot kh-job-detail__contact-dot--blue"></span>
+                            <span><strong>Địa điểm làm việc:</strong> @Model.Detail.JobLocation</span>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Detail.ContactEmail))
+                    {
+                        <li>
+                            <span class="kh-job-detail__contact-dot kh-job-detail__contact-dot--orange"></span>
+                            <span><strong>Email:</strong> <a href="mailto:@Model.Detail.ContactEmail">@Model.Detail.ContactEmail</a></span>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Detail.ContactPhone))
+                    {
+                        <li>
+                            <span class="kh-job-detail__contact-dot kh-job-detail__contact-dot--red"></span>
+                            <span><strong>Điện thoại:</strong> <a href="tel:@Model.Detail.ContactPhone.Replace(" ", string.Empty)">@Model.Detail.ContactPhone</a></span>
+                        </li>
+                    }
+                </ul>
+                @if (string.IsNullOrWhiteSpace(Model.Detail.ContactEmail) && string.IsNullOrWhiteSpace(Model.Detail.ContactPhone) && string.IsNullOrWhiteSpace(Model.Detail.Address) && string.IsNullOrWhiteSpace(Model.Detail.JobLocation) && string.IsNullOrWhiteSpace(locationLine))
+                {
+                    <p class="kh-job-detail__muted">Ứng viên vui lòng sử dụng nút &quot;Nộp đơn ngay&quot; hoặc theo hướng dẫn trong mô tả tin.</p>
+                }
+                else
+                {
+                    <p class="kh-job-detail__note"><em>Ứng viên có thể gửi hồ sơ qua email hoặc đường dẫn ứng tuyển được ghi trong tin.</em></p>
+                }
+            </div>
+        </section>
+
+        <section id="kh-job-employer" class="kh-job-detail__section">
+            <h2 class="kh-job-detail__h2">Về công ty / nhà tuyển dụng</h2>
+            <div class="kh-job-detail__employer-card">
+                <h3 class="kh-job-detail__employer-name">@Model.Detail.AuthorOrCompany</h3>
+                <div class="kh-job-detail__employer-meta">
+                    @if (!string.IsNullOrWhiteSpace(Model.Detail.ApplicationUrl))
+                    {
+                        <a href="@Model.Detail.ApplicationUrl" class="kh-job-detail__link" target="_blank" rel="noopener noreferrer">Trang ứng tuyển</a>
+                    }
+                </div>
+                <p class="kh-job-detail__employer-desc">@Model.Detail.Description</p>
+            </div>
+        </section>
+
+        @if (jobKeywordPills.Count > 0)
+        {
+            <section class="kh-job-detail__section kh-job-detail__section--tags" aria-labelledby="job-keywords-title">
+                <h2 id="job-keywords-title" class="kh-job-detail__h2">Từ khóa</h2>
+                <ul class="kh-job-detail__keyword-pills" role="list">
+                    @foreach (var tag in jobKeywordPills)
+                    {
+                        <li>
+                            <a href="@(Model.ListPath)?Tags=@Uri.EscapeDataString(tag.Slug)"><span class="kh-job-detail__keyword-dot"></span>@tag.Label</a>
+                        </li>
+                    }
+                </ul>
+            </section>
+        }
+
+        <section class="kh-job-detail__section kh-job-detail__share" aria-label="Chia sẻ tin tuyển dụng">
+            <h2 class="kh-job-detail__h2 kh-job-detail__h2--inline">Chia sẻ</h2>
+            <div class="kh-job-detail__share-buttons">
+                <a class="kh-job-detail__share-btn" href="https://www.facebook.com/sharer/sharer.php?u=@encodedShareUrl" target="_blank" rel="noopener noreferrer" aria-label="Chia sẻ Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                <a class="kh-job-detail__share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=@encodedShareUrl" target="_blank" rel="noopener noreferrer" aria-label="Chia sẻ LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                <a class="kh-job-detail__share-btn" href="https://twitter.com/intent/tweet?url=@encodedShareUrl&amp;text=@shareText" target="_blank" rel="noopener noreferrer" aria-label="Chia sẻ X"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                <button type="button" class="kh-job-detail__share-btn" data-copy-share-url="@shareUrl" aria-label="Sao chép liên kết"><i class="fa fa-link" aria-hidden="true"></i></button>
+            </div>
+        </section>
+
+        <partial name="~/Pages/Shared/PublicContent/_CommentSection.cshtml" model="Model.Detail" />
+    </article>
 
     @if (Model.Detail.RelatedItems.Count > 0)
     {
         var templateRoot = Url.Content("~/template");
-        <section class="gray-section kh-detail-section" aria-labelledby="related-title">
+        <section class="gray-section kh-detail-section kh-job-detail-related" aria-labelledby="related-title">
             <div class="container">
-                <div class="section-title">
+                <div class="section-title kh-job-detail-related__head">
                     <h2 id="related-title">Việc làm liên quan</h2>
-                    <div class="section-subtitle">Gợi ý thêm công việc phù hợp để bạn tham khảo.</div>
-                    <span class="section-separator"></span>
-                    <p>Xem thêm các tin tuyển dụng cùng nhóm ngành hoặc khu vực.</p>
-                    <a href="@Model.ListPath">Xem tất cả</a>
+                    <a href="@Model.ListPath" class="kh-job-detail-related__see-all">Xem tất cả <i class="fa fa-angle-right" aria-hidden="true"></i></a>
                 </div>
             </div>
             <div class="list-carousel fl-wrap card-listing">
                 <div class="listing-carousel fl-wrap">
                     @foreach (var item in Model.Detail.RelatedItems)
                     {
-                        var location = string.Join(", ", new[] { item.Province, item.Ward }.Where(x => !string.IsNullOrWhiteSpace(x)));
-                        var meta = string.IsNullOrWhiteSpace(item.MetaLabel) ? "Tin tuyển dụng mới" : item.MetaLabel;
+                        var relLocation = string.Join(", ", new[] { item.Province, item.Ward }.Where(x => !string.IsNullOrWhiteSpace(x)));
                         <div class="slick-slide-item">
-                            <div class="listing-item">
-                                <article class="geodir-category-listing fl-wrap">
-                                    <div class="geodir-category-img">
-                                        <img src="@item.ThumbnailUrl" alt="@item.Title" loading="lazy" decoding="async">
-                                        <div class="overlay"></div>
-                                        <div class="list-post-counter"><span>@item.Popularity</span><i class="fa fa-eye"></i></div>
+                            <div class="listing-item kh-job-related-card">
+                                <article class="kh-job-related-card__inner">
+                                    <button class="kh-job-related-card__fav kh-favorite" type="button" data-favorite="@item.Title" aria-pressed="false" title="Lưu tin">
+                                        <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="kh-job-related-card__logo">
+                                        <img src="@item.ThumbnailUrl" alt="" width="48" height="48" loading="lazy" decoding="async">
                                     </div>
-                                    <div class="geodir-category-content fl-wrap">
-                                        <a class="listing-geodir-category" href="@Model.ListPath">@item.Category</a>
-                                        <div class="listing-avatar">
-                                            <a href="@item.Url"><img src="@(templateRoot)/images/avatar/1.jpg" alt="@item.Title"></a>
-                                            <span class="avatar-tooltip">Đăng bởi <strong>KH HUB</strong></span>
-                                        </div>
-                                        <h3><a href="@item.Url">@item.Title</a></h3>
-                                        <div class="geodir-category-options fl-wrap">
-                                            <div class="listing-rating card-popup-rainingvis" data-starrating2="@(item.Rating ?? 4)">
-                                                <span>@meta</span>
-                                            </div>
-                                            <div class="geodir-category-location">
-                                                <a href="@item.Url"><i class="fa fa-map-marker" aria-hidden="true"></i> @location</a>
-                                            </div>
-                                        </div>
+                                    <div class="kh-job-related-card__body">
+                                        <h3 class="kh-job-related-card__title"><a href="@item.Url">@item.Title</a></h3>
+                                        <p class="kh-job-related-card__company">@item.Category</p>
+                                        <p class="kh-job-related-card__loc" title="@(string.IsNullOrWhiteSpace(relLocation) ? null : relLocation)"><i class="fa fa-map-marker" aria-hidden="true"></i> @(string.IsNullOrWhiteSpace(relLocation) ? "—" : relLocation)</p>
                                     </div>
                                 </article>
                             </div>
@@ -120,4 +303,21 @@
 
 @section Scripts {
     <script src="/template/js/public-content.js" asp-append-version="true" defer></script>
+    <script defer>
+        document.querySelectorAll('[data-copy-share-url]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var url = btn.getAttribute('data-copy-share-url') || '';
+                if (!url) return;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(function () {
+                        btn.classList.add('is-copied');
+                        window.setTimeout(function () { btn.classList.remove('is-copied'); }, 1600);
+                    });
+                } else {
+                    window.prompt('Sao chép liên kết:', url);
+                }
+            });
+        });
+    </script>
 }
+

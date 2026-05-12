@@ -1,3 +1,4 @@
+using System.Globalization;
 using KHHub.Publish_website.Pages.PublicContent;
 using KHHub.Publish_website.Services.PublicContent;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,9 @@ public sealed class DetailsModel : PublicDetailPageModel
 
     public IActionResult OnGet(string slug)
     {
-        return LoadDetail(PublicContentKind.News, slug, "/news", "Tin tức");
+        var listPath = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.OrdinalIgnoreCase)
+            ? "/news"
+            : "/tin-tuc";
+        return LoadDetail(PublicContentKind.News, slug, listPath, "Tin tức");
     }
 }

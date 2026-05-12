@@ -180,12 +180,12 @@ public class PublicMasterDataCatalogClient
         }
 
         var tagsByJobId = await GetTagsByJobIdAsync(cancellationToken);
-        var currentTags = GetTagValues(job.Job.Id, tagsByJobId);
+        var currentSlugs = GetTagSlugs(job.Job.Id, tagsByJobId);
         var related = jobs
             .Where(x => x.Job.Id != job.Job.Id)
             .Select(x => ToJobCard(x, tagsByJobId, detailBasePath))
             .OrderByDescending(x => string.Equals(x.Category, job.JobCategory?.Name, StringComparison.OrdinalIgnoreCase))
-            .ThenByDescending(x => x.Tags.Intersect(currentTags, StringComparer.OrdinalIgnoreCase).Count())
+            .ThenByDescending(x => x.Tags.Intersect(currentSlugs, StringComparer.OrdinalIgnoreCase).Count())
             .ThenByDescending(x => x.Popularity)
             .Take(3)
             .ToList();
@@ -204,8 +204,17 @@ public class PublicMasterDataCatalogClient
             Requirements = job.Job.Requirements,
             Province = job.Province?.Name,
             Ward = job.Ward?.Name,
+            JobLocation = string.IsNullOrWhiteSpace(job.Job.Location) ? null : job.Job.Location.Trim(),
+            BenefitsHtml = BuildJobBenefitsHtml(job.Job),
+            ApplicationUrl = string.IsNullOrWhiteSpace(job.Job.ApplicationUrl) ? null : job.Job.ApplicationUrl.Trim(),
+            ContactEmail = string.IsNullOrWhiteSpace(job.Job.ContactEmail) ? null : job.Job.ContactEmail.Trim(),
+            ContactPhone = string.IsNullOrWhiteSpace(job.Job.ContactPhone) ? null : job.Job.ContactPhone.Trim(),
+            EmploymentTypeLabel = FormatEmploymentTypeVi(job.Job.EmploymentType),
+            ExperienceLevelLabel = FormatExperienceLevelVi(job.Job.ExperienceLevel),
+            WorkModeLabel = FormatWorkModeVi(job.Job.WorkMode),
             Rating = 4.5m,
-            Tags = currentTags,
+            Tags = GetTagSlugs(job.Job.Id, tagsByJobId),
+            JobTagLinks = GetJobTagLinks(job.Job.Id, tagsByJobId),
             RelatedItems = related
         };
     }
@@ -247,7 +256,7 @@ public class PublicMasterDataCatalogClient
         }
     }
 
-    private async Task<IReadOnlyDictionary<Guid, IReadOnlyList<string>>> GetTagsByJobIdAsync(
+    private async Task<IReadOnlyDictionary<Guid, IReadOnlyList<JobDetailTagLink>>> GetTagsByJobIdAsync(
         CancellationToken cancellationToken)
     {
         try
@@ -261,7 +270,7 @@ public class PublicMasterDataCatalogClient
 
             if (page?.Items is not { Count: > 0 })
             {
-                return new Dictionary<Guid, IReadOnlyList<string>>();
+                return new Dictionary<Guid, IReadOnlyList<JobDetailTagLink>>();
             }
 
             return page.Items
@@ -269,26 +278,33 @@ public class PublicMasterDataCatalogClient
                 .GroupBy(x => x.JobTagMapping.JobId)
                 .ToDictionary(
                     x => x.Key,
-                    x => (IReadOnlyList<string>)x
-                        .Select(item => FirstNonEmpty(item.JobTag.Slug, item.JobTag.Name))
-                        .Where(tag => !string.IsNullOrWhiteSpace(tag))
-                        .Distinct(StringComparer.OrdinalIgnoreCase)
+                    x => (IReadOnlyList<JobDetailTagLink>)x
+                        .Select(item =>
+                        {
+                            var tag = item.JobTag!;
+                            var slug = FirstNonEmpty(tag.Slug, tag.Name);
+                            var name = FirstNonEmpty(tag.Name, tag.Slug);
+                            return new JobDetailTagLink(slug?.Trim() ?? string.Empty, name?.Trim() ?? string.Empty);
+                        })
+                        .Where(t => !string.IsNullOrWhiteSpace(t.Slug))
+                        .GroupBy(t => t.Slug, StringComparer.OrdinalIgnoreCase)
+                        .Select(g => g.First())
                         .ToList());
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Failed to load job tags from MasterData gateway.");
-            return new Dictionary<Guid, IReadOnlyList<string>>();
+            return new Dictionary<Guid, IReadOnlyList<JobDetailTagLink>>();
         }
     }
 
     private PublicContentCardViewModel ToJobCard(
         JobWithNavigationPropertiesDto item,
-        IReadOnlyDictionary<Guid, IReadOnlyList<string>> tagsByJobId,
+        IReadOnlyDictionary<Guid, IReadOnlyList<JobDetailTagLink>> tagsByJobId,
         string detailBasePath)
     {
         var job = item.Job;
-        var tags = GetTagValues(job.Id, tagsByJobId);
+        var tags = GetTagSlugs(job.Id, tagsByJobId);
         var province = item.Province?.Name;
         var ward = item.Ward?.Name;
 
@@ -302,8 +318,11 @@ public class PublicMasterDataCatalogClient
             Description = FirstNonEmpty(job.Summary, job.SeoDescription, StripHtml(job.Description), job.Title),
             ThumbnailUrl = ResolveBrowserImageUrl(job.ThumbnailUrl ?? job.CoverImageUrl, job.Slug),
             Category = item.JobCategory?.Name ?? "Việc làm",
+            CategoryIcon = item.JobCategory?.Icon,
+            CategoryIconColor = item.JobCategory?.Color,
             Province = province,
             Ward = ward,
+            WardCode = item.Ward?.Code,
             MetaLabel = FormatJobMeta(job),
             CreatedAt = ToDateTimeOffset(job.PublishedAt, job.CreationTime),
             Popularity = job.ViewCount,
@@ -383,13 +402,22 @@ public class PublicMasterDataCatalogClient
             .ToList();
     }
 
-    private static IReadOnlyList<string> GetTagValues(
+    private static IReadOnlyList<string> GetTagSlugs(
         Guid jobId,
-        IReadOnlyDictionary<Guid, IReadOnlyList<string>> tagsByJobId)
+        IReadOnlyDictionary<Guid, IReadOnlyList<JobDetailTagLink>> tagsByJobId)
     {
-        return tagsByJobId.TryGetValue(jobId, out var tags)
-            ? tags
+        return tagsByJobId.TryGetValue(jobId, out var links)
+            ? links.Select(l => l.Slug).Where(s => !string.IsNullOrWhiteSpace(s)).ToList()
             : Array.Empty<string>();
+    }
+
+    private static IReadOnlyList<JobDetailTagLink> GetJobTagLinks(
+        Guid jobId,
+        IReadOnlyDictionary<Guid, IReadOnlyList<JobDetailTagLink>> tagsByJobId)
+    {
+        return tagsByJobId.TryGetValue(jobId, out var links)
+            ? links
+            : Array.Empty<JobDetailTagLink>();
     }
 
     private string ResolveBrowserImageUrl(string? imageUrl, string seed)
@@ -469,6 +497,56 @@ public class PublicMasterDataCatalogClient
         return LooksLikeHtml(description)
             ? description
             : $"<p>{WebUtility.HtmlEncode(description)}</p>";
+    }
+
+    private static string? BuildJobBenefitsHtml(JobDto job)
+    {
+        var benefits = job.Benefits;
+        if (string.IsNullOrWhiteSpace(benefits))
+        {
+            return null;
+        }
+
+        return LooksLikeHtml(benefits)
+            ? benefits
+            : $"<p>{WebUtility.HtmlEncode(benefits)}</p>";
+    }
+
+    private static string? FormatEmploymentTypeVi(EmploymentType? value)
+    {
+        return value switch
+        {
+            EmploymentType.FullTime => "Nhân viên toàn thời gian",
+            EmploymentType.PartTime => "Bán thời gian",
+            EmploymentType.Internship => "Thực tập",
+            EmploymentType.Freelance => "Freelance",
+            EmploymentType.Contract => "Hợp đồng",
+            _ => null
+        };
+    }
+
+    private static string? FormatExperienceLevelVi(ExperienceLevel? value)
+    {
+        return value switch
+        {
+            ExperienceLevel.Fresher => "Chưa có kinh nghiệm",
+            ExperienceLevel.Junior => "Dưới 3 năm kinh nghiệm",
+            ExperienceLevel.Middle => "3–5 năm kinh nghiệm",
+            ExperienceLevel.Senior => "Trên 5 năm kinh nghiệm",
+            ExperienceLevel.Lead => "Trưởng nhóm / Lead",
+            _ => null
+        };
+    }
+
+    private static string? FormatWorkModeVi(WorkMode? value)
+    {
+        return value switch
+        {
+            WorkMode.Onsite => "Tại văn phòng",
+            WorkMode.Hybrid => "Kết hợp (Hybrid)",
+            WorkMode.Remote => "Làm việc từ xa",
+            _ => null
+        };
     }
 
     private static string StripHtml(string? value)

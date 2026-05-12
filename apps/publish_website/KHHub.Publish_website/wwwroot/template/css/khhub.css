@@ -98,6 +98,58 @@
     margin: 0 auto;
 }
 
+/* Section header: theme uses a huge absolute .section-subtitle as watermark — reset for jobs block */
+.khhub-job-section .section-title {
+    position: relative;
+    z-index: 0;
+    isolation: isolate;
+    overflow: visible;
+}
+
+.khhub-job-section .section-subtitle {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: auto;
+    max-width: 42rem;
+    margin: 0 auto 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 1;
+    z-index: 1;
+    color: #64748b;
+}
+
+.khhub-job-section .section-subtitle:before {
+    display: none;
+}
+
+.khhub-job-section .section-title h2 {
+    position: relative;
+    z-index: 2;
+    float: none;
+    width: auto;
+    margin-top: 0;
+}
+
+.khhub-job-section .section-separator {
+    float: none;
+    width: 100%;
+    clear: both;
+}
+
+.khhub-job-section .section-title p {
+    float: none;
+    width: auto;
+    clear: both;
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* Landing jobs: forum-style thread list + infinite scroll */
 .khhub-job-scroll-host.khhub-job-forum-board {
     float: left;
@@ -142,16 +194,14 @@
     align-items: stretch;
     gap: 16px;
     padding: 14px 18px;
-    text-decoration: none;
     color: inherit;
     transition: background-color 0.12s ease;
     min-width: 0;
 }
 
-.khhub-job-forum-row__link:hover,
-.khhub-job-forum-row__link:focus-visible {
+.khhub-job-forum-row:hover .khhub-job-forum-row__link,
+.khhub-job-forum-row:focus-within .khhub-job-forum-row__link {
     background: rgba(59, 130, 246, 0.06);
-    outline: none;
 }
 
 .khhub-job-forum-avatar {
@@ -165,6 +215,14 @@
     justify-content: center;
     box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
     align-self: center;
+    text-decoration: none;
+    color: inherit;
+    flex-shrink: 0;
+}
+
+.khhub-job-forum-avatar:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
 }
 
 .khhub-job-forum-avatar__glyph {
@@ -184,6 +242,13 @@
     padding-right: 8px;
 }
 
+.khhub-job-forum-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
 .khhub-job-forum-badge {
     align-self: flex-start;
     font-size: 11px;
@@ -195,16 +260,35 @@
     border: 1px solid transparent;
 }
 
-.khhub-job-forum-row--even .khhub-job-forum-badge {
+a.khhub-job-forum-badge {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a.khhub-job-forum-badge:hover {
+    filter: brightness(0.97);
+}
+
+.khhub-job-forum-row--even .khhub-job-forum-badge:not(.khhub-job-forum-badge--ward) {
     background: #dbeafe;
     color: #1e40af;
     border-color: #93c5fd;
 }
 
-.khhub-job-forum-row--odd .khhub-job-forum-badge {
+.khhub-job-forum-row--odd .khhub-job-forum-badge:not(.khhub-job-forum-badge--ward) {
     background: #ffedd5;
     color: #9a3412;
     border-color: #fdba74;
+}
+
+/* Solid ward chip: white label on ward color (inline hex when available). */
+.khhub-job-forum-badge--ward {
+    color: #fff;
+    background-color: #334155;
+    border-color: #334155;
+    text-transform: none;
+    font-weight: 600;
+    font-size: 12px;
 }
 
 .khhub-job-forum-title {
@@ -213,23 +297,31 @@
     font-weight: 700;
     line-height: 1.35;
     text-align: left;
+}
+
+.khhub-job-forum-title__a {
     display: -webkit-box;
     line-clamp: 2;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    color: inherit;
+    text-decoration: none;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
 }
 
-.khhub-job-forum-row--even .khhub-job-forum-title {
+.khhub-job-forum-row--even .khhub-job-forum-title__a {
     color: #c2410c;
 }
 
-.khhub-job-forum-row--odd .khhub-job-forum-title {
+.khhub-job-forum-row--odd .khhub-job-forum-title__a {
     color: #1d4ed8;
 }
 
-.khhub-job-forum-row__link:hover .khhub-job-forum-title,
-.khhub-job-forum-row__link:focus-visible .khhub-job-forum-title {
+.khhub-job-forum-row:hover .khhub-job-forum-title__a,
+.khhub-job-forum-row:focus-within .khhub-job-forum-title__a {
     text-decoration: underline;
     text-underline-offset: 3px;
 }
@@ -307,8 +399,18 @@
     font-size: 14px;
 }
 
+/* Author `display:flex` wins over UA `[hidden]` alone — force hide when toggled via hidden attribute */
+.khhub-job-forum-loading[hidden] {
+    display: none !important;
+}
+
 .khhub-job-forum-board--loading .khhub-job-forum-loading {
     border-top-color: #bfdbfe;
+}
+
+.khhub-job-forum-loading--end {
+    color: #64748b;
+    font-weight: 500;
 }
 
 .khhub-job-forum-loading__text {
@@ -444,4 +546,18 @@
     .khhub-job-section {
         padding-top: 20px;
     }
+}
+
+/* Mobile-friendly: allow readable scaling and comfortable social tap targets on landing */
+body.khhub-theme {
+    -webkit-text-size-adjust: 100%;
+}
+
+body.khhub-theme .footer-social a {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
 }

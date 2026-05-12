@@ -75,21 +75,24 @@ public class Program
                     options.Conventions.AddPageRoute("/JobTags/Index", "the-viec-lam");
                     options.Conventions.AddPageRoute("/JobTags/Details", "the-viec-lam/{slug}");
 
-                    //Place routes
-                    options.Conventions.AddPageRoute("/Places/Index", "dia-diem");
-                    options.Conventions.AddPageRoute("/Places/Details", "dia-diem/{slug}");
+                    // Location routes (Razor pages live under Pages/Locations)
+                    options.Conventions.AddPageRoute("/Locations/Index", "dia-diem");
+                    options.Conventions.AddPageRoute("/Locations/Details", "dia-diem/{slug}");
                     options.Conventions.AddPageRoute("/PlaceCategories/Index", "danh-muc-dia-diem");
                     options.Conventions.AddPageRoute("/PlaceCategories/Details", "danh-muc-dia-diem/{slug}");
                     options.Conventions.AddPageRoute("/PlaceTags/Index", "tags-dia-diem");
                     options.Conventions.AddPageRoute("/PlaceTags/Details", "tags-dia-diem/{slug}");
 
-                    //Article routes
-                    options.Conventions.AddPageRoute("/Articles/Index", "tin-tuc");
-                    options.Conventions.AddPageRoute("/Articles/Details", "tin-tuc/{slug}");
+                    // News routes (Razor pages live under Pages/News)
+                    options.Conventions.AddPageRoute("/News/Index", "tin-tuc");
+                    options.Conventions.AddPageRoute("/News/Details", "tin-tuc/{slug}");
                     options.Conventions.AddPageRoute("/ArticleCategories/Index", "danh-muc-tin-tuc");
                     options.Conventions.AddPageRoute("/ArticleCategories/Details", "danh-muc-tin-tuc/{slug}");
                     options.Conventions.AddPageRoute("/ArticleTags/Index", "tags-tin-tuc");
                     options.Conventions.AddPageRoute("/ArticleTags/Details", "tags-tin-tuc/{slug}");
+
+                    // Gold price (Razor page: Pages/GoldPrices/Index)
+                    options.Conventions.AddPageRoute("/GoldPrices/Index", "gia-vang");
                 })
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization();

@@ -3,6 +3,9 @@
     var templateRoot = Url.Content("~/template");
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var jobsPath = currentCulture.Equals("en", StringComparison.OrdinalIgnoreCase) ? "/jobs" : "/viec-lam";
+    var goldPricePath = currentCulture.Equals("en", StringComparison.OrdinalIgnoreCase) ? "/gold-price" : "/gia-vang";
+    var newsPath = currentCulture.Equals("en", StringComparison.OrdinalIgnoreCase) ? "/news" : "/tin-tuc";
+    var placesPath = currentCulture.Equals("en", StringComparison.OrdinalIgnoreCase) ? "/places" : "/dia-diem";
     var request = ViewContext.HttpContext.Request;
     var currentPath = request.Path.Value ?? "/";
     var currentQuery = request.QueryString.Value ?? string.Empty;
@@ -94,18 +97,18 @@
                         <a href="/" class="@ActiveClass(IsActive("/", exact: true))">@L["Menu:Home"] </a>
                     </li>
                     <li>
-                        <a href="/places" class="@ActiveClass(IsActive("/places"))">@L["Menu:Places"]</a>
+                        <a href="@placesPath" class="@ActiveClass(IsActive("/places") || IsActive("/dia-diem"))">@L["Menu:Places"]</a>
                     </li>
                     <li>
-                        <a href="/news" class="@ActiveClass(IsActive("/news"))">@L["Menu:News"]</a>
+                        <a href="@newsPath" class="@ActiveClass(IsActive("/news") || IsActive("/tin-tuc"))">@L["Menu:News"]</a>
                     </li>
                     <li>
                         <a href="@jobsPath" class="@ActiveClass(IsActive("/jobs") || IsActive("/viec-lam"))">@L["Menu:Jobs"]</a>
                     </li>
                     <li>
-                        <a href="/gold-price" class="@ActiveClass(IsActive("/gold-price"))">@L["Menu:GoldPrice"]</a>
+                        <a href="@goldPricePath" class="@ActiveClass(IsActive("/gold-price") || IsActive("/gia-vang"))">@L["Menu:GoldPrice"]</a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="#">@L["Menu:Pages"] <i class="fa fa-caret-down"></i></a>
                         <ul>
                             <li><a href="about.html">@L["Menu:About"]</a></li>
@@ -121,7 +124,7 @@
                             <li><a href="header2.html">Header 2</a></li>
                             <li><a href="footer-fixed.html">Footer fixed</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                 </ul>
             </nav>
         </div>

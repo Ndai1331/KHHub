@@ -230,7 +230,14 @@ public class JobCrawlerIntegrationService : ApplicationService, IJobCrawlerInteg
             return existing.Id;
         }
 
-        var slug = BuildJobCategorySlug(trimmed);
+        var slug = BuildJobCategorySeoSlug(trimmed);
+        var existingBySlug = categories.FirstOrDefault(c =>
+            string.Equals(c.Slug, slug, StringComparison.OrdinalIgnoreCase));
+        if (existingBySlug != null)
+        {
+            return existingBySlug.Id;
+        }
+
         var nextOrder = categories.Count == 0 ? 1 : categories.Max(c => c.DisplayOrder) + 1;
         var created = await _jobCategoryManager.CreateAsync(trimmed, slug, nextOrder, true);
         return created.Id;
@@ -241,7 +248,7 @@ public class JobCrawlerIntegrationService : ApplicationService, IJobCrawlerInteg
         return SlugifyAsciiSegment(text).Replace("-", "", StringComparison.Ordinal);
     }
 
-    private string BuildJobCategorySlug(string name)
+    private static string BuildJobCategorySeoSlug(string name)
     {
         var ascii = SlugifyAsciiSegment(name);
         if (string.IsNullOrEmpty(ascii))
@@ -249,11 +256,9 @@ public class JobCrawlerIntegrationService : ApplicationService, IJobCrawlerInteg
             ascii = "job-category";
         }
 
-        var hash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(name))).ToLowerInvariant();
-        var combined = $"{ascii}-{hash[..8]}";
-        return combined.Length > JobCategoryConsts.SlugMaxLength
-            ? combined[..JobCategoryConsts.SlugMaxLength]
-            : combined;
+        return ascii.Length > JobCategoryConsts.SlugMaxLength
+            ? ascii[..JobCategoryConsts.SlugMaxLength]
+            : ascii;
     }
 
     private async Task ReplaceJobTagsAsync(Guid jobId, List<string> tagNames)

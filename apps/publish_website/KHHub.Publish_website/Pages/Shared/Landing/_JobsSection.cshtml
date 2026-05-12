@@ -1,14 +1,10 @@
-@model KHHub.Publish_website.Pages.IndexModel
-@using System.Globalization
-@using System.Linq
+@using KHHub.Publish_website.Services
 
 <section class="khhub-job-section">
     <div class="container">
         <div class="section-title">
             <h2>@L["Landing:JobsTitle"]</h2>
-            <div class="section-subtitle">@L["Landing:JobsSectionSubtitle"]</div>
             <span class="section-separator"></span>
-            <p>@L["Landing:JobsLead"]</p>
         </div>
         @if (Model.Jobs.Count == 0)
         {
@@ -28,7 +24,8 @@
                 data-views-format="@L["Landing:ViewsFormat"]"
                 data-error-text="@L["Landing:JobsLoadMoreError"]"
                 data-views-label="@L["Landing:JobsForumViewsLabel"]"
-                data-ui-lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+                data-ui-lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName"
+                data-jobs-list-path="@Model.JobsListPath">
                 <div class="khhub-job-scroll-host__inner" id="khhub-jobs-list" role="list">
                     @{ var forumIndex = 0; }
                     @foreach (var job in Model.Jobs)
@@ -46,21 +43,61 @@
                         {
                             excerptParts.Add(loc);
                         }
-                        var firstTag = job.Tags.FirstOrDefault(t => !string.IsNullOrWhiteSpace(t));
+                       /* var firstTag = job.Tags.FirstOrDefault(t => !string.IsNullOrWhiteSpace(t));
                         if (!string.IsNullOrWhiteSpace(firstTag))
                         {
                             excerptParts.Add(firstTag!);
-                        }
+                        }*/
                         var excerpt = string.Join(" · ", excerptParts);
+                        var jobsBase = Model.JobsListPath;
+                        var categoryHref = !string.IsNullOrWhiteSpace(job.Category)
+                            ? QueryHelpers.AddQueryString(jobsBase, "Category", job.Category)
+                            : jobsBase;
+                        string? wardHref = null;
+                        if (!string.IsNullOrWhiteSpace(job.Ward))
+                        {
+                            var wardParams = new Dictionary<string, string?> { ["Ward"] = job.Ward };
+                            if (!string.IsNullOrWhiteSpace(job.Province))
+                            {
+                                wardParams["Province"] = job.Province;
+                            }
+
+                            wardHref = QueryHelpers.AddQueryString(jobsBase, wardParams);
+                        }
+
+                        string? wardFg = null;
+                        if (wardHref is not null)
+                        {
+                            wardFg = WardBadgeFormat.ForegroundHex(job.WardCode, job.Ward);
+                        }
+
                         forumIndex++;
                         <article class="khhub-job-forum-row khhub-job-forum-row--@rowTone" role="listitem">
-                            <a class="khhub-job-forum-row__link" href="@job.Url">
-                                <span class="khhub-job-forum-avatar" aria-hidden="true">
-                                    <span class="khhub-job-forum-avatar__glyph">@avatarGlyph</span>
-                                </span>
+                            <div class="khhub-job-forum-row__link">
+                                <a class="khhub-job-forum-avatar" href="@job.Url" aria-label="@job.Title">
+                                    <span class="khhub-job-forum-avatar__glyph" aria-hidden="true">@avatarGlyph</span>
+                                </a>
                                 <div class="khhub-job-forum-main">
-                                    <span class="khhub-job-forum-badge">@job.Category</span>
-                                    <h3 class="khhub-job-forum-title">@job.Title</h3>
+                                    @if (!string.IsNullOrWhiteSpace(job.Category) || wardHref is not null)
+                                    {
+                                        <div class="khhub-job-forum-badges">
+                                            @if (!string.IsNullOrWhiteSpace(job.Category))
+                                            {
+                                                <a class="khhub-job-forum-badge" href="@categoryHref" rel="tag">
+                                                    @if (!string.IsNullOrWhiteSpace(job.CategoryIcon))
+                                                    {
+                                                        <i class="@job.CategoryIcon" aria-hidden="true" style="color: @(job.CategoryIconColor ?? "inherit"); margin-right: 4px;"></i>
+                                                    }
+                                                    @job.Category
+                                                </a>
+                                            }
+                                            @if (wardHref is not null)
+                                            {
+                                                <a class="khhub-job-forum-badge khhub-job-forum-badge--ward" href="@wardHref" style="color: #fff; border-color: @wardFg; background-color: @wardFg;">@job.Ward</a>
+                                            }
+                                        </div>
+                                    }
+                                    <h3 class="khhub-job-forum-title"><a class="khhub-job-forum-title__a" href="@job.Url">@job.Title</a></h3>
                                     @if (!string.IsNullOrWhiteSpace(excerpt))
                                     {
                                         <p class="khhub-job-forum-excerpt">@excerpt</p>
@@ -77,13 +114,16 @@
                                         </time>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </article>
                     }
                 </div>
                 <div id="khhub-jobs-loading" class="khhub-job-forum-loading" hidden>
                     <span class="khhub-job-forum-loading__spinner" aria-hidden="true"></span>
                     <span class="khhub-job-forum-loading__text">@L["Landing:JobsLoadingMore"]</span>
+                </div>
+                <div id="khhub-jobs-end" class="khhub-job-forum-loading khhub-job-forum-loading--end" hidden role="status" aria-live="polite">
+                    <span class="khhub-job-forum-loading__text">@L["Landing:JobsNoMoreToLoad"]</span>
                 </div>
                 <div id="khhub-jobs-sentinel" class="khhub-job-forum-sentinel" aria-hidden="true"></div>
             </div>

@@ -1,7 +1,18 @@
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 @{
     var templateRoot = Url.Content("~/template");
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var jobsPath = currentCulture.Equals("en", StringComparison.OrdinalIgnoreCase) ? "/jobs" : "/viec-lam";
+    var newsPath = currentCulture.Equals("en", StringComparison.OrdinalIgnoreCase) ? "/news" : "/tin-tuc";
+    var placesPath = currentCulture.Equals("en", StringComparison.OrdinalIgnoreCase) ? "/places" : "/dia-diem";
+    var goldPricePath = currentCulture.Equals("en", StringComparison.OrdinalIgnoreCase) ? "/gold-price" : "/gia-vang";
+
+    var socialFacebook = Configuration["Social:FacebookUrl"];
+    var socialX = Configuration["Social:XUrl"];
+    var socialLinkedIn = Configuration["Social:LinkedInUrl"];
+    var socialInstagram = Configuration["Social:InstagramUrl"];
+    var socialYoutube = Configuration["Social:YoutubeUrl"];
 }
 
 <footer class="main-footer dark-footer">
@@ -27,21 +38,21 @@
                     <div class="widget-posts fl-wrap">
                         <ul>
                             <li class="clearfix">
-                                <a href="#" class="widget-posts-img"><img src="@(templateRoot)/images/all/1.jpg" class="respimg" alt=""></a>
+                                <a href="#" class="widget-posts-img"><img src="@(templateRoot)/images/all/1.jpg" class="respimg" alt="@L["Landing:ImageAltFooterNews"]"></a>
                                 <div class="widget-posts-descr">
                                     <a href="#" title="">@L["Landing:FooterNews1"]</a>
                                     <span class="widget-posts-date"> 21 Mar 09.05 </span>
                                 </div>
                             </li>
                             <li class="clearfix">
-                                <a href="#" class="widget-posts-img"><img src="@(templateRoot)/images/all/1.jpg" class="respimg" alt=""></a>
+                                <a href="#" class="widget-posts-img"><img src="@(templateRoot)/images/all/1.jpg" class="respimg" alt="@L["Landing:ImageAltFooterNews"]"></a>
                                 <div class="widget-posts-descr">
                                     <a href="#" title="">@L["Landing:FooterNews2"]</a>
                                     <span class="widget-posts-date"> 7 Mar 18.21 </span>
                                 </div>
                             </li>
                             <li class="clearfix">
-                                <a href="#" class="widget-posts-img"><img src="@(templateRoot)/images/all/1.jpg" class="respimg" alt=""></a>
+                                <a href="#" class="widget-posts-img"><img src="@(templateRoot)/images/all/1.jpg" class="respimg" alt="@L["Landing:ImageAltFooterNews"]"></a>
                                 <div class="widget-posts-descr">
                                     <a href="#" title="">@L["Landing:FooterNews3"]</a>
                                     <span class="widget-posts-date"> 7 Mar 16.42 </span>
@@ -58,11 +69,26 @@
 
                     <div class="footer-social">
                         <ul>
-                            <li><a href="#" target="_blank"><i class="fa fa-facebook-official"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fa fa-chrome"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fa fa-vk"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fa fa-whatsapp"></i></a></li>
+                            @if (IsConfiguredSocialUrl(socialFacebook))
+                            {
+                                <li><a href="@socialFacebook" rel="noopener noreferrer" target="_blank" aria-label="@L["Landing:SocialFacebookAria"]"><i class="fa fa-facebook-official" aria-hidden="true"></i></a></li>
+                            }
+                            @if (IsConfiguredSocialUrl(socialX))
+                            {
+                                <li><a href="@socialX" rel="noopener noreferrer" target="_blank" aria-label="@L["Landing:SocialXAria"]"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                            }
+                            @if (IsConfiguredSocialUrl(socialLinkedIn))
+                            {
+                                <li><a href="@socialLinkedIn" rel="noopener noreferrer" target="_blank" aria-label="@L["Landing:SocialLinkedInAria"]"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                            }
+                            @if (IsConfiguredSocialUrl(socialInstagram))
+                            {
+                                <li><a href="@socialInstagram" rel="noopener noreferrer" target="_blank" aria-label="@L["Landing:SocialInstagramAria"]"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                            }
+                            @if (IsConfiguredSocialUrl(socialYoutube))
+                            {
+                                <li><a href="@socialYoutube" rel="noopener noreferrer" target="_blank" aria-label="@L["Landing:SocialYoutubeAria"]"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
+                            }
                         </ul>
                     </div>
                 </div>
@@ -84,10 +110,10 @@
                         <div class="footer-menu fl-wrap">
                             <ul>
                                 <li><a href="/">@L["Menu:Home"]</a></li>
-                                <li><a href="/news">@L["Menu:News"]</a></li>
+                                <li><a href="@newsPath">@L["Menu:News"]</a></li>
                                 <li><a href="@jobsPath">@L["Menu:Jobs"]</a></li>
-                                <li><a href="/places">@L["Menu:Places"]</a></li>
-                                <li><a href="/gold-price">@L["Menu:GoldPrice"]</a></li>
+                                <li><a href="@placesPath">@L["Menu:Places"]</a></li>
+                                <li><a href="@goldPricePath">@L["Menu:GoldPrice"]</a></li>
                                 <li><a href="/contact">@L["Menu:Contact"]</a></li>
                             </ul>
                         </div>
@@ -122,3 +148,10 @@
         </div>
     </div> -->
 </footer>
+
+@functions {
+    private static bool IsConfiguredSocialUrl(string? url) =>
+        !string.IsNullOrWhiteSpace(url) &&
+        (url!.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
+         url.StartsWith("http://", StringComparison.OrdinalIgnoreCase));
+}
