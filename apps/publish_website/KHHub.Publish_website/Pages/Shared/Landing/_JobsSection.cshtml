@@ -1,10 +1,12 @@
 @model KHHub.Publish_website.Pages.IndexModel
+@using System.Globalization
+@using System.Linq
 
 <section class="khhub-job-section">
     <div class="container">
         <div class="section-title">
             <h2>@L["Landing:JobsTitle"]</h2>
-            <div class="section-subtitle">New Jobs</div>
+            <div class="section-subtitle">@L["Landing:JobsSectionSubtitle"]</div>
             <span class="section-separator"></span>
             <p>@L["Landing:JobsLead"]</p>
         </div>
@@ -16,46 +18,74 @@
         }
         else
         {
-            <div class="khhub-job-list">
-                @foreach (var job in Model.Jobs.Take(10))
-                {
-                    var imageUrl = Model.ResolveMediaUrl(job.ThumbnailUrl);
-                    <article class="khhub-job-card">
-                        <a class="khhub-job-card__media" href="@job.Url" aria-label="@job.Title">
-                            <img src="@imageUrl" alt="@job.Title" loading="lazy" decoding="async" width="640" height="360">
-                            <span class="khhub-job-badge">@job.Category</span>
-                        </a>
-                        <div class="khhub-job-card__content">
-                            <div class="khhub-job-card__head">
-                                <h3><a href="@job.Url">@job.Title</a></h3>
-                                <div class="khhub-job-meta">
-                                    <span>@job.Category</span>
-                                    <span>@L["Landing:ViewsFormat", job.Popularity]</span>
-                                </div>
-                            </div>
-                            @if (!string.IsNullOrWhiteSpace(job.Province))
-                            {
-                                <div class="khhub-job-location">
-                                    <i class="fa fa-map-marker"></i> @job.Province, @job.Ward
-                                </div>
-                            }
-                            <div class="khhub-job-card__footer">
-                                <div class="khhub-job-tags">
-                                    @foreach (var tag in job.Tags.Take(2))
+            <div
+                id="khhub-jobs-scroll-host"
+                class="khhub-job-scroll-host khhub-job-forum-board"
+                data-feed-url="@Url.Page("/Index", "JobsFeed")"
+                data-take="10"
+                data-initial-skip="@Model.Jobs.Count"
+                data-total-count="@Model.JobsTotalCount"
+                data-views-format="@L["Landing:ViewsFormat"]"
+                data-error-text="@L["Landing:JobsLoadMoreError"]"
+                data-views-label="@L["Landing:JobsForumViewsLabel"]"
+                data-ui-lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+                <div class="khhub-job-scroll-host__inner" id="khhub-jobs-list" role="list">
+                    @{ var forumIndex = 0; }
+                    @foreach (var job in Model.Jobs)
+                    {
+                        var rowTone = forumIndex % 2 == 0 ? "even" : "odd";
+                        var titleSample = (job.Title ?? string.Empty).Trim();
+                        var avatarGlyph = titleSample.Length > 0 ? char.ToUpperInvariant(titleSample[0]) : '\u2022';
+                        var loc = string.Join(", ", new[] { job.Province, job.Ward }.Where(s => !string.IsNullOrWhiteSpace(s)));
+                        var excerptParts = new List<string>();
+                        if (!string.IsNullOrWhiteSpace(job.MetaLabel))
+                        {
+                            excerptParts.Add(job.MetaLabel);
+                        }
+                        if (!string.IsNullOrWhiteSpace(loc))
+                        {
+                            excerptParts.Add(loc);
+                        }
+                        var firstTag = job.Tags.FirstOrDefault(t => !string.IsNullOrWhiteSpace(t));
+                        if (!string.IsNullOrWhiteSpace(firstTag))
+                        {
+                            excerptParts.Add(firstTag!);
+                        }
+                        var excerpt = string.Join(" · ", excerptParts);
+                        forumIndex++;
+                        <article class="khhub-job-forum-row khhub-job-forum-row--@rowTone" role="listitem">
+                            <a class="khhub-job-forum-row__link" href="@job.Url">
+                                <span class="khhub-job-forum-avatar" aria-hidden="true">
+                                    <span class="khhub-job-forum-avatar__glyph">@avatarGlyph</span>
+                                </span>
+                                <div class="khhub-job-forum-main">
+                                    <span class="khhub-job-forum-badge">@job.Category</span>
+                                    <h3 class="khhub-job-forum-title">@job.Title</h3>
+                                    @if (!string.IsNullOrWhiteSpace(excerpt))
                                     {
-                                        <span><i class="fa fa-tag"></i> @tag</span>
+                                        <p class="khhub-job-forum-excerpt">@excerpt</p>
                                     }
                                 </div>
-                                @if (!string.IsNullOrWhiteSpace(job.MetaLabel))
-                                {
-                                    <div class="khhub-job-salary">
-                                        <strong>@job.MetaLabel</strong>
+                                <div class="khhub-job-forum-side">
+                                    <div class="khhub-job-forum-stats" aria-label="@L["Landing:JobsForumViewsLabel"]">
+                                        <span class="khhub-job-forum-stats__label">@L["Landing:JobsForumViewsLabel"]</span>
+                                        <strong class="khhub-job-forum-stats__value">@job.Popularity.ToString("N0", CultureInfo.CurrentUICulture)</strong>
                                     </div>
-                                }
-                            </div>
-                        </div>
-                    </article>
-                }
+                                    <div class="khhub-job-forum-activity">
+                                        <time class="khhub-job-forum-activity__time" datetime="@job.CreatedAt.ToString("o", CultureInfo.InvariantCulture)">
+                                           @job.CreatedAt.ToLocalTime().ToString("d", CultureInfo.CurrentUICulture)
+                                        </time>
+                                    </div>
+                                </div>
+                            </a>
+                        </article>
+                    }
+                </div>
+                <div id="khhub-jobs-loading" class="khhub-job-forum-loading" hidden>
+                    <span class="khhub-job-forum-loading__spinner" aria-hidden="true"></span>
+                    <span class="khhub-job-forum-loading__text">@L["Landing:JobsLoadingMore"]</span>
+                </div>
+                <div id="khhub-jobs-sentinel" class="khhub-job-forum-sentinel" aria-hidden="true"></div>
             </div>
             <div class="khhub-job-section__cta text-center mt-4">
                 <a class="btn big-btn circle-btn dec-btn color-bg flat-btn" href="@Model.JobsListPath">

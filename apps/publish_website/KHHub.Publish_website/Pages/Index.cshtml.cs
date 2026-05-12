@@ -50,6 +50,9 @@ public class IndexModel : PageModel
     public IReadOnlyList<PublicContentCardViewModel> Jobs { get; private set; } =
         Array.Empty<PublicContentCardViewModel>();
 
+    /// <summary>Total published jobs count from MasterData (for landing infinite scroll).</summary>
+    public long JobsTotalCount { get; private set; }
+
     public string JobsListPath => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.OrdinalIgnoreCase)
         ? "/jobs"
         : "/viec-lam";
@@ -65,14 +68,54 @@ public class IndexModel : PageModel
                 var now = _timeProvider.GetUtcNow().UtcDateTime;
                 var banners = await _catalogClient.GetActiveHomeBannersAsync(8, now, cancellationToken);
                 var places = await _catalogClient.GetPublishedPlacesAsync(12, cancellationToken);
-                var jobs = await _catalogClient.GetLatestPublishedJobCardsAsync(10, JobsListPath, cancellationToken);
+                var jobsPage = await _catalogClient.GetLatestPublishedJobCardsPageAsync(
+                    0,
+                    10,
+                    JobsListPath,
+                    cancellationToken);
 
-                return new LandingPageCacheItem(banners, places, jobs);
+                return new LandingPageCacheItem(banners, places, jobsPage.Items, jobsPage.TotalCount);
             });
 
         HomeBanners = data?.HomeBanners ?? Array.Empty<HomeBannerDto>();
         Places = data?.Places ?? Array.Empty<PlaceWithNavigationPropertiesDto>();
         Jobs = data?.Jobs ?? Array.Empty<PublicContentCardViewModel>();
+        JobsTotalCount = data?.JobsTotalCount ?? 0;
+    }
+
+    public async Task<IActionResult> OnGetJobsFeedAsync(int skip, int take, CancellationToken cancellationToken)
+    {
+        take = Math.Clamp(take, 1, 20);
+        skip = Math.Max(0, skip);
+
+        try
+        {
+            var (items, totalCount) = await _catalogClient.GetLatestPublishedJobCardsPageAsync(
+                skip,
+                take,
+                JobsListPath,
+                cancellationToken);
+
+            var payload = items
+                .Select(j => new LandingJobFeedItem(
+                    j.Title,
+                    j.Url,
+                    j.Category,
+                    j.Popularity,
+                    j.Province,
+                    j.Ward,
+                    j.MetaLabel,
+                    j.Tags,
+                    j.CreatedAt))
+                .ToList();
+
+            return new JsonResult(new LandingJobsFeedResponse(payload, totalCount));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to load landing jobs feed.");
+            return new JsonResult(new { error = "feed_failed" }) { StatusCode = StatusCodes.Status500InternalServerError };
+        }
     }
 
     /// <summary>
@@ -279,8 +322,25 @@ public class IndexModel : PageModel
     private sealed record LandingPageCacheItem(
         IReadOnlyList<HomeBannerDto> HomeBanners,
         IReadOnlyList<PlaceWithNavigationPropertiesDto> Places,
-        IReadOnlyList<PublicContentCardViewModel> Jobs);
+        IReadOnlyList<PublicContentCardViewModel> Jobs,
+        long JobsTotalCount);
 }
+
+/// <summary>JSON payload for landing job infinite scroll.</summary>
+public sealed record LandingJobFeedItem(
+    string Title,
+    string Url,
+    string Category,
+    int Popularity,
+    string? Province,
+    string? Ward,
+    string? MetaLabel,
+    IReadOnlyList<string> Tags,
+    DateTimeOffset CreatedAt);
+
+public sealed record LandingJobsFeedResponse(
+    IReadOnlyList<LandingJobFeedItem> Items,
+    long TotalCount);
 
 /// <summary>Resolved hero slide assets for &lt;picture&gt; + webp srcset.</summary>
 public sealed record HeroBannerResponsiveSources(string FallbackUrl, string WebpSrcset)

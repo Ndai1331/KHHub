@@ -135,13 +135,28 @@ public class PublicMasterDataCatalogClient
         string detailBasePath,
         CancellationToken cancellationToken = default)
     {
-        var jobs = await GetPublishedJobsAsync(maxCount, cancellationToken);
-        var tagsByJobId = await GetTagsByJobIdAsync(cancellationToken);
+        var (items, _) = await GetLatestPublishedJobCardsPageAsync(0, maxCount, detailBasePath, cancellationToken);
+        return items;
+    }
 
-        return jobs
-            .Select(job => ToJobCard(job, tagsByJobId, detailBasePath))
-            .Take(maxCount)
-            .ToList();
+    /// <summary>
+    /// Paged published jobs for the landing feed (same ordering as MasterData jobs list API).
+    /// </summary>
+    public async Task<(IReadOnlyList<PublicContentCardViewModel> Items, long TotalCount)> GetLatestPublishedJobCardsPageAsync(
+        int skip,
+        int take,
+        string detailBasePath,
+        CancellationToken cancellationToken = default)
+    {
+        var (jobs, totalCount) = await GetPublishedJobsPageAsync(skip, take, cancellationToken);
+        if (jobs.Count == 0)
+        {
+            return (Array.Empty<PublicContentCardViewModel>(), totalCount);
+        }
+
+        var tagsByJobId = await GetTagsByJobIdAsync(cancellationToken);
+        var cards = jobs.Select(job => ToJobCard(job, tagsByJobId, detailBasePath)).ToList();
+        return (cards, totalCount);
     }
 
     public async Task<DetailPageViewModel?> GetPublishedJobDetailAsync(
@@ -199,24 +214,36 @@ public class PublicMasterDataCatalogClient
         int maxCount,
         CancellationToken cancellationToken)
     {
+        var (items, _) = await GetPublishedJobsPageAsync(0, maxCount, cancellationToken);
+        return items;
+    }
+
+    private async Task<(IReadOnlyList<JobWithNavigationPropertiesDto> Items, long TotalCount)> GetPublishedJobsPageAsync(
+        int skip,
+        int take,
+        CancellationToken cancellationToken)
+    {
         try
         {
             var status = (int)JobStatus.Published;
-            var path = $"api/masterdata/jobs?skipCount=0&maxResultCount={maxCount}&status={status}";
+            var path = $"api/masterdata/jobs?skipCount={skip}&maxResultCount={take}&status={status}";
             using var response = await _httpClient.GetAsync(path, cancellationToken);
             response.EnsureSuccessStatusCode();
             var page = await response.Content.ReadFromJsonAsync<PagedResult<JobWithNavigationPropertiesDto>>(
                 JsonOptions,
                 cancellationToken);
 
-            return page?.Items is { Count: > 0 }
-                ? page.Items
-                : Array.Empty<JobWithNavigationPropertiesDto>();
+            if (page?.Items is not { Count: > 0 })
+            {
+                return (Array.Empty<JobWithNavigationPropertiesDto>(), page?.TotalCount ?? 0);
+            }
+
+            return (page.Items, page.TotalCount);
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Failed to load jobs from MasterData gateway.");
-            return Array.Empty<JobWithNavigationPropertiesDto>();
+            return (Array.Empty<JobWithNavigationPropertiesDto>(), 0);
         }
     }
 

@@ -7,6 +7,9 @@
         <member name="F:KHHub.Publish_website.Pages.IndexModel.HeroBannerResponsiveWidths">
             <summary>Hero banner derivative widths (webp). Stored object key pattern: stem-768.webp, stem-1280.webp, stem-1920.webp.</summary>
         </member>
+        <member name="P:KHHub.Publish_website.Pages.IndexModel.JobsTotalCount">
+            <summary>Total published jobs count from MasterData (for landing infinite scroll).</summary>
+        </member>
         <member name="M:KHHub.Publish_website.Pages.IndexModel.ResolveMediaUrl(System.String)">
             <summary>
             Resolves stored media paths to browser-loadable URL (same behavior as apps/web).
@@ -23,6 +26,12 @@
         </member>
         <member name="M:KHHub.Publish_website.Pages.IndexModel.EscapeSrcsetUrlCandidate(System.String)">
             <remarks>Commas inside URLs break srcset tokenization — encode them.</remarks>
+        </member>
+        <member name="T:KHHub.Publish_website.Pages.LandingJobFeedItem">
+            <summary>JSON payload for landing job infinite scroll.</summary>
+        </member>
+        <member name="M:KHHub.Publish_website.Pages.LandingJobFeedItem.#ctor(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String},System.DateTimeOffset)">
+            <summary>JSON payload for landing job infinite scroll.</summary>
         </member>
         <member name="T:KHHub.Publish_website.Pages.HeroBannerResponsiveSources">
             <summary>Resolved hero slide assets for &lt;picture&gt; + webp srcset.</summary>
@@ -41,6 +50,11 @@
         <member name="T:KHHub.Publish_website.Services.PublicMasterDataCatalogClient">
             <summary>
             Loads public catalog data from MasterData via the Web Gateway (YARP).
+            </summary>
+        </member>
+        <member name="M:KHHub.Publish_website.Services.PublicMasterDataCatalogClient.GetLatestPublishedJobCardsPageAsync(System.Int32,System.Int32,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Paged published jobs for the landing feed (same ordering as MasterData jobs list API).
             </summary>
         </member>
     </members>
