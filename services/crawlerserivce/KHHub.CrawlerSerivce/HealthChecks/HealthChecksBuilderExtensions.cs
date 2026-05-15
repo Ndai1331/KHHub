@@ -1,15 +1,19 @@
 ﻿using HealthChecks.UI.Client;
+using KHHub.ServiceDefaults.HealthChecks;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Serilog;
 
 namespace KHHub.CrawlerSerivce.HealthChecks;
 
 public static class HealthChecksBuilderExtensions
 {
+    private const string StartupLogPrefix = "[Startup]";
+
     public static void AddCrawlerSerivceHealthChecks(this IServiceCollection services)
     {
         // Add your health checks here
         var healthChecksBuilder = services.AddHealthChecks();
-       
+
         var configuration = services.GetConfiguration();
         var healthCheckUrl = configuration["App:HealthCheckUrl"];
 
@@ -17,12 +21,22 @@ public static class HealthChecksBuilderExtensions
         {
             healthCheckUrl = "/health-status";
         }
-        
+
+        var healthUiProbeUri = HealthChecksUiEndpointUri.Resolve(configuration, healthCheckUrl);
+        Log.Information(
+            "{Prefix} Health checks — path: {HealthPath}, HealthChecks.UI probe URL: {ProbeUri}, UI: /health-ui",
+            StartupLogPrefix,
+            healthCheckUrl,
+            healthUiProbeUri);
+
         services.ConfigureHealthCheckEndpoint(healthCheckUrl);
 
         var healthChecksUiBuilder = services.AddHealthChecksUI(settings =>
         {
-            settings.AddHealthCheckEndpoint("CrawlerSerivce Health Status", configuration["App:HealthUiCheckUrl"] ?? healthCheckUrl);
+            settings.AddHealthCheckEndpoint(
+                "CrawlerSerivce Health Status",
+                healthUiProbeUri);
+
             var evaluationTimeInSeconds = configuration.GetValue<int?>("App:HealthChecksUi:EvaluationTimeInSeconds");
             if (evaluationTimeInSeconds.HasValue && evaluationTimeInSeconds.Value > 0)
             {
@@ -60,7 +74,9 @@ public static class HealthChecksBuilderExtensions
         return services;
     }
 
-    private static IServiceCollection MapHealthChecksUiEndpoints(this IServiceCollection services, Action<global::HealthChecks.UI.Configuration.Options>? setupOption = null)
+    private static IServiceCollection MapHealthChecksUiEndpoints(
+        this IServiceCollection services,
+        Action<global::HealthChecks.UI.Configuration.Options>? setupOption = null)
     {
         services.Configure<AbpEndpointRouterOptions>(routerOptions =>
         {

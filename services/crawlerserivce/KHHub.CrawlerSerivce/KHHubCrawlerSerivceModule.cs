@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Autofac;
@@ -17,6 +19,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.Mapperly;
 using Volo.Abp.BackgroundJobs.RabbitMQ;
+using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Data;
@@ -43,6 +46,7 @@ using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DistributedEvents;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
+using KHHub.CrawlerSerivce.BackgroundWorkers;
 using KHHub.CrawlerSerivce.Configuration;
 using KHHub.CrawlerSerivce.Crawling.Http;
 using KHHub.CrawlerSerivce.HealthChecks;
@@ -66,6 +70,7 @@ namespace KHHub.CrawlerSerivce;
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpEventBusRabbitMqModule),
     typeof(AbpBackgroundJobsRabbitMqModule),
+    typeof(AbpBackgroundWorkersModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpDistributedLockingModule),
     typeof(AbpStudioClientAspNetCoreModule),
@@ -73,11 +78,15 @@ namespace KHHub.CrawlerSerivce;
     )]
 public class KHHubCrawlerSerivceModule : AbpModule
 {
+    private const string StartupLogPrefix = "[Startup]";
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
         var env = context.Services.GetHostingEnvironment();
-        
+
+        Log.Information("{Prefix} ConfigureServices started (Environment: {Environment})", StartupLogPrefix, env.EnvironmentName);
+
         var redis = CreateRedisConnection(configuration);
 
         ConfigurePII(configuration);
@@ -98,9 +107,14 @@ public class KHHubCrawlerSerivceModule : AbpModule
         ConfigureHealthChecks(context);
         ConfigureCrawlerHttp(context, configuration);
         ConfigureCrawlerImportDefaults(configuration);
+        ConfigureCrawlerArticleImportDefaults(configuration);
+        ConfigureCrawlerPlaceImportDefaults(configuration);
+        ConfigureCrawlerScheduledImports(configuration);
         ConfigureMasterDataHttpClient(context);
-        
+
         context.Services.TransformAbpClaims();
+
+        Log.Information("{Prefix} ConfigureServices completed", StartupLogPrefix);
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -108,6 +122,8 @@ public class KHHubCrawlerSerivceModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
         var configuration = context.GetConfiguration();
+
+        Log.Information("{Prefix} Configuring HTTP pipeline...", StartupLogPrefix);
 
         if (env.IsDevelopment())
         {
@@ -124,33 +140,85 @@ public class KHHubCrawlerSerivceModule : AbpModule
         app.UseAuthentication();
         app.UseAuthorization();
 
-        if (IsSwaggerEnabled(configuration))
+        var swaggerEnabled = IsSwaggerEnabled(configuration);
+        if (swaggerEnabled)
         {
+            Log.Information("{Prefix} Swagger enabled — UI: /swagger, JSON: /swagger/v1/swagger.json", StartupLogPrefix);
             app.UseSwagger();
             app.UseAbpSwaggerUI(options => { ConfigureSwaggerUI(options, configuration); });
         }
-        
+        else
+        {
+            Log.Warning("{Prefix} Swagger is disabled (Swagger:IsEnabled=false)", StartupLogPrefix);
+        }
+
         app.UseAbpSerilogEnrichers();
         app.UseAuditing();
         app.UseUnitOfWork();
         app.UseDynamicClaims();
         app.UseConfiguredEndpoints(endpoints =>
         {
+            // Attribute-routed controllers (e.g. DemoController, conventional API) need MapControllers().
+            // Without this, no MVC endpoints are registered and Swagger UI / OpenAPI return 404.
+            endpoints.MapControllers();
             endpoints.MapMetrics();
+            Log.Information("{Prefix} Endpoints mapped: MapControllers, MapMetrics", StartupLogPrefix);
         });
+
+        var healthPath = configuration["App:HealthCheckUrl"] ?? "/health-status";
+        Log.Information(
+            "{Prefix} Health endpoints — status: {HealthPath}, UI: /health-ui, API: /health-api",
+            StartupLogPrefix,
+            healthPath);
     }
-    
+
     public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        using var scope = context.ServiceProvider.CreateScope();
-        await scope.ServiceProvider
-            .GetRequiredService<CrawlerSerivceRuntimeDatabaseMigrator>()
-            .CheckAndApplyDatabaseMigrationsAsync();
+        var logger = context.ServiceProvider.GetRequiredService<ILogger<KHHubCrawlerSerivceModule>>();
+        logger.LogInformation("{Prefix} Applying database migrations for CrawlerSerivce...", StartupLogPrefix);
+
+        try
+        {
+            using var scope = context.ServiceProvider.CreateScope();
+            await scope.ServiceProvider
+                .GetRequiredService<CrawlerSerivceRuntimeDatabaseMigrator>()
+                .CheckAndApplyDatabaseMigrationsAsync();
+            logger.LogInformation("{Prefix} Database migrations completed", StartupLogPrefix);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "{Prefix} Database migration failed: {Message}", StartupLogPrefix, ex.Message);
+            throw;
+        }
     }
-    
+
+    public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        // Must call base so OnApplicationInitialization runs (HTTP pipeline, Swagger, health endpoints).
+        // Overriding this method without base skips UseConfiguredEndpoints and /health-status returns 404.
+        await base.OnApplicationInitializationAsync(context);
+
+        Log.Information("{Prefix} Registering background worker {Worker}...", StartupLogPrefix, nameof(CrawlerScheduledImportTriggerWorker));
+        await context.AddBackgroundWorkerAsync<CrawlerScheduledImportTriggerWorker>();
+        Log.Information("{Prefix} Background worker registered", StartupLogPrefix);
+    }
+
     private ConnectionMultiplexer CreateRedisConnection(IConfiguration configuration)
     {
-        return ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+        var redisConfiguration = configuration["Redis:Configuration"] ?? "localhost:6379";
+        Log.Information("{Prefix} Connecting to Redis: {RedisConfiguration}", StartupLogPrefix, redisConfiguration);
+
+        try
+        {
+            var redis = ConnectionMultiplexer.Connect(redisConfiguration);
+            Log.Information("{Prefix} Redis connected", StartupLogPrefix);
+            return redis;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "{Prefix} Redis connection failed. Is Redis running at {RedisConfiguration}?", StartupLogPrefix, redisConfiguration);
+            throw;
+        }
     }
 
     private void ConfigureHealthChecks(ServiceConfigurationContext context)
@@ -171,6 +239,21 @@ public class KHHubCrawlerSerivceModule : AbpModule
     private void ConfigureCrawlerImportDefaults(IConfiguration configuration)
     {
         Configure<CrawlerImportDefaultsOptions>(configuration.GetSection(CrawlerImportDefaultsOptions.SectionKey));
+    }
+
+    private void ConfigureCrawlerArticleImportDefaults(IConfiguration configuration)
+    {
+        Configure<CrawlerArticleImportDefaultsOptions>(configuration.GetSection(CrawlerArticleImportDefaultsOptions.SectionKey));
+    }
+
+    private void ConfigureCrawlerPlaceImportDefaults(IConfiguration configuration)
+    {
+        Configure<CrawlerPlaceImportDefaultsOptions>(configuration.GetSection(CrawlerPlaceImportDefaultsOptions.SectionKey));
+    }
+
+    private void ConfigureCrawlerScheduledImports(IConfiguration configuration)
+    {
+        Configure<CrawlerScheduledImportsOptions>(configuration.GetSection(CrawlerScheduledImportsOptions.SectionKey));
     }
 
     private void ConfigureMasterDataHttpClient(ServiceConfigurationContext context)
@@ -238,6 +321,14 @@ public class KHHubCrawlerSerivceModule : AbpModule
     {
         if (IsSwaggerEnabled(configuration))
         {
+            var authority = configuration["AuthServer:Authority"];
+            if (string.IsNullOrWhiteSpace(authority))
+            {
+                Log.Warning(
+                    "{Prefix} AuthServer:Authority is empty — Swagger OAuth and JWT metadata may fail at runtime",
+                    StartupLogPrefix);
+            }
+
             context.Services.AddAbpSwaggerGenWithOAuth(
                 authority: configuration["AuthServer:Authority"],
                 scopes: new Dictionary<string, string>
