@@ -46,6 +46,7 @@ public abstract class PlaceManagerBase : DomainService
         Check.Length(seoDescription, nameof(seoDescription), PlaceConsts.SeoDescriptionMaxLength);
         Check.Length(seoKeywords, nameof(seoKeywords), PlaceConsts.SeoKeywordsMaxLength);
         Check.Length(source, nameof(source), PlaceConsts.SourceMaxLength);
+        Check.Length(sourceUrl, nameof(sourceUrl), PlaceConsts.SourceUrlMaxLength);
         var place = new Place(GuidGenerator.Create(), placeCategoryId, provinceId, wardId, name, slug, latitude, longituded, priceRange, status, viewCount, favoriteCount, reviewCount, ratingAveraged, ratingTotal, isFeatured, isHot, isVerified, seoTitle, shortDescription, description, thumbnailUrl, coverImageUrl, address, phoneNumber, email, website, openingHours, googleMapUrl, seoDescription, seoKeywords, source, sourceUrl);
         return await _placeRepository.InsertAsync(place);
     }
@@ -75,6 +76,7 @@ public abstract class PlaceManagerBase : DomainService
         Check.Length(seoDescription, nameof(seoDescription), PlaceConsts.SeoDescriptionMaxLength);
         Check.Length(seoKeywords, nameof(seoKeywords), PlaceConsts.SeoKeywordsMaxLength);
         Check.Length(source, nameof(source), PlaceConsts.SourceMaxLength);
+        Check.Length(sourceUrl, nameof(sourceUrl), PlaceConsts.SourceUrlMaxLength);
         var place = await _placeRepository.GetAsync(id);
         place.PlaceCategoryId = placeCategoryId;
         place.ProvinceId = provinceId;

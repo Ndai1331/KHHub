@@ -495,7 +495,7 @@ public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContex
                 b.Property(x => x.SeoDescription).HasColumnName(nameof(Place.SeoDescription)).HasMaxLength(PlaceConsts.SeoDescriptionMaxLength);
                 b.Property(x => x.SeoKeywords).HasColumnName(nameof(Place.SeoKeywords)).HasMaxLength(PlaceConsts.SeoKeywordsMaxLength);
                 b.Property(x => x.Source).HasColumnName(nameof(Place.Source)).HasMaxLength(PlaceConsts.SourceMaxLength);
-                b.Property(x => x.SourceUrl).HasColumnName(nameof(Place.SourceUrl));
+                b.Property(x => x.SourceUrl).HasColumnName(nameof(Place.SourceUrl)).HasMaxLength(PlaceConsts.SourceUrlMaxLength);
                 b.HasOne<PlaceCategory>().WithMany().IsRequired().HasForeignKey(x => x.PlaceCategoryId).OnDelete(DeleteBehavior.NoAction);
                 b.HasOne<Province>().WithMany().IsRequired().HasForeignKey(x => x.ProvinceId).OnDelete(DeleteBehavior.NoAction);
                 b.HasOne<Ward>().WithMany().IsRequired().HasForeignKey(x => x.WardId).OnDelete(DeleteBehavior.NoAction);

@@ -122,6 +122,7 @@ public abstract class PlaceBase : FullAuditedAggregateRoot<Guid>
         Check.Length(seoDescription, nameof(seoDescription), PlaceConsts.SeoDescriptionMaxLength, 0);
         Check.Length(seoKeywords, nameof(seoKeywords), PlaceConsts.SeoKeywordsMaxLength, 0);
         Check.Length(source, nameof(source), PlaceConsts.SourceMaxLength, 0);
+        Check.Length(sourceUrl, nameof(sourceUrl), PlaceConsts.SourceUrlMaxLength, 0);
         Name = name;
         Slug = slug;
         Latitude = latitude;
