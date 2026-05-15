@@ -225,40 +225,6 @@ public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContex
 
         if (builder.IsHostDatabase())
         {
-            builder.Entity<Place>(b => {
-                b.ToTable(DbTablePrefix + "Places", DbSchema);
-                b.ConfigureByConvention();
-                b.Property(x => x.Name).HasColumnName(nameof(Place.Name)).IsRequired().HasMaxLength(PlaceConsts.NameMaxLength);
-                b.Property(x => x.Slug).HasColumnName(nameof(Place.Slug)).IsRequired().HasMaxLength(PlaceConsts.SlugMaxLength);
-                b.Property(x => x.ShortDescription).HasColumnName(nameof(Place.ShortDescription)).HasMaxLength(PlaceConsts.ShortDescriptionMaxLength);
-                b.Property(x => x.Description).HasColumnName(nameof(Place.Description));
-                b.Property(x => x.ThumbnailUrl).HasColumnName(nameof(Place.ThumbnailUrl)).HasMaxLength(PlaceConsts.ThumbnailUrlMaxLength);
-                b.Property(x => x.CoverImageUrl).HasColumnName(nameof(Place.CoverImageUrl)).HasMaxLength(PlaceConsts.CoverImageUrlMaxLength);
-                b.Property(x => x.Address).HasColumnName(nameof(Place.Address)).HasMaxLength(PlaceConsts.AddressMaxLength);
-                b.Property(x => x.Latitude).HasColumnName(nameof(Place.Latitude));
-                b.Property(x => x.Longituded).HasColumnName(nameof(Place.Longituded));
-                b.Property(x => x.PhoneNumber).HasColumnName(nameof(Place.PhoneNumber)).HasMaxLength(PlaceConsts.PhoneNumberMaxLength);
-                b.Property(x => x.Email).HasColumnName(nameof(Place.Email)).HasMaxLength(PlaceConsts.EmailMaxLength);
-                b.Property(x => x.Website).HasColumnName(nameof(Place.Website)).HasMaxLength(PlaceConsts.WebsiteMaxLength);
-                b.Property(x => x.OpeningHours).HasColumnName(nameof(Place.OpeningHours)).HasMaxLength(PlaceConsts.OpeningHoursMaxLength);
-                b.Property(x => x.PriceRange).HasColumnName(nameof(Place.PriceRange));
-                b.Property(x => x.GoogleMapUrl).HasColumnName(nameof(Place.GoogleMapUrl)).HasMaxLength(PlaceConsts.GoogleMapUrlMaxLength);
-                b.Property(x => x.Status).HasColumnName(nameof(Place.Status));
-                b.Property(x => x.ViewCount).HasColumnName(nameof(Place.ViewCount));
-                b.Property(x => x.FavoriteCount).HasColumnName(nameof(Place.FavoriteCount));
-                b.Property(x => x.ReviewCount).HasColumnName(nameof(Place.ReviewCount));
-                b.Property(x => x.RatingAveraged).HasColumnName(nameof(Place.RatingAveraged));
-                b.Property(x => x.RatingTotal).HasColumnName(nameof(Place.RatingTotal));
-                b.Property(x => x.IsFeatured).HasColumnName(nameof(Place.IsFeatured));
-                b.Property(x => x.IsHot).HasColumnName(nameof(Place.IsHot));
-                b.Property(x => x.IsVerified).HasColumnName(nameof(Place.IsVerified));
-                b.Property(x => x.SeoTitle).HasColumnName(nameof(Place.SeoTitle)).IsRequired().HasMaxLength(PlaceConsts.SeoTitleMaxLength);
-                b.Property(x => x.SeoDescription).HasColumnName(nameof(Place.SeoDescription)).HasMaxLength(PlaceConsts.SeoDescriptionMaxLength);
-                b.Property(x => x.SeoKeywords).HasColumnName(nameof(Place.SeoKeywords)).HasMaxLength(PlaceConsts.SeoKeywordsMaxLength);
-                b.HasOne<PlaceCategory>().WithMany().IsRequired().HasForeignKey(x => x.PlaceCategoryId).OnDelete(DeleteBehavior.NoAction);
-                b.HasOne<Province>().WithMany().IsRequired().HasForeignKey(x => x.ProvinceId).OnDelete(DeleteBehavior.NoAction);
-                b.HasOne<Ward>().WithMany().IsRequired().HasForeignKey(x => x.WardId).OnDelete(DeleteBehavior.NoAction);
-            });
         }
 
         if (builder.IsHostDatabase())
@@ -493,6 +459,46 @@ public class MasterDataServiceDbContext : AbpDbContext<MasterDataServiceDbContex
                 b.Property(x => x.ParentId).HasColumnName(nameof(JobCategory.ParentId));
                 b.Property(x => x.DisplayOrder).HasColumnName(nameof(JobCategory.DisplayOrder));
                 b.Property(x => x.IsActive).HasColumnName(nameof(JobCategory.IsActive));
+            });
+        }
+
+        if (builder.IsHostDatabase())
+        {
+            builder.Entity<Place>(b => {
+                b.ToTable(DbTablePrefix + "Places", DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.Name).HasColumnName(nameof(Place.Name)).IsRequired().HasMaxLength(PlaceConsts.NameMaxLength);
+                b.Property(x => x.Slug).HasColumnName(nameof(Place.Slug)).IsRequired().HasMaxLength(PlaceConsts.SlugMaxLength);
+                b.Property(x => x.ShortDescription).HasColumnName(nameof(Place.ShortDescription)).HasMaxLength(PlaceConsts.ShortDescriptionMaxLength);
+                b.Property(x => x.Description).HasColumnName(nameof(Place.Description));
+                b.Property(x => x.ThumbnailUrl).HasColumnName(nameof(Place.ThumbnailUrl)).HasMaxLength(PlaceConsts.ThumbnailUrlMaxLength);
+                b.Property(x => x.CoverImageUrl).HasColumnName(nameof(Place.CoverImageUrl)).HasMaxLength(PlaceConsts.CoverImageUrlMaxLength);
+                b.Property(x => x.Address).HasColumnName(nameof(Place.Address)).HasMaxLength(PlaceConsts.AddressMaxLength);
+                b.Property(x => x.Latitude).HasColumnName(nameof(Place.Latitude));
+                b.Property(x => x.Longituded).HasColumnName(nameof(Place.Longituded));
+                b.Property(x => x.PhoneNumber).HasColumnName(nameof(Place.PhoneNumber)).HasMaxLength(PlaceConsts.PhoneNumberMaxLength);
+                b.Property(x => x.Email).HasColumnName(nameof(Place.Email)).HasMaxLength(PlaceConsts.EmailMaxLength);
+                b.Property(x => x.Website).HasColumnName(nameof(Place.Website)).HasMaxLength(PlaceConsts.WebsiteMaxLength);
+                b.Property(x => x.OpeningHours).HasColumnName(nameof(Place.OpeningHours)).HasMaxLength(PlaceConsts.OpeningHoursMaxLength);
+                b.Property(x => x.PriceRange).HasColumnName(nameof(Place.PriceRange));
+                b.Property(x => x.GoogleMapUrl).HasColumnName(nameof(Place.GoogleMapUrl)).HasMaxLength(PlaceConsts.GoogleMapUrlMaxLength);
+                b.Property(x => x.Status).HasColumnName(nameof(Place.Status));
+                b.Property(x => x.ViewCount).HasColumnName(nameof(Place.ViewCount));
+                b.Property(x => x.FavoriteCount).HasColumnName(nameof(Place.FavoriteCount));
+                b.Property(x => x.ReviewCount).HasColumnName(nameof(Place.ReviewCount));
+                b.Property(x => x.RatingAveraged).HasColumnName(nameof(Place.RatingAveraged));
+                b.Property(x => x.RatingTotal).HasColumnName(nameof(Place.RatingTotal));
+                b.Property(x => x.IsFeatured).HasColumnName(nameof(Place.IsFeatured));
+                b.Property(x => x.IsHot).HasColumnName(nameof(Place.IsHot));
+                b.Property(x => x.IsVerified).HasColumnName(nameof(Place.IsVerified));
+                b.Property(x => x.SeoTitle).HasColumnName(nameof(Place.SeoTitle)).IsRequired().HasMaxLength(PlaceConsts.SeoTitleMaxLength);
+                b.Property(x => x.SeoDescription).HasColumnName(nameof(Place.SeoDescription)).HasMaxLength(PlaceConsts.SeoDescriptionMaxLength);
+                b.Property(x => x.SeoKeywords).HasColumnName(nameof(Place.SeoKeywords)).HasMaxLength(PlaceConsts.SeoKeywordsMaxLength);
+                b.Property(x => x.Source).HasColumnName(nameof(Place.Source)).HasMaxLength(PlaceConsts.SourceMaxLength);
+                b.Property(x => x.SourceUrl).HasColumnName(nameof(Place.SourceUrl));
+                b.HasOne<PlaceCategory>().WithMany().IsRequired().HasForeignKey(x => x.PlaceCategoryId).OnDelete(DeleteBehavior.NoAction);
+                b.HasOne<Province>().WithMany().IsRequired().HasForeignKey(x => x.ProvinceId).OnDelete(DeleteBehavior.NoAction);
+                b.HasOne<Ward>().WithMany().IsRequired().HasForeignKey(x => x.WardId).OnDelete(DeleteBehavior.NoAction);
             });
         }
     }

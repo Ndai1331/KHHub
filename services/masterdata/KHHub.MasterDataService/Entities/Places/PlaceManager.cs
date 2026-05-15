@@ -21,7 +21,7 @@ public abstract class PlaceManagerBase : DomainService
         _placeRepository = placeRepository;
     }
 
-    public virtual async Task<Place> CreateAsync(Guid placeCategoryId, Guid provinceId, Guid wardId, string name, string slug, decimal latitude, decimal longituded, PriceRange priceRange, PlaceStatus status, int viewCount, int favoriteCount, int reviewCount, decimal ratingAveraged, int ratingTotal, bool isFeatured, bool isHot, bool isVerified, string seoTitle, string? shortDescription = null, string? description = null, string? thumbnailUrl = null, string? coverImageUrl = null, string? address = null, string? phoneNumber = null, string? email = null, string? website = null, string? openingHours = null, string? googleMapUrl = null, string? seoDescription = null, string? seoKeywords = null)
+    public virtual async Task<Place> CreateAsync(Guid placeCategoryId, Guid provinceId, Guid wardId, string name, string slug, decimal latitude, decimal longituded, PriceRange priceRange, PlaceStatus status, int viewCount, int favoriteCount, int reviewCount, decimal ratingAveraged, int ratingTotal, bool isFeatured, bool isHot, bool isVerified, string seoTitle, string? shortDescription = null, string? description = null, string? thumbnailUrl = null, string? coverImageUrl = null, string? address = null, string? phoneNumber = null, string? email = null, string? website = null, string? openingHours = null, string? googleMapUrl = null, string? seoDescription = null, string? seoKeywords = null, string? source = null, string? sourceUrl = null)
     {
         Check.NotNull(placeCategoryId, nameof(placeCategoryId));
         Check.NotNull(provinceId, nameof(provinceId));
@@ -45,11 +45,12 @@ public abstract class PlaceManagerBase : DomainService
         Check.Length(googleMapUrl, nameof(googleMapUrl), PlaceConsts.GoogleMapUrlMaxLength);
         Check.Length(seoDescription, nameof(seoDescription), PlaceConsts.SeoDescriptionMaxLength);
         Check.Length(seoKeywords, nameof(seoKeywords), PlaceConsts.SeoKeywordsMaxLength);
-        var place = new Place(GuidGenerator.Create(), placeCategoryId, provinceId, wardId, name, slug, latitude, longituded, priceRange, status, viewCount, favoriteCount, reviewCount, ratingAveraged, ratingTotal, isFeatured, isHot, isVerified, seoTitle, shortDescription, description, thumbnailUrl, coverImageUrl, address, phoneNumber, email, website, openingHours, googleMapUrl, seoDescription, seoKeywords);
+        Check.Length(source, nameof(source), PlaceConsts.SourceMaxLength);
+        var place = new Place(GuidGenerator.Create(), placeCategoryId, provinceId, wardId, name, slug, latitude, longituded, priceRange, status, viewCount, favoriteCount, reviewCount, ratingAveraged, ratingTotal, isFeatured, isHot, isVerified, seoTitle, shortDescription, description, thumbnailUrl, coverImageUrl, address, phoneNumber, email, website, openingHours, googleMapUrl, seoDescription, seoKeywords, source, sourceUrl);
         return await _placeRepository.InsertAsync(place);
     }
 
-    public virtual async Task<Place> UpdateAsync(Guid id, Guid placeCategoryId, Guid provinceId, Guid wardId, string name, string slug, decimal latitude, decimal longituded, PriceRange priceRange, PlaceStatus status, int viewCount, int favoriteCount, int reviewCount, decimal ratingAveraged, int ratingTotal, bool isFeatured, bool isHot, bool isVerified, string seoTitle, string? shortDescription = null, string? description = null, string? thumbnailUrl = null, string? coverImageUrl = null, string? address = null, string? phoneNumber = null, string? email = null, string? website = null, string? openingHours = null, string? googleMapUrl = null, string? seoDescription = null, string? seoKeywords = null, [CanBeNull] string? concurrencyStamp = null)
+    public virtual async Task<Place> UpdateAsync(Guid id, Guid placeCategoryId, Guid provinceId, Guid wardId, string name, string slug, decimal latitude, decimal longituded, PriceRange priceRange, PlaceStatus status, int viewCount, int favoriteCount, int reviewCount, decimal ratingAveraged, int ratingTotal, bool isFeatured, bool isHot, bool isVerified, string seoTitle, string? shortDescription = null, string? description = null, string? thumbnailUrl = null, string? coverImageUrl = null, string? address = null, string? phoneNumber = null, string? email = null, string? website = null, string? openingHours = null, string? googleMapUrl = null, string? seoDescription = null, string? seoKeywords = null, string? source = null, string? sourceUrl = null, [CanBeNull] string? concurrencyStamp = null)
     {
         Check.NotNull(placeCategoryId, nameof(placeCategoryId));
         Check.NotNull(provinceId, nameof(provinceId));
@@ -73,6 +74,7 @@ public abstract class PlaceManagerBase : DomainService
         Check.Length(googleMapUrl, nameof(googleMapUrl), PlaceConsts.GoogleMapUrlMaxLength);
         Check.Length(seoDescription, nameof(seoDescription), PlaceConsts.SeoDescriptionMaxLength);
         Check.Length(seoKeywords, nameof(seoKeywords), PlaceConsts.SeoKeywordsMaxLength);
+        Check.Length(source, nameof(source), PlaceConsts.SourceMaxLength);
         var place = await _placeRepository.GetAsync(id);
         place.PlaceCategoryId = placeCategoryId;
         place.ProvinceId = provinceId;
@@ -104,6 +106,8 @@ public abstract class PlaceManagerBase : DomainService
         place.GoogleMapUrl = googleMapUrl;
         place.SeoDescription = seoDescription;
         place.SeoKeywords = seoKeywords;
+        place.Source = source;
+        place.SourceUrl = sourceUrl;
         place.SetConcurrencyStampIfNotNull(concurrencyStamp);
         return await _placeRepository.UpdateAsync(place);
     }

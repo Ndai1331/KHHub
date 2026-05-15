@@ -68,6 +68,11 @@ public abstract class PlaceCreateDtoBase
     [StringLength(PlaceConsts.SeoKeywordsMaxLength)]
     public string? SeoKeywords { get; set; }
 
+    [StringLength(PlaceConsts.SourceMaxLength)]
+    public string? Source { get; set; }
+
+    public string? SourceUrl { get; set; }
+
     public Guid PlaceCategoryId { get; set; }
 
     public Guid ProvinceId { get; set; }

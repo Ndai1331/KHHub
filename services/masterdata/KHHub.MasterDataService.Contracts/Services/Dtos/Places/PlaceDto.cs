@@ -59,6 +59,10 @@ public abstract class PlaceDtoBase : FullAuditedEntityDto<Guid>, IHasConcurrency
 
     public string? SeoKeywords { get; set; }
 
+    public string? Source { get; set; }
+
+    public string? SourceUrl { get; set; }
+
     public Guid PlaceCategoryId { get; set; }
 
     public Guid ProvinceId { get; set; }

@@ -85,6 +85,12 @@ public abstract class PlaceBase : FullAuditedAggregateRoot<Guid>
     [CanBeNull]
     public virtual string? SeoKeywords { get; set; }
 
+    [CanBeNull]
+    public virtual string? Source { get; set; }
+
+    [CanBeNull]
+    public virtual string? SourceUrl { get; set; }
+
     public Guid PlaceCategoryId { get; set; }
 
     public Guid ProvinceId { get; set; }
@@ -95,7 +101,7 @@ public abstract class PlaceBase : FullAuditedAggregateRoot<Guid>
     {
     }
 
-    public PlaceBase(Guid id, Guid placeCategoryId, Guid provinceId, Guid wardId, string name, string slug, decimal latitude, decimal longituded, PriceRange priceRange, PlaceStatus status, int viewCount, int favoriteCount, int reviewCount, decimal ratingAveraged, int ratingTotal, bool isFeatured, bool isHot, bool isVerified, string seoTitle, string? shortDescription = null, string? description = null, string? thumbnailUrl = null, string? coverImageUrl = null, string? address = null, string? phoneNumber = null, string? email = null, string? website = null, string? openingHours = null, string? googleMapUrl = null, string? seoDescription = null, string? seoKeywords = null)
+    public PlaceBase(Guid id, Guid placeCategoryId, Guid provinceId, Guid wardId, string name, string slug, decimal latitude, decimal longituded, PriceRange priceRange, PlaceStatus status, int viewCount, int favoriteCount, int reviewCount, decimal ratingAveraged, int ratingTotal, bool isFeatured, bool isHot, bool isVerified, string seoTitle, string? shortDescription = null, string? description = null, string? thumbnailUrl = null, string? coverImageUrl = null, string? address = null, string? phoneNumber = null, string? email = null, string? website = null, string? openingHours = null, string? googleMapUrl = null, string? seoDescription = null, string? seoKeywords = null, string? source = null, string? sourceUrl = null)
     {
         Id = id;
         Check.NotNull(name, nameof(name));
@@ -115,6 +121,7 @@ public abstract class PlaceBase : FullAuditedAggregateRoot<Guid>
         Check.Length(googleMapUrl, nameof(googleMapUrl), PlaceConsts.GoogleMapUrlMaxLength, 0);
         Check.Length(seoDescription, nameof(seoDescription), PlaceConsts.SeoDescriptionMaxLength, 0);
         Check.Length(seoKeywords, nameof(seoKeywords), PlaceConsts.SeoKeywordsMaxLength, 0);
+        Check.Length(source, nameof(source), PlaceConsts.SourceMaxLength, 0);
         Name = name;
         Slug = slug;
         Latitude = latitude;
@@ -142,6 +149,8 @@ public abstract class PlaceBase : FullAuditedAggregateRoot<Guid>
         GoogleMapUrl = googleMapUrl;
         SeoDescription = seoDescription;
         SeoKeywords = seoKeywords;
+        Source = source;
+        SourceUrl = sourceUrl;
         PlaceCategoryId = placeCategoryId;
         ProvinceId = provinceId;
         WardId = wardId;

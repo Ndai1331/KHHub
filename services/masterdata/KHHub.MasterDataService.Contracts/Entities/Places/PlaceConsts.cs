@@ -23,4 +23,5 @@ public static class PlaceConsts
     public const int SeoTitleMaxLength = 255;
     public const int SeoDescriptionMaxLength = 500;
     public const int SeoKeywordsMaxLength = 500;
+    public const int SourceMaxLength = 500;
 }
