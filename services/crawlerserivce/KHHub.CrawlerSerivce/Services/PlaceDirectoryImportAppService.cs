@@ -9,6 +9,7 @@ using KHHub.CrawlerSerivce.Crawling.Models;
 using KHHub.CrawlerSerivce.Services.Dtos.Crawling;
 using KHHub.MasterDataService.Entities.Places;
 using KHHub.MasterDataService.IntegrationServices;
+using KHHub.MasterDataService.Services.Dtos.PlaceCrawler;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
@@ -18,6 +19,8 @@ namespace KHHub.CrawlerSerivce.Services;
 [AllowAnonymous]
 public class PlaceDirectoryImportAppService : CrawlerSerivceAppService, IPlaceDirectoryImportAppService
 {
+    private const int MasterDataUpsertMaxAttempts = 3;
+
     private readonly IPlaceDirectorySiteHandlerResolver _resolver;
     private readonly ICrawlerHtmlFetcher _htmlFetcher;
     private readonly IPlaceCrawlerIntegrationService _placeCrawler;
@@ -127,22 +130,22 @@ public class PlaceDirectoryImportAppService : CrawlerSerivceAppService, IPlaceDi
                 status,
                 input.ExtraTagNames);
 
-            try
+            var upsertResult = await UpsertPlaceWithRetriesAsync(upsert, row.SourceAbsoluteUrl, result);
+            if (upsertResult == null)
             {
-                var upsertResult = await _placeCrawler.UpsertFromCrawlerAsync(upsert);
-                result.PlacesProcessed++;
-                if (upsertResult.WasCreated)
-                {
-                    result.PlacesCreated++;
-                }
-                else
-                {
-                    result.PlacesUpdated++;
-                }
+                result.Warnings.Add(
+                    "Place import stopped: MasterData upsert failed after retries; remaining queued places were not processed.");
+                break;
             }
-            catch (Exception ex)
+
+            result.PlacesProcessed++;
+            if (upsertResult.WasCreated)
             {
-                result.Errors.Add($"{row.SourceAbsoluteUrl}: MasterData upsert failed — {ex.Message}");
+                result.PlacesCreated++;
+            }
+            else
+            {
+                result.PlacesUpdated++;
             }
 
             if (input.DelayBetweenDetailRequestsMs > 0)
@@ -152,6 +155,33 @@ public class PlaceDirectoryImportAppService : CrawlerSerivceAppService, IPlaceDi
         }
 
         return result;
+    }
+
+    private async Task<PlaceCrawlerUpsertResultDto?> UpsertPlaceWithRetriesAsync(
+        PlaceCrawlerUpsertInputDto upsert,
+        string sourceAbsoluteUrl,
+        ImportPlaceListingResultDto result)
+    {
+        Exception? lastEx = null;
+        for (var attempt = 1; attempt <= MasterDataUpsertMaxAttempts; attempt++)
+        {
+            try
+            {
+                return await _placeCrawler.UpsertFromCrawlerAsync(upsert);
+            }
+            catch (Exception ex)
+            {
+                lastEx = ex;
+                if (attempt < MasterDataUpsertMaxAttempts)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(300 * attempt));
+                }
+            }
+        }
+
+        result.Errors.Add(
+            $"{sourceAbsoluteUrl}: MasterData upsert failed after {MasterDataUpsertMaxAttempts} attempt(s) — {lastEx!.Message}");
+        return null;
     }
 
     private static Guid ResolveGuidOrDefault(Guid? requestValue, Guid configuredDefault)

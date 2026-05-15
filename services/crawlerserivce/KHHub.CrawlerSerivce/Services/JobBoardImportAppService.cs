@@ -8,6 +8,7 @@ using KHHub.CrawlerSerivce.Crawling.Mapping;
 using KHHub.CrawlerSerivce.Crawling.Models;
 using KHHub.CrawlerSerivce.Services.Dtos.Crawling;
 using KHHub.MasterDataService.IntegrationServices;
+using KHHub.MasterDataService.Services.Dtos.JobCrawler;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
@@ -17,6 +18,8 @@ namespace KHHub.CrawlerSerivce.Services;
 [AllowAnonymous]
 public class JobBoardImportAppService : CrawlerSerivceAppService, IJobBoardImportAppService
 {
+    private const int MasterDataUpsertMaxAttempts = 3;
+
     private readonly IJobBoardSiteHandlerResolver _boardResolver;
     private readonly ICrawlerHtmlFetcher _htmlFetcher;
     private readonly IJobCrawlerIntegrationService _jobCrawlerIntegration;
@@ -122,22 +125,22 @@ public class JobBoardImportAppService : CrawlerSerivceAppService, IJobBoardImpor
                 jobCategoryId,
                 input.ExtraTagNames);
 
-            try
+            var upsertResult = await UpsertJobWithRetriesAsync(upsert, row.SourceAbsoluteUrl, result);
+            if (upsertResult == null)
             {
-                var upsertResult = await _jobCrawlerIntegration.UpsertFromCrawlerAsync(upsert);
-                result.JobsProcessed++;
-                if (upsertResult.WasCreated)
-                {
-                    result.JobsCreated++;
-                }
-                else
-                {
-                    result.JobsUpdated++;
-                }
+                result.Warnings.Add(
+                    "Job import stopped: MasterData upsert failed after retries; remaining queued jobs were not processed.");
+                break;
             }
-            catch (Exception ex)
+
+            result.JobsProcessed++;
+            if (upsertResult.WasCreated)
             {
-                result.Errors.Add($"{row.SourceAbsoluteUrl}: MasterData upsert failed — {ex.Message}");
+                result.JobsCreated++;
+            }
+            else
+            {
+                result.JobsUpdated++;
             }
 
             if (input.DelayBetweenDetailRequestsMs > 0)
@@ -147,6 +150,33 @@ public class JobBoardImportAppService : CrawlerSerivceAppService, IJobBoardImpor
         }
 
         return result;
+    }
+
+    private async Task<JobCrawlerUpsertResultDto?> UpsertJobWithRetriesAsync(
+        JobCrawlerUpsertInputDto upsert,
+        string sourceAbsoluteUrl,
+        ImportJobListingResultDto result)
+    {
+        Exception? lastEx = null;
+        for (var attempt = 1; attempt <= MasterDataUpsertMaxAttempts; attempt++)
+        {
+            try
+            {
+                return await _jobCrawlerIntegration.UpsertFromCrawlerAsync(upsert);
+            }
+            catch (Exception ex)
+            {
+                lastEx = ex;
+                if (attempt < MasterDataUpsertMaxAttempts)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(300 * attempt));
+                }
+            }
+        }
+
+        result.Errors.Add(
+            $"{sourceAbsoluteUrl}: MasterData upsert failed after {MasterDataUpsertMaxAttempts} attempt(s) — {lastEx!.Message}");
+        return null;
     }
 
     private static Guid ResolveGuidOrDefault(Guid? requestValue, Guid configuredDefault)

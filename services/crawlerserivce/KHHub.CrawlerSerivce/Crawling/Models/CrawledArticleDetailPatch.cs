@@ -23,5 +23,10 @@ public class CrawledArticleDetailPatch
 
     public string? SeoDescription { get; set; }
 
-    public IReadOnlyList<string> TopicLabels { get; set; } = Array.Empty<string>();
+    /// <summary>
+    /// Extra category name hints for MasterData resolve (parents / breadcrumb); most specific stays in <see cref="CategoryLabel"/>.
+    /// </summary>
+    public List<string> ArticleCategoryNameCandidates { get; set; } = new();
+
+    public List<string> TopicLabels { get; set; } = new();
 }

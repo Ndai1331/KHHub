@@ -56,10 +56,39 @@ public static class ArticleCrawlerMergeMapper
             FirstNonEmpty(detail.SeoDescription, summary),
             500);
 
+        var primaryTrimmed = categoryLabel?.Trim();
         var categoryCandidates = new List<string>();
-        if (!string.IsNullOrWhiteSpace(categoryLabel))
+
+        void AddCategoryCandidate(string? s)
         {
-            categoryCandidates.Add(categoryLabel.Trim());
+            if (string.IsNullOrWhiteSpace(s))
+            {
+                return;
+            }
+
+            var t = s.Trim();
+            if (!string.IsNullOrWhiteSpace(primaryTrimmed) &&
+                string.Equals(t, primaryTrimmed, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            if (categoryCandidates.Any(x => string.Equals(x, t, StringComparison.OrdinalIgnoreCase)))
+            {
+                return;
+            }
+
+            categoryCandidates.Add(t);
+        }
+
+        foreach (var c in detail.ArticleCategoryNameCandidates)
+        {
+            AddCategoryCandidate(c);
+        }
+
+        foreach (var c in listing.ArticleCategoryNameCandidates)
+        {
+            AddCategoryCandidate(c);
         }
 
         return new ArticleCrawlerUpsertInputDto

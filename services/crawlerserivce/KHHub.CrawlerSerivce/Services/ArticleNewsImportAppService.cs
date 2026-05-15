@@ -9,6 +9,7 @@ using KHHub.CrawlerSerivce.Crawling.Models;
 using KHHub.CrawlerSerivce.Services.Dtos.Crawling;
 using KHHub.MasterDataService.Entities.Articles;
 using KHHub.MasterDataService.IntegrationServices;
+using KHHub.MasterDataService.Services.Dtos.ArticleCrawler;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
@@ -18,6 +19,8 @@ namespace KHHub.CrawlerSerivce.Services;
 [AllowAnonymous]
 public class ArticleNewsImportAppService : CrawlerSerivceAppService, IArticleNewsImportAppService
 {
+    private const int MasterDataUpsertMaxAttempts = 3;
+
     private readonly IArticleNewsSiteHandlerResolver _resolver;
     private readonly ICrawlerHtmlFetcher _htmlFetcher;
     private readonly IArticleCrawlerIntegrationService _articleCrawler;
@@ -120,22 +123,22 @@ public class ArticleNewsImportAppService : CrawlerSerivceAppService, IArticleNew
                 status,
                 input.ExtraTagNames);
 
-            try
+            var upsertResult = await UpsertArticleWithRetriesAsync(upsert, row.SourceAbsoluteUrl, result);
+            if (upsertResult == null)
             {
-                var upsertResult = await _articleCrawler.UpsertFromCrawlerAsync(upsert);
-                result.ArticlesProcessed++;
-                if (upsertResult.WasCreated)
-                {
-                    result.ArticlesCreated++;
-                }
-                else
-                {
-                    result.ArticlesUpdated++;
-                }
+                result.Warnings.Add(
+                    "Article import stopped: MasterData upsert failed after retries; remaining queued articles were not processed.");
+                break;
             }
-            catch (Exception ex)
+
+            result.ArticlesProcessed++;
+            if (upsertResult.WasCreated)
             {
-                result.Errors.Add($"{row.SourceAbsoluteUrl}: MasterData upsert failed — {ex.Message}");
+                result.ArticlesCreated++;
+            }
+            else
+            {
+                result.ArticlesUpdated++;
             }
 
             if (input.DelayBetweenDetailRequestsMs > 0)
@@ -145,6 +148,33 @@ public class ArticleNewsImportAppService : CrawlerSerivceAppService, IArticleNew
         }
 
         return result;
+    }
+
+    private async Task<ArticleCrawlerUpsertResultDto?> UpsertArticleWithRetriesAsync(
+        ArticleCrawlerUpsertInputDto upsert,
+        string sourceAbsoluteUrl,
+        ImportArticleListingResultDto result)
+    {
+        Exception? lastEx = null;
+        for (var attempt = 1; attempt <= MasterDataUpsertMaxAttempts; attempt++)
+        {
+            try
+            {
+                return await _articleCrawler.UpsertFromCrawlerAsync(upsert);
+            }
+            catch (Exception ex)
+            {
+                lastEx = ex;
+                if (attempt < MasterDataUpsertMaxAttempts)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(300 * attempt));
+                }
+            }
+        }
+
+        result.Errors.Add(
+            $"{sourceAbsoluteUrl}: MasterData upsert failed after {MasterDataUpsertMaxAttempts} attempt(s) — {lastEx!.Message}");
+        return null;
     }
 
     private static Guid ResolveGuidOrDefault(Guid? requestValue, Guid configuredDefault)

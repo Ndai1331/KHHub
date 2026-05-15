@@ -95,6 +95,98 @@
               "displayName": null
             }
           }
+        },
+        "KHHub.MasterDataService.IntegrationServices.ArticleCrawlerIntegrationService": {
+          "controllerName": "ArticleCrawlerIntegration",
+          "controllerGroupName": "ArticleCrawlerIntegration",
+          "isRemoteService": true,
+          "isIntegrationService": true,
+          "apiVersion": null,
+          "type": "KHHub.MasterDataService.IntegrationServices.ArticleCrawlerIntegrationService",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
+          "interfaces": [
+            {
+              "type": "KHHub.MasterDataService.IntegrationServices.IArticleCrawlerIntegrationService",
+              "name": "IArticleCrawlerIntegrationService",
+              "methods": [
+                {
+                  "name": "UpsertFromCrawlerAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.MasterDataService.Services.Dtos.ArticleCrawler.ArticleCrawlerUpsertInputDto, KHHub.MasterDataService.Contracts",
+                      "type": "KHHub.MasterDataService.Services.Dtos.ArticleCrawler.ArticleCrawlerUpsertInputDto",
+                      "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleCrawler.ArticleCrawlerUpsertInputDto",
+                      "isOptional": false,
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.MasterDataService.Services.Dtos.ArticleCrawler.ArticleCrawlerUpsertResultDto",
+                    "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleCrawler.ArticleCrawlerUpsertResultDto",
+                    "summary": null
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "UpsertFromCrawlerAsyncByInput": {
+              "uniqueName": "UpsertFromCrawlerAsyncByInput",
+              "name": "UpsertFromCrawlerAsync",
+              "httpMethod": "POST",
+              "url": "integration-api/masterdata/article-crawler/upsert-from-crawler",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.MasterDataService.Services.Dtos.ArticleCrawler.ArticleCrawlerUpsertInputDto, KHHub.MasterDataService.Contracts",
+                  "type": "KHHub.MasterDataService.Services.Dtos.ArticleCrawler.ArticleCrawlerUpsertInputDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleCrawler.ArticleCrawlerUpsertInputDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.MasterDataService.Services.Dtos.ArticleCrawler.ArticleCrawlerUpsertInputDto",
+                  "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleCrawler.ArticleCrawlerUpsertInputDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.MasterDataService.Services.Dtos.ArticleCrawler.ArticleCrawlerUpsertResultDto",
+                "typeSimple": "KHHub.MasterDataService.Services.Dtos.ArticleCrawler.ArticleCrawlerUpsertResultDto",
+                "summary": null
+              },
+              "allowAnonymous": true,
+              "authorizeDatas": [],
+              "implementFrom": "KHHub.MasterDataService.IntegrationServices.IArticleCrawlerIntegrationService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            }
+          }
         }
       }
     }

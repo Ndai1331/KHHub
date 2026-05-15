@@ -960,7 +960,7 @@
     ]
   },
   "packageFolders": {
-    "/var/folders/tp/v8g8_3g93_xgy4zrvs4lhv0c0000gq/T/cursor-sandbox-cache/c7f0a7ff203dd965059345a62d08e453/nuget": {}
+    "/Users/user/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
@@ -968,7 +968,7 @@
       "projectUniqueName": "/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/KHHub.ServiceDefaults.csproj",
       "projectName": "KHHub.ServiceDefaults",
       "projectPath": "/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/KHHub.ServiceDefaults.csproj",
-      "packagesPath": "/var/folders/tp/v8g8_3g93_xgy4zrvs4lhv0c0000gq/T/cursor-sandbox-cache/c7f0a7ff203dd965059345a62d08e453/nuget",
+      "packagesPath": "/Users/user/.nuget/packages/",
       "outputPath": "/Users/user/Documents/KHHub/aspire/service-defaults/KHHub.ServiceDefaults/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [

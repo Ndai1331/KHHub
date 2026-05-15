@@ -1,0 +1,625 @@
+{
+  "modules": {
+    "crawlerserivce": {
+      "rootPath": "crawlerserivce",
+      "remoteServiceName": "CrawlerSerivce",
+      "controllers": {
+        "KHHub.CrawlerSerivce.Controllers.DemoController": {
+          "controllerName": "Demo",
+          "controllerGroupName": "Demo",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "KHHub.CrawlerSerivce.Controllers.DemoController",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
+          "interfaces": [],
+          "actions": {
+            "HelloWorld": {
+              "uniqueName": "HelloWorld",
+              "name": "HelloWorld",
+              "httpMethod": "GET",
+              "url": "api/crawler-serivce/demo/hello",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string",
+                "summary": null
+              },
+              "allowAnonymous": null,
+              "authorizeDatas": [],
+              "implementFrom": "KHHub.CrawlerSerivce.Controllers.DemoController",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            },
+            "HelloWorldAuthorized": {
+              "uniqueName": "HelloWorldAuthorized",
+              "name": "HelloWorldAuthorized",
+              "httpMethod": "GET",
+              "url": "api/crawler-serivce/demo/hello-authorized",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string",
+                "summary": null
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": null,
+                  "roles": null
+                }
+              ],
+              "implementFrom": "KHHub.CrawlerSerivce.Controllers.DemoController",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            }
+          }
+        },
+        "KHHub.CrawlerSerivce.Services.ArticleListingCrawlAppService": {
+          "controllerName": "ArticleListingCrawl",
+          "controllerGroupName": "ArticleListingCrawl",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "KHHub.CrawlerSerivce.Services.ArticleListingCrawlAppService",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
+          "interfaces": [
+            {
+              "type": "KHHub.CrawlerSerivce.Services.IArticleListingCrawlAppService",
+              "name": "IArticleListingCrawlAppService",
+              "methods": [
+                {
+                  "name": "PreviewListingAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewArticleListingInput, KHHub.CrawlerSerivce.Contracts",
+                      "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewArticleListingInput",
+                      "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewArticleListingInput",
+                      "isOptional": false,
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewArticleListingResultDto",
+                    "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewArticleListingResultDto",
+                    "summary": null
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "PreviewListingAsyncByInput": {
+              "uniqueName": "PreviewListingAsyncByInput",
+              "name": "PreviewListingAsync",
+              "httpMethod": "POST",
+              "url": "api/crawlerserivce/article-listing-crawl/preview-listing",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewArticleListingInput, KHHub.CrawlerSerivce.Contracts",
+                  "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewArticleListingInput",
+                  "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewArticleListingInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewArticleListingInput",
+                  "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewArticleListingInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewArticleListingResultDto",
+                "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewArticleListingResultDto",
+                "summary": null
+              },
+              "allowAnonymous": true,
+              "authorizeDatas": [],
+              "implementFrom": "KHHub.CrawlerSerivce.Services.IArticleListingCrawlAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            }
+          }
+        },
+        "KHHub.CrawlerSerivce.Services.ArticleNewsImportAppService": {
+          "controllerName": "ArticleNewsImport",
+          "controllerGroupName": "ArticleNewsImport",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "KHHub.CrawlerSerivce.Services.ArticleNewsImportAppService",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
+          "interfaces": [
+            {
+              "type": "KHHub.CrawlerSerivce.Services.IArticleNewsImportAppService",
+              "name": "IArticleNewsImportAppService",
+              "methods": [
+                {
+                  "name": "ImportFromListingAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportArticleListingInput, KHHub.CrawlerSerivce.Contracts",
+                      "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportArticleListingInput",
+                      "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportArticleListingInput",
+                      "isOptional": false,
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportArticleListingResultDto",
+                    "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportArticleListingResultDto",
+                    "summary": null
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "ImportFromListingAsyncByInput": {
+              "uniqueName": "ImportFromListingAsyncByInput",
+              "name": "ImportFromListingAsync",
+              "httpMethod": "POST",
+              "url": "api/crawlerserivce/article-news-import/import-from-listing",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportArticleListingInput, KHHub.CrawlerSerivce.Contracts",
+                  "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportArticleListingInput",
+                  "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportArticleListingInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportArticleListingInput",
+                  "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportArticleListingInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportArticleListingResultDto",
+                "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportArticleListingResultDto",
+                "summary": null
+              },
+              "allowAnonymous": true,
+              "authorizeDatas": [],
+              "implementFrom": "KHHub.CrawlerSerivce.Services.IArticleNewsImportAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            }
+          }
+        },
+        "KHHub.CrawlerSerivce.Services.JobBoardImportAppService": {
+          "controllerName": "JobBoardImport",
+          "controllerGroupName": "JobBoardImport",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "KHHub.CrawlerSerivce.Services.JobBoardImportAppService",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
+          "interfaces": [
+            {
+              "type": "KHHub.CrawlerSerivce.Services.IJobBoardImportAppService",
+              "name": "IJobBoardImportAppService",
+              "methods": [
+                {
+                  "name": "ImportFromListingAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportJobListingInput, KHHub.CrawlerSerivce.Contracts",
+                      "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportJobListingInput",
+                      "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportJobListingInput",
+                      "isOptional": false,
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportJobListingResultDto",
+                    "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportJobListingResultDto",
+                    "summary": null
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "ImportFromListingAsyncByInput": {
+              "uniqueName": "ImportFromListingAsyncByInput",
+              "name": "ImportFromListingAsync",
+              "httpMethod": "POST",
+              "url": "api/crawlerserivce/job-board-import/import-from-listing",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportJobListingInput, KHHub.CrawlerSerivce.Contracts",
+                  "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportJobListingInput",
+                  "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportJobListingInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportJobListingInput",
+                  "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportJobListingInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportJobListingResultDto",
+                "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportJobListingResultDto",
+                "summary": null
+              },
+              "allowAnonymous": true,
+              "authorizeDatas": [],
+              "implementFrom": "KHHub.CrawlerSerivce.Services.IJobBoardImportAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            }
+          }
+        },
+        "KHHub.CrawlerSerivce.Services.JobListingCrawlAppService": {
+          "controllerName": "JobListingCrawl",
+          "controllerGroupName": "JobListingCrawl",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "KHHub.CrawlerSerivce.Services.JobListingCrawlAppService",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
+          "interfaces": [
+            {
+              "type": "KHHub.CrawlerSerivce.Services.IJobListingCrawlAppService",
+              "name": "IJobListingCrawlAppService",
+              "methods": [
+                {
+                  "name": "PreviewListingAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewJobListingInput, KHHub.CrawlerSerivce.Contracts",
+                      "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewJobListingInput",
+                      "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewJobListingInput",
+                      "isOptional": false,
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewJobListingResultDto",
+                    "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewJobListingResultDto",
+                    "summary": null
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "PreviewListingAsyncByInput": {
+              "uniqueName": "PreviewListingAsyncByInput",
+              "name": "PreviewListingAsync",
+              "httpMethod": "POST",
+              "url": "api/crawlerserivce/job-listing-crawl/preview-listing",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewJobListingInput, KHHub.CrawlerSerivce.Contracts",
+                  "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewJobListingInput",
+                  "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewJobListingInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewJobListingInput",
+                  "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewJobListingInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewJobListingResultDto",
+                "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewJobListingResultDto",
+                "summary": null
+              },
+              "allowAnonymous": true,
+              "authorizeDatas": [],
+              "implementFrom": "KHHub.CrawlerSerivce.Services.IJobListingCrawlAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            }
+          }
+        },
+        "KHHub.CrawlerSerivce.Services.PlaceDirectoryImportAppService": {
+          "controllerName": "PlaceDirectoryImport",
+          "controllerGroupName": "PlaceDirectoryImport",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "KHHub.CrawlerSerivce.Services.PlaceDirectoryImportAppService",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
+          "interfaces": [
+            {
+              "type": "KHHub.CrawlerSerivce.Services.IPlaceDirectoryImportAppService",
+              "name": "IPlaceDirectoryImportAppService",
+              "methods": [
+                {
+                  "name": "ImportFromListingAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportPlaceListingInput, KHHub.CrawlerSerivce.Contracts",
+                      "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportPlaceListingInput",
+                      "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportPlaceListingInput",
+                      "isOptional": false,
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportPlaceListingResultDto",
+                    "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportPlaceListingResultDto",
+                    "summary": null
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "ImportFromListingAsyncByInput": {
+              "uniqueName": "ImportFromListingAsyncByInput",
+              "name": "ImportFromListingAsync",
+              "httpMethod": "POST",
+              "url": "api/crawlerserivce/place-directory-import/import-from-listing",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportPlaceListingInput, KHHub.CrawlerSerivce.Contracts",
+                  "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportPlaceListingInput",
+                  "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportPlaceListingInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportPlaceListingInput",
+                  "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportPlaceListingInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportPlaceListingResultDto",
+                "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.ImportPlaceListingResultDto",
+                "summary": null
+              },
+              "allowAnonymous": true,
+              "authorizeDatas": [],
+              "implementFrom": "KHHub.CrawlerSerivce.Services.IPlaceDirectoryImportAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            }
+          }
+        },
+        "KHHub.CrawlerSerivce.Services.PlaceListingCrawlAppService": {
+          "controllerName": "PlaceListingCrawl",
+          "controllerGroupName": "PlaceListingCrawl",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "KHHub.CrawlerSerivce.Services.PlaceListingCrawlAppService",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
+          "interfaces": [
+            {
+              "type": "KHHub.CrawlerSerivce.Services.IPlaceListingCrawlAppService",
+              "name": "IPlaceListingCrawlAppService",
+              "methods": [
+                {
+                  "name": "PreviewListingAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewPlaceListingInput, KHHub.CrawlerSerivce.Contracts",
+                      "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewPlaceListingInput",
+                      "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewPlaceListingInput",
+                      "isOptional": false,
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewPlaceListingResultDto",
+                    "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewPlaceListingResultDto",
+                    "summary": null
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "PreviewListingAsyncByInput": {
+              "uniqueName": "PreviewListingAsyncByInput",
+              "name": "PreviewListingAsync",
+              "httpMethod": "POST",
+              "url": "api/crawlerserivce/place-listing-crawl/preview-listing",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewPlaceListingInput, KHHub.CrawlerSerivce.Contracts",
+                  "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewPlaceListingInput",
+                  "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewPlaceListingInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewPlaceListingInput",
+                  "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewPlaceListingInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "returnValue": {
+                "type": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewPlaceListingResultDto",
+                "typeSimple": "KHHub.CrawlerSerivce.Services.Dtos.Crawling.PreviewPlaceListingResultDto",
+                "summary": null
+              },
+              "allowAnonymous": true,
+              "authorizeDatas": [],
+              "implementFrom": "KHHub.CrawlerSerivce.Services.IPlaceListingCrawlAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

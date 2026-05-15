@@ -8,16 +8,17 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using KHHub.CrawlerSerivce.Crawling;
 using KHHub.CrawlerSerivce.Crawling.Abstractions;
 using KHHub.CrawlerSerivce.Crawling.Models;
-using Volo.Abp.DependencyInjection;
 
 namespace KHHub.CrawlerSerivce.Crawling.Sites.Articles.BaoNinhThuan;
 
 /// <summary>
 /// Listing + detail for <see href="https://www.baoninhthuan.com.vn/">baoninhthuan.com.vn</see>.
+/// Registered explicitly in <see cref="CrawlerSiteHandlersServiceCollectionExtensions.AddCrawlerArticleNewsSiteHandlers"/>.
 /// </summary>
-public class BaoNinhThuanArticleSiteHandler : IArticleNewsSiteHandler, ITransientDependency
+public class BaoNinhThuanArticleSiteHandler : IArticleNewsSiteHandler
 {
     public const string SiteKeyConst = "BaoNinhThuan";
 
@@ -235,13 +236,15 @@ public class BaoNinhThuanArticleSiteHandler : IArticleNewsSiteHandler, ITransien
 
     private static bool IsHost(string host)
     {
-        return host.Equals("baoninhthuan.com.vn", StringComparison.OrdinalIgnoreCase)
-               || host.Equals("www.baoninhthuan.com.vn", StringComparison.OrdinalIgnoreCase);
+        var h = CrawlerUriHostNormalizer.NormalizeHost(host);
+        return h.Equals("baoninhthuan.com.vn", StringComparison.OrdinalIgnoreCase)
+               || h.Equals("www.baoninhthuan.com.vn", StringComparison.OrdinalIgnoreCase);
     }
 
     private static string NormalizeHost(string host)
     {
-        return host.Contains("www.", StringComparison.OrdinalIgnoreCase) ? host : "www.baoninhthuan.com.vn";
+        var h = CrawlerUriHostNormalizer.NormalizeHost(host);
+        return h.Contains("www.", StringComparison.OrdinalIgnoreCase) ? h : "www.baoninhthuan.com.vn";
     }
 
     private static string NormalizeUrl(Uri uri)

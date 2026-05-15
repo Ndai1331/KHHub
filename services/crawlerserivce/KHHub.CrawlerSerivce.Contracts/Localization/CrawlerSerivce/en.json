@@ -1,6 +1,7 @@
 {
   "Culture": "en",
   "Texts": {
-    
+    "UnknownArticleListingSite": "Article listing crawl is not supported for this URL ({Uri}). Host: {Host}. Registered handlers ({RegisteredHandlerCount}): {RegisteredSiteKeys}.",
+    "UnknownArticleDetailSite": "Article detail crawl is not supported for this URL ({Uri}). Host: {Host}. Registered handlers ({RegisteredHandlerCount}): {RegisteredSiteKeys}."
   }
 }

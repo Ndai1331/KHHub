@@ -1,6 +1,7 @@
 {
   "Culture": "vi",
   "Texts": {
-    
+    "UnknownArticleListingSite": "Không hỗ trợ crawl danh sách tin từ URL này ({Uri}). Host: {Host}. Số handler đã đăng ký: {RegisteredHandlerCount}. Site keys: {RegisteredSiteKeys}.",
+    "UnknownArticleDetailSite": "Không hỗ trợ crawl chi tiết bài từ URL này ({Uri}). Host: {Host}. Số handler đã đăng ký: {RegisteredHandlerCount}. Site keys: {RegisteredSiteKeys}."
   }
 }

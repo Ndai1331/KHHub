@@ -48,6 +48,7 @@ using Volo.Abp.EntityFrameworkCore.DistributedEvents;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using KHHub.CrawlerSerivce.BackgroundWorkers;
 using KHHub.CrawlerSerivce.Configuration;
+using KHHub.CrawlerSerivce.Crawling;
 using KHHub.CrawlerSerivce.Crawling.Http;
 using KHHub.CrawlerSerivce.HealthChecks;
 using KHHub.MasterDataService;
@@ -106,6 +107,7 @@ public class KHHubCrawlerSerivceModule : AbpModule
         ConfigureDynamicClaims(context);
         ConfigureHealthChecks(context);
         ConfigureCrawlerHttp(context, configuration);
+        context.Services.AddCrawlerArticleNewsSiteHandlers();
         ConfigureCrawlerImportDefaults(configuration);
         ConfigureCrawlerArticleImportDefaults(configuration);
         ConfigureCrawlerPlaceImportDefaults(configuration);
